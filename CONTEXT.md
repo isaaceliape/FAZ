@@ -174,12 +174,18 @@ Este projeto é uma **tradução comunitária**, não um fork oficial.
 - [x] `faz-codebase-mapper.pt.md` — traduzido (30KB, 772 linhas)
 - [x] Commands: `new-milestone`, `add-phase`, `research-phase`, `map-codebase`
 
-### 🚧 Em Progresso (Fase 3 - Verification & Debug)
+### ✅ Fase 3 Verification & Debug — COMPLETA
+- [x] `faz-plan-checker.pt.md` — traduzido (24KB, 708 linhas)
+- [x] `faz-integration-checker.pt.md` — traduzido (13KB, 445 linhas)
+- [x] `faz-debugger.pt.md` — traduzido (40KB, 1257 linhas)
+- [x] Commands: `verify-work`, `validate-phase`, `debug`, `check-todos`, `add-todo`, `add-tests`
+
+### 🚧 Em Progresso (Fase 4 - Advanced & Utility)
 
 ### ⏳ Pendentes
-- [ ] Agents de verification (plan-checker, integration-checker, debugger)
-- [ ] Agents de verification (plan-checker, integration-checker, debugger)
-- [ ] Hooks e commands utilitários
+- [ ] `faz-nyquist-auditor.pt.md`
+- [ ] Hooks (check-update, statusline, context-monitor)
+- [ ] Commands utilitários restantes (17 arquivos)
 - [ ] Documentação traduzida
 - [ ] Primeiro release
 
