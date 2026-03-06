@@ -166,10 +166,18 @@ Este projeto é uma **tradução comunitária**, não um fork oficial.
 - [x] `faz-planner.pt.md` — traduzido (43KB, 1309 linhas)
 - [x] `faz-verifier.pt.md` — traduzido (19KB, 581 linhas)
 
-### 🚧 Em Progresso (Fase 2 - Planning & Research)
+### ✅ Fase 2 Planning & Research — COMPLETA
+- [x] `faz-roadmapper.pt.md` — traduzido (35KB, 652 linhas)
+- [x] `faz-project-researcher.pt.md` — traduzido (28KB, 631 linhas)
+- [x] `faz-phase-researcher.pt.md` — traduzido (23KB, 555 linhas)
+- [x] `faz-research-synthesizer.pt.md` — traduzido (249 linhas)
+- [x] `faz-codebase-mapper.pt.md` — traduzido (30KB, 772 linhas)
+- [x] Commands: `new-milestone`, `add-phase`, `research-phase`, `map-codebase`
+
+### 🚧 Em Progresso (Fase 3 - Verification & Debug)
 
 ### ⏳ Pendentes
-- [ ] Agents de planning (roadmapper, researchers)
+- [ ] Agents de verification (plan-checker, integration-checker, debugger)
 - [ ] Agents de verification (plan-checker, integration-checker, debugger)
 - [ ] Hooks e commands utilitários
 - [ ] Documentação traduzida
