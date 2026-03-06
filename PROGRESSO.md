@@ -8,12 +8,12 @@
 
 | Categoria | Total | Feito | Pendente | Progresso |
 |-----------|-------|-------|----------|-----------|
-| **Agents** | 12 | 1 | 11 | 8% |
-| **Commands** | 32 | 1 | 31 | 3% |
+| **Agents** | 12 | 3 | 9 | 25% |
+| **Commands** | 32 | 5 | 27 | 16% |
 | **Hooks** | 3 | 0 | 3 | 0% |
 | **Docs** | 2 | 0 | 2 | 0% |
 | **Setup/Infra** | 4 | 4 | 0 | 100% |
-| **TOTAL** | 53 | 6 | 47 | **11%** |
+| **TOTAL** | 53 | 8 | 45 | **15%** |
 
 ---
 
@@ -58,13 +58,15 @@
 
 ## 📋 Próximos da Fila
 
-### Fase 1: Core (MVP) — 5 arquivos restantes
+### Fase 1: Core (MVP) — ✅ COMPLETA
 
-1. ⏳ `commands/faz/new-project.pt.md`
-2. ⏳ `commands/faz/plan-phase.pt.md`
-3. ⏳ `commands/faz/execute-phase.pt.md`
-4. ⏳ `agents/faz-planner.pt.md` (43KB)
-5. ⏳ `agents/faz-verifier.pt.md` (19KB)
+1. ✅ `commands/faz/help.pt.md`
+2. ✅ `commands/faz/new-project.pt.md`
+3. ✅ `commands/faz/plan-phase.pt.md`
+4. ✅ `commands/faz/execute-phase.pt.md`
+5. ✅ `agents/faz-executor.pt.md`
+6. ✅ `agents/faz-planner.pt.md` (43KB)
+7. ✅ `agents/faz-verifier.pt.md` (19KB)
 
 ### Fase 2: Planning & Research — 9 arquivos
 
@@ -120,6 +122,10 @@
 | 12:29 | `help.pt.md` traduzido via OpenCode | ✅ |
 | 12:33 | Projeto movido para `~/repos/FAZ` | ✅ |
 | 12:42 | PROGRESSO.md criado (este arquivo) | ✅ |
+| 13:00 | Commands core traduzidos (new-project, plan-phase, execute-phase) | ✅ |
+| 13:15 | faz-verifier.pt.md traduzido (581 linhas) | ✅ |
+| 13:39 | faz-planner.pt.md traduzido (1309 linhas) | ✅ |
+| 13:40 | **Fase 1 Core completa** — 100% (6/6 arquivos) | 🎉 |
 
 ---
 
@@ -137,9 +143,9 @@
 ## 📊 Métricas
 
 - **Sessão atual:** 2026-03-06 (contínua)
-- **Arquivos traduzidos:** 2
-- **Linhas traduzidas:** ~600
-- **Commits:** 4
+- **Arquivos traduzidos:** 8
+- **Linhas traduzidas:** ~2500
+- **Commits:** 7
 - **Participantes:** Isaac, Clawd (OpenClaw), OpenCode
 
 ---

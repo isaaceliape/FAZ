@@ -162,9 +162,11 @@ Este projeto é uma **tradução comunitária**, não um fork oficial.
   - [x] `plan-phase.pt.md`
   - [x] `execute-phase.pt.md`
 
-### 🚧 Em Progresso (Fase 1 - Core)
-- [ ] `faz-planner.pt.md` — tradução necessária (43KB)
-- [ ] `faz-verifier.pt.md` — tradução necessária (19KB)
+### ✅ Fase 1 Core — COMPLETA
+- [x] `faz-planner.pt.md` — traduzido (43KB, 1309 linhas)
+- [x] `faz-verifier.pt.md` — traduzido (19KB, 581 linhas)
+
+### 🚧 Em Progresso (Fase 2 - Planning & Research)
 
 ### ⏳ Pendentes
 - [ ] Agents de planning (roadmapper, researchers)
