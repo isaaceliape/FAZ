@@ -1,6 +1,6 @@
 # 📊 Progresso do Projeto F.A.Z.
 
-**Última atualização:** 2026-03-06 12:42 GMT
+**Última atualização:** 2026-03-06 14:20 GMT
 
 ---
 
@@ -8,12 +8,12 @@
 
 | Categoria | Total | Feito | Pendente | Progresso |
 |-----------|-------|-------|----------|-----------|
-| **Agents** | 12 | 3 | 9 | 25% |
+| **Agents** | 12 | 7 | 5 | 58% |
 | **Commands** | 32 | 5 | 27 | 16% |
 | **Hooks** | 3 | 0 | 3 | 0% |
 | **Docs** | 2 | 0 | 2 | 0% |
 | **Setup/Infra** | 4 | 4 | 0 | 100% |
-| **TOTAL** | 53 | 8 | 45 | **15%** |
+| **TOTAL** | 53 | 12 | 41 | **23%** |
 
 ---
 
@@ -29,13 +29,29 @@
 - [x] **2026-03-06 12:06** — PLANO_DE_TRADUCAO.md criado
 - [x] **2026-03-06 12:33** — Projeto movido para `/Users/isaaceliape/repos/FAZ`
 
-### 🤖 Agents (8%)
+### 🤖 Agents (58%)
 
 - [x] **2026-03-06 12:11** — `agents/faz-executor.pt.md` traduzido (19KB)
   - ✅ Tradução completa PT-BR
   - ✅ Prefixos atualizados: `gsd-` → `faz-`, `/gsd:` → `/faz:`
   - ✅ Paths: `~/.claude/get-shit-done/` → `~/.faz/`
   - ✅ Commit: `48accbe`
+- [x] **2026-03-06 14:20** — `agents/faz-roadmapper.pt.md` traduzido (652 linhas)
+  - ✅ Tradução completa PT-BR
+  - ✅ Prefixos atualizados: `gsd-` → `faz-`, `/gsd:` → `/faz:`
+  - ✅ Paths: `.claude/get-shit-done` → `.claude/faz`
+- [x] **2026-03-06 14:20** — `agents/faz-project-researcher.pt.md` traduzido (631 linhas)
+  - ✅ Tradução completa PT-BR
+  - ✅ Prefixos atualizados: `gsd-` → `faz-`, `/gsd:` → `/faz:`
+  - ✅ Skills: `gsd-*-workflow` → `faz-*-workflow`
+- [x] **2026-03-06 14:20** — `agents/faz-phase-researcher.pt.md` traduzido (555 linhas)
+  - ✅ Tradução completa PT-BR
+  - ✅ Prefixos atualizados: `gsd-` → `faz-`, `/gsd:` → `/faz:`
+  - ✅ Termos técnicos mantidos em inglês
+- [x] **2026-03-06 14:20** — `agents/faz-codebase-mapper.pt.md` traduzido (772 linhas)
+  - ✅ Tradução completa PT-BR
+  - ✅ Prefixos atualizados: `gsd-` → `faz-`, `/gsd:` → `/faz:`
+  - ✅ Paths: `get-shit-done` → `faz`
 
 ### 📜 Commands (3%)
 
@@ -68,13 +84,16 @@
 6. ✅ `agents/faz-planner.pt.md` (43KB)
 7. ✅ `agents/faz-verifier.pt.md` (19KB)
 
-### Fase 2: Planning & Research — 9 arquivos
+### Fase 2: Planning & Research — 5/9 arquivos (56%)
 
-- `agents/faz-roadmapper.pt.md`
-- `agents/faz-project-researcher.pt.md`
-- `agents/faz-phase-researcher.pt.md`
+**Concluídos:**
+- [x] `agents/faz-roadmapper.pt.md` ✅ (652 linhas)
+- [x] `agents/faz-project-researcher.pt.md` ✅ (631 linhas)
+- [x] `agents/faz-phase-researcher.pt.md` ✅ (555 linhas)
+- [x] `agents/faz-codebase-mapper.pt.md` ✅ (772 linhas)
+
+**Pendentes:**
 - `agents/faz-research-synthesizer.pt.md`
-- `agents/faz-codebase-mapper.pt.md`
 - `commands/faz/new-milestone.pt.md`
 - `commands/faz/add-phase.pt.md`
 - `commands/faz/research-phase.pt.md`
@@ -126,6 +145,7 @@
 | 13:15 | faz-verifier.pt.md traduzido (581 linhas) | ✅ |
 | 13:39 | faz-planner.pt.md traduzido (1309 linhas) | ✅ |
 | 13:40 | **Fase 1 Core completa** — 100% (6/6 arquivos) | 🎉 |
+| 14:20 | **4 agents de Fase 2 traduzidos** — roadmapper, project-researcher, phase-researcher, codebase-mapper | ✅ |
 
 ---
 
@@ -143,8 +163,8 @@
 ## 📊 Métricas
 
 - **Sessão atual:** 2026-03-06 (contínua)
-- **Arquivos traduzidos:** 8
-- **Linhas traduzidas:** ~2500
+- **Arquivos traduzidos:** 12
+- **Linhas traduzidas:** ~5200
 - **Commits:** 7
 - **Participantes:** Isaac, Clawd (OpenClaw), OpenCode
 
