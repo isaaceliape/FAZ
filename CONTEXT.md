@@ -148,12 +148,28 @@ Este projeto é uma **tradução comunitária**, não um fork oficial.
 
 ## 📝 Estado Atual
 
+### ✅ Concluído
 - [x] Repo criado
 - [x] README.md criado
 - [x] TRANSLATION_GUIDE.md criado
 - [x] CONTEXT.md criado
-- [ ] Agents traduzidos
-- [ ] Comandos traduzidos
+- [x] Estrutura completa do GSD copiada
+- [x] PROGRESSO.md com plano detalhado
+- [x] `faz-executor.pt.md` traduzido
+- [x] Commands core traduzidos:
+  - [x] `help.pt.md`
+  - [x] `new-project.pt.md`
+  - [x] `plan-phase.pt.md`
+  - [x] `execute-phase.pt.md`
+
+### 🚧 Em Progresso (Fase 1 - Core)
+- [ ] `faz-planner.pt.md` — tradução necessária (43KB)
+- [ ] `faz-verifier.pt.md` — tradução necessária (19KB)
+
+### ⏳ Pendentes
+- [ ] Agents de planning (roadmapper, researchers)
+- [ ] Agents de verification (plan-checker, integration-checker, debugger)
+- [ ] Hooks e commands utilitários
 - [ ] Documentação traduzida
 - [ ] Primeiro release
 
