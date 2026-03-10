@@ -1,8 +1,8 @@
 <div align="center">
 
-# F.A.Z.
+# F.A.S.E.
 
-## Framework de Automação com Zelo
+## Framework de Automação Sem Enrolação
 
 **🇧🇷 Tradução brasileira do [get-shit-done](https://github.com/gsd-build/get-shit-done) para Claude Code.**
 
@@ -22,7 +22,7 @@ npx get-shit-done-cc@latest
 
 <br>
 
-> *"Chega de enrolação. Descreve o que quer e FAZ acontecer."*
+> *"Chega de enrolação. Descreve o que quer e FASE acontecer."*
 
 <br>
 
@@ -32,7 +32,7 @@ npx get-shit-done-cc@latest
 
 ## 🤔 O Que É Isso?
 
-O **F.A.Z.** é a versão em português brasileiro do **Get Shit Done (GSD)** — um sistema de meta-prompting e context engineering que faz o Claude Code funcionar de verdade.
+O **F.A.S.E.** é a versão em português brasileiro do **Get Shit Done (GSD)** — um sistema de meta-prompting e context engineering que faz o Claude Code funcionar de verdade.
 
 **Traduzimos:**
 - ✅ Agents (arquivos de prompt)
@@ -59,17 +59,17 @@ O instalador vai te perguntar:
 
 ### Verificar Instalação
 
-- Claude Code / Gemini: `/faz:ajuda`
-- OpenCode: `/faz-ajuda`
-- Codex: `$faz-ajuda`
+- Claude Code / Gemini: `/fase:ajuda`
+- OpenCode: `/fase-ajuda`
+- Codex: `$fase-ajuda`
 
 ---
 
-## 📖 Por Que "F.A.Z."?
+## 📖 Por Que "F.A.S.E."?
 
-**F.A.Z.** significa **Framework de Automação com Zelo**.
+**F.A.S.E.** significa **Framework de Automação Sem Enrolação**.
 
-É um trocadilho com o verbo "fazer" — porque no final do dia, é isso que importa: **fazer acontecer**.
+É um trocadilho com o conceito de "fases de desenvolvimento" — porque cada entrega é uma fase concluída, sem burocracia, sem enrolação.
 
 A filosofia é a mesma do original:
 - Sem teatro enterprise (reunião que podia ser email)
@@ -85,58 +85,58 @@ A filosofia é a mesma do original:
 
 ### Core
 ```bash
-/faz:ajuda              # Mostra ajuda
-/faz:novo-projeto       # Inicia novo projeto
-/faz:planejar-fase      # Planeja uma fase
-/faz:executar-fase      # Executa uma fase
-/faz:configuracoes      # Ajusta configurações
+/fase:ajuda              # Mostra ajuda
+/fase:novo-projeto       # Inicia novo projeto
+/fase:planejar-fase      # Planeja uma fase
+/fase:executar-fase      # Executa uma fase
+/fase:configuracoes      # Ajusta configurações
 ```
 
 ### Planning
 ```bash
-/faz:novo-marco         # Cria novo marco/milestone
-/faz:adicionar-fase     # Adiciona uma fase
-/faz:inserir-fase       # Insere fase em posição específica
-/faz:remover-fase       # Remove uma fase
-/faz:pausar-trabalho    # Pausa o trabalho
-/faz:retomar-trabalho   # Retoma o trabalho
-/faz:progresso          # Mostra progresso atual
+/fase:novo-marco         # Cria novo marco/milestone
+/fase:adicionar-fase     # Adiciona uma fase
+/fase:inserir-fase       # Insere fase em posição específica
+/fase:remover-fase       # Remove uma fase
+/fase:pausar-trabalho    # Pausa o trabalho
+/fase:retomar-trabalho   # Retoma o trabalho
+/fase:progresso          # Mostra progresso atual
 ```
 
 ### Research
 ```bash
-/faz:pesquisar-fase     # Pesquisa para uma fase
-/faz:mapear-codigo      # Mapeia codebase existente
-/faz:listar-premissas   # Lista premissas da fase
+/fase:pesquisar-fase     # Pesquisa para uma fase
+/fase:mapear-codigo      # Mapeia codebase existente
+/fase:listar-premissas   # Lista premissas da fase
 ```
 
 ### Verification
 ```bash
-/faz:verificar-trabalho # Verifica trabalho feito
-/faz:validar-fase       # Valida uma fase
-/faz:auditar-marco      # Audita um marco
+/fase:verificar-trabalho # Verifica trabalho feito
+/fase:validar-fase       # Valida uma fase
+/fase:auditar-marco      # Audita um marco
 ```
 
 ### Debug
 ```bash
-/faz:debug              # Debuga problemas
-/faz:checar-todos       # Checa lista de todos
-/faz:adicionar-todo     # Adiciona um todo
-/faz:adicionar-testes   # Adiciona testes
+/fase:debug              # Debuga problemas
+/fase:checar-todos       # Checa lista de todos
+/fase:adicionar-todo     # Adiciona um todo
+/fase:adicionar-testes   # Adiciona testes
 ```
 
 ### Utility
 ```bash
-/faz:discutir-fase      # Discute uma fase
-/faz:completar-marco    # Completa um marco
-/faz:planejar-lacunas   # Planeja como fechar lacunas
-/faz:limpar             # Limpa arquivos temporários
-/faz:saude              # Checkup de saúde do projeto
-/faz:atualizar          # Atualiza o F.A.Z.
-/faz:rapido             # Modo rápido para tarefas simples
-/faz:entrar-discord     # Link para Discord
-/faz:reaplicar-patches  # Reaplica patches
-/faz:definir-perfil     # Define perfil de modelo
+/fase:discutir-fase      # Discute uma fase
+/fase:completar-marco    # Completa um marco
+/fase:planejar-lacunas   # Planeja como fechar lacunas
+/fase:limpar             # Limpa arquivos temporários
+/fase:saude              # Checkup de saúde do projeto
+/fase:atualizar          # Atualiza o F.A.S.E.
+/fase:rapido             # Modo rápido para tarefas simples
+/fase:entrar-discord     # Link para Discord
+/fase:reaplicar-patches  # Reaplica patches
+/fase:definir-perfil     # Define perfil de modelo
 ```
 
 **Veja a lista completa:** [📚 COMANDOS.md](docs/COMANDOS.md)
@@ -176,7 +176,7 @@ Sem o trabalho incrível deles, isso não existiria. 🙌
 
 ## 🤝 Como Contribuir
 
-Quer ajudar a traduzir ou melhorar o F.A.Z.?
+Quer ajudar a traduzir ou melhorar o F.A.S.E.?
 
 1. **Fork** este repo
 2. **Traduza** um agent ou documento

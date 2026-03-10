@@ -1,6 +1,6 @@
-# 📘 Guia de Tradução — F.A.Z.
+# 📘 Guia de Tradução — F.A.S.E.
 
-Este documento define as diretrizes e o glossário para traduzir o **get-shit-done** para português brasileiro.
+Este documento define as diretrizes e o glossário para traduzir o **get-shit-done** para português brasileiro como **F.A.S.E.**
 
 ---
 
@@ -57,7 +57,7 @@ O original é direto, informal, sem frescura. A tradução deve ser igual.
 
 | Inglês | Português | Notas |
 |--------|-----------|-------|
-| `Get Shit Done` | `F.A.Z. / Faz Acontecer` | Nome do projeto |
+| `Get Shit Done` | `F.A.S.E. / Fase Acontecer` | Nome do projeto |
 | `executor` | `executor` | Mantém, mas explica em PT |
 | `planner` | `planejador` | |
 | `researcher` | `pesquisador` | |
@@ -160,12 +160,12 @@ agents/
 
 ```markdown
 ---
-name: faz-executor
-description: Executa planos do F.A.Z. com commits atômicos, tratamento de desvios, checkpoints e gerenciamento de estado.
+name: fase-executor
+description: Executa planos do F.A.S.E. com commits atômicos, tratamento de desvios, checkpoints e gerenciamento de estado.
 tools: Read, Write, Edit, Bash, Grep, Glob
 color: yellow
 skills:
-  - faz-executor-workflow
+  - fase-executor-workflow
 ---
 ```
 

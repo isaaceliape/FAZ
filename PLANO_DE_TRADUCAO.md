@@ -1,4 +1,4 @@
-# 📋 Plano de Tradução — F.A.Z.
+# 📋 Plano de Tradução — F.A.S.E.
 
 Este documento mapeia **toda a estrutura do GSD original** e define a ordem de tradução.
 
@@ -185,7 +185,7 @@ O mínimo pra funcionar:
 
 ---
 
-## 📝 Estrutura de Pastas do F.A.Z.
+## 📝 Estrutura de Pastas do F.A.S.E.
 
 ```
 FAZ/
@@ -194,8 +194,8 @@ FAZ/
 ├── TRANSLATION_GUIDE.md
 ├── PLANO_DE_TRADUCAO.md       # ESTE ARQUIVO
 ├── agents/
-│   ├── faz-executor.pt.md
-│   ├── faz-planner.pt.md
+│   ├── fase-executor.pt.md
+│   ├── fase-planner.pt.md
 │   └── ...
 ├── commands/
 │   └── faz/
@@ -243,8 +243,8 @@ FAZ/
 
 Sugestão de ordem:
 
-1. `agents/gsd-executor.md` → `agents/faz-executor.pt.md`
-2. `commands/gsd/help.md` → `commands/faz/help.pt.md`
-3. `commands/gsd/new-project.md` → `commands/faz/new-project.pt.md`
+1. `agents/gsd-executor.md` → `agents/fase-executor.pt.md`
+2. `commands/gsd/help.md` → `commands/fase/help.pt.md`
+3. `commands/gsd/new-project.md` → `commands/fase/new-project.pt.md`
 
 **Quer que eu comece a traduzir o primeiro agent agora?** 🐙

@@ -1,6 +1,6 @@
-# 🇧🇷 F.A.Z. — Contexto do Projeto
+# 🇧🇷 F.A.S.E. — Contexto do Projeto
 
-**Framework de Automação com Zelo**
+**Framework de Automação Sem Enrolação**
 
 Tradução brasileira do [get-shit-done](https://github.com/gsd-build/get-shit-done) para Claude Code.
 
@@ -24,10 +24,10 @@ Adaptando:
 
 ## 🏗️ Arquitetura
 
-O F.A.Z. mantém a mesma estrutura do GSD original:
+O F.A.S.E. mantém a mesma estrutura do GSD original:
 
 ```
-FAZ/
+FASE/
 ├── agents/           # Agents de IA traduzidos
 ├── commands/         # Comandos slash traduzidos
 ├── hooks/            # Hooks de evento
@@ -46,13 +46,13 @@ FAZ/
 
 | Agent | Função |
 |-------|--------|
-| `faz-executor` | Executa planos com commits atômicos |
-| `faz-planner` | Cria planos baseados em specs |
-| `faz-verifier` | Verifica se o trabalho está correto |
-| `faz-researcher` | Pesquisa contexto do projeto |
-| `faz-roadmapper` | Cria roadmaps de alto nível |
-| `faz-debugger` | Debuga problemas complexos |
-| `faz-integration-checker` | Verifica integrações |
+| `fase-executor` | Executa planos com commits atômicos |
+| `fase-planner` | Cria planos baseados em specs |
+| `fase-verifier` | Verifica se o trabalho está correto |
+| `fase-researcher` | Pesquisa contexto do projeto |
+| `fase-roadmapper` | Cria roadmaps de alto nível |
+| `fase-debugger` | Debuga problemas complexos |
+| `fase-integration-checker` | Verifica integrações |
 
 ---
 
@@ -82,17 +82,15 @@ Sempre mencione o [gsd-build/get-shit-done](https://github.com/gsd-build/get-shi
 
 ## 🚀 Comandos
 
-Os comandos mantêm o prefixo original `/gsd:` para compatibilidade:
+Os comandos usam o prefixo `/fase:`:
 
 ```
-/gsd:help          # Ajuda
-/gsd:init          # Inicializa projeto
-/gsd:plan          # Cria plano
-/gsd:execute       # Executa plano
-/gsd:verify        # Verifica trabalho
+/fase:ajuda          # Ajuda
+/fase:novo-projeto   # Inicializa projeto
+/fase:planejar-fase  # Cria plano
+/fase:executar-fase  # Executa plano
+/fase:verificar-trabalho  # Verifica trabalho
 ```
-
-**Futuro:** Podemos adicionar `/faz:` como alias.
 
 ---
 
@@ -121,7 +119,7 @@ O GSD original evolui rápido. Precisamos:
 
 ## 🎨 Identidade Visual
 
-- **Nome:** F.A.Z. (Framework de Automação com Zelo)
+- **Nome:** F.A.S.E. (Framework de Automação Sem Enrolação)
 - **Emoji:** 🇧🇷
 - **Cores:** Verde e amarelo (opcional, manter profissional)
 - **Vibe:** Brasileiro, direto, sem frescura
@@ -138,8 +136,8 @@ O GSD original evolui rápido. Precisamos:
 
 ## 🙏 Créditos
 
-**Criador do GSD Original:** TÂCHES  
-**Repo Original:** https://github.com/gsd-build/get-shit-done  
+**Criador do GSD Original:** TÂCHES
+**Repo Original:** https://github.com/gsd-build/get-shit-done
 **Licença:** MIT (mesma do original)
 
 Este projeto é uma **tradução comunitária**, não um fork oficial.
@@ -155,40 +153,20 @@ Este projeto é uma **tradução comunitária**, não um fork oficial.
 - [x] CONTEXT.md criado
 - [x] Estrutura completa do GSD copiada
 - [x] PROGRESSO.md com plano detalhado
-- [x] `faz-executor.pt.md` traduzido
-- [x] Commands core traduzidos:
-  - [x] `help.pt.md`
-  - [x] `new-project.pt.md`
-  - [x] `plan-phase.pt.md`
-  - [x] `execute-phase.pt.md`
+- [x] Todos os agents traduzidos (12/12)
+- [x] Todos os comandos traduzidos (32/32)
+- [x] Hooks traduzidos para PT-BR
+- [x] Documentação técnica traduzida
+- [x] **Refatoração de nome: FAZ → FASE**
 
-### ✅ Fase 1 Core — COMPLETA
-- [x] `faz-planner.pt.md` — traduzido (43KB, 1309 linhas)
-- [x] `faz-verifier.pt.md` — traduzido (19KB, 581 linhas)
-
-### ✅ Fase 2 Planning & Research — COMPLETA
-- [x] `faz-roadmapper.pt.md` — traduzido (35KB, 652 linhas)
-- [x] `faz-project-researcher.pt.md` — traduzido (28KB, 631 linhas)
-- [x] `faz-phase-researcher.pt.md` — traduzido (23KB, 555 linhas)
-- [x] `faz-research-synthesizer.pt.md` — traduzido (249 linhas)
-- [x] `faz-codebase-mapper.pt.md` — traduzido (30KB, 772 linhas)
-- [x] Commands: `new-milestone`, `add-phase`, `research-phase`, `map-codebase`
-
-### ✅ Fase 3 Verification & Debug — COMPLETA
-- [x] `faz-plan-checker.pt.md` — traduzido (24KB, 708 linhas)
-- [x] `faz-integration-checker.pt.md` — traduzido (13KB, 445 linhas)
-- [x] `faz-debugger.pt.md` — traduzido (40KB, 1257 linhas)
-- [x] Commands: `verify-work`, `validate-phase`, `debug`, `check-todos`, `add-todo`, `add-tests`
-
-### 🚧 Em Progresso (Fase 4 - Advanced & Utility)
-
-### ⏳ Pendentes
-- [ ] `faz-nyquist-auditor.pt.md`
-- [ ] Hooks (check-update, statusline, context-monitor)
-- [ ] Commands utilitários restantes (17 arquivos)
-- [ ] Documentação traduzida
-- [ ] Primeiro release
+### ✅ Refatoração FASE — COMPLETA
+- [x] Branding atualizado (README, CONTEXT, docs)
+- [x] CLI (bin/install.js) atualizado
+- [x] Hooks atualizados
+- [x] Diretório `commands/fase/` renomeado
+- [x] Agentes renomeados para `fase-*.pt.md`
+- [x] Documentação técnica atualizada
 
 ---
 
-**"Chega de enrolação. Descreve o que quer e FAZ acontecer."** 🇧🇷🚀
+**"Chega de enrolação. Descreve o que quer e FASE acontecer."** 🇧🇷🚀

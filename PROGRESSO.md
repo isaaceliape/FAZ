@@ -1,4 +1,4 @@
-# 📊 Progresso do Projeto F.A.Z.
+# 📊 Progresso do Projeto F.A.S.E.
 
 **Última atualização:** 2026-03-06 19:18 GMT
 
@@ -48,18 +48,18 @@
 
 ### 🤖 Agents (100%) — TODOS TRADUZIDOS! 🎉
 
-- [x] `agents/faz-executor.pt.md` (19KB)
-- [x] `agents/faz-planner.pt.md` (43KB)
-- [x] `agents/faz-verifier.pt.md` (19KB)
-- [x] `agents/faz-debugger.pt.md` (38KB)
-- [x] `agents/faz-roadmapper.pt.md` (17KB)
-- [x] `agents/faz-project-researcher.pt.md` (16KB)
-- [x] `agents/faz-phase-researcher.pt.md` (18KB)
-- [x] `agents/faz-research-synthesizer.pt.md` (7KB)
-- [x] `agents/faz-codebase-mapper.pt.md` (16KB)
-- [x] `agents/faz-plan-checker.pt.md` (23KB)
-- [x] `agents/faz-integration-checker.pt.md` (13KB)
-- [x] **2026-03-06 18:06** — `agents/faz-nyquist-auditor.pt.md` (5KB) ✅ ÚLTIMO!
+- [x] `agents/fase-executor.pt.md` (19KB)
+- [x] `agents/fase-planner.pt.md` (43KB)
+- [x] `agents/fase-verifier.pt.md` (19KB)
+- [x] `agents/fase-debugger.pt.md` (38KB)
+- [x] `agents/fase-roadmapper.pt.md` (17KB)
+- [x] `agents/fase-project-researcher.pt.md` (16KB)
+- [x] `agents/fase-phase-researcher.pt.md` (18KB)
+- [x] `agents/fase-research-synthesizer.pt.md` (7KB)
+- [x] `agents/fase-codebase-mapper.pt.md` (16KB)
+- [x] `agents/fase-plan-checker.pt.md` (23KB)
+- [x] `agents/fase-integration-checker.pt.md` (13KB)
+- [x] **2026-03-06 18:06** — `agents/fase-nyquist-auditor.pt.md` (5KB) ✅ ÚLTIMO!
 
 ### 📜 Commands (100%) — TODOS TRADUZIDOS! 🎉
 
@@ -98,44 +98,44 @@
 
 ### Fase 1: Core (MVP) — ✅ COMPLETA
 
-1. ✅ `commands/faz/help.pt.md`
-2. ✅ `commands/faz/new-project.pt.md`
-3. ✅ `commands/faz/plan-phase.pt.md`
-4. ✅ `commands/faz/execute-phase.pt.md`
-5. ✅ `agents/faz-executor.pt.md`
-6. ✅ `agents/faz-planner.pt.md` (43KB)
-7. ✅ `agents/faz-verifier.pt.md` (19KB)
+1. ✅ `commands/fase/help.pt.md`
+2. ✅ `commands/fase/new-project.pt.md`
+3. ✅ `commands/fase/plan-phase.pt.md`
+4. ✅ `commands/fase/execute-phase.pt.md`
+5. ✅ `agents/fase-executor.pt.md`
+6. ✅ `agents/fase-planner.pt.md` (43KB)
+7. ✅ `agents/fase-verifier.pt.md` (19KB)
 
 ### Fase 2: Planning & Research — 5/9 arquivos (56%)
 
 **Concluídos:**
-- [x] `agents/faz-roadmapper.pt.md` ✅ (652 linhas)
-- [x] `agents/faz-project-researcher.pt.md` ✅ (631 linhas)
-- [x] `agents/faz-phase-researcher.pt.md` ✅ (555 linhas)
-- [x] `agents/faz-codebase-mapper.pt.md` ✅ (772 linhas)
+- [x] `agents/fase-roadmapper.pt.md` ✅ (652 linhas)
+- [x] `agents/fase-project-researcher.pt.md` ✅ (631 linhas)
+- [x] `agents/fase-phase-researcher.pt.md` ✅ (555 linhas)
+- [x] `agents/fase-codebase-mapper.pt.md` ✅ (772 linhas)
 
 **Pendentes:**
-- `agents/faz-research-synthesizer.pt.md`
-- `commands/faz/new-milestone.pt.md`
-- `commands/faz/add-phase.pt.md`
-- `commands/faz/research-phase.pt.md`
-- `commands/faz/map-codebase.pt.md`
+- `agents/fase-research-synthesizer.pt.md`
+- `commands/fase/new-milestone.pt.md`
+- `commands/fase/add-phase.pt.md`
+- `commands/fase/research-phase.pt.md`
+- `commands/fase/map-codebase.pt.md`
 
 ### Fase 3: Verification & Debug — 9 arquivos
 
-- `agents/faz-plan-checker.pt.md`
-- `agents/faz-integration-checker.pt.md`
-- `agents/faz-debugger.pt.md`
-- `commands/faz/verify-work.pt.md`
-- `commands/faz/validate-phase.pt.md`
-- `commands/faz/debug.pt.md`
-- `commands/faz/check-todos.pt.md`
-- `commands/faz/add-todo.pt.md`
-- `commands/faz/add-tests.pt.md`
+- `agents/fase-plan-checker.pt.md`
+- `agents/fase-integration-checker.pt.md`
+- `agents/fase-debugger.pt.md`
+- `commands/fase/verify-work.pt.md`
+- `commands/fase/validate-phase.pt.md`
+- `commands/fase/debug.pt.md`
+- `commands/fase/check-todos.pt.md`
+- `commands/fase/add-todo.pt.md`
+- `commands/fase/add-tests.pt.md`
 
 ### Fase 4: Advanced & Utility — 22 arquivos
 
-- `agents/faz-nyquist-auditor.pt.md`
+- `agents/fase-nyquist-auditor.pt.md`
 - `hooks/faz-check-update.js`
 - `hooks/faz-statusline.js`
 - `hooks/faz-context-monitor.js`
@@ -151,21 +151,21 @@
 |------|-----------|--------|
 | 11:41 | Isaac propõe tradução do GSD para PT-BR | ✅ |
 | 11:44 | Pesquisa no GitHub: nenhuma tradução BR existente | ✅ |
-| 11:49 | Decidido nome "F.A.Z." (Framework de Automação com Zelo) | ✅ |
+| 11:49 | Decidido nome "F.A.S.E." (Framework de Automação Sem Enrolação) | ✅ |
 | 11:51 | Repo criado: https://github.com/isaaceliape/FAZ | ✅ |
 | 11:53 | README.md, TRANSLATION_GUIDE.md, CONTEXT.md criados | ✅ |
 | 12:04 | Estrutura completa copiada do GSD original (168 arquivos) | ✅ |
 | 12:06 | PLANO_DE_TRADUCAO.md criado | ✅ |
 | 12:09 | Tradução do `gsd-executor.md` iniciada | ✅ |
-| 12:11 | `faz-executor.pt.md` traduzido e commitado | ✅ |
+| 12:11 | `fase-executor.pt.md` traduzido e commitado | ✅ |
 | 12:19 | Prefixos `gsd-` → `faz-` atualizados no executor | ✅ |
 | 12:25 | OpenCode integrado para traduções em lote | ✅ |
 | 12:29 | `help.pt.md` traduzido via OpenCode | ✅ |
 | 12:33 | Projeto movido para `~/repos/FAZ` | ✅ |
 | 12:42 | PROGRESSO.md criado (este arquivo) | ✅ |
 | 13:00 | Commands core traduzidos (new-project, plan-phase, execute-phase) | ✅ |
-| 13:15 | faz-verifier.pt.md traduzido (581 linhas) | ✅ |
-| 13:39 | faz-planner.pt.md traduzido (1309 linhas) | ✅ |
+| 13:15 | fase-verifier.pt.md traduzido (581 linhas) | ✅ |
+| 13:39 | fase-planner.pt.md traduzido (1309 linhas) | ✅ |
 | 13:40 | **Fase 1 Core completa** — 100% (6/6 arquivos) | 🎉 |
 | 14:20 | **4 agents de Fase 2 traduzidos** | ✅ |
 | 18:00 | Isaac retorna e pede pull das mudanças | ✅ |
@@ -173,7 +173,7 @@
 | 18:06 | **18 commands traduzidos em lote** via OpenCode | ✅ |
 | 18:06 | **Último agent (nyquist-auditor) traduzido** | ✅ |
 | 18:10 | **FASE 4 COMPLETA!** Commit e push | ✅ |
-| 18:10 | **PROJETO F.A.Z. 100% TRADUZIDO!** 🇧🇷🎉 | 🚀 |
+| 18:10 | **PROJETO F.A.S.E. 100% TRADUZIDO!** 🇧🇷🎉 | 🚀 |
 | 19:18 | **PROGRESSO.md atualizado** — status final | ✅ |
 
 ---
@@ -238,20 +238,20 @@
 - [ ] Documentação mínima no README
 
 **Dependências:**
-- `faz-executor.pt.md` ✅ (já traduzido)
-- `faz-planner.pt.md` → depende do executor
-- `faz-verifier.pt.md` → depende do planner
+- `fase-executor.pt.md` ✅ (já traduzido)
+- `fase-planner.pt.md` → depende do executor
+- `fase-verifier.pt.md` → depende do planner
 
 **Checklist Fase 1:**
 
 | # | Arquivo | Status | Tamanho | Complexidade | Responsável | Previsão |
 |---|---------|--------|---------|--------------|-------------|----------|
-| 1 | `commands/faz/help.pt.md` | ✅ Traduzido | ~8KB | Baixa | OpenCode | 2026-03-06 |
-| 2 | `commands/faz/new-project.pt.md` | ⏳ Pendente | ~12KB | Média | OpenCode | 2026-03-06 |
-| 3 | `commands/faz/plan-phase.pt.md` | ⏳ Pendente | ~15KB | Média | OpenCode | 2026-03-06 |
-| 4 | `commands/faz/execute-phase.pt.md` | ⏳ Pendente | ~10KB | Média | OpenCode | 2026-03-06 |
-| 5 | `agents/faz-planner.pt.md` | ⏳ Pendente | ~43KB | Alta | OpenCode | 2026-03-07 |
-| 6 | `agents/faz-verifier.pt.md` | ⏳ Pendente | ~19KB | Média | OpenCode | 2026-03-07 |
+| 1 | `commands/fase/help.pt.md` | ✅ Traduzido | ~8KB | Baixa | OpenCode | 2026-03-06 |
+| 2 | `commands/fase/new-project.pt.md` | ⏳ Pendente | ~12KB | Média | OpenCode | 2026-03-06 |
+| 3 | `commands/fase/plan-phase.pt.md` | ⏳ Pendente | ~15KB | Média | OpenCode | 2026-03-06 |
+| 4 | `commands/fase/execute-phase.pt.md` | ⏳ Pendente | ~10KB | Média | OpenCode | 2026-03-06 |
+| 5 | `agents/fase-planner.pt.md` | ⏳ Pendente | ~43KB | Alta | OpenCode | 2026-03-07 |
+| 6 | `agents/fase-verifier.pt.md` | ⏳ Pendente | ~19KB | Média | OpenCode | 2026-03-07 |
 
 **Estimativa:** 2-3 dias
 
@@ -269,22 +269,22 @@
 
 **Dependências:**
 - Depende da Fase 1 (especialmente planner e verifier)
-- `faz-roadmapper.pt.md` → base para todos os outros
-- `faz-research-synthesizer.pt.md` → depende dos researchers
+- `fase-roadmapper.pt.md` → base para todos os outros
+- `fase-research-synthesizer.pt.md` → depende dos researchers
 
 **Checklist Fase 2:**
 
 | # | Arquivo | Tipo | Tamanho | Complexidade | Dependência |
 |---|---------|------|---------|--------------|-------------|
-| 1 | `agents/faz-roadmapper.pt.md` | Agent | ~35KB | Alta | Fase 1 |
-| 2 | `agents/faz-project-researcher.pt.md` | Agent | ~25KB | Média | - |
-| 3 | `agents/faz-phase-researcher.pt.md` | Agent | ~20KB | Média | - |
-| 4 | `agents/faz-research-synthesizer.pt.md` | Agent | ~18KB | Média | #2, #3 |
-| 5 | `agents/faz-codebase-mapper.pt.md` | Agent | ~22KB | Média | - |
-| 6 | `commands/faz/new-milestone.pt.md` | Command | ~10KB | Baixa | #1 |
-| 7 | `commands/faz/add-phase.pt.md` | Command | ~12KB | Baixa | #1 |
-| 8 | `commands/faz/research-phase.pt.md` | Command | ~15KB | Média | #2, #3, #4 |
-| 9 | `commands/faz/map-codebase.pt.md` | Command | ~10KB | Baixa | #5 |
+| 1 | `agents/fase-roadmapper.pt.md` | Agent | ~35KB | Alta | Fase 1 |
+| 2 | `agents/fase-project-researcher.pt.md` | Agent | ~25KB | Média | - |
+| 3 | `agents/fase-phase-researcher.pt.md` | Agent | ~20KB | Média | - |
+| 4 | `agents/fase-research-synthesizer.pt.md` | Agent | ~18KB | Média | #2, #3 |
+| 5 | `agents/fase-codebase-mapper.pt.md` | Agent | ~22KB | Média | - |
+| 6 | `commands/fase/new-milestone.pt.md` | Command | ~10KB | Baixa | #1 |
+| 7 | `commands/fase/add-phase.pt.md` | Command | ~12KB | Baixa | #1 |
+| 8 | `commands/fase/research-phase.pt.md` | Command | ~15KB | Média | #2, #3, #4 |
+| 9 | `commands/fase/map-codebase.pt.md` | Command | ~10KB | Baixa | #5 |
 
 **Estimativa:** 4-5 dias
 
@@ -308,15 +308,15 @@
 
 | # | Arquivo | Tipo | Tamanho | Complexidade | Dependência |
 |---|---------|------|---------|--------------|-------------|
-| 1 | `agents/faz-plan-checker.pt.md` | Agent | ~20KB | Média | Fase 1 |
-| 2 | `agents/faz-integration-checker.pt.md` | Agent | ~25KB | Média | Fase 1 |
-| 3 | `agents/faz-debugger.pt.md` | Agent | ~30KB | Alta | - |
-| 4 | `commands/faz/verify-work.pt.md` | Command | ~12KB | Média | Fase 1 |
-| 5 | `commands/faz/validate-phase.pt.md` | Command | ~10KB | Média | #1 |
-| 6 | `commands/faz/debug.pt.md` | Command | ~15KB | Média | #3 |
-| 7 | `commands/faz/check-todos.pt.md` | Command | ~8KB | Baixa | - |
-| 8 | `commands/faz/add-todo.pt.md` | Command | ~8KB | Baixa | - |
-| 9 | `commands/faz/add-tests.pt.md` | Command | ~12KB | Média | #4 |
+| 1 | `agents/fase-plan-checker.pt.md` | Agent | ~20KB | Média | Fase 1 |
+| 2 | `agents/fase-integration-checker.pt.md` | Agent | ~25KB | Média | Fase 1 |
+| 3 | `agents/fase-debugger.pt.md` | Agent | ~30KB | Alta | - |
+| 4 | `commands/fase/verify-work.pt.md` | Command | ~12KB | Média | Fase 1 |
+| 5 | `commands/fase/validate-phase.pt.md` | Command | ~10KB | Média | #1 |
+| 6 | `commands/fase/debug.pt.md` | Command | ~15KB | Média | #3 |
+| 7 | `commands/fase/check-todos.pt.md` | Command | ~8KB | Baixa | - |
+| 8 | `commands/fase/add-todo.pt.md` | Command | ~8KB | Baixa | - |
+| 9 | `commands/fase/add-tests.pt.md` | Command | ~12KB | Média | #4 |
 
 **Estimativa:** 4-5 dias
 
@@ -348,7 +348,7 @@
 #### Agent Avançado (1 arquivo)
 | # | Arquivo | Tamanho | Complexidade |
 |---|---------|---------|--------------|
-| 4 | `agents/faz-nyquist-auditor.pt.md` | ~35KB | Alta |
+| 4 | `agents/fase-nyquist-auditor.pt.md` | ~35KB | Alta |
 
 #### Commands Utilitários (18 arquivos - selecionar os mais importantes)
 | # | Arquivo | Prioridade | Estimativa |
@@ -426,4 +426,4 @@
 
 ---
 
-**"Chega de enrolação. Descreve o que quer e FAZ acontecer."** 🇧🇷🚀
+**"Chega de enrolação. Descreve o que quer e FASE acontecer."** 🇧🇷🚀
