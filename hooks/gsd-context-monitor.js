@@ -100,7 +100,7 @@ process.stdin.on('end', () => {
     warnData.lastLevel = currentLevel;
     fs.writeFileSync(warnPath, JSON.stringify(warnData));
 
-    // Detecta se o FAZ está ativo (possui .planning/STATE.md no diretório de trabalho)
+    // Detecta se o FASE está ativo (possui .planning/STATE.md no diretório de trabalho)
     const cwd = data.cwd || process.cwd();
     const isGsdActive = fs.existsSync(path.join(cwd, '.planning', 'STATE.md'));
 
@@ -111,8 +111,8 @@ process.stdin.on('end', () => {
       message = isGsdActive
         ? `CONTEXTO CRÍTICO: Uso em ${usedPct}%. Restante: ${remaining}%. ` +
           'O contexto está quase esgotado. NÃO inicie trabalho complexo novo ou escreva arquivos de handoff — ' +
-          'o estado do FAZ já está registrado em STATE.md. Informe o usuário para que ele execute ' +
-          '/faz:pausar-trabalho no próximo ponto de parada natural.'
+          'o estado do FASE já está registrado em STATE.md. Informe o usuário para que ele execute ' +
+          '/fase:pausar-trabalho no próximo ponto de parada natural.'
         : `CONTEXTO CRÍTICO: Uso em ${usedPct}%. Restante: ${remaining}%. ` +
           'O contexto está quase esgotado. Informe ao usuário que o contexto está baixo e pergunte como ele ' +
           'quer prosseguir. NÃO salve estado ou escreva arquivos de handoff de forma autônoma, a menos que o usuário peça.';

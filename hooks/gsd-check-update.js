@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Verifica atualizações do FAZ em segundo plano e salva resultado no cache
+// Verifica atualizações do FASE em segundo plano e salva resultado no cache
 // Chamado pelo hook SessionStart — executa uma vez por sessão
 
 const fs = require('fs');

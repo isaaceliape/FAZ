@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Statusline do Claude Code — Edição FAZ
+// Statusline do Claude Code — Edição FASE
 // Exibe: modelo | tarefa atual | diretório | uso do contexto
 
 const fs = require('fs');
@@ -90,14 +90,14 @@ process.stdin.on('end', () => {
       }
     }
 
-    // Atualização do FAZ disponível?
+    // Atualização do FASE disponível?
     let gsdUpdate = '';
     const cacheFile = path.join(claudeDir, 'cache', 'gsd-update-check.json');
     if (fs.existsSync(cacheFile)) {
       try {
         const cache = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
         if (cache.update_available) {
-          gsdUpdate = '\x1b[33m⬆ /faz:atualizar\x1b[0m │ ';
+          gsdUpdate = '\x1b[33m⬆ /fase:atualizar\x1b[0m │ ';
         }
       } catch (e) {}
     }
