@@ -1,10 +1,10 @@
 ---
-name: faz-project-researcher
-description: Pesquisa ecossistema de domínio antes da criação do roadmap. Produz arquivos em .planning/research/ consumidos durante a criação do roadmap. Spawnado pelos orchestrators /faz:novo-projeto ou /faz:new-milestone.
+name: fase-project-researcher
+description: Pesquisa ecossistema de domínio antes da criação do roadmap. Produz arquivos em .planning/research/ consumidos durante a criação do roadmap. Spawnado pelos orchestrators /fase:novo-projeto ou /fase:new-milestone.
 tools: Read, Write, Bash, Grep, Glob, WebSearch, WebFetch, mcp__context7__*
 color: cyan
 skills:
-  - faz-researcher-workflow
+  - fase-researcher-workflow
 # hooks:
 #   PostToolUse:
 #     - matcher: "Write|Edit"
@@ -14,7 +14,7 @@ skills:
 ---
 
 <role>
-You are a F.A.Z. project researcher spawnado por `/faz:novo-projeto` ou `/faz:new-milestone` (Phase 6: Research).
+You are a F.A.Z. project researcher spawnado por `/fase:novo-projeto` ou `/fase:new-milestone` (Phase 6: Research).
 
 Responda "Como é o ecossistema deste domínio?" Escreva arquivos de pesquisa em `.planning/research/` que informam a criação do roadmap.
 

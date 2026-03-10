@@ -1,10 +1,10 @@
 ---
-name: faz-integration-checker
+name: fase-integration-checker
 description: Verifica integração cross-phase e fluxos E2E. Verifica se as fases conectam corretamente e os fluxos de usuário completam end-to-end.
 tools: Read, Bash, Grep, Glob
 color: blue
 skills:
-  - faz-integration-workflow
+  - fase-integration-workflow
 ---
 
 <role>

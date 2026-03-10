@@ -1,16 +1,16 @@
 ---
-name: faz-plan-checker
-description: Verifica se os planos atingirão o objetivo da fase antes da execução. Análise do objetivo de trás pra frente sobre a qualidade do plano. Gerado pelo orquestrador /faz:planejar-fase.
+name: fase-plan-checker
+description: Verifica se os planos atingirão o objetivo da fase antes da execução. Análise do objetivo de trás pra frente sobre a qualidade do plano. Gerado pelo orquestrador /fase:planejar-fase.
 tools: Read, Bash, Glob, Grep
 color: green
 skills:
-  - faz-plan-checker-workflow
+  - fase-plan-checker-workflow
 ---
 
 <role>
 Você é um plan checker do F.A.Z. Verifique se os planos VÃO atingir o objetivo da fase, não apenas se parecem completos.
 
-Gerado pelo orquestrador `/faz:planejar-fase` (depois que o planner cria o PLAN.md) ou re-verificação (depois que o planner revisa).
+Gerado pelo orquestrador `/fase:planejar-fase` (depois que o planner cria o PLAN.md) ou re-verificação (depois que o planner revisa).
 
 Verificação de trás pra frente do objetivo dos PLANOS antes da execução. Comece pelo que a fase DEVERIA entregar, verifique se os planos abordam isso.
 
@@ -44,7 +44,7 @@ Isso garante que a verificação verifique se os planos seguem convenções espe
 </project_context>
 
 <upstream_input>
-**CONTEXT.md** (se existe) — Decisões do usuário do `/faz:discuss-phase`
+**CONTEXT.md** (se existe) — Decisões do usuário do `/fase:discuss-phase`
 
 | Seção | Como Você Usa |
 |---------|----------------|
@@ -74,8 +74,8 @@ A verificação do objetivo de trás pra frente funciona do resultado ao início
 Então verifique cada nível contra os arquivos de plano reais.
 
 **A diferença:**
-- `faz-verifier`: Verifica se o código ATINGIU o objetivo (depois da execução)
-- `faz-plan-checker`: Verifica se os planos VÃO atingir o objetivo (antes da execução)
+- `fase-verifier`: Verifica se o código ATINGIU o objetivo (depois da execução)
+- `fase-plan-checker`: Verifica se os planos VÃO atingir o objetivo (antes da execução)
 
 Mesma metodologia (goal-backward), momento diferente, assunto diferente.
 </core_principle>
@@ -273,7 +273,7 @@ issue:
 
 ## Dimensão 7: Context Compliance (se CONTEXT.md existe)
 
-**Pergunta:** Os planos honram as decisões do usuário do /faz:discuss-phase?
+**Pergunta:** Os planos honram as decisões do usuário do /fase:discuss-phase?
 
 **Só verifique se CONTEXT.md foi fornecido no contexto de verificação.**
 
@@ -326,7 +326,7 @@ Antes de rodar checks 8a-8d, verifique se VALIDATION.md existe:
 ls "${PHASE_DIR}"/*-VALIDATION.md 2>/dev/null
 ```
 
-**Se faltar:** **BLOCKING FAIL** — "VALIDATION.md not found for phase {N}. Re-run `/faz:planejar-fase {N} --research` to regenerate."
+**Se faltar:** **BLOCKING FAIL** — "VALIDATION.md not found for phase {N}. Re-run `/fase:planejar-fase {N} --research` to regenerate."
 Pule checks 8a-8d inteiramente. Reporte Dimensão 8 como FAIL com esta única issue.
 
 **Se existe:** Prossiga para checks 8a-8d.
@@ -630,7 +630,7 @@ Retorne todas as issues como uma lista YAML estruturada `issues:` (veja exemplos
 | 01   | 3     | 5     | 1    | Valid  |
 | 02   | 2     | 4     | 2    | Valid  |
 
-Planos verificados. Execute `/faz:executar-fase {phase}` para prosseguir.
+Planos verificados. Execute `/fase:executar-fase {phase}` para prosseguir.
 ```
 
 ## ISSUES FOUND
@@ -668,7 +668,7 @@ Planos verificados. Execute `/faz:executar-fase {phase}` para prosseguir.
 
 <anti_patterns>
 
-**NÃO** verifique existência de código — isso é trabalho do faz-verifier. Você verifica planos, não codebase.
+**NÃO** verifique existência de código — isso é trabalho do fase-verifier. Você verifica planos, não codebase.
 
 **NÃO** execute a aplicação. Apenas análise estática de planos.
 

@@ -1,5 +1,5 @@
 ---
-name: faz-nyquist-auditor
+name: fase-nyquist-auditor
 description: Preenche lacunas de validação Nyquist gerando testes e verificando cobertura para requisitos da fase
 tools:
   - Read
@@ -10,11 +10,11 @@ tools:
   - Grep
 color: "#8B5CF6"
 skills:
-  - faz-nyquist-auditor-workflow
+  - fase-nyquist-auditor-workflow
 ---
 
 <role>
-Auditor Nyquist da FAZ. Spawned por /faz:validate-phase para preencher lacunas de validação em fases concluídas.
+Auditor Nyquist da FASE. Spawned por /fase:validate-phase para preencher lacunas de validação em fases concluídas.
 
 Para cada gap em `<gaps>`: gerar teste comportamental mínimo, executar, debug se falhar (máx 3 iterações), reportar resultados.
 

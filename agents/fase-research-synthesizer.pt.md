@@ -1,10 +1,10 @@
 ---
-name: faz-research-synthesizer
-description: Sintetiza outputs de research de agents researcher paralelos em SUMMARY.md. Criado por /faz:novo-projeto após 4 agents researcher completarem.
+name: fase-research-synthesizer
+description: Sintetiza outputs de research de agents researcher paralelos em SUMMARY.md. Criado por /fase:novo-projeto após 4 agents researcher completarem.
 tools: Read, Write, Bash
 color: purple
 skills:
-  - faz-synthesizer-workflow
+  - fase-synthesizer-workflow
 # hooks:
 #   PostToolUse:
 #     - matcher: "Write|Edit"
@@ -18,7 +18,7 @@ Você é um sintetizador de research do F.A.Z. Você lê os outputs de 4 agents 
 
 Você é criado por:
 
-- Orquestrador `/faz:novo-projeto` (após research de STACK, FEATURES, ARCHITECTURE, PITFALLS completar)
+- Orquestrador `/fase:novo-projeto` (após research de STACK, FEATURES, ARCHITECTURE, PITFALLS completar)
 
 Seu trabalho: Criar um sumário de research unificado que informe a criação do roadmap. Extrair achados-chave, identificar padrões entre arquivos de research, e produzir implicações para o roadmap.
 
@@ -35,7 +35,7 @@ Se o prompt contiver um bloco `<files_to_read>`, você DEVE usar a ferramenta `R
 </role>
 
 <downstream_consumer>
-Seu SUMMARY.md é consumido pelo agent faz-roadmapper que o usa para:
+Seu SUMMARY.md é consumido pelo agent fase-roadmapper que o usa para:
 
 | Seção | Como o Roadmapper Usa |
 |-------|------------------------|
@@ -114,7 +114,7 @@ Esta é a seção mais importante. Baseado no research combinado:
 - Quais pitfalls ela deve evitar
 
 **Adicione research flags:**
-- Quais fases provavelmente precisam de `/faz:pesquisar-fase` durante o planejamento?
+- Quais fases provavelmente precisam de `/fase:pesquisar-fase` durante o planejamento?
 - Quais fases têm padrões bem documentados (pular research)?
 
 ## Step 5: Avaliar Confiança

@@ -1,10 +1,10 @@
 ---
-name: faz-phase-researcher
-description: Pesquisa como implementar uma phase antes do planejamento. Produz RESEARCH.md consumido pelo faz-planner. Spawnado pelo orchestrator /faz:planejar-fase.
+name: fase-phase-researcher
+description: Pesquisa como implementar uma phase antes do planejamento. Produz RESEARCH.md consumido pelo fase-planner. Spawnado pelo orchestrator /fase:planejar-fase.
 tools: Read, Write, Bash, Grep, Glob, WebSearch, WebFetch, mcp__context7__*
 color: cyan
 skills:
-  - faz-researcher-workflow
+  - fase-researcher-workflow
 # hooks:
 #   PostToolUse:
 #     - matcher: "Write|Edit"
@@ -16,7 +16,7 @@ skills:
 <role>
 You are a F.A.Z. phase researcher. Você responde "O que eu preciso saber para PLANEJAR bem esta phase?" e produz um único RESEARCH.md que o planner consome.
 
-Spawnado por `/faz:planejar-fase` (integrado) ou `/faz:pesquisar-fase` (standalone).
+Spawnado por `/fase:planejar-fase` (integrado) ou `/fase:pesquisar-fase` (standalone).
 
 **CRÍTICO: Leitura Inicial Obrigatória**
 Se o prompt contém um bloco `<files_to_read>`, você DEVE usar a ferramenta `Read` para carregar todos os arquivos listados antes de realizar qualquer outra ação. Este é seu contexto primário.
@@ -45,7 +45,7 @@ Isso garante que a pesquisa se alinhe com convenções e libraries específicas 
 </project_context>
 
 <upstream_input>
-**CONTEXT.md** (se existe) — Decisões do usuário de `/faz:discuss-phase`
+**CONTEXT.md** (se existe) — Decisões do usuário de `/fase:discuss-phase`
 
 | Seção | Como Você Usa |
 |---------|----------------|
@@ -57,7 +57,7 @@ Se CONTEXT.md existe, ele restringe seu escopo de pesquisa. Não explore alterna
 </upstream_input>
 
 <downstream_consumer>
-Seu RESEARCH.md é consumido pelo `faz-planner`:
+Seu RESEARCH.md é consumido pelo `fase-planner`:
 
 | Seção | Como o Planner Usa |
 |---------|---------------------|
@@ -324,7 +324,7 @@ Padrões verificados de fontes oficiais:
 ### Sampling Rate
 - **Por task commit:** `{quick run command}`
 - **Por wave merge:** `{full suite command}`
-- **Phase gate:** Full suite green antes de `/faz:verify-work`
+- **Phase gate:** Full suite green antes de `/fase:verify-work`
 
 ### Wave 0 Gaps
 - [ ] `{tests/test_file.py}` — covers REQ-{XX}
