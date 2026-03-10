@@ -1,4 +1,4 @@
-# 🔧 Comandos do F.A.Z.
+# 🔧 Comandos do F.A.S.E.
 
 **32 comandos em português brasileiro para Claude Code.**
 
@@ -20,7 +20,7 @@
 
 Comandos essenciais para começar e executar projetos.
 
-### `/faz:ajuda`
+### `/fase:ajuda`
 
 Mostra ajuda geral e lista de comandos disponíveis.
 
@@ -28,15 +28,15 @@ Mostra ajuda geral e lista de comandos disponíveis.
 
 **Exemplo:**
 ```bash
-/faz:ajuda
-/faz:ajuda novo-projeto  # Ajuda específica de um comando
+/fase:ajuda
+/fase:ajuda novo-projeto  # Ajuda específica de um comando
 ```
 
 ---
 
-### `/faz:novo-projeto`
+### `/fase:novo-projeto`
 
-Inicia um novo projeto F.A.Z. no diretório atual.
+Inicia um novo projeto F.A.S.E. no diretório atual.
 
 **O que faz:**
 - Cria estrutura de pastas `.planning/`
@@ -45,12 +45,12 @@ Inicia um novo projeto F.A.Z. no diretório atual.
 
 **Exemplo:**
 ```bash
-/faz:novo-projeto "Sistema de autenticação JWT"
+/fase:novo-projeto "Sistema de autenticação JWT"
 ```
 
 ---
 
-### `/faz:planejar-fase`
+### `/fase:planejar-fase`
 
 Cria um plano detalhado para uma fase específica.
 
@@ -62,12 +62,12 @@ Cria um plano detalhado para uma fase específica.
 
 **Exemplo:**
 ```bash
-/faz:planejar-fase "Implementar login com email/senha"
+/fase:planejar-fase "Implementar login com email/senha"
 ```
 
 ---
 
-### `/faz:executar-fase`
+### `/fase:executar-fase`
 
 Executa o plano de uma fase, tarefa por tarefa.
 
@@ -79,14 +79,14 @@ Executa o plano de uma fase, tarefa por tarefa.
 
 **Exemplo:**
 ```bash
-/faz:executar-fase "fase-1"
+/fase:executar-fase "fase-1"
 ```
 
 ---
 
-### `/faz:configuracoes`
+### `/fase:configuracoes`
 
-Mostra e ajusta configurações do F.A.Z.
+Mostra e ajusta configurações do F.A.S.E.
 
 **O que faz:**
 - Lista configurações atuais
@@ -95,8 +95,8 @@ Mostra e ajusta configurações do F.A.Z.
 
 **Exemplo:**
 ```bash
-/faz:configuracoes
-/faz:configuracoes set modelo padrao claude-sonnet
+/fase:configuracoes
+/fase:configuracoes set modelo padrao claude-sonnet
 ```
 
 ---
@@ -105,7 +105,7 @@ Mostra e ajusta configurações do F.A.Z.
 
 Comandos para planejar e gerenciar milestones e fases.
 
-### `/faz:novo-marco`
+### `/fase:novo-marco`
 
 Cria um novo marco (milestone) no roadmap.
 
@@ -116,12 +116,12 @@ Cria um novo marco (milestone) no roadmap.
 
 **Exemplo:**
 ```bash
-/faz:novo-marco "MVP funcional até sexta"
+/fase:novo-marco "MVP funcional até sexta"
 ```
 
 ---
 
-### `/faz:adicionar-fase`
+### `/fase:adicionar-fase`
 
 Adiciona uma nova fase ao projeto.
 
@@ -132,12 +132,12 @@ Adiciona uma nova fase ao projeto.
 
 **Exemplo:**
 ```bash
-/faz:adicionar-fase "Autenticação de usuários"
+/fase:adicionar-fase "Autenticação de usuários"
 ```
 
 ---
 
-### `/faz:inserir-fase`
+### `/fase:inserir-fase`
 
 Insere uma fase em uma posição específica (entre outras fases).
 
@@ -148,12 +148,12 @@ Insere uma fase em uma posição específica (entre outras fases).
 
 **Exemplo:**
 ```bash
-/faz:inserir-fase "Validação de inputs" --depois "fase-2"
+/fase:inserir-fase "Validação de inputs" --depois "fase-2"
 ```
 
 ---
 
-### `/faz:remover-fase`
+### `/fase:remover-fase`
 
 Remove uma fase do projeto.
 
@@ -164,12 +164,12 @@ Remove uma fase do projeto.
 
 **Exemplo:**
 ```bash
-/faz:remover-fase "fase-3"
+/fase:remover-fase "fase-3"
 ```
 
 ---
 
-### `/faz:pausar-trabalho`
+### `/fase:pausar-trabalho`
 
 Pausa o trabalho atual e salva o estado.
 
@@ -180,12 +180,12 @@ Pausa o trabalho atual e salva o estado.
 
 **Exemplo:**
 ```bash
-/faz:pausar-trabalho "Preciso sair, continuo depois"
+/fase:pausar-trabalho "Preciso sair, continuo depois"
 ```
 
 ---
 
-### `/faz:retomar-trabalho`
+### `/fase:retomar-trabalho`
 
 Retoma trabalho de onde parou.
 
@@ -196,12 +196,12 @@ Retoma trabalho de onde parou.
 
 **Exemplo:**
 ```bash
-/faz:retomar-trabalho
+/fase:retomar-trabalho
 ```
 
 ---
 
-### `/faz:progresso`
+### `/fase:progresso`
 
 Mostra o progresso atual do projeto.
 
@@ -212,7 +212,7 @@ Mostra o progresso atual do projeto.
 
 **Exemplo:**
 ```bash
-/faz:progresso
+/fase:progresso
 ```
 
 ---
@@ -221,7 +221,7 @@ Mostra o progresso atual do projeto.
 
 Comandos para pesquisar e mapear o projeto.
 
-### `/faz:pesquisar-fase`
+### `/fase:pesquisar-fase`
 
 Realiza pesquisa para embasar uma fase.
 
@@ -233,12 +233,12 @@ Realiza pesquisa para embasar uma fase.
 
 **Exemplo:**
 ```bash
-/faz:pesquisar-fase "Implementar WebSockets para chat em tempo real"
+/fase:pesquisar-fase "Implementar WebSockets para chat em tempo real"
 ```
 
 ---
 
-### `/faz:mapear-codigo`
+### `/fase:mapear-codigo`
 
 Mapeia um codebase existente.
 
@@ -250,7 +250,7 @@ Mapeia um codebase existente.
 
 **Exemplo:**
 ```bash
-/faz:mapear-codigo
+/fase:mapear-codigo
 ```
 
 **Output:**
@@ -261,7 +261,7 @@ Mapeia um codebase existente.
 
 ---
 
-### `/faz:listar-premissas`
+### `/fase:listar-premissas`
 
 Lista todas as premissas de uma fase.
 
@@ -272,7 +272,7 @@ Lista todas as premissas de uma fase.
 
 **Exemplo:**
 ```bash
-/faz:listar-premissas "fase-2"
+/fase:listar-premissas "fase-2"
 ```
 
 ---
@@ -281,7 +281,7 @@ Lista todas as premissas de uma fase.
 
 Comandos para verificar e validar o trabalho.
 
-### `/faz:verificar-trabalho`
+### `/fase:verificar-trabalho`
 
 Verifica se o trabalho foi feito corretamente.
 
@@ -293,12 +293,12 @@ Verifica se o trabalho foi feito corretamente.
 
 **Exemplo:**
 ```bash
-/faz:verificar-trabalho "fase-1"
+/fase:verificar-trabalho "fase-1"
 ```
 
 ---
 
-### `/faz:validar-fase`
+### `/fase:validar-fase`
 
 Valida que uma fase está completa e pronta.
 
@@ -310,12 +310,12 @@ Valida que uma fase está completa e pronta.
 
 **Exemplo:**
 ```bash
-/faz:validar-fase "fase-1"
+/fase:validar-fase "fase-1"
 ```
 
 ---
 
-### `/faz:auditar-marco`
+### `/fase:auditar-marco`
 
 Realiza auditoria de um marco.
 
@@ -327,7 +327,7 @@ Realiza auditoria de um marco.
 
 **Exemplo:**
 ```bash
-/faz:auditar-marco "MVP"
+/fase:auditar-marco "MVP"
 ```
 
 ---
@@ -336,7 +336,7 @@ Realiza auditoria de um marco.
 
 Comandos para debug e troubleshooting.
 
-### `/faz:debug`
+### `/fase:debug`
 
 Inicia sessão de debug estruturado.
 
@@ -348,12 +348,12 @@ Inicia sessão de debug estruturado.
 
 **Exemplo:**
 ```bash
-/faz:debug "Erro 500 ao fazer login"
+/fase:debug "Erro 500 ao fazer login"
 ```
 
 ---
 
-### `/faz:checar-todos`
+### `/fase:checar-todos`
 
 Lista todos os TODOs do projeto.
 
@@ -364,12 +364,12 @@ Lista todos os TODOs do projeto.
 
 **Exemplo:**
 ```bash
-/faz:checar-todos
+/fase:checar-todos
 ```
 
 ---
 
-### `/faz:adicionar-todo`
+### `/fase:adicionar-todo`
 
 Adiciona um TODO ao projeto.
 
@@ -380,12 +380,12 @@ Adiciona um TODO ao projeto.
 
 **Exemplo:**
 ```bash
-/faz:adicionar-todo "Adicionar rate limiting no login" --prioridade alta
+/fase:adicionar-todo "Adicionar rate limiting no login" --prioridade alta
 ```
 
 ---
 
-### `/faz:adicionar-testes`
+### `/fase:adicionar-testes`
 
 Adiciona testes para uma funcionalidade.
 
@@ -397,7 +397,7 @@ Adiciona testes para uma funcionalidade.
 
 **Exemplo:**
 ```bash
-/faz:adicionar-testes "Autenticação JWT"
+/fase:adicionar-testes "Autenticação JWT"
 ```
 
 ---
@@ -406,7 +406,7 @@ Adiciona testes para uma funcionalidade.
 
 Comandos para discussão e conclusão.
 
-### `/faz:discutir-fase`
+### `/fase:discutir-fase`
 
 Inicia discussão sobre uma fase.
 
@@ -418,12 +418,12 @@ Inicia discussão sobre uma fase.
 
 **Exemplo:**
 ```bash
-/faz:discutir-fase "Autenticação: JWT vs Session"
+/fase:discutir-fase "Autenticação: JWT vs Session"
 ```
 
 ---
 
-### `/faz:completar-marco`
+### `/fase:completar-marco`
 
 Marca um marco como completado.
 
@@ -435,12 +435,12 @@ Marca um marco como completado.
 
 **Exemplo:**
 ```bash
-/faz:completar-marco "MVP"
+/fase:completar-marco "MVP"
 ```
 
 ---
 
-### `/faz:planejar-lacunas`
+### `/fase:planejar-lacunas`
 
 Identifica e planeja como fechar lacunas de um marco.
 
@@ -452,7 +452,7 @@ Identifica e planeja como fechar lacunas de um marco.
 
 **Exemplo:**
 ```bash
-/faz:planejar-lacunas "MVP"
+/fase:planejar-lacunas "MVP"
 ```
 
 ---
@@ -461,7 +461,7 @@ Identifica e planeja como fechar lacunas de um marco.
 
 Comandos utilitários diversos.
 
-### `/faz:limpar`
+### `/fase:limpar`
 
 Limpa arquivos temporários e cache.
 
@@ -472,12 +472,12 @@ Limpa arquivos temporários e cache.
 
 **Exemplo:**
 ```bash
-/faz:limpar
+/fase:limpar
 ```
 
 ---
 
-### `/faz:saude`
+### `/fase:saude`
 
 Realiza checkup de saúde do projeto.
 
@@ -489,14 +489,14 @@ Realiza checkup de saúde do projeto.
 
 **Exemplo:**
 ```bash
-/faz:saude
+/fase:saude
 ```
 
 ---
 
-### `/faz:atualizar`
+### `/fase:atualizar`
 
-Atualiza o F.A.Z. para a versão mais recente.
+Atualiza o F.A.S.E. para a versão mais recente.
 
 **O que faz:**
 - Verifica versão instalada
@@ -506,12 +506,12 @@ Atualiza o F.A.Z. para a versão mais recente.
 
 **Exemplo:**
 ```bash
-/faz:atualizar
+/fase:atualizar
 ```
 
 ---
 
-### `/faz:rapido`
+### `/fase:rapido`
 
 Modo rápido para tarefas simples.
 
@@ -522,23 +522,23 @@ Modo rápido para tarefas simples.
 
 **Exemplo:**
 ```bash
-/faz:rapido "Adiciona log no endpoint de login"
+/fase:rapido "Adiciona log no endpoint de login"
 ```
 
 ---
 
-### `/faz:entrar-discord`
+### `/fase:entrar-discord`
 
 Mostra link para entrar no Discord da comunidade.
 
 **Exemplo:**
 ```bash
-/faz:entrar-discord
+/fase:entrar-discord
 ```
 
 ---
 
-### `/faz:reaplicar-patches`
+### `/fase:reaplicar-patches`
 
 Reaplica patches que falharam anteriormente.
 
@@ -550,12 +550,12 @@ Reaplica patches que falharam anteriormente.
 
 **Exemplo:**
 ```bash
-/faz:reaplicar-patches
+/fase:reaplicar-patches
 ```
 
 ---
 
-### `/faz:definir-perfil`
+### `/fase:definir-perfil`
 
 Define o perfil de modelo a ser usado.
 
@@ -566,8 +566,8 @@ Define o perfil de modelo a ser usado.
 
 **Exemplo:**
 ```bash
-/faz:definir-perfil claude-sonnet
-/faz:definir-perfil lista
+/fase:definir-perfil claude-sonnet
+/fase:definir-perfil lista
 ```
 
 ---
@@ -577,9 +577,9 @@ Define o perfil de modelo a ser usado.
 **Problemas com algum comando?**
 
 - 📖 [Guia do Usuário](USER-GUIDE.md)
-- 🐛 [Reportar bug](https://github.com/isaaceliape/FAZ/issues)
+- 🐛 [Reportar bug](https://github.com/isaaceliape/FASE/issues)
 - 💬 [Discord da comunidade](https://discord.gg/gsd)
 
 ---
 
-**"Chega de enrolação. Descreve o que quer e FAZ acontecer."** 🇧🇷🚀
+**"Chega de enrolação. Descreve o que quer e FASE acontecer."** 🇧🇷🚀

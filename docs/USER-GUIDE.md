@@ -1,4 +1,4 @@
-# Guia do Usuário — FAZ
+# Guia do Usuário — FASE
 
 Referência detalhada de workflows, resolução de problemas e configuração. Para configuração rápida, veja o [README](../README.md).
 
@@ -22,7 +22,7 @@ Referência detalhada de workflows, resolução de problemas e configuração. P
 ```
   ┌──────────────────────────────────────────────────┐
   │                  NOVO PROJETO                    │
-  │  /faz:novo-projeto                               │
+  │  /fase:novo-projeto                               │
   │  Perguntas -> Pesquisa -> Requisitos -> Roadmap  │
   └─────────────────────────┬────────────────────────┘
                             │
@@ -30,19 +30,19 @@ Referência detalhada de workflows, resolução de problemas e configuração. P
              │      PARA CADA FASE:       │
              │                            │
              │  ┌──────────────────────┐  │
-             │  │ /faz:discutir-fase   │  │  <- Definir preferências
+             │  │ /fase:discutir-fase   │  │  <- Definir preferências
              │  └──────────┬───────────┘  │
              │             │              │
              │  ┌──────────▼──────────┐   │
-             │  │ /faz:planejar-fase  │   │  <- Pesquisa + Plano + Verificação
+             │  │ /fase:planejar-fase  │   │  <- Pesquisa + Plano + Verificação
              │  └──────────┬──────────┘   │
              │             │              │
              │  ┌──────────▼──────────┐   │
-             │  │ /faz:executar-fase  │   │  <- Execução paralela
+             │  │ /fase:executar-fase  │   │  <- Execução paralela
              │  └──────────┬──────────┘   │
              │             │              │
              │  ┌──────────▼────────────┐ │
-             │  │ /faz:verificar-trabalho│ │  <- UAT manual
+             │  │ /fase:verificar-trabalho│ │  <- UAT manual
              │  └──────────┬────────────┘ │
              │             │              │
              │     Próxima fase?──────────┘
@@ -50,8 +50,8 @@ Referência detalhada de workflows, resolução de problemas e configuração. P
              └─────────────┼──────────────┘
                             │
             ┌───────────────▼──────────────┐
-            │  /faz:auditar-marco          │
-            │  /faz:completar-marco        │
+            │  /fase:auditar-marco          │
+            │  /fase:completar-marco        │
             └───────────────┬──────────────┘
                             │
                    Outro marco?
@@ -59,14 +59,14 @@ Referência detalhada de workflows, resolução de problemas e configuração. P
                       Sim        Não -> Pronto!
                        │
                ┌───────▼──────────────┐
-               │  /faz:novo-marco     │
+               │  /fase:novo-marco     │
                └──────────────────────┘
 ```
 
 ### Coordenação do Agente de Planejamento
 
 ```
-  /faz:planejar-fase N
+  /fase:planejar-fase N
          │
          ├── Pesquisador de Fase (x4 em paralelo)
          │     ├── Pesquisador de stack
@@ -100,7 +100,7 @@ Referência detalhada de workflows, resolução de problemas e configuração. P
 
 ### Arquitetura de Validação (Camada Nyquist)
 
-Durante a pesquisa do planejar-fase, o FAZ mapeia a cobertura de testes automatizados para cada requisito da fase antes de qualquer código ser escrito. Isso garante que, quando o executor do Claude fizer commit de uma tarefa, já exista um mecanismo de feedback para verificá-la em segundos.
+Durante a pesquisa do planejar-fase, o FASE mapeia a cobertura de testes automatizados para cada requisito da fase antes de qualquer código ser escrito. Isso garante que, quando o executor do Claude fizer commit de uma tarefa, já exista um mecanismo de feedback para verificá-la em segundos.
 
 O pesquisador detecta sua infraestrutura de testes existente, mapeia cada requisito a um comando de teste específico, e identifica qualquer scaffolding de testes que deve ser criado antes do início da implementação (tarefas da Wave 0).
 
@@ -108,14 +108,14 @@ O verificador de plano aplica isso como uma 8ª dimensão de verificação: plan
 
 **Saída:** `{fase}-VALIDATION.md` — o contrato de feedback para a fase.
 
-**Desabilitar:** Defina `workflow.nyquist_validation: false` em `/faz:configuracoes` para fases de prototipagem rápida onde a infraestrutura de testes não é o foco.
+**Desabilitar:** Defina `workflow.nyquist_validation: false` em `/fase:configuracoes` para fases de prototipagem rápida onde a infraestrutura de testes não é o foco.
 
-### Validação Retroativa (`/faz:validar-fase`)
+### Validação Retroativa (`/fase:validar-fase`)
 
 Para fases executadas antes da validação Nyquist existir, ou para bases de código existentes com apenas suítes de testes tradicionais, audite retroativamente e preencha lacunas de cobertura:
 
 ```
-  /faz:validar-fase N
+  /fase:validar-fase N
          |
          +-- Detectar estado (VALIDATION.md existe? SUMMARY.md existe?)
          |
@@ -135,12 +135,12 @@ Para fases executadas antes da validação Nyquist existir, ou para bases de có
 
 O auditor nunca modifica o código de implementação — apenas arquivos de teste e VALIDATION.md. Se um teste revelar um bug de implementação, ele é sinalizado como uma escalação para você resolver.
 
-**Quando usar:** Após executar fases que foram planejadas antes do Nyquist estar habilitado, ou após `/faz:auditar-marco` detectar lacunas de conformidade Nyquist.
+**Quando usar:** Após executar fases que foram planejadas antes do Nyquist estar habilitado, ou após `/fase:auditar-marco` detectar lacunas de conformidade Nyquist.
 
 ### Coordenação de Waves de Execução
 
 ```
-  /faz:executar-fase N
+  /fase:executar-fase N
          │
          ├── Analisar dependências do plano
          │
@@ -155,13 +155,13 @@ O auditor nunca modifica o código de implementação — apenas arquivos de tes
                └── Verificar base de código contra objetivos da fase
                      │
                      ├── PASSA -> VERIFICATION.md (sucesso)
-                     └── FALHA -> Problemas registrados para /faz:verificar-trabalho
+                     └── FALHA -> Problemas registrados para /fase:verificar-trabalho
 ```
 
 ### Workflow Brownfield (Base de Código Existente)
 
 ```
-  /faz:mapear-codigo
+  /fase:mapear-codigo
          │
          ├── Mapeador de Stack     -> codebase/STACK.md
          ├── Mapeador de Arq.      -> codebase/ARCHITECTURE.md
@@ -169,7 +169,7 @@ O auditor nunca modifica o código de implementação — apenas arquivos de tes
          └── Mapeador de Preocupações -> codebase/CONCERNS.md
                 │
         ┌───────▼──────────────┐
-        │ /faz:novo-projeto    │  <- Perguntas focam no que você está ADICIONANDO
+        │ /fase:novo-projeto    │  <- Perguntas focam no que você está ADICIONANDO
         └──────────────────────┘
 ```
 
@@ -181,56 +181,56 @@ O auditor nunca modifica o código de implementação — apenas arquivos de tes
 
 | Comando | Propósito | Quando Usar |
 |---------|----------|-------------|
-| `/faz:novo-projeto` | Inicialização completa: perguntas, pesquisa, requisitos, roadmap | Início de um novo projeto |
-| `/faz:novo-projeto --auto @ideia.md` | Inicialização automatizada a partir de documento | Quando você tem um PRD ou documento de ideia pronto |
-| `/faz:discutir-fase [N]` | Capturar decisões de implementação | Antes do planejamento, para definir como será construído |
-| `/faz:planejar-fase [N]` | Pesquisa + plano + verificação | Antes de executar uma fase |
-| `/faz:executar-fase <N>` | Executar todos os planos em waves paralelas | Após o planejamento estar completo |
-| `/faz:verificar-trabalho [N]` | UAT manual com diagnóstico automático | Após a execução ser concluída |
-| `/faz:auditar-marco` | Verificar se o marco atingiu sua definição de pronto | Antes de completar o marco |
-| `/faz:completar-marco` | Arquivar marco, criar tag de release | Após todas as fases serem verificadas |
-| `/faz:novo-marco [nome]` | Iniciar próximo ciclo de versão | Após completar um marco |
+| `/fase:novo-projeto` | Inicialização completa: perguntas, pesquisa, requisitos, roadmap | Início de um novo projeto |
+| `/fase:novo-projeto --auto @ideia.md` | Inicialização automatizada a partir de documento | Quando você tem um PRD ou documento de ideia pronto |
+| `/fase:discutir-fase [N]` | Capturar decisões de implementação | Antes do planejamento, para definir como será construído |
+| `/fase:planejar-fase [N]` | Pesquisa + plano + verificação | Antes de executar uma fase |
+| `/fase:executar-fase <N>` | Executar todos os planos em waves paralelas | Após o planejamento estar completo |
+| `/fase:verificar-trabalho [N]` | UAT manual com diagnóstico automático | Após a execução ser concluída |
+| `/fase:auditar-marco` | Verificar se o marco atingiu sua definição de pronto | Antes de completar o marco |
+| `/fase:completar-marco` | Arquivar marco, criar tag de release | Após todas as fases serem verificadas |
+| `/fase:novo-marco [nome]` | Iniciar próximo ciclo de versão | Após completar um marco |
 
 ### Navegação
 
 | Comando | Propósito | Quando Usar |
 |---------|----------|-------------|
-| `/faz:progresso` | Mostrar status e próximos passos | A qualquer momento — "onde estou?" |
-| `/faz:retomar-trabalho` | Restaurar contexto completo da última sessão | Ao iniciar uma nova sessão |
-| `/faz:pausar-trabalho` | Salvar handoff de contexto | Ao parar no meio de uma fase |
-| `/faz:ajuda` | Mostrar todos os comandos | Referência rápida |
-| `/faz:atualizar` | Atualizar FAZ com prévia do changelog | Verificar novas versões |
-| `/faz:entrar-discord` | Abrir convite da comunidade Discord | Dúvidas ou comunidade |
+| `/fase:progresso` | Mostrar status e próximos passos | A qualquer momento — "onde estou?" |
+| `/fase:retomar-trabalho` | Restaurar contexto completo da última sessão | Ao iniciar uma nova sessão |
+| `/fase:pausar-trabalho` | Salvar handoff de contexto | Ao parar no meio de uma fase |
+| `/fase:ajuda` | Mostrar todos os comandos | Referência rápida |
+| `/fase:atualizar` | Atualizar FASE com prévia do changelog | Verificar novas versões |
+| `/fase:entrar-discord` | Abrir convite da comunidade Discord | Dúvidas ou comunidade |
 
 ### Gerenciamento de Fases
 
 | Comando | Propósito | Quando Usar |
 |---------|----------|-------------|
-| `/faz:adicionar-fase` | Adicionar nova fase ao roadmap | Escopo cresce após planejamento inicial |
-| `/faz:inserir-fase [N]` | Inserir trabalho urgente (numeração decimal) | Correção urgente no meio do marco |
-| `/faz:remover-fase [N]` | Remover fase futura e renumerar | Reduzir escopo de uma funcionalidade |
-| `/faz:listar-premissas [N]` | Prévia da abordagem pretendida pelo Claude | Antes do planejamento, para validar direção |
-| `/faz:planejar-lacunas` | Criar fases para lacunas da auditoria | Após auditoria encontrar itens faltando |
-| `/faz:pesquisar-fase [N]` | Pesquisa profunda do ecossistema apenas | Domínio complexo ou desconhecido |
+| `/fase:adicionar-fase` | Adicionar nova fase ao roadmap | Escopo cresce após planejamento inicial |
+| `/fase:inserir-fase [N]` | Inserir trabalho urgente (numeração decimal) | Correção urgente no meio do marco |
+| `/fase:remover-fase [N]` | Remover fase futura e renumerar | Reduzir escopo de uma funcionalidade |
+| `/fase:listar-premissas [N]` | Prévia da abordagem pretendida pelo Claude | Antes do planejamento, para validar direção |
+| `/fase:planejar-lacunas` | Criar fases para lacunas da auditoria | Após auditoria encontrar itens faltando |
+| `/fase:pesquisar-fase [N]` | Pesquisa profunda do ecossistema apenas | Domínio complexo ou desconhecido |
 
 ### Brownfield e Utilitários
 
 | Comando | Propósito | Quando Usar |
 |---------|----------|-------------|
-| `/faz:mapear-codigo` | Analisar base de código existente | Antes de `/faz:novo-projeto` em código existente |
-| `/faz:rapido` | Tarefa avulsa com garantias do FAZ | Correções de bugs, pequenas funcionalidades, mudanças de config |
-| `/faz:debug [desc]` | Depuração sistemática com estado persistente | Quando algo quebra |
-| `/faz:adicionar-todo [desc]` | Capturar uma ideia para depois | Pensar em algo durante uma sessão |
-| `/faz:checar-todos` | Listar todos pendentes | Revisar ideias capturadas |
-| `/faz:configuracoes` | Configurar toggles de workflow e perfil de modelo | Mudar modelo, alternar agentes |
-| `/faz:definir-perfil <perfil>` | Troca rápida de perfil | Mudar custo/qualidade |
-| `/faz:reaplicar-patches` | Restaurar modificações locais após atualização | Após `/faz:atualizar` se você tinha edições locais |
+| `/fase:mapear-codigo` | Analisar base de código existente | Antes de `/fase:novo-projeto` em código existente |
+| `/fase:rapido` | Tarefa avulsa com garantias do FASE | Correções de bugs, pequenas funcionalidades, mudanças de config |
+| `/fase:debug [desc]` | Depuração sistemática com estado persistente | Quando algo quebra |
+| `/fase:adicionar-todo [desc]` | Capturar uma ideia para depois | Pensar em algo durante uma sessão |
+| `/fase:checar-todos` | Listar todos pendentes | Revisar ideias capturadas |
+| `/fase:configuracoes` | Configurar toggles de workflow e perfil de modelo | Mudar modelo, alternar agentes |
+| `/fase:definir-perfil <perfil>` | Troca rápida de perfil | Mudar custo/qualidade |
+| `/fase:reaplicar-patches` | Restaurar modificações locais após atualização | Após `/fase:atualizar` se você tinha edições locais |
 
 ---
 
 ## Referência de Configuração
 
-O FAZ armazena configurações do projeto em `.planning/config.json`. Configure durante `/faz:novo-projeto` ou atualize depois com `/faz:configuracoes`.
+O FASE armazena configurações do projeto em `.planning/config.json`. Configure durante `/fase:novo-projeto` ou atualize depois com `/fase:configuracoes`.
 
 ### Schema Completo do config.json
 
@@ -307,17 +307,17 @@ Desabilite esses toggles para acelerar fases em domínios familiares ou para eco
 
 | Agente | `quality` | `balanced` | `budget` |
 |--------|-----------|------------|----------|
-| faz-planner | Opus | Opus | Sonnet |
-| faz-roadmapper | Opus | Sonnet | Sonnet |
-| faz-executor | Opus | Sonnet | Sonnet |
-| faz-phase-researcher | Opus | Sonnet | Haiku |
-| faz-project-researcher | Opus | Sonnet | Haiku |
-| faz-research-synthesizer | Sonnet | Sonnet | Haiku |
-| faz-debugger | Opus | Sonnet | Sonnet |
-| faz-codebase-mapper | Sonnet | Haiku | Haiku |
-| faz-verifier | Sonnet | Sonnet | Haiku |
-| faz-plan-checker | Sonnet | Sonnet | Haiku |
-| faz-integration-checker | Sonnet | Sonnet | Haiku |
+| fase-planner | Opus | Opus | Sonnet |
+| fase-roadmapper | Opus | Sonnet | Sonnet |
+| fase-executor | Opus | Sonnet | Sonnet |
+| fase-phase-researcher | Opus | Sonnet | Haiku |
+| fase-project-researcher | Opus | Sonnet | Haiku |
+| fase-research-synthesizer | Sonnet | Sonnet | Haiku |
+| fase-debugger | Opus | Sonnet | Sonnet |
+| fase-codebase-mapper | Sonnet | Haiku | Haiku |
+| fase-verifier | Sonnet | Sonnet | Haiku |
+| fase-plan-checker | Sonnet | Sonnet | Haiku |
+| fase-integration-checker | Sonnet | Sonnet | Haiku |
 
 **Filosofia dos perfis:**
 - **quality** — Opus para todos os agentes de tomada de decisão, Sonnet para verificação somente-leitura. Use quando há cota disponível e o trabalho é crítico.
@@ -332,56 +332,56 @@ Desabilite esses toggles para acelerar fases em domínios familiares ou para eco
 
 ```bash
 claude --dangerously-skip-permissions
-/faz:novo-projeto            # Responda perguntas, configure, aprove o roadmap
+/fase:novo-projeto            # Responda perguntas, configure, aprove o roadmap
 /clear
-/faz:discutir-fase 1        # Defina suas preferências
-/faz:planejar-fase 1        # Pesquisa + plano + verificação
-/faz:executar-fase 1        # Execução paralela
-/faz:verificar-trabalho 1   # UAT manual
+/fase:discutir-fase 1        # Defina suas preferências
+/fase:planejar-fase 1        # Pesquisa + plano + verificação
+/fase:executar-fase 1        # Execução paralela
+/fase:verificar-trabalho 1   # UAT manual
 /clear
-/faz:discutir-fase 2        # Repita para cada fase
+/fase:discutir-fase 2        # Repita para cada fase
 ...
-/faz:auditar-marco          # Verifique tudo que foi entregue
-/faz:completar-marco        # Arquive, crie tag, pronto
+/fase:auditar-marco          # Verifique tudo que foi entregue
+/fase:completar-marco        # Arquive, crie tag, pronto
 ```
 
 ### Novo Projeto a Partir de Documento Existente
 
 ```bash
-/faz:novo-projeto --auto @prd.md   # Executa automaticamente pesquisa/requisitos/roadmap do seu doc
+/fase:novo-projeto --auto @prd.md   # Executa automaticamente pesquisa/requisitos/roadmap do seu doc
 /clear
-/faz:discutir-fase 1               # Fluxo normal a partir daqui
+/fase:discutir-fase 1               # Fluxo normal a partir daqui
 ```
 
 ### Base de Código Existente
 
 ```bash
-/faz:mapear-codigo          # Analisar o que existe (agentes em paralelo)
-/faz:novo-projeto           # Perguntas focam no que você está ADICIONANDO
+/fase:mapear-codigo          # Analisar o que existe (agentes em paralelo)
+/fase:novo-projeto           # Perguntas focam no que você está ADICIONANDO
 # (fluxo de fases normal a partir daqui)
 ```
 
 ### Correção Rápida de Bug
 
 ```bash
-/faz:rapido
+/fase:rapido
 > "Corrigir o botão de login que não responde no Safari mobile"
 ```
 
 ### Retomando Após uma Pausa
 
 ```bash
-/faz:progresso              # Veja onde você parou e o que vem a seguir
+/fase:progresso              # Veja onde você parou e o que vem a seguir
 # ou
-/faz:retomar-trabalho       # Restauração completa do contexto da última sessão
+/fase:retomar-trabalho       # Restauração completa do contexto da última sessão
 ```
 
 ### Preparando para Release
 
 ```bash
-/faz:auditar-marco          # Verificar cobertura de requisitos, detectar stubs
-/faz:planejar-lacunas       # Se a auditoria encontrou lacunas, criar fases para fechá-las
-/faz:completar-marco        # Arquive, crie tag, pronto
+/fase:auditar-marco          # Verificar cobertura de requisitos, detectar stubs
+/fase:planejar-lacunas       # Se a auditoria encontrou lacunas, criar fases para fechá-las
+/fase:completar-marco        # Arquive, crie tag, pronto
 ```
 
 ### Presets de Velocidade vs Qualidade
@@ -395,11 +395,11 @@ claude --dangerously-skip-permissions
 ### Mudanças de Escopo no Meio do Marco
 
 ```bash
-/faz:adicionar-fase         # Adicionar nova fase ao roadmap
+/fase:adicionar-fase         # Adicionar nova fase ao roadmap
 # ou
-/faz:inserir-fase 3         # Inserir trabalho urgente entre fases 3 e 4
+/fase:inserir-fase 3         # Inserir trabalho urgente entre fases 3 e 4
 # ou
-/faz:remover-fase 7         # Remover escopo da fase 7 e renumerar
+/fase:remover-fase 7         # Remover escopo da fase 7 e renumerar
 ```
 
 ---
@@ -408,15 +408,15 @@ claude --dangerously-skip-permissions
 
 ### "Projeto já inicializado"
 
-Você executou `/faz:novo-projeto` mas `.planning/PROJECT.md` já existe. Esse é um mecanismo de segurança. Se quiser recomeçar, delete o diretório `.planning/` primeiro.
+Você executou `/fase:novo-projeto` mas `.planning/PROJECT.md` já existe. Esse é um mecanismo de segurança. Se quiser recomeçar, delete o diretório `.planning/` primeiro.
 
 ### Degradação de Contexto em Sessões Longas
 
-Limpe sua janela de contexto entre comandos principais: `/clear` no Claude Code. O FAZ é projetado em torno de contextos frescos — cada subagente recebe uma janela limpa de 200K. Se a qualidade estiver caindo na sessão principal, limpe e use `/faz:retomar-trabalho` ou `/faz:progresso` para restaurar o estado.
+Limpe sua janela de contexto entre comandos principais: `/clear` no Claude Code. O FASE é projetado em torno de contextos frescos — cada subagente recebe uma janela limpa de 200K. Se a qualidade estiver caindo na sessão principal, limpe e use `/fase:retomar-trabalho` ou `/fase:progresso` para restaurar o estado.
 
 ### Planos Parecem Errados ou Desalinhados
 
-Execute `/faz:discutir-fase [N]` antes do planejamento. A maioria dos problemas de qualidade do plano vem do Claude fazendo suposições que o `CONTEXT.md` teria prevenido. Você também pode executar `/faz:listar-premissas [N]` para ver o que o Claude pretende fazer antes de se comprometer com um plano.
+Execute `/fase:discutir-fase [N]` antes do planejamento. A maioria dos problemas de qualidade do plano vem do Claude fazendo suposições que o `CONTEXT.md` teria prevenido. Você também pode executar `/fase:listar-premissas [N]` para ver o que o Claude pretende fazer antes de se comprometer com um plano.
 
 ### Execução Falha ou Produz Stubs
 
@@ -424,27 +424,27 @@ Verifique se o plano não foi muito ambicioso. Os planos devem ter no máximo 2-
 
 ### Perdeu o Fio da Meada
 
-Execute `/faz:progresso`. Ele lê todos os arquivos de estado e diz exatamente onde você está e o que fazer a seguir.
+Execute `/fase:progresso`. Ele lê todos os arquivos de estado e diz exatamente onde você está e o que fazer a seguir.
 
 ### Precisa Mudar Algo Após a Execução
 
-Não reexecute `/faz:executar-fase`. Use `/faz:rapido` para correções pontuais, ou `/faz:verificar-trabalho` para identificar e corrigir problemas sistematicamente via UAT.
+Não reexecute `/fase:executar-fase`. Use `/fase:rapido` para correções pontuais, ou `/fase:verificar-trabalho` para identificar e corrigir problemas sistematicamente via UAT.
 
 ### Custos de Modelo Muito Altos
 
-Mude para o perfil budget: `/faz:definir-perfil budget`. Desabilite os agentes de pesquisa e verificação de plano via `/faz:configuracoes` se o domínio for familiar para você (ou para o Claude).
+Mude para o perfil budget: `/fase:definir-perfil budget`. Desabilite os agentes de pesquisa e verificação de plano via `/fase:configuracoes` se o domínio for familiar para você (ou para o Claude).
 
 ### Trabalhando em Projeto Sensível/Privado
 
-Defina `commit_docs: false` durante `/faz:novo-projeto` ou via `/faz:configuracoes`. Adicione `.planning/` ao seu `.gitignore`. Os artefatos de planejamento ficam locais e nunca tocam o git.
+Defina `commit_docs: false` durante `/fase:novo-projeto` ou via `/fase:configuracoes`. Adicione `.planning/` ao seu `.gitignore`. Os artefatos de planejamento ficam locais e nunca tocam o git.
 
-### Atualização do FAZ Sobrescreveu Minhas Mudanças Locais
+### Atualização do FASE Sobrescreveu Minhas Mudanças Locais
 
-Desde a v1.17, o instalador faz backup de arquivos modificados localmente em `faz-local-patches/`. Execute `/faz:reaplicar-patches` para mesclar suas mudanças de volta.
+Desde a v1.17, o instalador faz backup de arquivos modificados localmente em `faz-local-patches/`. Execute `/fase:reaplicar-patches` para mesclar suas mudanças de volta.
 
 ### Subagente Parece Ter Falhado Mas o Trabalho Foi Feito
 
-Existe uma solução conhecida para um bug de classificação do Claude Code. Os orquestradores do FAZ (executar-fase, rapido) verificam a saída real antes de reportar falha. Se você vir uma mensagem de falha mas commits foram feitos, verifique `git log` — o trabalho pode ter sido bem-sucedido.
+Existe uma solução conhecida para um bug de classificação do Claude Code. Os orquestradores do FASE (executar-fase, rapido) verificam a saída real antes de reportar falha. Se você vir uma mensagem de falha mas commits foram feitos, verifique `git log` — o trabalho pode ter sido bem-sucedido.
 
 ---
 
@@ -452,21 +452,21 @@ Existe uma solução conhecida para um bug de classificação do Claude Code. Os
 
 | Problema | Solução |
 |---------|---------|
-| Contexto perdido / nova sessão | `/faz:retomar-trabalho` ou `/faz:progresso` |
+| Contexto perdido / nova sessão | `/fase:retomar-trabalho` ou `/fase:progresso` |
 | Fase deu errado | `git revert` nos commits da fase, depois replaneje |
-| Precisa mudar escopo | `/faz:adicionar-fase`, `/faz:inserir-fase` ou `/faz:remover-fase` |
-| Auditoria de marco encontrou lacunas | `/faz:planejar-lacunas` |
-| Algo quebrou | `/faz:debug "descrição"` |
-| Correção pontual rápida | `/faz:rapido` |
-| Plano não corresponde à sua visão | `/faz:discutir-fase [N]` e replaneje |
-| Custos altos | `/faz:definir-perfil budget` e `/faz:configuracoes` para desligar agentes |
-| Atualização quebrou mudanças locais | `/faz:reaplicar-patches` |
+| Precisa mudar escopo | `/fase:adicionar-fase`, `/fase:inserir-fase` ou `/fase:remover-fase` |
+| Auditoria de marco encontrou lacunas | `/fase:planejar-lacunas` |
+| Algo quebrou | `/fase:debug "descrição"` |
+| Correção pontual rápida | `/fase:rapido` |
+| Plano não corresponde à sua visão | `/fase:discutir-fase [N]` e replaneje |
+| Custos altos | `/fase:definir-perfil budget` e `/fase:configuracoes` para desligar agentes |
+| Atualização quebrou mudanças locais | `/fase:reaplicar-patches` |
 
 ---
 
 ## Estrutura de Arquivos do Projeto
 
-Para referência, aqui está o que o FAZ cria no seu projeto:
+Para referência, aqui está o que o FASE cria no seu projeto:
 
 ```
 .planning/
@@ -476,13 +476,13 @@ Para referência, aqui está o que o FAZ cria no seu projeto:
   STATE.md                # Decisões, bloqueadores, memória de sessão
   config.json             # Configuração de workflow
   MILESTONES.md           # Arquivo de marcos concluídos
-  research/               # Pesquisa de domínio do /faz:novo-projeto
+  research/               # Pesquisa de domínio do /fase:novo-projeto
   todos/
     pending/              # Ideias capturadas aguardando trabalho
     done/                 # Todos concluídos
   debug/                  # Sessões de debug ativas
     resolved/             # Sessões de debug arquivadas
-  codebase/               # Mapeamento brownfield da base de código (de /faz:mapear-codigo)
+  codebase/               # Mapeamento brownfield da base de código (de /fase:mapear-codigo)
   phases/
     XX-nome-da-fase/
       XX-YY-PLAN.md       # Planos de execução atômicos
