@@ -1,5 +1,5 @@
 ---
-name: faz:saude
+name: fase:saude
 description: Diagnostica health do diretório de planning e opcionalmente repara issues
 argument-hint: [--repair]
 allowed-tools:
@@ -13,10 +13,10 @@ Valide integridade do diretório `.planning/` e reporte issues acionáveis. Chec
 </objective>
 
 <execution_context>
-@~/.faz/workflows/health.md
+@~/.fase/workflows/health.md
 </execution_context>
 
 <process>
-Execute o workflow health de @~/.faz/workflows/health.md end-to-end.
+Execute o workflow health de @~/.fase/workflows/health.md end-to-end.
 Parse flag --repair dos argumentos e passe para workflow.
 </process>

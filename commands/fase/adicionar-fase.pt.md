@@ -1,5 +1,5 @@
 ---
-name: faz:adicionar-fase
+name: fase:adicionar-fase
 description: Adiciona fase ao final do milestone atual no roadmap
 argument-hint: <descrição>
 allowed-tools:
@@ -19,7 +19,7 @@ Roteia para o workflow add-phase que gerencia:
 </objective>
 
 <execution_context>
-@~/.claude/faz/workflows/add-phase.md
+@~/.claude/fase/workflows/add-phase.md
 </execution_context>
 
 <context>
@@ -29,7 +29,7 @@ Roadmap e state são resolvidos in-workflow via `init phase-op` e tool calls dir
 </context>
 
 <process>
-**Siga o workflow add-phase** de `@~/.claude/faz/workflows/add-phase.md`.
+**Siga o workflow add-phase** de `@~/.claude/fase/workflows/add-phase.md`.
 
 O workflow gerencia toda a lógica incluindo:
 1. Parse e validação de argumentos

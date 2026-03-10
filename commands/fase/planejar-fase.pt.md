@@ -1,8 +1,8 @@
 ---
-name: faz:planejar-fase
+name: fase:planejar-fase
 description: Cria plano detalhado da fase (PLAN.md) com loop de verificação
 argument-hint: "[fase] [--auto] [--research] [--skip-research] [--gaps] [--skip-verify] [--prd <arquivo>]"
-agent: faz-planner
+agent: fase-planner
 allowed-tools:
   - Read
   - Write
@@ -18,12 +18,12 @@ Criar prompts executáveis da fase (arquivos PLAN.md) para uma fase do roadmap c
 
 **Fluxo padrão:** Research (se necessário) → Plano → Verificar → Concluir
 
-**Papel do orquestrador:** Analisar argumentos, validar fase, pesquisar domínio (a menos que pulado), spawnar faz-planner, verificar com faz-plan-checker, iterar até passar ou atingir max de iterações, apresentar resultados.
+**Papel do orquestrador:** Analisar argumentos, validar fase, pesquisar domínio (a menos que pulado), spawnar fase-planner, verificar com fase-plan-checker, iterar até passar ou atingir max de iterações, apresentar resultados.
 </objective>
 
 <execution_context>
-@~/.claude/faz/workflows/plan-phase.md
-@~/.claude/faz/references/ui-brand.md
+@~/.claude/fase/workflows/plan-phase.md
+@~/.claude/fase/references/ui-brand.md
 </execution_context>
 
 <context>
@@ -40,6 +40,6 @@ Normalizar input da fase no passo 2 antes de qualquer lookup de diretório.
 </context>
 
 <process>
-Execute o workflow plan-phase de @~/.claude/faz/workflows/plan-phase.md ponta a ponta.
+Execute o workflow plan-phase de @~/.claude/fase/workflows/plan-phase.md ponta a ponta.
 Preservar todos os gates do workflow (validação, research, planejamento, loop de verificação, roteamento).
 </process>

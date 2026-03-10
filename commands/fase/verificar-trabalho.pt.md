@@ -1,5 +1,5 @@
 ---
-name: faz:verificar-trabalho
+name: fase:verificar-trabalho
 description: Valida features construídas através de UAT conversacional
 argument-hint: "[número da fase, ex: '4']"
 allowed-tools:
@@ -20,8 +20,8 @@ Output: {phase_num}-UAT.md rastreando todos os resultados de teste. Se issues en
 </objective>
 
 <execution_context>
-@~/.claude/faz/workflows/verify-work.md
-@~/.claude/faz/templates/UAT.md
+@~/.claude/fase/workflows/verify-work.md
+@~/.claude/fase/templates/UAT.md
 </execution_context>
 
 <context>
@@ -33,6 +33,6 @@ Arquivos de contexto são resolvidos dentro do workflow (`init verify-work`) e d
 </context>
 
 <process>
-Execute o workflow verify-work de @~/.claude/faz/workflows/verify-work.md ponta a ponta.
+Execute o workflow verify-work de @~/.claude/fase/workflows/verify-work.md ponta a ponta.
 Preserve todos os gates do workflow (gerenciamento de sessão, apresentação de testes, diagnóstico, planejamento de correções, roteamento).
 </process>

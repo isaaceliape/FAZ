@@ -1,5 +1,5 @@
 ---
-name: faz:debug
+name: fase:debug
 description: Debugging sistemático com estado persistente através de resets de contexto
 argument-hint: [descrição da issue]
 allowed-tools:
@@ -12,7 +12,7 @@ allowed-tools:
 <objective>
 Debugar issues usando método científico com isolamento de subagent.
 
-**Papel do orquestrador:** Coletar sintomas, spawnar agent faz-debugger, lidar com checkpoints, spawnar continuações.
+**Papel do orquestrador:** Coletar sintomas, spawnar agent fase-debugger, lidar com checkpoints, spawnar continuações.
 
 **Por que subagent:** Investigação queima contexto rápido (lendo arquivos, formando hipóteses, testando). Contexto fresh de 200k por investigação. Contexto principal permanece enxuto para interação com usuário.
 </objective>
@@ -31,13 +31,13 @@ ls .planning/debug/*.md 2>/dev/null | grep -v resolved | head -5
 ## 0. Inicializar Contexto
 
 ```bash
-INIT=$(node "$HOME/.claude/faz/bin/faz-tools.cjs" state load)
+INIT=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" state load)
 if [[ "$INIT" == @file:* ]]; then INIT=$(cat "${INIT#@file:}"); fi
 ```
 
 Extraia `commit_docs` do init JSON. Resolva modelo do debugger:
 ```bash
-debugger_model=$(node "$HOME/.claude/faz/bin/faz-tools.cjs" resolve-model faz-debugger --raw)
+debugger_model=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" resolve-model fase-debugger --raw)
 ```
 
 ## 1. Verificar Sessões Ativas
@@ -61,7 +61,7 @@ Use AskUserQuestion para cada:
 
 Depois de todos coletados, confirme pronto para investigar.
 
-## 3. Spawnar Agent faz-debugger
+## 3. Spawnar Agent fase-debugger
 
 Preencha prompt e spawn:
 
@@ -93,7 +93,7 @@ Criar: .planning/debug/{slug}.md
 ```
 Task(
   prompt=filled_prompt,
-  subagent_type="faz-debugger",
+  subagent_type="fase-debugger",
   model="{debugger_model}",
   description="Debug {slug}"
 )

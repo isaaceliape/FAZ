@@ -428,8 +428,8 @@ Output: [Artefatos criados]
 </objective>
 
 <execution_context>
-@~/.claude/faz/workflows/execute-plan.md
-@~/.claude/faz/templates/summary.md
+@~/.claude/fase/workflows/execute-plan.md
+@~/.claude/fase/templates/summary.md
 </execution_context>
 
 <context>
@@ -933,7 +933,7 @@ Agrupe por plano, dimensão, severidade.
 ### Passo 6: Commit
 
 ```bash
-node "$HOME/.claude/faz/bin/faz-tools.cjs" commit "fix($PHASE): revise plans based on checker feedback" --files .planning/phases/$PHASE-*/$PHASE-*-PLAN.md
+node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "fix($PHASE): revise plans based on checker feedback" --files .planning/phases/$PHASE-*/$PHASE-*-PLAN.md
 ```
 
 ### Passo 7: Retornar Resumo de Revisão
@@ -972,7 +972,7 @@ node "$HOME/.claude/faz/bin/faz-tools.cjs" commit "fix($PHASE): revise plans bas
 Carregue contexto de planejamento:
 
 ```bash
-INIT=$(node "$HOME/.claude/faz/bin/faz-tools.cjs" init plan-phase "${PHASE}")
+INIT=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" init plan-phase "${PHASE}")
 if [[ "$INIT" == @file:* ]]; then INIT=$(cat "${INIT#@file:}"); fi
 ```
 
@@ -1029,7 +1029,7 @@ Aplique protocolo de nível de descoberta (veja seção discovery_levels).
 
 **Passo 1 — Gerar índice digest:**
 ```bash
-node "$HOME/.claude/faz/bin/faz-tools.cjs" history-digest
+node "$HOME/.claude/fase/bin/fase-tools.cjs" history-digest
 ```
 
 **Passo 2 — Selecione fases relevantes (tipicamente 2-4):**
@@ -1154,10 +1154,10 @@ Inclua todos os campos do frontmatter.
 </step>
 
 <step name="validate_plan">
-Valide cada PLAN.md criado usando faz-tools:
+Valide cada PLAN.md criado usando fase-tools:
 
 ```bash
-VALID=$(node "$HOME/.claude/faz/bin/faz-tools.cjs" frontmatter validate "$PLAN_PATH" --schema plan)
+VALID=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" frontmatter validate "$PLAN_PATH" --schema plan)
 ```
 
 Retorna JSON: `{ valid, missing, present, schema }`
@@ -1170,7 +1170,7 @@ Campos obrigatórios do frontmatter do plano:
 Também valide estrutura do plano:
 
 ```bash
-STRUCTURE=$(node "$HOME/.claude/faz/bin/faz-tools.cjs" verify plan-structure "$PLAN_PATH")
+STRUCTURE=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" verify plan-structure "$PLAN_PATH")
 ```
 
 Retorna JSON: `{ valid, errors, warnings, task_count, tasks }`
@@ -1207,7 +1207,7 @@ Plans:
 
 <step name="git_commit">
 ```bash
-node "$HOME/.claude/faz/bin/faz-tools.cjs" commit "docs($PHASE): create phase plan" --files .planning/phases/$PHASE-*/$PHASE-*-PLAN.md .planning/ROADMAP.md
+node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "docs($PHASE): create phase plan" --files .planning/phases/$PHASE-*/$PHASE-*-PLAN.md .planning/ROADMAP.md
 ```
 </step>
 

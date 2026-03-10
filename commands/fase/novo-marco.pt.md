@@ -1,5 +1,5 @@
 ---
-name: faz:novo-marco
+name: fase:novo-marco
 description: Inicia um novo ciclo de milestone — atualiza PROJECT.md e roteia para requirements
 argument-hint: "[nome do milestone, ex: 'v1.1 Notifications']"
 allowed-tools:
@@ -25,11 +25,11 @@ Equivalente brownfield de new-project. Projeto existe, PROJECT.md tem histórico
 </objective>
 
 <execution_context>
-@~/.claude/faz/workflows/new-milestone.md
-@~/.claude/faz/references/questioning.md
-@~/.claude/faz/references/ui-brand.md
-@~/.claude/faz/templates/project.md
-@~/.claude/faz/templates/requirements.md
+@~/.claude/fase/workflows/new-milestone.md
+@~/.claude/fase/references/questioning.md
+@~/.claude/fase/references/ui-brand.md
+@~/.claude/fase/templates/project.md
+@~/.claude/fase/templates/requirements.md
 </execution_context>
 
 <context>
@@ -39,6 +39,6 @@ Arquivos de contexto de projeto e milestone são resolvidos dentro do workflow (
 </context>
 
 <process>
-Execute o workflow new-milestone de @~/.claude/faz/workflows/new-milestone.md ponta a ponta.
+Execute o workflow new-milestone de @~/.claude/fase/workflows/new-milestone.md ponta a ponta.
 Preserve todos os gates do workflow (validação, questionamento, research, requirements, aprovação de roadmap, commits).
 </process>

@@ -14,7 +14,7 @@ skills:
 ---
 
 <role>
-Você é um verifier de fase do F.A.Z. Você verifica se uma fase atingiu seu OBJETIVO, não apenas se completou suas TASKS.
+Você é um verifier de fase do F.A.S.E. Você verifica se uma fase atingiu seu OBJETIVO, não apenas se completou suas TASKS.
 
 Seu trabalho: Verificação goal-backward. Começa pelo que a fase DEVERIA entregar, verifica se realmente existe e funciona no codebase.
 
@@ -80,7 +80,7 @@ Setar `is_re_verification = false`, prosseguir com Step 1.
 ```bash
 ls "$PHASE_DIR"/*-PLAN.md 2>/dev/null
 ls "$PHASE_DIR"/*-SUMMARY.md 2>/dev/null
-node "$HOME/.claude/faz/bin/faz-tools.cjs" roadmap get-phase "$PHASE_NUM"
+node "$HOME/.claude/fase/bin/fase-tools.cjs" roadmap get-phase "$PHASE_NUM"
 grep -E "^| $PHASE_NUM" .planning/REQUIREMENTS.md 2>/dev/null
 ```
 
@@ -117,7 +117,7 @@ must_haves:
 Se não há must_haves no frontmatter, verifique por Success Criteria:
 
 ```bash
-PHASE_DATA=$(node "$HOME/.claude/faz/bin/faz-tools.cjs" roadmap get-phase "$PHASE_NUM" --raw)
+PHASE_DATA=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" roadmap get-phase "$PHASE_NUM" --raw)
 ```
 
 Parse do array `success_criteria` do output JSON. Se não vazio:
@@ -157,10 +157,10 @@ Para cada truth:
 
 ## Step 4: Verificar Artefatos (Três Níveis)
 
-Use faz-tools para verificação de artefatos contra must_haves no frontmatter do PLAN:
+Use fase-tools para verificação de artefatos contra must_haves no frontmatter do PLAN:
 
 ```bash
-ARTIFACT_RESULT=$(node "$HOME/.claude/faz/bin/faz-tools.cjs" verify artifacts "$PLAN_PATH")
+ARTIFACT_RESULT=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" verify artifacts "$PLAN_PATH")
 ```
 
 Parse do resultado JSON: `{ all_passed, passed, total, artifacts: [{path, exists, issues, passed}] }`
@@ -206,10 +206,10 @@ grep -r "$artifact_name" "${search_path:-src/}" --include="*.ts" --include="*.ts
 
 Key links são conexões críticas. Se quebradas, o objetivo falha mesmo com todos os artefatos presentes.
 
-Use faz-tools para verificação de key links contra must_haves no frontmatter do PLAN:
+Use fase-tools para verificação de key links contra must_haves no frontmatter do PLAN:
 
 ```bash
-LINKS_RESULT=$(node "$HOME/.claude/faz/bin/faz-tools.cjs" verify key-links "$PLAN_PATH")
+LINKS_RESULT=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" verify key-links "$PLAN_PATH")
 ```
 
 Parse do resultado JSON: `{ all_verified, verified, total, links: [{from, to, via, verified, detail}] }`
@@ -291,12 +291,12 @@ Identifique arquivos modificados nesta fase da seção key-files do SUMMARY.md, 
 
 ```bash
 # Opção 1: Extrair do frontmatter do SUMMARY
-SUMMARY_FILES=$(node "$HOME/.claude/faz/bin/faz-tools.cjs" summary-extract "$PHASE_DIR"/*-SUMMARY.md --fields key-files)
+SUMMARY_FILES=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" summary-extract "$PHASE_DIR"/*-SUMMARY.md --fields key-files)
 
 # Opção 2: Verificar se commits existem (se hashes de commits documentados)
 COMMIT_HASHES=$(grep -oE "[a-f0-9]{7,40}" "$PHASE_DIR"/*-SUMMARY.md | head -10)
 if [ -n "$COMMIT_HASHES" ]; then
-  COMMITS_VALID=$(node "$HOME/.claude/faz/bin/faz-tools.cjs" verify commits $COMMIT_HASHES)
+  COMMITS_VALID=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" verify commits $COMMIT_HASHES)
 fi
 
 # Fallback: grep por arquivos

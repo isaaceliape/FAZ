@@ -1,5 +1,5 @@
 ---
-name: faz:validar-fase
+name: fase:validar-fase
 description: Audita retroativamente e preenche gaps de validação Nyquist para uma fase completada
 argument-hint: "[número da fase]"
 allowed-tools:
@@ -22,7 +22,7 @@ Output: VALIDATION.md atualizado + arquivos de teste gerados.
 </objective>
 
 <execution_context>
-@~/.claude/faz/workflows/validate-phase.md
+@~/.claude/fase/workflows/validate-phase.md
 </execution_context>
 
 <context>
@@ -30,6 +30,6 @@ Fase: $ARGUMENTS — opcional, padrão é última fase completada.
 </context>
 
 <process>
-Execute @~/.claude/faz/workflows/validate-phase.md.
+Execute @~/.claude/fase/workflows/validate-phase.md.
 Preserve todos os gates do workflow.
 </process>

@@ -1,5 +1,5 @@
 ---
-name: faz:planejar-lacunas
+name: fase:planejar-lacunas
 description: Cria phases para fechar todos gaps identificados pelo audit do milestone
 allowed-tools:
   - Read
@@ -18,7 +18,7 @@ Um comando cria todas fix phases — sem `/fase:adicionar-fase` manual por gap.
 </objective>
 
 <execution_context>
-@~/.faz/workflows/plan-milestone-gaps.md
+@~/.fase/workflows/plan-milestone-gaps.md
 </execution_context>
 
 <context>
@@ -29,6 +29,6 @@ Intent original e estado atual do planning são carregados on demand dentro do w
 </context>
 
 <process>
-Execute o workflow plan-milestone-gaps de @~/.faz/workflows/plan-milestone-gaps.md end-to-end.
+Execute o workflow plan-milestone-gaps de @~/.fase/workflows/plan-milestone-gaps.md end-to-end.
 Preserve todas workflow gates (audit loading, prioritization, phase grouping, confirmação do usuário, roadmap updates).
 </process>

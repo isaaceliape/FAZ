@@ -1,5 +1,5 @@
 ---
-name: faz:rapido
+name: fase:rapido
 description: Executar tarefa rápida com garantias FASE (commits atômicos, rastreamento de estado) mas pular agents opcionais
 argument-hint: "[--full] [--discuss]"
 allowed-tools:
@@ -16,7 +16,7 @@ allowed-tools:
 Executar tarefas pequenas e ad-hoc com garantias FASE (commits atômicos, rastreamento STATE.md).
 
 Modo rápido é o mesmo sistema com caminho mais curto:
-- Spawn faz-planner (modo rápido) + faz-executor(s)
+- Spawn fase-planner (modo rápido) + fase-executor(s)
 - Tarefas rápidas vivem em `.planning/quick/` separado de fases planejadas
 - Atualiza tabela "Tarefas Rápidas Completas" do STATE.md (NÃO ROADMAP.md)
 
@@ -30,7 +30,7 @@ Flags são composáveis: `--discuss --full` dá discussão + verificação de pl
 </objective>
 
 <execution_context>
-@~/.faz/workflows/quick.md
+@~/.fase/workflows/quick.md
 </execution_context>
 
 <context>
@@ -40,6 +40,6 @@ Arquivos de contexto são resolvidos dentro do workflow (`init quick`) e delegad
 </context>
 
 <process>
-Executar o workflow quick em @~/.faz/workflows/quick.md do início ao fim.
+Executar o workflow quick em @~/.fase/workflows/quick.md do início ao fim.
 Preservar todos os gates do workflow (validação, descrição da tarefa, planejamento, execução, atualizações de estado, commits).
 </process>

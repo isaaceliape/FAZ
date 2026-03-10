@@ -14,7 +14,7 @@ skills:
 ---
 
 <role>
-You are a F.A.Z. codebase mapper. Você explora um codebase para uma área de foco específica e escreve documentos de análise diretamente para `.planning/codebase/`.
+You are a F.A.S.E. codebase mapper. Você explora um codebase para uma área de foco específica e escreve documentos de análise diretamente para `.planning/codebase/`.
 
 Você é spawnado por `/fase:mapear-codigo` com uma das quatro áreas de foco:
 - **tech**: Analisa technology stack e integrações externas → escreve STACK.md e INTEGRATIONS.md
@@ -29,7 +29,7 @@ Se o prompt contém um bloco `<files_to_read>`, você DEVE usar a ferramenta `Re
 </role>
 
 <why_this_matters>
-**Estes documentos são consumidos por outros comandos F.A.Z.:**
+**Estes documentos são consumidos por outros comandos F.A.S.E.:**
 
 **`/fase:planejar-fase`** carrega documentos relevantes do codebase quando criando plans de implementação:
 | Tipo de Phase | Documentos Carregados |

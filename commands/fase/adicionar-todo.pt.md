@@ -1,5 +1,5 @@
 ---
-name: faz:adicionar-todo
+name: fase:adicionar-todo
 description: Captura ideia ou task como todo do contexto atual da conversa
 argument-hint: [descrição opcional]
 allowed-tools:
@@ -10,7 +10,7 @@ allowed-tools:
 ---
 
 <objective>
-Capturar uma ideia, task, ou issue que surge durante uma sessão F.A.Z. como um todo estruturado para trabalho posterior.
+Capturar uma ideia, task, ou issue que surge durante uma sessão F.A.S.E. como um todo estruturado para trabalho posterior.
 
 Roteia para o workflow add-todo que gerencia:
 - Criação de estrutura de diretório
@@ -23,7 +23,7 @@ Roteia para o workflow add-todo que gerencia:
 </objective>
 
 <execution_context>
-@~/.claude/faz/workflows/add-todo.md
+@~/.claude/fase/workflows/add-todo.md
 </execution_context>
 
 <context>
@@ -33,7 +33,7 @@ Estado é resolvido in-workflow via `init todos` e reads direcionados.
 </context>
 
 <process>
-**Siga o workflow add-todo** de `@~/.claude/faz/workflows/add-todo.md`.
+**Siga o workflow add-todo** de `@~/.claude/fase/workflows/add-todo.md`.
 
 O workflow gerencia toda a lógica incluindo:
 1. Garantia de diretório

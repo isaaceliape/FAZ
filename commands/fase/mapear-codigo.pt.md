@@ -1,5 +1,5 @@
 ---
-name: faz:mapear-codigo
+name: fase:mapear-codigo
 description: Analisa codebase com agents mapper paralelos para produzir documentos .planning/codebase/
 argument-hint: "[opcional: área específica para mapear, ex: 'api' ou 'auth']"
 allowed-tools:
@@ -12,7 +12,7 @@ allowed-tools:
 ---
 
 <objective>
-Analisar codebase existente usando agents faz-codebase-mapper paralelos para produzir documentos de codebase estruturados.
+Analisar codebase existente usando agents fase-codebase-mapper paralelos para produzir documentos de codebase estruturados.
 
 Cada agent mapper explora uma área de foco e **escreve documentos diretamente** em `.planning/codebase/`. O orquestrador apenas recebe confirmações, mantendo uso de contexto mínimo.
 
@@ -20,7 +20,7 @@ Output: pasta `.planning/codebase/` com 7 documentos estruturados sobre o estado
 </objective>
 
 <execution_context>
-@~/.claude/faz/workflows/map-codebase.md
+@~/.claude/fase/workflows/map-codebase.md
 </execution_context>
 
 <context>
@@ -51,7 +51,7 @@ Verifique por .planning/STATE.md - carrega contexto se projeto já inicializado
 <process>
 1. Verificar se .planning/codebase/ já existe (oferecer refrescar ou pular)
 2. Criar estrutura de diretório .planning/codebase/
-3. Spawnar 4 agents faz-codebase-mapper paralelos:
+3. Spawnar 4 agents fase-codebase-mapper paralelos:
    - Agent 1: foco tech → escreve STACK.md, INTEGRATIONS.md
    - Agent 2: foco arch → escreve ARCHITECTURE.md, STRUCTURE.md
    - Agent 3: foco quality → escreve CONVENTIONS.md, TESTING.md

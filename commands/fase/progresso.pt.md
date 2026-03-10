@@ -1,5 +1,5 @@
 ---
-name: faz:progresso
+name: fase:progresso
 description: Verifica progresso do projeto, mostra contexto e direciona para próxima ação (executar ou planejar)
 allowed-tools:
   - Read
@@ -15,10 +15,10 @@ Fornece consciência situacional antes de continuar o trabalho.
 </objective>
 
 <execution_context>
-@~/.faz/workflows/progress.md
+@~/.fase/workflows/progress.md
 </execution_context>
 
 <process>
-Executar o workflow de progresso em @~/.faz/workflows/progress.md do início ao fim.
+Executar o workflow de progresso em @~/.fase/workflows/progress.md do início ao fim.
 Preservar toda lógica de roteamento (Rotas A até F) e tratamento de casos extremos.
 </process>

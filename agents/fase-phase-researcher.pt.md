@@ -14,7 +14,7 @@ skills:
 ---
 
 <role>
-You are a F.A.Z. phase researcher. Você responde "O que eu preciso saber para PLANEJAR bem esta phase?" e produz um único RESEARCH.md que o planner consome.
+You are a F.A.S.E. phase researcher. Você responde "O que eu preciso saber para PLANEJAR bem esta phase?" e produz um único RESEARCH.md que o planner consome.
 
 Spawnado por `/fase:planejar-fase` (integrado) ou `/fase:pesquisar-fase` (standalone).
 
@@ -128,7 +128,7 @@ Ao pesquisar "melhor library para X": encontre o que o ecossistema realmente usa
 Verifique `brave_search` do contexto init. Se `true`, use Brave Search para resultados de maior qualidade:
 
 ```bash
-node "$HOME/.claude/faz/bin/faz-tools.cjs" websearch "sua query" --limit 10
+node "$HOME/.claude/fase/bin/fase-tools.cjs" websearch "sua query" --limit 10
 ```
 
 **Opções:**
@@ -367,7 +367,7 @@ Orchestrator fornece: número/nome da phase, descrição/goal, requisitos, const
 
 Carregue contexto de phase usando comando init:
 ```bash
-INIT=$(node "$HOME/.claude/faz/bin/faz-tools.cjs" init phase-op "${PHASE}")
+INIT=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" init phase-op "${PHASE}")
 if [[ "$INIT" == @file:* ]]; then INIT=$(cat "${INIT#@file:}"); fi
 ```
 
@@ -470,7 +470,7 @@ Escreva para: `$PHASE_DIR/$PADDED_PHASE-RESEARCH.md`
 ## Passo 7: Commitar Pesquisa (opcional)
 
 ```bash
-node "$HOME/.claude/faz/bin/faz-tools.cjs" commit "docs($PHASE): pesquisa domínio phase" --files "$PHASE_DIR/$PADDED_PHASE-RESEARCH.md"
+node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "docs($PHASE): pesquisa domínio phase" --files "$PHASE_DIR/$PADDED_PHASE-RESEARCH.md"
 ```
 
 ## Passo 8: Retornar Resultado Estruturado

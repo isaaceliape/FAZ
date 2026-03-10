@@ -1,5 +1,5 @@
 ---
-name: faz:configuracoes
+name: fase:configuracoes
 description: Configurar toggles de workflow FASE e perfil de model
 allowed-tools:
   - Read
@@ -20,11 +20,11 @@ Direciona para o workflow settings que lida com:
 </objective>
 
 <execution_context>
-@~/.faz/workflows/settings.md
+@~/.fase/workflows/settings.md
 </execution_context>
 
 <process>
-**Seguir workflow settings** em `@~/.faz/workflows/settings.md`.
+**Seguir workflow settings** em `@~/.fase/workflows/settings.md`.
 
 O workflow lida com toda lógica incluindo:
 1. Criação de arquivo de config com defaults se ausente

@@ -1,6 +1,6 @@
 ---
 type: prompt
-name: faz:completar-marco
+name: fase:completar-marco
 description: Arquiva milestone completado e prepara para próxima version
 argument-hint: <version>
 allowed-tools:
@@ -19,8 +19,8 @@ Output: Milestone arquivado (roadmap + requirements), PROJECT.md evoluído, git 
 <execution_context>
 **Carregue estes arquivos AGORA (antes de prosseguir):**
 
-- @~/.faz/workflows/complete-milestone.md (workflow principal)
-- @~/.faz/templates/milestone-archive.md (template de archive)
+- @~/.fase/workflows/complete-milestone.md (workflow principal)
+- @~/.fase/templates/milestone-archive.md (template de archive)
   </execution_context>
 
 <context>

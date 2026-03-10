@@ -1,5 +1,5 @@
 ---
-name: faz:listar-premissas
+name: fase:listar-premissas
 description: Expõe suposições do Claude sobre abordagem da phase antes do planning
 argument-hint: "[phase]"
 allowed-tools:
@@ -17,7 +17,7 @@ Output: Apenas output conversacional (sem criação de arquivo) — termina com 
 </objective>
 
 <execution_context>
-@~/.faz/workflows/list-phase-assumptions.md
+@~/.fase/workflows/list-phase-assumptions.md
 </execution_context>
 
 <context>

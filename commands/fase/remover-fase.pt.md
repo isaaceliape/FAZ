@@ -1,5 +1,5 @@
 ---
-name: faz:remover-fase
+name: fase:remover-fase
 description: Remover fase futura do roadmap e renumerar fases subsequentes
 argument-hint: <numero-da-fase>
 allowed-tools:
@@ -16,7 +16,7 @@ Output: Fase deletada, todas fases subsequentes renumeradas, git commit como reg
 </objective>
 
 <execution_context>
-@~/.faz/workflows/remove-phase.md
+@~/.fase/workflows/remove-phase.md
 </execution_context>
 
 <context>
@@ -26,6 +26,6 @@ Roadmap e estado são resolvidos no-workflow via `init phase-op` e leituras dire
 </context>
 
 <process>
-Executar workflow remove-phase em @~/.faz/workflows/remove-phase.md do início ao fim.
+Executar workflow remove-phase em @~/.fase/workflows/remove-phase.md do início ao fim.
 Preservar todos validation gates (checagem de fase futura, checagem de trabalho), lógica de renumeração e commit.
 </process>

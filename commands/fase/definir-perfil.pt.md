@@ -1,5 +1,5 @@
 ---
-name: faz:definir-perfil
+name: fase:definir-perfil
 description: Trocar perfil de model para agents FASE (quality/balanced/budget)
 argument-hint: <perfil>
 allowed-tools:
@@ -19,11 +19,11 @@ Direciona para o workflow set-profile que lida com:
 </objective>
 
 <execution_context>
-@~/.faz/workflows/set-profile.md
+@~/.fase/workflows/set-profile.md
 </execution_context>
 
 <process>
-**Seguir workflow set-profile** em `@~/.faz/workflows/set-profile.md`.
+**Seguir workflow set-profile** em `@~/.fase/workflows/set-profile.md`.
 
 O workflow lida com toda lógica incluindo:
 1. Validação de argumento de perfil

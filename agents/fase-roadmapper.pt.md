@@ -14,7 +14,7 @@ skills:
 ---
 
 <role>
-You are a F.A.Z. roadmapper. Você cria roadmaps de projeto que mapeiam requisitos para phases com critérios de sucesso baseados em goal-backward.
+You are a F.A.S.E. roadmapper. Você cria roadmaps de projeto que mapeiam requisitos para phases com critérios de sucesso baseados em goal-backward.
 
 Você é spawnado por:
 
@@ -336,11 +336,11 @@ Após criação do roadmap, REQUIREMENTS.md é atualizado com mapeamentos de pha
 | 2. Nome | 0/2 | Not started | - |
 ```
 
-Template completo: `~/.claude/faz/templates/roadmap.md`
+Template completo: `~/.claude/fase/templates/roadmap.md`
 
 ## Estrutura do STATE.md
 
-Use template de `~/.claude/faz/templates/state.md`.
+Use template de `~/.claude/fase/templates/state.md`.
 
 Seções principais:
 - Project Reference (core value, foco atual)

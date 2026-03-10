@@ -1,6 +1,6 @@
-# Plano de Refatoração: FAZ → FASE
+# Plano de Refatoração: FASE → FASE
 
-**Objetivo:** Renomear o projeto de FAZ (Framework de Automação com Zelo) para FASE (Framework de Automação Sem Enrolação).
+**Objetivo:** Renomear o projeto de FASE (Framework de Automação com Zelo) para FASE (Framework de Automação Sem Enrolação).
 
 ---
 
@@ -9,10 +9,10 @@
 | Categoria | Quantidade |
 |-----------|-----------|
 | Agentes a renomear (`faz-*.pt.md`) | 12 arquivos |
-| Diretório de comandos a renomear | `commands/faz/` → `commands/fase/` |
-| Arquivos com padrão `/faz:` | 27 arquivos |
-| Arquivos com "FAZ" (maiúsculo) | 18 arquivos, 61 ocorrências |
-| Hooks com referências `/faz:` | 2 arquivos |
+| Diretório de comandos a renomear | `commands/fase/` → `commands/fase/` |
+| Arquivos com padrão `/fase:` | 27 arquivos |
+| Arquivos com "FASE" (maiúsculo) | 18 arquivos, 61 ocorrências |
+| Hooks com referências `/fase:` | 2 arquivos |
 
 ---
 
@@ -26,9 +26,9 @@
 - `PLANO_DE_TRADUCAO.md` — plano original de tradução
 
 **O que muda:**
-- "FAZ" → "FASE" em todos os títulos e referências
+- "FASE" → "FASE" em todos os títulos e referências
 - "Framework de Automação com Zelo" → "Framework de Automação Sem Enrolação"
-- Referências a `/faz:` → `/fase:`
+- Referências a `/fase:` → `/fase:`
 
 ---
 
@@ -37,19 +37,19 @@
 **Arquivo:** `bin/install.js`
 
 **O que muda:**
-- ASCII art: letras "FAZ" → letras "FASE"
+- ASCII art: letras "FASE" → letras "FASE"
 - Linha de descrição do banner: "com Zelo" → "Sem Enrolação"
-- Comando de conclusão: `/faz:novo-projeto` → `/fase:novo-projeto`
-- Mensagens de desinstalação que mencionam "FAZ" → "FASE"
-- Texto de statusline interativa: referências ao FAZ → FASE
+- Comando de conclusão: `/fase:novo-projeto` → `/fase:novo-projeto`
+- Mensagens de desinstalação que mencionam "FASE" → "FASE"
+- Texto de statusline interativa: referências ao FASE → FASE
 
 ---
 
 ## Parte 3 — Hooks JavaScript
 
 **Arquivos:**
-- `hooks/gsd-context-monitor.js` — `/faz:pausar-trabalho` → `/fase:pausar-trabalho`
-- `hooks/gsd-statusline.js` — `/faz:atualizar` → `/fase:atualizar`
+- `hooks/gsd-context-monitor.js` — `/fase:pausar-trabalho` → `/fase:pausar-trabalho`
+- `hooks/gsd-statusline.js` — `/fase:atualizar` → `/fase:atualizar`
 - `hooks/gsd-check-update.js` — referências ao nome do projeto
 
 ---
@@ -57,10 +57,10 @@
 ## Parte 4 — Diretório e conteúdo dos comandos
 
 **O que muda:**
-- Renomear diretório: `commands/faz/` → `commands/fase/`
+- Renomear diretório: `commands/fase/` → `commands/fase/`
 - Atualizar conteúdo de todos os 31 arquivos `.pt.md`:
-  - `/faz:` → `/fase:` (namespace de comandos)
-  - Referências ao nome "FAZ" → "FASE"
+  - `/fase:` → `/fase:` (namespace de comandos)
+  - Referências ao nome "FASE" → "FASE"
 
 ---
 
@@ -68,22 +68,22 @@
 
 **O que muda:**
 - Renomear 12 arquivos: `faz-*.pt.md` → `fase-*.pt.md`
-- Atualizar conteúdo interno com `/faz:` → `/fase:` e "FAZ" → "FASE"
+- Atualizar conteúdo interno com `/fase:` → `/fase:` e "FASE" → "FASE"
 
 ---
 
 ## Parte 6 — Documentação técnica (docs/)
 
 **Arquivos:**
-- `docs/USER-GUIDE.md` — ~120+ ocorrências de `/faz:` + 9 de "FAZ"
-- `docs/COMANDOS.md` — ~30+ ocorrências de `/faz:` + 2 de "FAZ"
-- `docs/context-monitor.md` — 2 ocorrências de `/faz:` + 1 de "FAZ"
+- `docs/USER-GUIDE.md` — ~120+ ocorrências de `/fase:` + 9 de "FASE"
+- `docs/COMANDOS.md` — ~30+ ocorrências de `/fase:` + 2 de "FASE"
+- `docs/context-monitor.md` — 2 ocorrências de `/fase:` + 1 de "FASE"
 
 ---
 
 ## Parte 7 — Verificação final
 
-- Grep por `/faz:` e `"FAZ"` em todo o repositório
+- Grep por `/fase:` e `"FASE"` em todo o repositório
 - Corrigir quaisquer ocorrências residuais
 - Commit final de verificação
 

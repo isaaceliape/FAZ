@@ -1,5 +1,5 @@
 ---
-name: faz:novo-projeto
+name: fase:novo-projeto
 description: Inicializa um novo projeto com coleta profunda de contexto e PROJECT.md
 argument-hint: "[--auto]"
 allowed-tools:
@@ -29,14 +29,14 @@ Inicializar um novo projeto através de fluxo unificado: questionamento → rese
 </objective>
 
 <execution_context>
-@~/.claude/faz/workflows/new-project.md
-@~/.claude/faz/references/questioning.md
-@~/.claude/faz/references/ui-brand.md
-@~/.claude/faz/templates/project.md
-@~/.claude/faz/templates/requirements.md
+@~/.claude/fase/workflows/new-project.md
+@~/.claude/fase/references/questioning.md
+@~/.claude/fase/references/ui-brand.md
+@~/.claude/fase/templates/project.md
+@~/.claude/fase/templates/requirements.md
 </execution_context>
 
 <process>
-Execute o workflow new-project de @~/.claude/faz/workflows/new-project.md ponta a ponta.
+Execute o workflow new-project de @~/.claude/fase/workflows/new-project.md ponta a ponta.
 Preservar todos os gates do workflow (validação, aprovações, commits, roteamento).
 </process>

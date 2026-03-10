@@ -1,5 +1,5 @@
 ---
-name: faz:retomar-trabalho
+name: fase:retomar-trabalho
 description: Retomar trabalho da sessão anterior com restauração completa de contexto
 allowed-tools:
   - Read
@@ -22,11 +22,11 @@ Direciona para o workflow resume-project que lida com:
   </objective>
 
 <execution_context>
-@~/.faz/workflows/resume-project.md
+@~/.fase/workflows/resume-project.md
 </execution_context>
 
 <process>
-**Seguir workflow resume-project** em `@~/.faz/workflows/resume-project.md`.
+**Seguir workflow resume-project** em `@~/.fase/workflows/resume-project.md`.
 
 O workflow lida com toda lógica de resumo incluindo:
 

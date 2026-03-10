@@ -1,5 +1,5 @@
 ---
-name: faz:pausar-trabalho
+name: fase:pausar-trabalho
 description: Cria handoff de context ao pausar trabalho mid-phase
 allowed-tools:
   - Read
@@ -19,7 +19,7 @@ Roteia para workflow pause-work que lida com:
 </objective>
 
 <execution_context>
-@~/.faz/workflows/pause-work.md
+@~/.fase/workflows/pause-work.md
 </execution_context>
 
 <context>
@@ -27,7 +27,7 @@ Estado e phase progress são gathered in-workflow com reads direcionados.
 </context>
 
 <process>
-**Siga o workflow pause-work** de `@~/.faz/workflows/pause-work.md`.
+**Siga o workflow pause-work** de `@~/.fase/workflows/pause-work.md`.
 
 O workflow lida com toda lógica incluindo:
 1. Detecção de phase directory

@@ -1,5 +1,5 @@
 ---
-name: faz:atualizar
+name: fase:atualizar
 description: Atualizar FASE para versão mais recente com exibição de changelog
 allowed-tools:
   - Bash
@@ -19,11 +19,11 @@ Direciona para o workflow update que lida com:
 </objective>
 
 <execution_context>
-@~/.faz/workflows/update.md
+@~/.fase/workflows/update.md
 </execution_context>
 
 <process>
-**Seguir workflow update** em `@~/.faz/workflows/update.md`.
+**Seguir workflow update** em `@~/.fase/workflows/update.md`.
 
 O workflow lida com toda lógica incluindo:
 1. Detecção de versão instalada (local/global)

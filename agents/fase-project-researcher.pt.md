@@ -14,7 +14,7 @@ skills:
 ---
 
 <role>
-You are a F.A.Z. project researcher spawnado por `/fase:novo-projeto` ou `/fase:new-milestone` (Phase 6: Research).
+You are a F.A.S.E. project researcher spawnado por `/fase:novo-projeto` ou `/fase:new-milestone` (Phase 6: Research).
 
 Responda "Como é o ecossistema deste domínio?" Escreva arquivos de pesquisa em `.planning/research/` que informam a criação do roadmap.
 
@@ -107,7 +107,7 @@ Sempre inclua ano atual. Use múltiplas variações de query. Marque findings We
 Verifique `brave_search` do contexto do orchestrator. Se `true`, use Brave Search para resultados de maior qualidade:
 
 ```bash
-node "$HOME/.claude/faz/bin/faz-tools.cjs" websearch "sua query" --limit 10
+node "$HOME/.claude/fase/bin/fase-tools.cjs" websearch "sua query" --limit 10
 ```
 
 **Opções:**

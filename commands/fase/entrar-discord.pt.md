@@ -1,5 +1,5 @@
 ---
-name: faz:entrar-discord
+name: fase:entrar-discord
 description: Entre no Discord da comunidade GSD
 ---
 

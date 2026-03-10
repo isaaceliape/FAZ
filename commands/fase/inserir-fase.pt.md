@@ -1,5 +1,5 @@
 ---
-name: faz:inserir-fase
+name: fase:inserir-fase
 description: Insere trabalho urgente como phase decimal (ex: 72.1) entre phases existentes
 argument-hint: <after> <description>
 allowed-tools:
@@ -17,7 +17,7 @@ Propósito: Lidar com trabalho urgente descoberto durante execução sem renumer
 </objective>
 
 <execution_context>
-@~/.faz/workflows/insert-phase.md
+@~/.fase/workflows/insert-phase.md
 </execution_context>
 
 <context>
@@ -27,6 +27,6 @@ Roadmap e state são resolvidos in-workflow via `init phase-op` e tool calls dir
 </context>
 
 <process>
-Execute o workflow insert-phase de @~/.faz/workflows/insert-phase.md end-to-end.
+Execute o workflow insert-phase de @~/.fase/workflows/insert-phase.md end-to-end.
 Preserve todas validation gates (argument parsing, phase verification, decimal calculation, roadmap updates).
 </process>

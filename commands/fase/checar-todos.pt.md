@@ -1,5 +1,5 @@
 ---
-name: faz:checar-todos
+name: fase:checar-todos
 description: Lista todos pendentes e seleciona um para trabalhar
 argument-hint: [filtro de área]
 allowed-tools:
@@ -21,7 +21,7 @@ Roteia para o workflow check-todos que gerencia:
 </objective>
 
 <execution_context>
-@~/.claude/faz/workflows/check-todos.md
+@~/.claude/fase/workflows/check-todos.md
 </execution_context>
 
 <context>
@@ -31,7 +31,7 @@ Estado de todos e correlação com roadmap são carregados in-workflow usando `i
 </context>
 
 <process>
-**Siga o workflow check-todos** de `@~/.claude/faz/workflows/check-todos.md`.
+**Siga o workflow check-todos** de `@~/.claude/fase/workflows/check-todos.md`.
 
 O workflow gerencia toda a lógica incluindo:
 1. Checagem de existência de todos

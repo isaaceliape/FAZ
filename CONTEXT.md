@@ -129,7 +129,7 @@ O GSD original evolui rápido. Precisamos:
 ## 📞 Comunidade
 
 - **Discord Internacional:** https://discord.gg/gsd
-- **GitHub:** https://github.com/isaaceliape/FAZ
+- **GitHub:** https://github.com/isaaceliape/FASE
 - **Issues:** Reportar bugs e sugerir melhorias
 
 ---
@@ -157,7 +157,7 @@ Este projeto é uma **tradução comunitária**, não um fork oficial.
 - [x] Todos os comandos traduzidos (32/32)
 - [x] Hooks traduzidos para PT-BR
 - [x] Documentação técnica traduzida
-- [x] **Refatoração de nome: FAZ → FASE**
+- [x] **Refatoração de nome: FASE → FASE**
 
 ### ✅ Refatoração FASE — COMPLETA
 - [x] Branding atualizado (README, CONTEXT, docs)

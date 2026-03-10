@@ -1,5 +1,5 @@
 ---
-name: faz:limpar
+name: fase:limpar
 description: Arquiva diretórios de phases acumulados de milestones completados
 ---
 <objective>
@@ -9,10 +9,10 @@ Use quando `.planning/phases/` acumulou diretórios de milestones passados.
 </objective>
 
 <execution_context>
-@~/.faz/workflows/cleanup.md
+@~/.fase/workflows/cleanup.md
 </execution_context>
 
 <process>
-Siga o workflow cleanup em @~/.faz/workflows/cleanup.md.
+Siga o workflow cleanup em @~/.fase/workflows/cleanup.md.
 Identifique milestones completados, mostre um resumo dry-run e arquive após confirmação.
 </process>

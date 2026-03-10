@@ -1,9 +1,9 @@
 ---
-name: faz:ajuda
-description: Mostra os comandos F.A.Z. disponíveis e guia de uso
+name: fase:ajuda
+description: Mostra os comandos F.A.S.E. disponíveis e guia de uso
 ---
 <objective>
-Exibe a referência completa de comandos F.A.Z.
+Exibe a referência completa de comandos F.A.S.E.
 
 Apenas envie o conteúdo da referência. NÃO adicione:
 - Análise específica do projeto
@@ -13,10 +13,10 @@ Apenas envie o conteúdo da referência. NÃO adicione:
 </objective>
 
 <execution_context>
-@~/.faz/workflows/help.md
+@~/.fase/workflows/help.md
 </execution_context>
 
 <process>
-Exiba a referência completa de comandos F.A.Z. de @~/.faz/workflows/help.md.
+Exiba a referência completa de comandos F.A.S.E. de @~/.fase/workflows/help.md.
 Mostre o conteúdo da referência diretamente — sem adições ou modificações.
 </process>

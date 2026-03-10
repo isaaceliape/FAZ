@@ -38,13 +38,13 @@
 
 ### 📦 Setup e Infraestrutura (100%)
 
-- [x] **2026-03-06 11:51** — Repo criado no GitHub: https://github.com/isaaceliape/FAZ
+- [x] **2026-03-06 11:51** — Repo criado no GitHub: https://github.com/isaaceliape/FASE
 - [x] **2026-03-06 11:53** — README.md criado e commitado
 - [x] **2026-03-06 11:53** — TRANSLATION_GUIDE.md criado (glossário + diretrizes)
 - [x] **2026-03-06 11:54** — CONTEXT.md criado (visão do projeto)
 - [x] **2026-03-06 12:04** — Estrutura completa copiada do GSD original (168 arquivos)
 - [x] **2026-03-06 12:06** — PLANO_DE_TRADUCAO.md criado
-- [x] **2026-03-06 12:33** — Projeto movido para `/Users/isaaceliape/repos/FAZ`
+- [x] **2026-03-06 12:33** — Projeto movido para `/Users/isaaceliape/repos/FASE`
 
 ### 🤖 Agents (100%) — TODOS TRADUZIDOS! 🎉
 
@@ -136,9 +136,9 @@
 ### Fase 4: Advanced & Utility — 22 arquivos
 
 - `agents/fase-nyquist-auditor.pt.md`
-- `hooks/faz-check-update.js`
-- `hooks/faz-statusline.js`
-- `hooks/faz-context-monitor.js`
+- `hooks/fase-check-update.js`
+- `hooks/fase-statusline.js`
+- `hooks/fase-context-monitor.js`
 - + 18 commands utilitários
 
 ---
@@ -152,7 +152,7 @@
 | 11:41 | Isaac propõe tradução do GSD para PT-BR | ✅ |
 | 11:44 | Pesquisa no GitHub: nenhuma tradução BR existente | ✅ |
 | 11:49 | Decidido nome "F.A.S.E." (Framework de Automação Sem Enrolação) | ✅ |
-| 11:51 | Repo criado: https://github.com/isaaceliape/FAZ | ✅ |
+| 11:51 | Repo criado: https://github.com/isaaceliape/FASE | ✅ |
 | 11:53 | README.md, TRANSLATION_GUIDE.md, CONTEXT.md criados | ✅ |
 | 12:04 | Estrutura completa copiada do GSD original (168 arquivos) | ✅ |
 | 12:06 | PLANO_DE_TRADUCAO.md criado | ✅ |
@@ -161,7 +161,7 @@
 | 12:19 | Prefixos `gsd-` → `faz-` atualizados no executor | ✅ |
 | 12:25 | OpenCode integrado para traduções em lote | ✅ |
 | 12:29 | `help.pt.md` traduzido via OpenCode | ✅ |
-| 12:33 | Projeto movido para `~/repos/FAZ` | ✅ |
+| 12:33 | Projeto movido para `~/repos/FASE` | ✅ |
 | 12:42 | PROGRESSO.md criado (este arquivo) | ✅ |
 | 13:00 | Commands core traduzidos (new-project, plan-phase, execute-phase) | ✅ |
 | 13:15 | fase-verifier.pt.md traduzido (581 linhas) | ✅ |
@@ -218,10 +218,10 @@
 
 ## 📞 Links Úteis
 
-- **Repo:** https://github.com/isaaceliape/FAZ
+- **Repo:** https://github.com/isaaceliape/FASE
 - **OpenCode UI:** http://localhost:3000/
 - **GSD Original:** https://github.com/gsd-build/get-shit-done
-- **Path local:** `/Users/isaaceliape/repos/FAZ`
+- **Path local:** `/Users/isaaceliape/repos/FASE`
 
 ---
 
@@ -341,9 +341,9 @@
 #### Hooks (3 arquivos)
 | # | Arquivo | Tamanho | Complexidade |
 |---|---------|---------|--------------|
-| 1 | `hooks/faz-check-update.js` | ~5KB | Baixa |
-| 2 | `hooks/faz-statusline.js` | ~8KB | Média |
-| 3 | `hooks/faz-context-monitor.js` | ~10KB | Média |
+| 1 | `hooks/fase-check-update.js` | ~5KB | Baixa |
+| 2 | `hooks/fase-statusline.js` | ~8KB | Média |
+| 3 | `hooks/fase-context-monitor.js` | ~10KB | Média |
 
 #### Agent Avançado (1 arquivo)
 | # | Arquivo | Tamanho | Complexidade |
@@ -377,8 +377,8 @@
 ### Processo de Tradução por Arquivo
 1. **Preparação:** Ler arquivo original, identificar termos técnicos
 2. **Tradução:** Traduzir mantendo estrutura e formatação
-3. **Atualização de Prefixos:** `gsd-` → `faz-`, `/gsd:` → `/faz:`
-4. **Atualização de Paths:** `~/.claude/get-shit-done/` → `~/.faz/`
+3. **Atualização de Prefixos:** `gsd-` → `faz-`, `/gsd:` → `/fase:`
+4. **Atualização de Paths:** `~/.claude/get-shit-done/` → `~/.fase/`
 5. **Revisão:** Verificar consistência com glossário
 6. **Teste:** Validar se comandos fazem sentido em PT-BR
 7. **Commit:** Commitar com mensagem descritiva

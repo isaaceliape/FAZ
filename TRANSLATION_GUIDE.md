@@ -11,7 +11,7 @@ Este documento define as diretrizes e o glossário para traduzir o **get-shit-do
 O objetivo é capturar o **espírito** e a **intenção**, não fazer tradução literal.
 
 ❌ Ruim: "Você é um executor de plano GSD"  
-✅ Bom: "Você é um executor de planos do F.A.Z."
+✅ Bom: "Você é um executor de planos do F.A.S.E."
 
 ### 2. **Mantenha Termos Técnicos em Inglês**
 
