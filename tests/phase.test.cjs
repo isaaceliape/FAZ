@@ -1329,7 +1329,7 @@ describe('phase complete command', () => {
 // comparePhaseNum and normalizePhaseName (imported directly)
 // ─────────────────────────────────────────────────────────────────────────────
 
-const { comparePhaseNum, normalizePhaseName } = require('../get-shit-done/bin/lib/core.cjs');
+const { comparePhaseNum, normalizePhaseName } = require('../bin/lib/core.cjs');
 
 describe('comparePhaseNum', () => {
   test('sorts integer phases numerically', () => {

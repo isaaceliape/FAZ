@@ -26,7 +26,7 @@ const {
   getRoadmapPhaseInternal,
   searchPhaseInDir,
   findPhaseInternal,
-} = require('../get-shit-done/bin/lib/core.cjs');
+} = require('../bin/lib/core.cjs');
 
 // ─── loadConfig ────────────────────────────────────────────────────────────────
 
