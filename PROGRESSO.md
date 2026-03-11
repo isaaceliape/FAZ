@@ -48,18 +48,18 @@
 
 ### 🤖 Agents (100%) — TODOS TRADUZIDOS! 🎉
 
-- [x] `agents/fase-executor.pt.md` (19KB)
-- [x] `agents/fase-planner.pt.md` (43KB)
-- [x] `agents/fase-verifier.pt.md` (19KB)
-- [x] `agents/fase-debugger.pt.md` (38KB)
-- [x] `agents/fase-roadmapper.pt.md` (17KB)
-- [x] `agents/fase-project-researcher.pt.md` (16KB)
-- [x] `agents/fase-phase-researcher.pt.md` (18KB)
-- [x] `agents/fase-research-synthesizer.pt.md` (7KB)
-- [x] `agents/fase-codebase-mapper.pt.md` (16KB)
-- [x] `agents/fase-plan-checker.pt.md` (23KB)
-- [x] `agents/fase-integration-checker.pt.md` (13KB)
-- [x] **2026-03-06 18:06** — `agents/fase-nyquist-auditor.pt.md` (5KB) ✅ ÚLTIMO!
+- [x] `agentes/fase-executor.pt.md` (19KB)
+- [x] `agentes/fase-planejador.pt.md` (43KB)
+- [x] `agentes/fase-verificador.pt.md` (19KB)
+- [x] `agentes/fase-depurador.pt.md` (38KB)
+- [x] `agentes/fase-roadmapper.pt.md` (17KB)
+- [x] `agentes/fase-pesquisador-projeto.pt.md` (16KB)
+- [x] `agentes/fase-pesquisador-fase.pt.md` (18KB)
+- [x] `agentes/fase-sintetizador-pesquisa.pt.md` (7KB)
+- [x] `agentes/fase-mapeador-codigo.pt.md` (16KB)
+- [x] `agentes/fase-verificador-plano.pt.md` (23KB)
+- [x] `agentes/fase-verificador-integracao.pt.md` (13KB)
+- [x] **2026-03-06 18:06** — `agentes/fase-auditor-nyquist.pt.md` (5KB) ✅ ÚLTIMO!
 
 ### 📜 Commands (100%) — TODOS TRADUZIDOS! 🎉
 
@@ -102,20 +102,20 @@
 2. ✅ `comandos/new-project.pt.md`
 3. ✅ `comandos/plan-phase.pt.md`
 4. ✅ `comandos/execute-phase.pt.md`
-5. ✅ `agents/fase-executor.pt.md`
-6. ✅ `agents/fase-planner.pt.md` (43KB)
-7. ✅ `agents/fase-verifier.pt.md` (19KB)
+5. ✅ `agentes/fase-executor.pt.md`
+6. ✅ `agentes/fase-planejador.pt.md` (43KB)
+7. ✅ `agentes/fase-verificador.pt.md` (19KB)
 
 ### Fase 2: Planning & Research — 5/9 arquivos (56%)
 
 **Concluídos:**
-- [x] `agents/fase-roadmapper.pt.md` ✅ (652 linhas)
-- [x] `agents/fase-project-researcher.pt.md` ✅ (631 linhas)
-- [x] `agents/fase-phase-researcher.pt.md` ✅ (555 linhas)
-- [x] `agents/fase-codebase-mapper.pt.md` ✅ (772 linhas)
+- [x] `agentes/fase-roadmapper.pt.md` ✅ (652 linhas)
+- [x] `agentes/fase-pesquisador-projeto.pt.md` ✅ (631 linhas)
+- [x] `agentes/fase-pesquisador-fase.pt.md` ✅ (555 linhas)
+- [x] `agentes/fase-mapeador-codigo.pt.md` ✅ (772 linhas)
 
 **Pendentes:**
-- `agents/fase-research-synthesizer.pt.md`
+- `agentes/fase-sintetizador-pesquisa.pt.md`
 - `comandos/new-milestone.pt.md`
 - `comandos/add-phase.pt.md`
 - `comandos/research-phase.pt.md`
@@ -123,9 +123,9 @@
 
 ### Fase 3: Verification & Debug — 9 arquivos
 
-- `agents/fase-plan-checker.pt.md`
-- `agents/fase-integration-checker.pt.md`
-- `agents/fase-debugger.pt.md`
+- `agentes/fase-verificador-plano.pt.md`
+- `agentes/fase-verificador-integracao.pt.md`
+- `agentes/fase-depurador.pt.md`
 - `comandos/verify-work.pt.md`
 - `comandos/validate-phase.pt.md`
 - `comandos/debug.pt.md`
@@ -135,7 +135,7 @@
 
 ### Fase 4: Advanced & Utility — 22 arquivos
 
-- `agents/fase-nyquist-auditor.pt.md`
+- `agentes/fase-auditor-nyquist.pt.md`
 - `hooks/faz-check-update.js`
 - `hooks/faz-statusline.js`
 - `hooks/faz-context-monitor.js`
@@ -250,8 +250,8 @@
 | 2 | `comandos/new-project.pt.md` | ⏳ Pendente | ~12KB | Média | OpenCode | 2026-03-06 |
 | 3 | `comandos/plan-phase.pt.md` | ⏳ Pendente | ~15KB | Média | OpenCode | 2026-03-06 |
 | 4 | `comandos/execute-phase.pt.md` | ⏳ Pendente | ~10KB | Média | OpenCode | 2026-03-06 |
-| 5 | `agents/fase-planner.pt.md` | ⏳ Pendente | ~43KB | Alta | OpenCode | 2026-03-07 |
-| 6 | `agents/fase-verifier.pt.md` | ⏳ Pendente | ~19KB | Média | OpenCode | 2026-03-07 |
+| 5 | `agentes/fase-planejador.pt.md` | ⏳ Pendente | ~43KB | Alta | OpenCode | 2026-03-07 |
+| 6 | `agentes/fase-verificador.pt.md` | ⏳ Pendente | ~19KB | Média | OpenCode | 2026-03-07 |
 
 **Estimativa:** 2-3 dias
 
@@ -276,11 +276,11 @@
 
 | # | Arquivo | Tipo | Tamanho | Complexidade | Dependência |
 |---|---------|------|---------|--------------|-------------|
-| 1 | `agents/fase-roadmapper.pt.md` | Agent | ~35KB | Alta | Fase 1 |
-| 2 | `agents/fase-project-researcher.pt.md` | Agent | ~25KB | Média | - |
-| 3 | `agents/fase-phase-researcher.pt.md` | Agent | ~20KB | Média | - |
-| 4 | `agents/fase-research-synthesizer.pt.md` | Agent | ~18KB | Média | #2, #3 |
-| 5 | `agents/fase-codebase-mapper.pt.md` | Agent | ~22KB | Média | - |
+| 1 | `agentes/fase-roadmapper.pt.md` | Agent | ~35KB | Alta | Fase 1 |
+| 2 | `agentes/fase-pesquisador-projeto.pt.md` | Agent | ~25KB | Média | - |
+| 3 | `agentes/fase-pesquisador-fase.pt.md` | Agent | ~20KB | Média | - |
+| 4 | `agentes/fase-sintetizador-pesquisa.pt.md` | Agent | ~18KB | Média | #2, #3 |
+| 5 | `agentes/fase-mapeador-codigo.pt.md` | Agent | ~22KB | Média | - |
 | 6 | `comandos/new-milestone.pt.md` | Command | ~10KB | Baixa | #1 |
 | 7 | `comandos/add-phase.pt.md` | Command | ~12KB | Baixa | #1 |
 | 8 | `comandos/research-phase.pt.md` | Command | ~15KB | Média | #2, #3, #4 |
@@ -308,9 +308,9 @@
 
 | # | Arquivo | Tipo | Tamanho | Complexidade | Dependência |
 |---|---------|------|---------|--------------|-------------|
-| 1 | `agents/fase-plan-checker.pt.md` | Agent | ~20KB | Média | Fase 1 |
-| 2 | `agents/fase-integration-checker.pt.md` | Agent | ~25KB | Média | Fase 1 |
-| 3 | `agents/fase-debugger.pt.md` | Agent | ~30KB | Alta | - |
+| 1 | `agentes/fase-verificador-plano.pt.md` | Agent | ~20KB | Média | Fase 1 |
+| 2 | `agentes/fase-verificador-integracao.pt.md` | Agent | ~25KB | Média | Fase 1 |
+| 3 | `agentes/fase-depurador.pt.md` | Agent | ~30KB | Alta | - |
 | 4 | `comandos/verify-work.pt.md` | Command | ~12KB | Média | Fase 1 |
 | 5 | `comandos/validate-phase.pt.md` | Command | ~10KB | Média | #1 |
 | 6 | `comandos/debug.pt.md` | Command | ~15KB | Média | #3 |
@@ -348,7 +348,7 @@
 #### Agent Avançado (1 arquivo)
 | # | Arquivo | Tamanho | Complexidade |
 |---|---------|---------|--------------|
-| 4 | `agents/fase-nyquist-auditor.pt.md` | ~35KB | Alta |
+| 4 | `agentes/fase-auditor-nyquist.pt.md` | ~35KB | Alta |
 
 #### Commands Utilitários (18 arquivos - selecionar os mais importantes)
 | # | Arquivo | Prioridade | Estimativa |

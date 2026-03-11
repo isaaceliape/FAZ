@@ -163,7 +163,7 @@ Este projeto é uma **tradução comunitária**, não um fork oficial.
 - [x] CLI (bin/install.js) atualizado
 - [x] Hooks atualizados
 - [x] Diretório `comandos/` renomeado
-- [x] Agentes renomeados para `fase-*.pt.md`
+- [x] Agentes renomeados e movidos para `agentes/`
 - [x] Documentação técnica atualizada
 
 ---

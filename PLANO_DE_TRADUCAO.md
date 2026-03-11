@@ -242,7 +242,7 @@ FASE/
 
 Sugestão de ordem:
 
-1. `agents/gsd-executor.md` → `agents/fase-executor.pt.md`
+1. `agents/gsd-executor.md` → `agentes/fase-executor.pt.md`
 2. `commands/gsd/help.md` → `comandos/help.pt.md`
 3. `commands/gsd/new-project.md` → `comandos/new-project.pt.md`
 
