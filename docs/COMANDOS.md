@@ -20,7 +20,7 @@
 
 Comandos essenciais para começar e executar projetos.
 
-### `/fase:ajuda`
+### `/fase-ajuda`
 
 Mostra ajuda geral e lista de comandos disponíveis.
 
@@ -28,13 +28,13 @@ Mostra ajuda geral e lista de comandos disponíveis.
 
 **Exemplo:**
 ```bash
-/fase:ajuda
-/fase:ajuda novo-projeto  # Ajuda específica de um comando
+/fase-ajuda
+/fase-ajuda novo-projeto  # Ajuda específica de um comando
 ```
 
 ---
 
-### `/fase:novo-projeto`
+### `/fase-novo-projeto`
 
 Inicia um novo projeto F.A.S.E. no diretório atual.
 
@@ -45,12 +45,12 @@ Inicia um novo projeto F.A.S.E. no diretório atual.
 
 **Exemplo:**
 ```bash
-/fase:novo-projeto "Sistema de autenticação JWT"
+/fase-novo-projeto "Sistema de autenticação JWT"
 ```
 
 ---
 
-### `/fase:planejar-fase`
+### `/fase-planejar-fase`
 
 Cria um plano detalhado para uma fase específica.
 
@@ -62,12 +62,12 @@ Cria um plano detalhado para uma fase específica.
 
 **Exemplo:**
 ```bash
-/fase:planejar-fase "Implementar login com email/senha"
+/fase-planejar-fase "Implementar login com email/senha"
 ```
 
 ---
 
-### `/fase:executar-fase`
+### `/fase-executar-fase`
 
 Executa o plano de uma fase, tarefa por tarefa.
 
@@ -79,12 +79,12 @@ Executa o plano de uma fase, tarefa por tarefa.
 
 **Exemplo:**
 ```bash
-/fase:executar-fase "fase-1"
+/fase-executar-fase "fase-1"
 ```
 
 ---
 
-### `/fase:configuracoes`
+### `/fase-configuracoes`
 
 Mostra e ajusta configurações do F.A.S.E.
 
@@ -95,8 +95,8 @@ Mostra e ajusta configurações do F.A.S.E.
 
 **Exemplo:**
 ```bash
-/fase:configuracoes
-/fase:configuracoes set modelo padrao claude-sonnet
+/fase-configuracoes
+/fase-configuracoes set modelo padrao claude-sonnet
 ```
 
 ---
@@ -105,7 +105,7 @@ Mostra e ajusta configurações do F.A.S.E.
 
 Comandos para planejar e gerenciar milestones e fases.
 
-### `/fase:novo-marco`
+### `/fase-novo-marco`
 
 Cria um novo marco (milestone) no roadmap.
 
@@ -116,12 +116,12 @@ Cria um novo marco (milestone) no roadmap.
 
 **Exemplo:**
 ```bash
-/fase:novo-marco "MVP funcional até sexta"
+/fase-novo-marco "MVP funcional até sexta"
 ```
 
 ---
 
-### `/fase:adicionar-fase`
+### `/fase-adicionar-fase`
 
 Adiciona uma nova fase ao projeto.
 
@@ -132,12 +132,12 @@ Adiciona uma nova fase ao projeto.
 
 **Exemplo:**
 ```bash
-/fase:adicionar-fase "Autenticação de usuários"
+/fase-adicionar-fase "Autenticação de usuários"
 ```
 
 ---
 
-### `/fase:inserir-fase`
+### `/fase-inserir-fase`
 
 Insere uma fase em uma posição específica (entre outras fases).
 
@@ -148,12 +148,12 @@ Insere uma fase em uma posição específica (entre outras fases).
 
 **Exemplo:**
 ```bash
-/fase:inserir-fase "Validação de inputs" --depois "fase-2"
+/fase-inserir-fase "Validação de inputs" --depois "fase-2"
 ```
 
 ---
 
-### `/fase:remover-fase`
+### `/fase-remover-fase`
 
 Remove uma fase do projeto.
 
@@ -164,12 +164,12 @@ Remove uma fase do projeto.
 
 **Exemplo:**
 ```bash
-/fase:remover-fase "fase-3"
+/fase-remover-fase "fase-3"
 ```
 
 ---
 
-### `/fase:pausar-trabalho`
+### `/fase-pausar-trabalho`
 
 Pausa o trabalho atual e salva o estado.
 
@@ -180,12 +180,12 @@ Pausa o trabalho atual e salva o estado.
 
 **Exemplo:**
 ```bash
-/fase:pausar-trabalho "Preciso sair, continuo depois"
+/fase-pausar-trabalho "Preciso sair, continuo depois"
 ```
 
 ---
 
-### `/fase:retomar-trabalho`
+### `/fase-retomar-trabalho`
 
 Retoma trabalho de onde parou.
 
@@ -196,12 +196,12 @@ Retoma trabalho de onde parou.
 
 **Exemplo:**
 ```bash
-/fase:retomar-trabalho
+/fase-retomar-trabalho
 ```
 
 ---
 
-### `/fase:progresso`
+### `/fase-progresso`
 
 Mostra o progresso atual do projeto.
 
@@ -212,7 +212,7 @@ Mostra o progresso atual do projeto.
 
 **Exemplo:**
 ```bash
-/fase:progresso
+/fase-progresso
 ```
 
 ---
@@ -221,7 +221,7 @@ Mostra o progresso atual do projeto.
 
 Comandos para pesquisar e mapear o projeto.
 
-### `/fase:pesquisar-fase`
+### `/fase-pesquisar-fase`
 
 Realiza pesquisa para embasar uma fase.
 
@@ -233,12 +233,12 @@ Realiza pesquisa para embasar uma fase.
 
 **Exemplo:**
 ```bash
-/fase:pesquisar-fase "Implementar WebSockets para chat em tempo real"
+/fase-pesquisar-fase "Implementar WebSockets para chat em tempo real"
 ```
 
 ---
 
-### `/fase:mapear-codigo`
+### `/fase-mapear-codigo`
 
 Mapeia um codebase existente.
 
@@ -250,7 +250,7 @@ Mapeia um codebase existente.
 
 **Exemplo:**
 ```bash
-/fase:mapear-codigo
+/fase-mapear-codigo
 ```
 
 **Output:**
@@ -261,7 +261,7 @@ Mapeia um codebase existente.
 
 ---
 
-### `/fase:listar-premissas`
+### `/fase-listar-premissas`
 
 Lista todas as premissas de uma fase.
 
@@ -272,7 +272,7 @@ Lista todas as premissas de uma fase.
 
 **Exemplo:**
 ```bash
-/fase:listar-premissas "fase-2"
+/fase-listar-premissas "fase-2"
 ```
 
 ---
@@ -281,7 +281,7 @@ Lista todas as premissas de uma fase.
 
 Comandos para verificar e validar o trabalho.
 
-### `/fase:verificar-trabalho`
+### `/fase-verificar-trabalho`
 
 Verifica se o trabalho foi feito corretamente.
 
@@ -293,12 +293,12 @@ Verifica se o trabalho foi feito corretamente.
 
 **Exemplo:**
 ```bash
-/fase:verificar-trabalho "fase-1"
+/fase-verificar-trabalho "fase-1"
 ```
 
 ---
 
-### `/fase:validar-fase`
+### `/fase-validar-fase`
 
 Valida que uma fase está completa e pronta.
 
@@ -310,12 +310,12 @@ Valida que uma fase está completa e pronta.
 
 **Exemplo:**
 ```bash
-/fase:validar-fase "fase-1"
+/fase-validar-fase "fase-1"
 ```
 
 ---
 
-### `/fase:auditar-marco`
+### `/fase-auditar-marco`
 
 Realiza auditoria de um marco.
 
@@ -327,7 +327,7 @@ Realiza auditoria de um marco.
 
 **Exemplo:**
 ```bash
-/fase:auditar-marco "MVP"
+/fase-auditar-marco "MVP"
 ```
 
 ---
@@ -336,7 +336,7 @@ Realiza auditoria de um marco.
 
 Comandos para debug e troubleshooting.
 
-### `/fase:debug`
+### `/fase-debug`
 
 Inicia sessão de debug estruturado.
 
@@ -348,12 +348,12 @@ Inicia sessão de debug estruturado.
 
 **Exemplo:**
 ```bash
-/fase:debug "Erro 500 ao fazer login"
+/fase-debug "Erro 500 ao fazer login"
 ```
 
 ---
 
-### `/fase:checar-tarefas`
+### `/fase-checar-tarefas`
 
 Lista todas as tarefas do projeto.
 
@@ -364,12 +364,12 @@ Lista todas as tarefas do projeto.
 
 **Exemplo:**
 ```bash
-/fase:checar-tarefas
+/fase-checar-tarefas
 ```
 
 ---
 
-### `/fase:adicionar-tarefa`
+### `/fase-adicionar-tarefa`
 
 Adiciona uma tarefa ao projeto.
 
@@ -380,12 +380,12 @@ Adiciona uma tarefa ao projeto.
 
 **Exemplo:**
 ```bash
-/fase:adicionar-tarefa "Adicionar rate limiting no login" --prioridade alta
+/fase-adicionar-tarefa "Adicionar rate limiting no login" --prioridade alta
 ```
 
 ---
 
-### `/fase:adicionar-testes`
+### `/fase-adicionar-testes`
 
 Adiciona testes para uma funcionalidade.
 
@@ -397,7 +397,7 @@ Adiciona testes para uma funcionalidade.
 
 **Exemplo:**
 ```bash
-/fase:adicionar-testes "Autenticação JWT"
+/fase-adicionar-testes "Autenticação JWT"
 ```
 
 ---
@@ -406,7 +406,7 @@ Adiciona testes para uma funcionalidade.
 
 Comandos para discussão e conclusão.
 
-### `/fase:discutir-fase`
+### `/fase-discutir-fase`
 
 Inicia discussão sobre uma fase.
 
@@ -418,12 +418,12 @@ Inicia discussão sobre uma fase.
 
 **Exemplo:**
 ```bash
-/fase:discutir-fase "Autenticação: JWT vs Session"
+/fase-discutir-fase "Autenticação: JWT vs Session"
 ```
 
 ---
 
-### `/fase:completar-marco`
+### `/fase-completar-marco`
 
 Marca um marco como completado.
 
@@ -435,12 +435,12 @@ Marca um marco como completado.
 
 **Exemplo:**
 ```bash
-/fase:completar-marco "MVP"
+/fase-completar-marco "MVP"
 ```
 
 ---
 
-### `/fase:planejar-lacunas`
+### `/fase-planejar-lacunas`
 
 Identifica e planeja como fechar lacunas de um marco.
 
@@ -452,7 +452,7 @@ Identifica e planeja como fechar lacunas de um marco.
 
 **Exemplo:**
 ```bash
-/fase:planejar-lacunas "MVP"
+/fase-planejar-lacunas "MVP"
 ```
 
 ---
@@ -461,7 +461,7 @@ Identifica e planeja como fechar lacunas de um marco.
 
 Comandos utilitários diversos.
 
-### `/fase:limpar`
+### `/fase-limpar`
 
 Limpa arquivos temporários e cache.
 
@@ -472,12 +472,12 @@ Limpa arquivos temporários e cache.
 
 **Exemplo:**
 ```bash
-/fase:limpar
+/fase-limpar
 ```
 
 ---
 
-### `/fase:saude`
+### `/fase-saude`
 
 Realiza checkup de saúde do projeto.
 
@@ -489,12 +489,12 @@ Realiza checkup de saúde do projeto.
 
 **Exemplo:**
 ```bash
-/fase:saude
+/fase-saude
 ```
 
 ---
 
-### `/fase:atualizar`
+### `/fase-atualizar`
 
 Atualiza o F.A.S.E. para a versão mais recente.
 
@@ -506,12 +506,12 @@ Atualiza o F.A.S.E. para a versão mais recente.
 
 **Exemplo:**
 ```bash
-/fase:atualizar
+/fase-atualizar
 ```
 
 ---
 
-### `/fase:rapido`
+### `/fase-rapido`
 
 Modo rápido para tarefas simples.
 
@@ -522,14 +522,14 @@ Modo rápido para tarefas simples.
 
 **Exemplo:**
 ```bash
-/fase:rapido "Adiciona log no endpoint de login"
+/fase-rapido "Adiciona log no endpoint de login"
 ```
 
 ---
 
 ---
 
-### `/fase:reaplicar-patches`
+### `/fase-reaplicar-patches`
 
 Reaplica patches que falharam anteriormente.
 
@@ -541,12 +541,12 @@ Reaplica patches que falharam anteriormente.
 
 **Exemplo:**
 ```bash
-/fase:reaplicar-patches
+/fase-reaplicar-patches
 ```
 
 ---
 
-### `/fase:definir-perfil`
+### `/fase-definir-perfil`
 
 Define o perfil de modelo a ser usado.
 
@@ -557,8 +557,8 @@ Define o perfil de modelo a ser usado.
 
 **Exemplo:**
 ```bash
-/fase:definir-perfil claude-sonnet
-/fase:definir-perfil lista
+/fase-definir-perfil claude-sonnet
+/fase-definir-perfil lista
 ```
 
 ---

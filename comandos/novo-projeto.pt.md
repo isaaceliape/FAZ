@@ -25,7 +25,7 @@ Inicializar um novo projeto através de fluxo unificado: questionamento → rese
 - `.planning/ROADMAP.md` — estrutura de fases
 - `.planning/STATE.md` — memória do projeto
 
-**Após este comando:** Execute `/fase:planejar-fase 1` para iniciar a execução.
+**Após este comando:** Execute `/fase-planejar-fase 1` para iniciar a execução.
 </objective>
 
 <execution_context>

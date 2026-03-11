@@ -19,7 +19,7 @@ A statusline mostra o uso do contexto ao **usuário**, mas o **agente** não tem
 |-------|----------|------------------------|
 | Normal | > 35% | Sem aviso |
 | AVISO | <= 35% | Encerrar tarefa atual, evitar iniciar trabalho complexo novo |
-| CRÍTICO | <= 25% | Parar imediatamente, salvar estado (`/fase:pausar-trabalho`) |
+| CRÍTICO | <= 25% | Parar imediatamente, salvar estado (`/fase-pausar-trabalho`) |
 
 ## Debounce
 
@@ -56,7 +56,7 @@ O arquivo bridge é um objeto JSON simples:
 
 ## Integração com o FASE
 
-O comando `/fase:pausar-trabalho` salva o estado de execução. A mensagem de AVISO sugere usá-lo. A mensagem CRÍTICA instrui o salvamento imediato do estado.
+O comando `/fase-pausar-trabalho` salva o estado de execução. A mensagem de AVISO sugere usá-lo. A mensagem CRÍTICA instrui o salvamento imediato do estado.
 
 ## Configuração
 

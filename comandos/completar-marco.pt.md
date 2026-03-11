@@ -42,19 +42,19 @@ Output: Milestone arquivado (roadmap + requirements), PROJECT.md evoluído, git 
 0. **Cheque por audit:**
 
    - Procure por `.planning/v{{version}}-MILESTONE-AUDIT.md`
-   - Se ausente ou stale: recomenda `/fase:audit-milestone` primeiro
-   - Se audit status é `gaps_found`: recomenda `/fase:plan-milestone-gaps` primeiro
+   - Se ausente ou stale: recomenda `/fase-audit-milestone` primeiro
+   - Se audit status é `gaps_found`: recomenda `/fase-plan-milestone-gaps` primeiro
    - Se audit status é `passed`: prossegue para passo 1
 
    ```markdown
    ## Pre-flight Check
 
    {Se não houver v{{version}}-MILESTONE-AUDIT.md:}
-   ⚠ Nenhum audit de milestone encontrado. Rode `/fase:audit-milestone` primeiro para verificar
+   ⚠ Nenhum audit de milestone encontrado. Rode `/fase-audit-milestone` primeiro para verificar
    cobertura de requirements, integração cross-phase e fluxos E2E.
 
    {Se audit tem gaps:}
-   ⚠ Audit do milestone encontrou gaps. Rode `/fase:plan-milestone-gaps` para criar
+   ⚠ Audit do milestone encontrou gaps. Rode `/fase-plan-milestone-gaps` para criar
    phases que fecham os gaps, ou prossiga mesmo assim para aceitar como tech debt.
 
    {Se audit passou:}
@@ -108,7 +108,7 @@ Output: Milestone arquivado (roadmap + requirements), PROJECT.md evoluído, git 
    - Pergunte sobre push da tag
 
 8. **Ofereça próximos passos:**
-   - `/fase:novo-marco` — inicia próximo milestone (questioning → research → requirements → roadmap)
+   - `/fase-novo-marco` — inicia próximo milestone (questioning → research → requirements → roadmap)
 
 </process>
 
@@ -132,5 +132,5 @@ Output: Milestone arquivado (roadmap + requirements), PROJECT.md evoluído, git 
 - **Arquive antes de deletar:** Sempre crie arquivos archive antes de atualizar/deletar originais
 - **Resumo one-line:** Milestone colapsado no ROADMAP.md deve ser single line com link
 - **Eficiência de context:** Archive mantém ROADMAP.md e REQUIREMENTS.md com tamanho constante por milestone
-- **Fresh requirements:** Próximo milestone começa com `/fase:novo-marco` que inclui definição de requirements
+- **Fresh requirements:** Próximo milestone começa com `/fase-novo-marco` que inclui definição de requirements
   </critical_rules>

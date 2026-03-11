@@ -60,7 +60,7 @@ O instalador vai te perguntar:
 
 ### Verificar Instalação
 
-- Claude Code / Gemini: `/fase:ajuda`
+- Claude Code / Gemini: `/fase-ajuda`
 - OpenCode: `/fase-ajuda`
 - Codex: `$fase-ajuda`
 
@@ -91,7 +91,7 @@ O instalador vai te perguntar:
 
 ### Verificar Instalação
 
-- Claude Code / Gemini: `/fase:ajuda`
+- Claude Code / Gemini: `/fase-ajuda`
 - OpenCode: `/fase-ajuda`
 - Codex: `$fase-ajuda`
 
@@ -129,57 +129,57 @@ A filosofia é a mesma do original:
 
 ### Core
 ```bash
-/fase:ajuda              # Mostra ajuda
-/fase:novo-projeto       # Inicia novo projeto
-/fase:planejar-fase      # Planeja uma fase
-/fase:executar-fase      # Executa uma fase
-/fase:configuracoes      # Ajusta configurações
+/fase-ajuda              # Mostra ajuda
+/fase-novo-projeto       # Inicia novo projeto
+/fase-planejar-fase      # Planeja uma fase
+/fase-executar-fase      # Executa uma fase
+/fase-configuracoes      # Ajusta configurações
 ```
 
 ### Planning
 ```bash
-/fase:novo-marco         # Cria novo marco/milestone
-/fase:adicionar-fase     # Adiciona uma fase
-/fase:inserir-fase       # Insere fase em posição específica
-/fase:remover-fase       # Remove uma fase
-/fase:pausar-trabalho    # Pausa o trabalho
-/fase:retomar-trabalho   # Retoma o trabalho
-/fase:progresso          # Mostra progresso atual
+/fase-novo-marco         # Cria novo marco/milestone
+/fase-adicionar-fase     # Adiciona uma fase
+/fase-inserir-fase       # Insere fase em posição específica
+/fase-remover-fase       # Remove uma fase
+/fase-pausar-trabalho    # Pausa o trabalho
+/fase-retomar-trabalho   # Retoma o trabalho
+/fase-progresso          # Mostra progresso atual
 ```
 
 ### Research
 ```bash
-/fase:pesquisar-fase     # Pesquisa para uma fase
-/fase:mapear-codigo      # Mapeia codebase existente
-/fase:listar-premissas   # Lista premissas da fase
+/fase-pesquisar-fase     # Pesquisa para uma fase
+/fase-mapear-codigo      # Mapeia codebase existente
+/fase-listar-premissas   # Lista premissas da fase
 ```
 
 ### Verification
 ```bash
-/fase:verificar-trabalho # Verifica trabalho feito
-/fase:validar-fase       # Valida uma fase
-/fase:auditar-marco      # Audita um marco
+/fase-verificar-trabalho # Verifica trabalho feito
+/fase-validar-fase       # Valida uma fase
+/fase-auditar-marco      # Audita um marco
 ```
 
 ### Debug
 ```bash
-/fase:debug              # Debuga problemas
-/fase:checar-tarefas     # Checa lista de tarefas
-/fase:adicionar-tarefa   # Adiciona uma tarefa
-/fase:adicionar-testes   # Adiciona testes
+/fase-debug              # Debuga problemas
+/fase-checar-tarefas     # Checa lista de tarefas
+/fase-adicionar-tarefa   # Adiciona uma tarefa
+/fase-adicionar-testes   # Adiciona testes
 ```
 
 ### Utility
 ```bash
-/fase:discutir-fase      # Discute uma fase
-/fase:completar-marco    # Completa um marco
-/fase:planejar-lacunas   # Planeja como fechar lacunas
-/fase:limpar             # Limpa arquivos temporários
-/fase:saude              # Checkup de saúde do projeto
-/fase:atualizar          # Atualiza o F.A.S.E.
-/fase:rapido             # Modo rápido para tarefas simples
-/fase:reaplicar-patches  # Reaplica patches
-/fase:definir-perfil     # Define perfil de modelo
+/fase-discutir-fase      # Discute uma fase
+/fase-completar-marco    # Completa um marco
+/fase-planejar-lacunas   # Planeja como fechar lacunas
+/fase-limpar             # Limpa arquivos temporários
+/fase-saude              # Checkup de saúde do projeto
+/fase-atualizar          # Atualiza o F.A.S.E.
+/fase-rapido             # Modo rápido para tarefas simples
+/fase-reaplicar-patches  # Reaplica patches
+/fase-definir-perfil     # Define perfil de modelo
 ```
 
 **Veja a lista completa:** [📚 COMANDOS.md](docs/COMANDOS.md)

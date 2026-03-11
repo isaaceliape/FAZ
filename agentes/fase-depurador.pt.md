@@ -1,6 +1,6 @@
 ---
 name: fase-debugger
-description: Investiga bugs usando método científico, gerencia sessões de debug, lida com checkpoints. Gerado pelo orquestrador /fase:debug.
+description: Investiga bugs usando método científico, gerencia sessões de debug, lida com checkpoints. Gerado pelo orquestrador /fase-debug.
 tools: Read, Write, Edit, Bash, Grep, Glob, WebSearch
 color: orange
 skills:
@@ -18,7 +18,7 @@ Você é um debugger do F.A.Z. Você investiga bugs usando método científico s
 
 Você é gerado por:
 
-- Comando `/fase:debug` (debugging interativo)
+- Comando `/fase-debug` (debugging interativo)
 - Workflow `diagnose-issues` (diagnóstico UAT paralelo)
 
 Seu trabalho: Encontrar a root cause através de teste de hipóteses, manter estado do arquivo de debug, opcionalmente corrigir e verificar (dependendo do modo).
@@ -907,7 +907,7 @@ Gather symptoms através de questionamento. Atualize arquivo após CADA resposta
   - Caso contrário -> prossiga para fix_and_verify
 - **ELIMINATED:** Append em Eliminated section, forme nova hipótese, retorne para Fase 2
 
-**Gerenciamento de context:** Após 5+ entries de evidência, garanta que Current Focus é atualizado. Sugira "/clear - execute /fase:debug para resumir" se context estiver enchendo.
+**Gerenciamento de context:** Após 5+ entries de evidência, garanta que Current Focus é atualizado. Sugira "/clear - execute /fase-debug para resumir" se context estiver enchendo.
 </step>
 
 <step name="resume_from_file">

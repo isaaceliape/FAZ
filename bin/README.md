@@ -120,13 +120,13 @@ O instalador configura:
 - E mais...
 
 ### Comandos
-- `/fase:novo-projeto` — Inicia novo projeto
-- `/fase:planejar-fase` — Planeja uma fase
-- `/fase:executar-fase` — Executa fase
-- `/fase:verificar-trabalho` — Verifica trabalho
-- `/fase:progresso` — Mostra progresso
-- `/fase:discutir-fase` — Discute implementação
-- `/fase:completar-marco` — Completa marco
+- `/fase-novo-projeto` — Inicia novo projeto
+- `/fase-planejar-fase` — Planeja uma fase
+- `/fase-executar-fase` — Executa fase
+- `/fase-verificar-trabalho` — Verifica trabalho
+- `/fase-progresso` — Mostra progresso
+- `/fase-discutir-fase` — Discute implementação
+- `/fase-completar-marco` — Completa marco
 - E 25+ comandos...
 
 ### Hooks
@@ -142,9 +142,9 @@ Após instalar, verifique no seu runtime:
 
 | Runtime | Comando de Verificação |
 |---------|------------------------|
-| Claude Code | `/fase:ajuda` |
+| Claude Code | `/fase-ajuda` |
 | OpenCode | `/fase-ajuda` |
-| Gemini | `/fase:ajuda` |
+| Gemini | `/fase-ajuda` |
 | Codex | `$fase-ajuda` |
 
 ---

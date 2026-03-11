@@ -22,7 +22,7 @@ Referência detalhada de fluxos de trabalho, resolução de problemas e configur
 ```
   ┌──────────────────────────────────────────────────┐
   │                  NOVO PROJETO                    │
-  │  /fase:novo-projeto                               │
+  │  /fase-novo-projeto                               │
   │  Perguntas -> Pesquisa -> Requisitos -> Plano de Entregas  │
   └─────────────────────────┬────────────────────────┘
                              │
@@ -30,19 +30,19 @@ Referência detalhada de fluxos de trabalho, resolução de problemas e configur
               │      PARA CADA FASE:       │
               │                            │
               │  ┌──────────────────────┐  │
-              │  │ /fase:discutir-fase   │  │  <- Definir preferências
+              │  │ /fase-discutir-fase   │  │  <- Definir preferências
               │  └──────────┬───────────┘  │
               │             │              │
               │  ┌──────────▼──────────┐   │
-              │  │ /fase:planejar-fase  │   │  <- Pesquisa + Plano + Verificação
+              │  │ /fase-planejar-fase  │   │  <- Pesquisa + Plano + Verificação
               │  └──────────┬──────────┘   │
               │             │              │
               │  ┌──────────▼──────────┐   │
-              │  │ /fase:executar-fase  │   │  <- Execução paralela
+              │  │ /fase-executar-fase  │   │  <- Execução paralela
               │  └──────────┬──────────┘   │
               │             │              │
               │  ┌──────────▼────────────┐ │
-              │  │ /fase:verificar-trabalho│ │  <- Teste de Aceitação do Usuário manual
+              │  │ /fase-verificar-trabalho│ │  <- Teste de Aceitação do Usuário manual
               │  └──────────┬────────────┘ │
               │             │              │
               │     Próxima fase?──────────┘
@@ -50,8 +50,8 @@ Referência detalhada de fluxos de trabalho, resolução de problemas e configur
               └─────────────┼──────────────┘
                              │
              ┌───────────────▼──────────────┐
-             │  /fase:auditar-marco          │
-             │  /fase:completar-marco        │
+             │  /fase-auditar-marco          │
+             │  /fase-completar-marco        │
              └───────────────┬──────────────┘
                              │
                     Outro marco?
@@ -59,14 +59,14 @@ Referência detalhada de fluxos de trabalho, resolução de problemas e configur
                        Sim        Não -> Pronto!
                         │
                 ┌───────▼──────────────┐
-                │  /fase:novo-marco     │
+                │  /fase-novo-marco     │
                 └──────────────────────┘
 ```
 
 ### Coordenação do Agente de Planejamento
 
 ```
-  /fase:planejar-fase N
+  /fase-planejar-fase N
           │
           ├── Pesquisador de Fase (x4 em paralelo)
           │     ├── Pesquisador de pilha tecnológica
@@ -108,14 +108,14 @@ O verificador de plano aplica isso como uma 8ª dimensão de verificação: plan
 
 **Saída:** `{fase}-VALIDACAO.md` — o contrato de feedback para a fase.
 
-**Desabilitar:** Defina `workflow.nyquist_validation: false` em `/fase:configuracoes` para fases de prototipagem rápida onde a infraestrutura de testes não é o foco.
+**Desabilitar:** Defina `workflow.nyquist_validation: false` em `/fase-configuracoes` para fases de prototipagem rápida onde a infraestrutura de testes não é o foco.
 
-### Validação Retroativa (`/fase:validar-fase`)
+### Validação Retroativa (`/fase-validar-fase`)
 
 Para fases executadas antes da validação Nyquist existir, ou para bases de código existentes com apenas suítes de testes tradicionais, audite retroativamente e preencha lacunas de cobertura:
 
 ```
-  /fase:validar-fase N
+  /fase-validar-fase N
           |
           +-- Detectar estado (VALIDACAO.md existe? RESUMO.md existe?)
           |
@@ -133,12 +133,12 @@ Para fases executadas antes da validação Nyquist existir, ou para bases de có
 
 O auditor nunca modifica o código de implementação — apenas arquivos de teste e VALIDACAO.md. Se um teste revelar um bug de implementação, ele é sinalizado como uma escalação para você resolver.
 
-**Quando usar:** Após executar fases que foram planejadas antes do Nyquist estar habilitado, ou após `/fase:auditar-marco` detectar lacunas de conformidade Nyquist.
+**Quando usar:** Após executar fases que foram planejadas antes do Nyquist estar habilitado, ou após `/fase-auditar-marco` detectar lacunas de conformidade Nyquist.
 
 ### Coordenação de Ondas de Execução
 
 ```
-  /fase:executar-fase N
+  /fase-executar-fase N
           │
           ├── Analisar dependências do plano
           │
@@ -153,13 +153,13 @@ O auditor nunca modifica o código de implementação — apenas arquivos de tes
                 └── Verificar base de código contra objetivos da fase
                       │
                       ├── PASSA -> VERIFICACAO.md (sucesso)
-                      └── FALHA -> Problemas registrados para /fase:verificar-trabalho
+                      └── FALHA -> Problemas registrados para /fase-verificar-trabalho
 ```
 
 ### Fluxo Brownfield (Base de Código Existente)
 
 ```
-  /fase:mapear-codigo
+  /fase-mapear-codigo
           │
           ├── Mapeador de Pilha Tecnológica     -> codebase/PILHA.md
           ├── Mapeador de Arquitetura           -> codebase/ARQUITETURA.md
@@ -167,7 +167,7 @@ O auditor nunca modifica o código de implementação — apenas arquivos de tes
           └── Mapeador de Preocupações          -> codebase/PREOCUPACOES.md
                  │
          ┌───────▼──────────────┐
-         │ /fase:novo-projeto    │  <- Perguntas focam no que você está ADICIONANDO
+         │ /fase-novo-projeto    │  <- Perguntas focam no que você está ADICIONANDO
          └──────────────────────┘
 ```
 
@@ -179,55 +179,55 @@ O auditor nunca modifica o código de implementação — apenas arquivos de tes
 
 | Comando | Propósito | Quando Usar |
 |---------|----------|-------------|
-| `/fase:novo-projeto` | Inicialização completa: perguntas, pesquisa, requisitos, plano de entregas | Início de um novo projeto |
-| `/fase:novo-projeto --auto @ideia.md` | Inicialização automatizada a partir de documento | Quando você tem um documento de requisitos ou documento de ideia pronto |
-| `/fase:discutir-fase [N]` | Capturar decisões de implementação | Antes do planejamento, para definir como será construído |
-| `/fase:planejar-fase [N]` | Pesquisa + plano + verificação | Antes de executar uma fase |
-| `/fase:executar-fase <N>` | Executar todos os planos em ondas paralelas | Após o planejamento estar completo |
-| `/fase:verificar-trabalho [N]` | Teste de aceitação do usuário manual com diagnóstico automático | Após a execução ser concluída |
-| `/fase:auditar-marco` | Verificar se o marco atingiu sua definição de pronto | Antes de completar o marco |
-| `/fase:completar-marco` | Arquivar marco, criar tag de lançamento | Após todas as fases serem verificadas |
-| `/fase:novo-marco [nome]` | Iniciar próximo ciclo de versão | Após completar um marco |
+| `/fase-novo-projeto` | Inicialização completa: perguntas, pesquisa, requisitos, plano de entregas | Início de um novo projeto |
+| `/fase-novo-projeto --auto @ideia.md` | Inicialização automatizada a partir de documento | Quando você tem um documento de requisitos ou documento de ideia pronto |
+| `/fase-discutir-fase [N]` | Capturar decisões de implementação | Antes do planejamento, para definir como será construído |
+| `/fase-planejar-fase [N]` | Pesquisa + plano + verificação | Antes de executar uma fase |
+| `/fase-executar-fase <N>` | Executar todos os planos em ondas paralelas | Após o planejamento estar completo |
+| `/fase-verificar-trabalho [N]` | Teste de aceitação do usuário manual com diagnóstico automático | Após a execução ser concluída |
+| `/fase-auditar-marco` | Verificar se o marco atingiu sua definição de pronto | Antes de completar o marco |
+| `/fase-completar-marco` | Arquivar marco, criar tag de lançamento | Após todas as fases serem verificadas |
+| `/fase-novo-marco [nome]` | Iniciar próximo ciclo de versão | Após completar um marco |
 
 ### Navegação
 
 | Comando | Propósito | Quando Usar |
 |---------|----------|-------------|
-| `/fase:progresso` | Mostrar status e próximos passos | A qualquer momento — "onde estou?" |
-| `/fase:retomar-trabalho` | Restaurar contexto completo da última sessão | Ao iniciar uma nova sessão |
-| `/fase:pausar-trabalho` | Salvar transferência de contexto | Ao parar no meio de uma fase |
-| `/fase:ajuda` | Mostrar todos os comandos | Referência rápida |
-| `/fase:atualizar` | Atualizar FASE com prévia do registro de mudanças | Verificar novas versões |
+| `/fase-progresso` | Mostrar status e próximos passos | A qualquer momento — "onde estou?" |
+| `/fase-retomar-trabalho` | Restaurar contexto completo da última sessão | Ao iniciar uma nova sessão |
+| `/fase-pausar-trabalho` | Salvar transferência de contexto | Ao parar no meio de uma fase |
+| `/fase-ajuda` | Mostrar todos os comandos | Referência rápida |
+| `/fase-atualizar` | Atualizar FASE com prévia do registro de mudanças | Verificar novas versões |
 
 ### Gerenciamento de Fases
 
 | Comando | Propósito | Quando Usar |
 |---------|----------|-------------|
-| `/fase:adicionar-fase` | Adicionar nova fase ao plano de entregas | Escopo cresce após planejamento inicial |
-| `/fase:inserir-fase [N]` | Inserir trabalho urgente (numeração decimal) | Correção urgente no meio do marco |
-| `/fase:remover-fase [N]` | Remover fase futura e renumerar | Reduzir escopo de uma funcionalidade |
-| `/fase:listar-premissas [N]` | Prévia da abordagem pretendida pelo Claude | Antes do planejamento, para validar direção |
-| `/fase:planejar-lacunas` | Criar fases para lacunas da auditoria | Após auditoria encontrar itens faltando |
-| `/fase:pesquisar-fase [N]` | Pesquisa profunda do ecossistema apenas | Domínio complexo ou desconhecido |
+| `/fase-adicionar-fase` | Adicionar nova fase ao plano de entregas | Escopo cresce após planejamento inicial |
+| `/fase-inserir-fase [N]` | Inserir trabalho urgente (numeração decimal) | Correção urgente no meio do marco |
+| `/fase-remover-fase [N]` | Remover fase futura e renumerar | Reduzir escopo de uma funcionalidade |
+| `/fase-listar-premissas [N]` | Prévia da abordagem pretendida pelo Claude | Antes do planejamento, para validar direção |
+| `/fase-planejar-lacunas` | Criar fases para lacunas da auditoria | Após auditoria encontrar itens faltando |
+| `/fase-pesquisar-fase [N]` | Pesquisa profunda do ecossistema apenas | Domínio complexo ou desconhecido |
 
 ### Brownfield e Utilitários
 
 | Comando | Propósito | Quando Usar |
 |---------|----------|-------------|
-| `/fase:mapear-codigo` | Analisar base de código existente | Antes de `/fase:novo-projeto` em código existente |
-| `/fase:rapido` | Tarefa avulsa com garantias do FASE | Correções de bugs, pequenas funcionalidades, mudanças de configuração |
-| `/fase:debug [desc]` | Depuração sistemática com estado persistente | Quando algo quebra |
-| `/fase:adicionar-tarefa [desc]` | Capturar uma ideia para depois | Pensar em algo durante uma sessão |
-| `/fase:checar-tarefas` | Listar tarefas pendentes | Revisar ideias capturadas |
-| `/fase:configuracoes` | Configurar opções de fluxo de trabalho e perfil de modelo | Mudar modelo, alternar agentes |
-| `/fase:definir-perfil <perfil>` | Troca rápida de perfil | Mudar custo/qualidade |
-| `/fase:reaplicar-patches` | Restaurar modificações locais após atualização | Após `/fase:atualizar` se você tinha edições locais |
+| `/fase-mapear-codigo` | Analisar base de código existente | Antes de `/fase-novo-projeto` em código existente |
+| `/fase-rapido` | Tarefa avulsa com garantias do FASE | Correções de bugs, pequenas funcionalidades, mudanças de configuração |
+| `/fase-debug [desc]` | Depuração sistemática com estado persistente | Quando algo quebra |
+| `/fase-adicionar-tarefa [desc]` | Capturar uma ideia para depois | Pensar em algo durante uma sessão |
+| `/fase-checar-tarefas` | Listar tarefas pendentes | Revisar ideias capturadas |
+| `/fase-configuracoes` | Configurar opções de fluxo de trabalho e perfil de modelo | Mudar modelo, alternar agentes |
+| `/fase-definir-perfil <perfil>` | Troca rápida de perfil | Mudar custo/qualidade |
+| `/fase-reaplicar-patches` | Restaurar modificações locais após atualização | Após `/fase-atualizar` se você tinha edições locais |
 
 ---
 
 ## Referência de Configuração
 
-O FASE armazena configurações do projeto em `.planning/config.json`. Configure durante `/fase:novo-projeto` ou atualize depois com `/fase:configuracoes`.
+O FASE armazena configurações do projeto em `.planning/config.json`. Configure durante `/fase-novo-projeto` ou atualize depois com `/fase-configuracoes`.
 
 ### Esquema Completo do config.json
 
@@ -329,56 +329,56 @@ Desabilite essas opções para acelerar fases em domínios familiares ou para ec
 
 ```bash
 claude --dangerously-skip-permissions
-/fase:novo-projeto            # Responda perguntas, configure, aprove o plano de entregas
+/fase-novo-projeto            # Responda perguntas, configure, aprove o plano de entregas
 /clear
-/fase:discutir-fase 1        # Defina suas preferências
-/fase:planejar-fase 1        # Pesquisa + plano + verificação
-/fase:executar-fase 1        # Execução paralela
-/fase:verificar-trabalho 1   # Teste de aceitação do usuário manual
+/fase-discutir-fase 1        # Defina suas preferências
+/fase-planejar-fase 1        # Pesquisa + plano + verificação
+/fase-executar-fase 1        # Execução paralela
+/fase-verificar-trabalho 1   # Teste de aceitação do usuário manual
 /clear
-/fase:discutir-fase 2        # Repita para cada fase
+/fase-discutir-fase 2        # Repita para cada fase
 ...
-/fase:auditar-marco          # Verifique tudo que foi entregue
-/fase:completar-marco        # Arquive, crie tag, pronto
+/fase-auditar-marco          # Verifique tudo que foi entregue
+/fase-completar-marco        # Arquive, crie tag, pronto
 ```
 
 ### Novo Projeto a Partir de Documento Existente
 
 ```bash
-/fase:novo-projeto --auto @prd.md   # Executa automaticamente pesquisa/requisitos/plano de entregas do seu documento
+/fase-novo-projeto --auto @prd.md   # Executa automaticamente pesquisa/requisitos/plano de entregas do seu documento
 /clear
-/fase:discutir-fase 1               # Fluxo normal a partir daqui
+/fase-discutir-fase 1               # Fluxo normal a partir daqui
 ```
 
 ### Base de Código Existente
 
 ```bash
-/fase:mapear-codigo          # Analisar o que existe (agentes em paralelo)
-/fase:novo-projeto           # Perguntas focam no que você está ADICIONANDO
+/fase-mapear-codigo          # Analisar o que existe (agentes em paralelo)
+/fase-novo-projeto           # Perguntas focam no que você está ADICIONANDO
 # (fluxo de fases normal a partir daqui)
 ```
 
 ### Correção Rápida de Bug
 
 ```bash
-/fase:rapido
+/fase-rapido
 > "Corrigir o botão de login que não responde no Safari mobile"
 ```
 
 ### Retomando Após uma Pausa
 
 ```bash
-/fase:progresso              # Veja onde você parou e o que vem a seguir
+/fase-progresso              # Veja onde você parou e o que vem a seguir
 # ou
-/fase:retomar-trabalho       # Restauração completa do contexto da última sessão
+/fase-retomar-trabalho       # Restauração completa do contexto da última sessão
 ```
 
 ### Preparando para Lançamento
 
 ```bash
-/fase:auditar-marco          # Verificar cobertura de requisitos, detectar esboços
-/fase:planejar-lacunas       # Se a auditoria encontrou lacunas, criar fases para fechá-las
-/fase:completar-marco        # Arquive, crie tag, pronto
+/fase-auditar-marco          # Verificar cobertura de requisitos, detectar esboços
+/fase-planejar-lacunas       # Se a auditoria encontrou lacunas, criar fases para fechá-las
+/fase-completar-marco        # Arquive, crie tag, pronto
 ```
 
 ### Predefinições de Velocidade vs Qualidade
@@ -392,11 +392,11 @@ claude --dangerously-skip-permissions
 ### Mudanças de Escopo no Meio do Marco
 
 ```bash
-/fase:adicionar-fase         # Adicionar nova fase ao plano de entregas
+/fase-adicionar-fase         # Adicionar nova fase ao plano de entregas
 # ou
-/fase:inserir-fase 3         # Inserir trabalho urgente entre fases 3 e 4
+/fase-inserir-fase 3         # Inserir trabalho urgente entre fases 3 e 4
 # ou
-/fase:remover-fase 7         # Remover escopo da fase 7 e renumerar
+/fase-remover-fase 7         # Remover escopo da fase 7 e renumerar
 ```
 
 ---
@@ -405,15 +405,15 @@ claude --dangerously-skip-permissions
 
 ### "Projeto já inicializado"
 
-Você executou `/fase:novo-projeto` mas `.planning/PROJETO.md` já existe. Esse é um mecanismo de segurança. Se quiser recomeçar, delete o diretório `.planning/` primeiro.
+Você executou `/fase-novo-projeto` mas `.planning/PROJETO.md` já existe. Esse é um mecanismo de segurança. Se quiser recomeçar, delete o diretório `.planning/` primeiro.
 
 ### Degradação de Contexto em Sessões Longas
 
-Limpe sua janela de contexto entre comandos principais: `/clear` no Claude Code. O FASE é projetado em torno de contextos frescos — cada subagente recebe uma janela limpa de 200K. Se a qualidade estiver caindo na sessão principal, limpe e use `/fase:retomar-trabalho` ou `/fase:progresso` para restaurar o estado.
+Limpe sua janela de contexto entre comandos principais: `/clear` no Claude Code. O FASE é projetado em torno de contextos frescos — cada subagente recebe uma janela limpa de 200K. Se a qualidade estiver caindo na sessão principal, limpe e use `/fase-retomar-trabalho` ou `/fase-progresso` para restaurar o estado.
 
 ### Planos Parecem Errados ou Desalinhados
 
-Execute `/fase:discutir-fase [N]` antes do planejamento. A maioria dos problemas de qualidade do plano vem do Claude fazendo suposições que o `CONTEXTO.md` teria prevenido. Você também pode executar `/fase:listar-premissas [N]` para ver o que o Claude pretende fazer antes de se comprometer com um plano.
+Execute `/fase-discutir-fase [N]` antes do planejamento. A maioria dos problemas de qualidade do plano vem do Claude fazendo suposições que o `CONTEXTO.md` teria prevenido. Você também pode executar `/fase-listar-premissas [N]` para ver o que o Claude pretende fazer antes de se comprometer com um plano.
 
 ### Execução Falha ou Produz Esboços
 
@@ -421,23 +421,23 @@ Verifique se o plano não foi muito ambicioso. Os planos devem ter no máximo 2-
 
 ### Perdeu o Fio da Meada
 
-Execute `/fase:progresso`. Ele lê todos os arquivos de estado e diz exatamente onde você está e o que fazer a seguir.
+Execute `/fase-progresso`. Ele lê todos os arquivos de estado e diz exatamente onde você está e o que fazer a seguir.
 
 ### Precisa Mudar Algo Após a Execução
 
-Não reexecute `/fase:executar-fase`. Use `/fase:rapido` para correções pontuais, ou `/fase:verificar-trabalho` para identificar e corrigir problemas sistematicamente via teste de aceitação do usuário.
+Não reexecute `/fase-executar-fase`. Use `/fase-rapido` para correções pontuais, ou `/fase-verificar-trabalho` para identificar e corrigir problemas sistematicamente via teste de aceitação do usuário.
 
 ### Custos de Modelo Muito Altos
 
-Mude para o perfil budget: `/fase:definir-perfil budget`. Desabilite os agentes de pesquisa e verificação de plano via `/fase:configuracoes` se o domínio for familiar para você (ou para o Claude).
+Mude para o perfil budget: `/fase-definir-perfil budget`. Desabilite os agentes de pesquisa e verificação de plano via `/fase-configuracoes` se o domínio for familiar para você (ou para o Claude).
 
 ### Trabalhando em Projeto Sensível/Privado
 
-Defina `commit_docs: false` durante `/fase:novo-projeto` ou via `/fase:configuracoes`. Adicione `.planning/` ao seu `.gitignore`. Os artefatos de planejamento ficam locais e nunca tocam o git.
+Defina `commit_docs: false` durante `/fase-novo-projeto` ou via `/fase-configuracoes`. Adicione `.planning/` ao seu `.gitignore`. Os artefatos de planejamento ficam locais e nunca tocam o git.
 
 ### Atualização do FASE Sobrescreveu Minhas Mudanças Locais
 
-Desde a v1.17, o instalador faz backup de arquivos modificados localmente em `fase-local-patches/`. Execute `/fase:reaplicar-patches` para mesclar suas mudanças de volta.
+Desde a v1.17, o instalador faz backup de arquivos modificados localmente em `fase-local-patches/`. Execute `/fase-reaplicar-patches` para mesclar suas mudanças de volta.
 
 ### Subagente Parece Ter Falhado Mas o Trabalho Foi Feito
 
@@ -449,15 +449,15 @@ Existe uma solução conhecida para um bug de classificação do Claude Code. Os
 
 | Problema | Solução |
 |---------|---------|
-| Contexto perdido / nova sessão | `/fase:retomar-trabalho` ou `/fase:progresso` |
+| Contexto perdido / nova sessão | `/fase-retomar-trabalho` ou `/fase-progresso` |
 | Fase deu errado | `git revert` nos commits da fase, depois replaneje |
-| Precisa mudar escopo | `/fase:adicionar-fase`, `/fase:inserir-fase` ou `/fase:remover-fase` |
-| Auditoria de marco encontrou lacunas | `/fase:planejar-lacunas` |
-| Algo quebrou | `/fase:debug "descrição"` |
-| Correção pontual rápida | `/fase:rapido` |
-| Plano não corresponde à sua visão | `/fase:discutir-fase [N]` e replaneje |
-| Custos altos | `/fase:definir-perfil budget` e `/fase:configuracoes` para desligar agentes |
-| Atualização quebrou mudanças locais | `/fase:reaplicar-patches` |
+| Precisa mudar escopo | `/fase-adicionar-fase`, `/fase-inserir-fase` ou `/fase-remover-fase` |
+| Auditoria de marco encontrou lacunas | `/fase-planejar-lacunas` |
+| Algo quebrou | `/fase-debug "descrição"` |
+| Correção pontual rápida | `/fase-rapido` |
+| Plano não corresponde à sua visão | `/fase-discutir-fase [N]` e replaneje |
+| Custos altos | `/fase-definir-perfil budget` e `/fase-configuracoes` para desligar agentes |
+| Atualização quebrou mudanças locais | `/fase-reaplicar-patches` |
 
 ---
 
@@ -473,13 +473,13 @@ Para referência, aqui está o que o FASE cria no seu projeto:
   ESTADO.md               # Decisões, bloqueadores, memória de sessão
   config.json             # Configuração de fluxo de trabalho
   MARCOS.md               # Arquivo de marcos concluídos
-  pesquisa/               # Pesquisa de domínio do /fase:novo-projeto
+  pesquisa/               # Pesquisa de domínio do /fase-novo-projeto
   tarefas/
     pendentes/            # Ideias capturadas aguardando trabalho
     concluidas/           # Tarefas concluídas
   debug/                  # Sessões de depuração ativas
     resolvidos/           # Sessões de depuração arquivadas
-  codebase/               # Mapeamento brownfield da base de código (de /fase:mapear-codigo)
+  codebase/               # Mapeamento brownfield da base de código (de /fase-mapear-codigo)
   fases/
     XX-nome-da-fase/
       XX-YY-PLANO.md      # Planos de execução atômicos

@@ -1,6 +1,6 @@
 ---
 name: fase-plan-checker
-description: Verifica se os planos atingirão o objetivo da fase antes da execução. Análise do objetivo de trás pra frente sobre a qualidade do plano. Gerado pelo orquestrador /fase:planejar-fase.
+description: Verifica se os planos atingirão o objetivo da fase antes da execução. Análise do objetivo de trás pra frente sobre a qualidade do plano. Gerado pelo orquestrador /fase-planejar-fase.
 tools: Read, Bash, Glob, Grep
 color: green
 skills:
@@ -10,7 +10,7 @@ skills:
 <role>
 Você é um plan checker do F.A.Z. Verifique se os planos VÃO atingir o objetivo da fase, não apenas se parecem completos.
 
-Gerado pelo orquestrador `/fase:planejar-fase` (depois que o planner cria o PLAN.md) ou re-verificação (depois que o planner revisa).
+Gerado pelo orquestrador `/fase-planejar-fase` (depois que o planner cria o PLAN.md) ou re-verificação (depois que o planner revisa).
 
 Verificação de trás pra frente do objetivo dos PLANOS antes da execução. Comece pelo que a fase DEVERIA entregar, verifique se os planos abordam isso.
 
@@ -44,7 +44,7 @@ Isso garante que a verificação verifique se os planos seguem convenções espe
 </project_context>
 
 <upstream_input>
-**CONTEXT.md** (se existe) — Decisões do usuário do `/fase:discuss-phase`
+**CONTEXT.md** (se existe) — Decisões do usuário do `/fase-discuss-phase`
 
 | Seção | Como Você Usa |
 |---------|----------------|
@@ -273,7 +273,7 @@ issue:
 
 ## Dimensão 7: Context Compliance (se CONTEXT.md existe)
 
-**Pergunta:** Os planos honram as decisões do usuário do /fase:discuss-phase?
+**Pergunta:** Os planos honram as decisões do usuário do /fase-discuss-phase?
 
 **Só verifique se CONTEXT.md foi fornecido no contexto de verificação.**
 
@@ -326,7 +326,7 @@ Antes de rodar checks 8a-8d, verifique se VALIDATION.md existe:
 ls "${PHASE_DIR}"/*-VALIDATION.md 2>/dev/null
 ```
 
-**Se faltar:** **BLOCKING FAIL** — "VALIDATION.md not found for phase {N}. Re-run `/fase:planejar-fase {N} --research` to regenerate."
+**Se faltar:** **BLOCKING FAIL** — "VALIDATION.md not found for phase {N}. Re-run `/fase-planejar-fase {N} --research` to regenerate."
 Pule checks 8a-8d inteiramente. Reporte Dimensão 8 como FAIL com esta única issue.
 
 **Se existe:** Prossiga para checks 8a-8d.
@@ -630,7 +630,7 @@ Retorne todas as issues como uma lista YAML estruturada `issues:` (veja exemplos
 | 01   | 3     | 5     | 1    | Valid  |
 | 02   | 2     | 4     | 2    | Valid  |
 
-Planos verificados. Execute `/fase:executar-fase {phase}` para prosseguir.
+Planos verificados. Execute `/fase-executar-fase {phase}` para prosseguir.
 ```
 
 ## ISSUES FOUND

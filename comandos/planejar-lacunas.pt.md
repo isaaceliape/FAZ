@@ -10,11 +10,11 @@ allowed-tools:
   - AskUserQuestion
 ---
 <objective>
-Crie todas phases necessárias para fechar gaps identificados por `/fase:audit-milestone`.
+Crie todas phases necessárias para fechar gaps identificados por `/fase-audit-milestone`.
 
 Lê MILESTONE-AUDIT.md, agrupa gaps em phases lógicas, cria entradas de phase no ROADMAP.md, e oferece planejar cada phase.
 
-Um comando cria todas fix phases — sem `/fase:adicionar-fase` manual por gap.
+Um comando cria todas fix phases — sem `/fase-adicionar-fase` manual por gap.
 </objective>
 
 <execution_context>

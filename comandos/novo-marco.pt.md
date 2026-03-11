@@ -21,7 +21,7 @@ Equivalente brownfield de new-project. Projeto existe, PROJECT.md tem histórico
 - `.planning/ROADMAP.md` — estrutura de fases (continua numeração)
 - `.planning/STATE.md` — resetado para novo milestone
 
-**Depois:** `/fase:planejar-fase [N]` para iniciar execução.
+**Depois:** `/fase-planejar-fase [N]` para iniciar execução.
 </objective>
 
 <execution_context>

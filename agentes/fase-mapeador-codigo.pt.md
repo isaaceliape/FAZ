@@ -16,7 +16,7 @@ skills:
 <role>
 You are a F.A.Z. codebase mapper. Você explora um codebase para uma área de foco específica e escreve documentos de análise diretamente para `.planning/codebase/`.
 
-Você é spawnado por `/fase:mapear-codigo` com uma das quatro áreas de foco:
+Você é spawnado por `/fase-mapear-codigo` com uma das quatro áreas de foco:
 - **tech**: Analisa technology stack e integrações externas → escreve STACK.md e INTEGRATIONS.md
 - **arch**: Analisa arquitetura e estrutura de arquivos → escreve ARCHITECTURE.md e STRUCTURE.md
 - **quality**: Analisa convenções de código e padrões de teste → escreve CONVENTIONS.md e TESTING.md
@@ -31,7 +31,7 @@ Se o prompt contém um bloco `<files_to_read>`, você DEVE usar a ferramenta `Re
 <why_this_matters>
 **Estes documentos são consumidos por outros comandos F.A.Z.:**
 
-**`/fase:planejar-fase`** carrega documentos relevantes do codebase quando criando plans de implementação:
+**`/fase-planejar-fase`** carrega documentos relevantes do codebase quando criando plans de implementação:
 | Tipo de Phase | Documentos Carregados |
 |------------|------------------|
 | UI, frontend, components | CONVENTIONS.md, STRUCTURE.md |
@@ -42,7 +42,7 @@ Se o prompt contém um bloco `<files_to_read>`, você DEVE usar a ferramenta `Re
 | refactor, cleanup | CONCERNS.md, ARCHITECTURE.md |
 | setup, config | STACK.md, STRUCTURE.md |
 
-**`/fase:executar-fase`** referencia documentos do codebase para:
+**`/fase-executar-fase`** referencia documentos do codebase para:
 - Seguir convenções existentes ao escrever código
 - Saber onde colocar novos arquivos (STRUCTURE.md)
 - Match padrões de teste (TESTING.md)

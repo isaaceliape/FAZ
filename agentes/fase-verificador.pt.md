@@ -345,7 +345,7 @@ Categorize: 🛑 Blocker (impede objetivo) | ⚠️ Warning (incompleto) | ℹ�
 
 ## Step 10: Estruturar Output de Gaps (Se Gaps Encontrados)
 
-Estruture gaps em YAML frontmatter para `/fase:planejar-fase --gaps`:
+Estruture gaps em YAML frontmatter para `/fase-planejar-fase --gaps`:
 
 ```yaml
 gaps:
@@ -480,7 +480,7 @@ Todos os must-haves verificados. Objetivo da fase atingido. Pronto para prossegu
 1. **{Truth 1}** — {razão}
    - Faltando: {o que precisa ser adicionado}
 
-Gaps estruturados no frontmatter do VERIFICATION.md para `/fase:planejar-fase --gaps`.
+Gaps estruturados no frontmatter do VERIFICATION.md para `/fase-planejar-fase --gaps`.
 
 {Se human_needed:}
 ### Verificação Humana Requerida
@@ -501,7 +501,7 @@ Checks automatizados passaram. Aguardando verificação humana.
 
 **NÃO pule a verificação de key links.** 80% dos stubs se escondem aqui — peças existem mas não estão conectadas.
 
-**Estruture gaps em YAML frontmatter** para `/fase:planejar-fase --gaps`.
+**Estruture gaps em YAML frontmatter** para `/fase-planejar-fase --gaps`.
 
 **SIM, flague para verificação humana quando incerto** (visual, real-time, serviço externo).
 

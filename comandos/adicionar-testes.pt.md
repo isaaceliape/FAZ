@@ -13,8 +13,8 @@ allowed-tools:
   - AskUserQuestion
 argument-instructions: |
   Parseie o argumento como um número de fase (inteiro, decimal, ou sufixo de letra), mais instruções opcionais em free-text.
-  Exemplo: /fase:adicionar-testes 12
-  Exemplo: /fase:adicionar-testes 12 focar em edge cases no módulo de pricing
+  Exemplo: /fase-adicionar-testes 12
+  Exemplo: /fase-adicionar-testes 12 focar em edge cases no módulo de pricing
 ---
 <objective>
 Gerar testes unit e E2E para uma fase completada, usando seu SUMMARY.md, CONTEXT.md, e VERIFICATION.md como especificações.

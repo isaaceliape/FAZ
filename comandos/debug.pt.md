@@ -122,7 +122,7 @@ O debugger retorna quando:
 
 ## 6. Sessões Ativas
 
-Quando usuário executa `/fase:debug` sem argumentos:
+Quando usuário executa `/fase-debug` sem argumentos:
 
 ```bash
 ls .planning/debug/*.md 2>/dev/null | grep -v resolved | head -10
@@ -183,7 +183,7 @@ Quando debugging completa:
 
 **Se fix automatizado:**
 - Gere PLAN.md com tasks específicas
-- Coordene com `/fase:executar-fase` se necessário
+- Coordene com `/fase-executar-fase` se necessário
 
 </process>
 

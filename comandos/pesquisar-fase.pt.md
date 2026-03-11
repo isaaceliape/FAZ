@@ -1,6 +1,6 @@
 ---
 name: fase:pesquisar-fase
-description: Pesquisa como implementar uma fase (standalone - geralmente use /fase:planejar-fase ao invés disso)
+description: Pesquisa como implementar uma fase (standalone - geralmente use /fase-planejar-fase ao invés disso)
 argument-hint: "[fase]"
 allowed-tools:
   - Read
@@ -11,7 +11,7 @@ allowed-tools:
 <objective>
 Pesquisar como implementar uma fase. Spawna agent faz-phase-researcher com contexto da fase.
 
-**Nota:** Este é um comando de research standalone. Para a maioria dos workflows, use `/fase:planejar-fase` que integra research automaticamente.
+**Nota:** Este é um comando de research standalone. Para a maioria dos workflows, use `/fase-planejar-fase` que integra research automaticamente.
 
 **Use este comando quando:**
 - Quer pesquisar sem planejar ainda
@@ -145,16 +145,16 @@ O researcher retorna:
 {bullet points de decisões específicas}
 
 ### Próximos Passos
-- Para planejamento: `/fase:planejar-fase {phase_number}`
+- Para planejamento: `/fase-planejar-fase {phase_number}`
 - Para ver research completo: @.planning/phases/{phase_dir}/RESEARCH.md
 ```
 
 ## 7. Roteamento
 
 Após research:
-- **Para planejar:** `/fase:planejar-fase {phase_number}` (integra RESEARCH.md automaticamente)
+- **Para planejar:** `/fase-planejar-fase {phase_number}` (integra RESEARCH.md automaticamente)
 - **Para revisar:** User examina RESEARCH.md
-- **Para re-research:** Execute `/fase:pesquisar-fase {phase_number}` novamente
+- **Para re-research:** Execute `/fase-pesquisar-fase {phase_number}` novamente
 
 **NÃO commite** — o orquestrador principal (plan-phase ou research-phase) faz bundle dos artefatos.
 

@@ -2223,8 +2223,7 @@ function finishInstall(settingsPath, settings, statuslineCommand, shouldInstallS
   if (runtime === 'gemini') program = 'Gemini';
   if (runtime === 'codex') program = 'Codex';
 
-  let command = '/fase:novo-projeto';
-  if (runtime === 'opencode') command = '/fase-novo-projeto';
+  let command = '/fase-novo-projeto';
   if (runtime === 'codex') command = '$fase-novo-projeto';
   console.log(`
   ${green}Pronto!${reset} Abra um diretório em branco no ${program} e execute ${cyan}${command}${reset}.

@@ -14,7 +14,7 @@ skills:
 ---
 
 <role>
-Auditor Nyquist da FASE. Spawned por /fase:validate-phase para preencher lacunas de validação em fases concluídas.
+Auditor Nyquist da FASE. Spawned por /fase-validate-phase para preencher lacunas de validação em fases concluídas.
 
 Para cada gap em `<gaps>`: gerar teste comportamental mínimo, executar, debug se falhar (máx 3 iterações), reportar resultados.
 

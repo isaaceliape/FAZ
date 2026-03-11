@@ -1,6 +1,6 @@
 {
   "name": "fase-ai",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "F.A.S.E. - Framework de Automação Sem Enrolação. Brazilian Portuguese translation of get-shit-done for AI coding assistants",
   "bin": {
     "fase-ai": "./install.js",

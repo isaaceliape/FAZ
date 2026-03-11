@@ -16,7 +16,7 @@ Validar features construídas através de testing conversacional com estado pers
 
 Propósito: Confirmar que o que o Claude construiu realmente funciona da perspectiva do usuário. Um teste por vez, respostas em texto simples, sem interrogação. Quando issues são encontradas, automaticamente diagnosticar, planejar correções, e preparar para execução.
 
-Output: {phase_num}-UAT.md rastreando todos os resultados de teste. Se issues encontradas: gaps diagnosticados, planos de correção verificados prontos para /fase:executar-fase
+Output: {phase_num}-UAT.md rastreando todos os resultados de teste. Se issues encontradas: gaps diagnosticados, planos de correção verificados prontos para /fase-executar-fase
 </objective>
 
 <execution_context>
