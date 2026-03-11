@@ -157,7 +157,7 @@ Para cada truth:
 
 ## Step 4: Verificar Artefatos (Três Níveis)
 
-Use faz-tools para verificação de artefatos contra must_haves no frontmatter do PLAN:
+Use fase-tools para verificação de artefatos contra must_haves no frontmatter do PLAN:
 
 ```bash
 ARTIFACT_RESULT=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" verify artifacts "$PLAN_PATH")
@@ -206,7 +206,7 @@ grep -r "$artifact_name" "${search_path:-src/}" --include="*.ts" --include="*.ts
 
 Key links são conexões críticas. Se quebradas, o objetivo falha mesmo com todos os artefatos presentes.
 
-Use faz-tools para verificação de key links contra must_haves no frontmatter do PLAN:
+Use fase-tools para verificação de key links contra must_haves no frontmatter do PLAN:
 
 ```bash
 LINKS_RESULT=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" verify key-links "$PLAN_PATH")

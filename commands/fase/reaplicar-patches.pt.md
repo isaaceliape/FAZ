@@ -15,20 +15,20 @@ Verificar se existe diretório de patches locais:
 
 ```bash
 # Instalação global — detectar diretório de config em runtime
-if [ -d "$HOME/.config/opencode/faz-local-patches" ]; then
-  PATCHES_DIR="$HOME/.config/opencode/faz-local-patches"
-elif [ -d "$HOME/.opencode/faz-local-patches" ]; then
-  PATCHES_DIR="$HOME/.opencode/faz-local-patches"
-elif [ -d "$HOME/.gemini/faz-local-patches" ]; then
-  PATCHES_DIR="$HOME/.gemini/faz-local-patches"
+if [ -d "$HOME/.config/opencode/fase-local-patches" ]; then
+  PATCHES_DIR="$HOME/.config/opencode/fase-local-patches"
+elif [ -d "$HOME/.opencode/fase-local-patches" ]; then
+  PATCHES_DIR="$HOME/.opencode/fase-local-patches"
+elif [ -d "$HOME/.gemini/fase-local-patches" ]; then
+  PATCHES_DIR="$HOME/.gemini/fase-local-patches"
 else
-  PATCHES_DIR="$HOME/.claude/faz-local-patches"
+  PATCHES_DIR="$HOME/.claude/fase-local-patches"
 fi
 # Fallback para instalação local — verificar todos os diretórios runtime
 if [ ! -d "$PATCHES_DIR" ]; then
   for dir in .config/opencode .opencode .gemini .claude; do
-    if [ -d "./$dir/faz-local-patches" ]; then
-      PATCHES_DIR="./$dir/faz-local-patches"
+    if [ -d "./$dir/fase-local-patches" ]; then
+      PATCHES_DIR="./$dir/fase-local-patches"
       break
     fi
   done
@@ -65,7 +65,7 @@ Sair.
 
 Para cada arquivo em `backup-meta.json`:
 
-1. **Ler versão salva** (cópia modificada do usuário de `faz-local-patches/`)
+1. **Ler versão salva** (cópia modificada do usuário de `fase-local-patches/`)
 2. **Ler versão recém-instalada** (arquivo atual após atualização)
 3. **Comparar e mesclar:**
 
@@ -96,8 +96,8 @@ Após reaplicar, regenerar o manifest do arquivo para que futuras atualizações
 ## Passo 5: Opção de cleanup
 
 Perguntar ao usuário:
-- "Manter backups de patch para referência?" → preservar `faz-local-patches/`
-- "Limpar backups de patch?" → remover diretório `faz-local-patches/`
+- "Manter backups de patch para referência?" → preservar `fase-local-patches/`
+- "Limpar backups de patch?" → remover diretório `fase-local-patches/`
 
 ## Passo 6: Relatório
 
