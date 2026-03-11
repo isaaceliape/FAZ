@@ -12,10 +12,6 @@ Spec-driven development, context engineering e meta-prompting — agora em portu
 [![npm version](https://img.shields.io/npm/v/get-shit-done-cc?style=for-the-badge&logo=npm&logoColor=white&color=CB3837)](https://www.npmjs.com/package/get-shit-done-cc)
 <br>
 
-```bash
-npx get-shit-done-cc@latest
-```
-
 **Funciona no Mac, Windows e Linux.**
 
 <br>
@@ -46,10 +42,6 @@ O **F.A.S.E.** é a versão em português brasileiro do **Get Shit Done (GSD)** 
 ---
 
 ## 🚀 Instalação
-
-```bash
-npx get-shit-done-cc@latest
-```
 
 O instalador vai te perguntar:
 1. **Runtime** — Claude Code, OpenCode, Gemini, Codex, ou todos
