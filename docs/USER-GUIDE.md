@@ -251,8 +251,8 @@ O FASE armazena configurações do projeto em `.planning/config.json`. Configure
   },
   "git": {
     "branching_strategy": "none",
-    "phase_branch_template": "faz/fase-{phase}-{slug}",
-    "milestone_branch_template": "faz/{milestone}-{slug}"
+    "phase_branch_template": "fase/fase-{phase}-{slug}",
+    "milestone_branch_template": "fase/{milestone}-{slug}"
   }
 }
 ```
@@ -290,8 +290,8 @@ Desabilite esses toggles para acelerar fases em domínios familiares ou para eco
 | Configuração | Opções | Padrão | O que Controla |
 |-------------|--------|--------|----------------|
 | `git.branching_strategy` | `none`, `phase`, `milestone` | `none` | Quando e como as branches são criadas |
-| `git.phase_branch_template` | String template | `faz/fase-{phase}-{slug}` | Nome da branch para estratégia por fase |
-| `git.milestone_branch_template` | String template | `faz/{milestone}-{slug}` | Nome da branch para estratégia por marco |
+| `git.phase_branch_template` | String template | `fase/fase-{phase}-{slug}` | Nome da branch para estratégia por fase |
+| `git.milestone_branch_template` | String template | `fase/{milestone}-{slug}` | Nome da branch para estratégia por marco |
 
 **Estratégias de branching explicadas:**
 
@@ -440,7 +440,7 @@ Defina `commit_docs: false` durante `/fase:novo-projeto` ou via `/fase:configura
 
 ### Atualização do FASE Sobrescreveu Minhas Mudanças Locais
 
-Desde a v1.17, o instalador faz backup de arquivos modificados localmente em `faz-local-patches/`. Execute `/fase:reaplicar-patches` para mesclar suas mudanças de volta.
+Desde a v1.17, o instalador faz backup de arquivos modificados localmente em `fase-local-patches/`. Execute `/fase:reaplicar-patches` para mesclar suas mudanças de volta.
 
 ### Subagente Parece Ter Falhado Mas o Trabalho Foi Feito
 

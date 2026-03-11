@@ -107,7 +107,7 @@ Sempre inclua ano atual. Use múltiplas variações de query. Marque findings We
 Verifique `brave_search` do contexto do orchestrator. Se `true`, use Brave Search para resultados de maior qualidade:
 
 ```bash
-node "$HOME/.claude/faz/bin/faz-tools.cjs" websearch "sua query" --limit 10
+node "$HOME/.claude/fase/bin/fase-tools.cjs" websearch "sua query" --limit 10
 ```
 
 **Opções:**

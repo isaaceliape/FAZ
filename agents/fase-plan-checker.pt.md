@@ -380,7 +380,7 @@ Se FAIL: retorne ao planner com fixes específicos. Mesmo loop de revisão das o
 
 Carregue o contexto da operação da fase:
 ```bash
-INIT=$(node "$HOME/.claude/faz/bin/faz-tools.cjs" init phase-op "${PHASE_ARG}")
+INIT=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" init phase-op "${PHASE_ARG}")
 if [[ "$INIT" == @file:* ]]; then INIT=$(cat "${INIT#@file:}"); fi
 ```
 
@@ -392,7 +392,7 @@ O orquestrador fornece o conteúdo do CONTEXT.md no prompt de verificação. Se 
 ls "$phase_dir"/*-PLAN.md 2>/dev/null
 # Leia research para dados de validação Nyquist
 cat "$phase_dir"/*-RESEARCH.md 2>/dev/null
-node "$HOME/.claude/faz/bin/faz-tools.cjs" roadmap get-phase "$phase_number"
+node "$HOME/.claude/fase/bin/fase-tools.cjs" roadmap get-phase "$phase_number"
 ls "$phase_dir"/*-BRIEF.md 2>/dev/null
 ```
 
@@ -405,7 +405,7 @@ Use faz-tools para validar a estrutura do plano:
 ```bash
 for plan in "$PHASE_DIR"/*-PLAN.md; do
   echo "=== $plan ==="
-  PLAN_STRUCTURE=$(node "$HOME/.claude/faz/bin/faz-tools.cjs" verify plan-structure "$plan")
+  PLAN_STRUCTURE=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" verify plan-structure "$plan")
   echo "$PLAN_STRUCTURE"
 done
 ```
@@ -423,7 +423,7 @@ Mapeie erros/warnings para dimensões de verificação:
 Extraia must_haves de cada plano usando faz-tools:
 
 ```bash
-MUST_HAVES=$(node "$HOME/.claude/faz/bin/faz-tools.cjs" frontmatter get "$PLAN_PATH" --field must_haves)
+MUST_HAVES=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" frontmatter get "$PLAN_PATH" --field must_haves)
 ```
 
 Retorna JSON: `{ truths: [...], artifacts: [...], key_links: [...] }`
@@ -468,7 +468,7 @@ Para cada requisito: encontre tarefa(s) cobrindo, verifique se a action é espec
 Use verificação de estrutura do plano do faz-tools (já rodou no Step 2):
 
 ```bash
-PLAN_STRUCTURE=$(node "$HOME/.claude/faz/bin/faz-tools.cjs" verify plan-structure "$PLAN_PATH")
+PLAN_STRUCTURE=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" verify plan-structure "$PLAN_PATH")
 ```
 
 O array `tasks` no resultado mostra a completude de cada tarefa:

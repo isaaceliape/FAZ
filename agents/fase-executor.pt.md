@@ -45,7 +45,7 @@ Isso garante que padrões, convenções e melhores práticas específicas do pro
 Carregue o contexto de execução:
 
 ```bash
-INIT=$(node "$HOME/.faz/bin/faz-tools.cjs" init execute-phase "${PHASE}")
+INIT=$(node "$HOME/.fase/bin/fase-tools.cjs" init execute-phase "${PHASE}")
 if [[ "$INIT" == @file:* ]]; then INIT=$(cat "${INIT#@file:}"); fi
 ```
 
@@ -209,8 +209,8 @@ NÃO continue lendo. Análise sem ação é um sinal de travamento.
 Verifique se auto mode está ativo no início do executor (flag chain ou preferência do usuário):
 
 ```bash
-AUTO_CHAIN=$(node "$HOME/.faz/bin/faz-tools.cjs" config-get workflow._auto_chain_active 2>/dev/null || echo "false")
-AUTO_CFG=$(node "$HOME/.faz/bin/faz-tools.cjs" config-get workflow.auto_advance 2>/dev/null || echo "false")
+AUTO_CHAIN=$(node "$HOME/.fase/bin/fase-tools.cjs" config-get workflow._auto_chain_active 2>/dev/null || echo "false")
+AUTO_CFG=$(node "$HOME/.fase/bin/fase-tools.cjs" config-get workflow.auto_advance 2>/dev/null || echo "false")
 ```
 
 Auto mode está ativo se `AUTO_CHAIN` ou `AUTO_CFG` for `"true"`. Guarde o resultado para tratamento de checkpoint abaixo.
@@ -223,7 +223,7 @@ Auto mode está ativo se `AUTO_CHAIN` ou `AUTO_CFG` for `"true"`. Guarde o resul
 Antes de qualquer `checkpoint:human-verify`, garanta que o ambiente de verificação está pronto. Se o plano não tem server startup antes do checkpoint, ADICIONE UM (Regra 3 de desvio).
 
 Para padrões automation-first completos, lifecycle de server, manipulação CLI:
-**Veja @~/.faz/references/checkpoints.md**
+**Veja @~/.fase/references/checkpoints.md**
 
 **Referência rápida:** Usuários NUNCA rodam comandos CLI. Usuários APENAS visitam URLs, clicam na UI, avaliam visuais, fornecem secrets. Claude faz toda automação.
 
@@ -346,7 +346,7 @@ Após todas tarefas completarem, crie `{phase}-{plan}-SUMMARY.md` em `.planning/
 
 **SEMPRE use a ferramenta Write para criar arquivos** — nunca use `Bash(cat << 'EOF')` ou comandos heredoc para criação de arquivos.
 
-**Use template:** @~/.faz/templates/summary.md
+**Use template:** @~/.fase/templates/summary.md
 
 **Frontmatter:** phase, plan, subsystem, tags, grafo de dependência (requires/provides/affects), tech-stack (added/patterns), key-files (created/modified), decisions, metrics (duration, completed date).
 
@@ -395,38 +395,38 @@ NÃO pule. NÃO prossiga para atualizações de estado se self-check falhar.
 </self_check>
 
 <state_updates>
-Após SUMMARY.md, atualize STATE.md usando faz-tools:
+Após SUMMARY.md, atualize STATE.md usando fase-tools:
 
 ```bash
 # Avança contador de plan (lida com edge cases automaticamente)
-node "$HOME/.faz/bin/faz-tools.cjs" state advance-plan
+node "$HOME/.fase/bin/fase-tools.cjs" state advance-plan
 
 # Recalcula barra de progresso do estado em disco
-node "$HOME/.faz/bin/faz-tools.cjs" state update-progress
+node "$HOME/.fase/bin/fase-tools.cjs" state update-progress
 
 # Registra métricas de execução
-node "$HOME/.faz/bin/faz-tools.cjs" state record-metric \
+node "$HOME/.fase/bin/fase-tools.cjs" state record-metric \
   --phase "${PHASE}" --plan "${PLAN}" --duration "${DURATION}" \
   --tasks "${TASK_COUNT}" --files "${FILE_COUNT}"
 
 # Adiciona decisões (extraia de key-decisions do SUMMARY.md)
 for decision in "${DECISIONS[@]}"; do
-  node "$HOME/.faz/bin/faz-tools.cjs" state add-decision \
+  node "$HOME/.fase/bin/fase-tools.cjs" state add-decision \
     --phase "${PHASE}" --summary "${decision}"
 done
 
 # Atualiza info de sessão
-node "$HOME/.faz/bin/faz-tools.cjs" state record-session \
+node "$HOME/.fase/bin/fase-tools.cjs" state record-session \
   --stopped-at "Completed ${PHASE}-${PLAN}-PLAN.md"
 ```
 
 ```bash
 # Atualiza progresso ROADMAP.md para esta fase (contagem de plans, status)
-node "$HOME/.faz/bin/faz-tools.cjs" roadmap update-plan-progress "${PHASE_NUMBER}"
+node "$HOME/.fase/bin/fase-tools.cjs" roadmap update-plan-progress "${PHASE_NUMBER}"
 
 # Marca requirements completados do frontmatter PLAN.md
 # Extraia o array `requirements` do frontmatter do plan, então marque cada um completo
-node "$HOME/.faz/bin/faz-tools.cjs" requirements mark-complete ${REQ_IDS}
+node "$HOME/.fase/bin/fase-tools.cjs" requirements mark-complete ${REQ_IDS}
 ```
 
 **IDs de Requirement:** Extraia do campo `requirements:` do frontmatter PLAN.md (ex: `requirements: [AUTH-01, AUTH-02]`). Passe todos IDs para `requirements mark-complete`. Se o plan não tem campo requirements, pule este passo.
@@ -444,13 +444,13 @@ node "$HOME/.faz/bin/faz-tools.cjs" requirements mark-complete ${REQ_IDS}
 
 **Para bloqueadores encontrados durante execução:**
 ```bash
-node "$HOME/.faz/bin/faz-tools.cjs" state add-blocker "Descrição do bloqueador"
+node "$HOME/.fase/bin/fase-tools.cjs" state add-blocker "Descrição do bloqueador"
 ```
 </state_updates>
 
 <final_commit>
 ```bash
-node "$HOME/.faz/bin/faz-tools.cjs" commit "docs({phase}-{plan}): complete [plan-name] plan" --files .planning/phases/XX-name/{phase}-{plan}-SUMMARY.md .planning/STATE.md .planning/ROADMAP.md .planning/REQUIREMENTS.md
+node "$HOME/.fase/bin/fase-tools.cjs" commit "docs({phase}-{plan}): complete [plan-name] plan" --files .planning/phases/XX-name/{phase}-{plan}-SUMMARY.md .planning/STATE.md .planning/ROADMAP.md .planning/REQUIREMENTS.md
 ```
 
 Separado de commits por-tarefa — captura apenas resultados de execução.

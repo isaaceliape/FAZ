@@ -189,7 +189,7 @@ Quer ajudar a traduzir ou melhorar o F.A.S.E.?
 ## 📞 Comunidade
 
 - **Discord Internacional:** https://discord.gg/gsd
-- **GitHub Issues:** [Reportar bugs / sugerir melhorias](https://github.com/isaaceliape/FAZ/issues)
+- **GitHub Issues:** [Reportar bugs / sugerir melhorias](https://github.com/isaaceliape/FASE/issues)
 
 ---
 

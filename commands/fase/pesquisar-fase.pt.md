@@ -1,5 +1,5 @@
 ---
-name: faz:pesquisar-fase
+name: fase:pesquisar-fase
 description: Pesquisa como implementar uma fase (standalone - geralmente use /fase:planejar-fase ao invés disso)
 argument-hint: "[fase]"
 allowed-tools:

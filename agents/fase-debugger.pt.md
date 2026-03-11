@@ -1037,7 +1037,7 @@ mv .planning/debug/{slug}.md .planning/debug/resolved/
 **Verifique planning config usando state load (commit_docs está disponível no output):**
 
 ```bash
-INIT=$(node "$HOME/.claude/faz/bin/faz-tools.cjs" state load)
+INIT=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" state load)
 if [[ "$INIT" == @file:* ]]; then INIT=$(cat "${INIT#@file:}"); fi
 # commit_docs está no JSON output
 ```
@@ -1055,7 +1055,7 @@ Root cause: {root_cause}"
 
 Então commit planning docs via CLI (respeita `commit_docs` config automaticamente):
 ```bash
-node "$HOME/.claude/faz/bin/faz-tools.cjs" commit "docs: resolve debug {slug}" --files .planning/debug/resolved/{slug}.md
+node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "docs: resolve debug {slug}" --files .planning/debug/resolved/{slug}.md
 ```
 
 Reporte completion e ofereça próximos passos.

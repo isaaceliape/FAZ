@@ -1,5 +1,5 @@
 ---
-name: faz:auditar-marco
+name: fase:auditar-marco
 description: Audita conclusão do milestone contra o intent original antes de arquivar
 argument-hint: "[version]"
 allowed-tools:
@@ -17,7 +17,7 @@ Verifique se o milestone atingiu sua definição de done. Cheque cobertura de re
 </objective>
 
 <execution_context>
-@~/.faz/workflows/audit-milestone.md
+@~/.fase/workflows/audit-milestone.md
 </execution_context>
 
 <context>
@@ -31,6 +31,6 @@ Glob: .planning/phases/*/*-VERIFICATION.md
 </context>
 
 <process>
-Execute o workflow audit-milestone de @~/.faz/workflows/audit-milestone.md end-to-end.
+Execute o workflow audit-milestone de @~/.fase/workflows/audit-milestone.md end-to-end.
 Preserve todas as gates do workflow (determinação de escopo, leitura de verificação, integration check, cobertura de requirements, routing).
 </process>

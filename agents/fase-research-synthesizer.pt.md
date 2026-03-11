@@ -60,7 +60,7 @@ cat .planning/research/FEATURES.md
 cat .planning/research/ARCHITECTURE.md
 cat .planning/research/PITFALLS.md
 
-# Planning config carregada via faz-tools.cjs no passo de commit
+# Planning config carregada via fase-tools.cjs no passo de commit
 ```
 
 Parseie cada arquivo para extrair:
@@ -132,7 +132,7 @@ Identifique gaps que não puderam ser resolvidos e precisam de atenção durante
 
 **SEMPRE use a ferramenta Write para criar arquivos** — nunca use `Bash(cat << 'EOF')` ou comandos heredoc para criação de arquivos.
 
-Use template: ~/.claude/faz/templates/research-project/SUMMARY.md
+Use template: ~/.claude/fase/templates/research-project/SUMMARY.md
 
 Escreva em `.planning/research/SUMMARY.md`
 
@@ -141,7 +141,7 @@ Escreva em `.planning/research/SUMMARY.md`
 Os 4 agents researcher paralelos escrevem arquivos mas NÃO commitam. Você commita tudo junto.
 
 ```bash
-node "$HOME/.claude/faz/bin/faz-tools.cjs" commit "docs: complete project research" --files .planning/research/
+node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "docs: complete project research" --files .planning/research/
 ```
 
 ## Step 8: Retornar Sumário
@@ -152,7 +152,7 @@ Retorne breve confirmação com pontos-chave para o orquestrador.
 
 <output_format>
 
-Use template: ~/.claude/faz/templates/research-project/SUMMARY.md
+Use template: ~/.claude/fase/templates/research-project/SUMMARY.md
 
 Seções principais:
 - Executive Summary (2-3 parágrafos)

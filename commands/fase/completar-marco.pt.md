@@ -1,6 +1,6 @@
 ---
 type: prompt
-name: faz:completar-marco
+name: fase:completar-marco
 description: Arquiva milestone completado e prepara para próxima version
 argument-hint: <version>
 allowed-tools:

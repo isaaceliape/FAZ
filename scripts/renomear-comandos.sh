@@ -3,7 +3,7 @@
 # Script para renomear commands do F.A.Z. para português brasileiro
 # Usage: ./renomear-comandos.sh
 
-cd "$(dirname "$0")/../commands/faz"
+cd "$(dirname "$0")/../commands/fase"
 
 echo "🔄 Renomeando commands para PT-BR..."
 echo ""

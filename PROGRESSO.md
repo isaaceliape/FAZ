@@ -218,10 +218,10 @@
 
 ## 📞 Links Úteis
 
-- **Repo:** https://github.com/isaaceliape/FAZ
+- **Repo:** https://github.com/isaaceliape/FASE
 - **OpenCode UI:** http://localhost:3000/
 - **GSD Original:** https://github.com/gsd-build/get-shit-done
-- **Path local:** `/Users/isaaceliape/repos/FAZ`
+- **Path local:** `/Users/isaaceliape/repos/FASE`
 
 ---
 

@@ -1,5 +1,5 @@
 ---
-name: faz:atualizar
+name: fase:atualizar
 description: Atualizar FASE para versão mais recente com exibição de changelog
 allowed-tools:
   - Bash

@@ -1353,7 +1353,7 @@ function uninstall(isGlobal, runtime = 'claude') {
     if (fs.existsSync(gsdCommandsDir)) {
       fs.rmSync(gsdCommandsDir, { recursive: true });
       removedCount++;
-      console.log(`  ${green}✓${reset} Removido commands/faz/`);
+      console.log(`  ${green}✓${reset} Removido commands/fase/`);
     }
   }
 
@@ -1945,7 +1945,7 @@ function install(isGlobal, runtime = 'claude') {
     const gsdDest = path.join(commandsDir, 'gsd');
     copyWithPathReplacement(gsdSrc, gsdDest, pathPrefix, runtime, true);
     if (verifyInstalled(gsdDest, 'commands/gsd')) {
-      console.log(`  ${green}✓${reset} Instalado commands/faz`);
+      console.log(`  ${green}✓${reset} Instalado commands/fase`);
     } else {
       failures.push('commands/gsd');
     }
