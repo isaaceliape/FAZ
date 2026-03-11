@@ -17,17 +17,17 @@ const reset = '\x1b[0m';
 const GSD_CODEX_MARKER = '# GSD Agent Configuration \u2014 managed by get-shit-done installer';
 
 const CODEX_AGENT_SANDBOX = {
-  'gsd-executor': 'workspace-write',
-  'gsd-planner': 'workspace-write',
-  'gsd-phase-researcher': 'workspace-write',
-  'gsd-project-researcher': 'workspace-write',
-  'gsd-research-synthesizer': 'workspace-write',
-  'gsd-verifier': 'workspace-write',
-  'gsd-codebase-mapper': 'workspace-write',
-  'gsd-roadmapper': 'workspace-write',
-  'gsd-debugger': 'workspace-write',
-  'gsd-plan-checker': 'read-only',
-  'gsd-integration-checker': 'read-only',
+  'fase-executor': 'workspace-write',
+  'fase-planner': 'workspace-write',
+  'fase-phase-researcher': 'workspace-write',
+  'fase-project-researcher': 'workspace-write',
+  'fase-research-synthesizer': 'workspace-write',
+  'fase-verifier': 'workspace-write',
+  'fase-codebase-mapper': 'workspace-write',
+  'fase-roadmapper': 'workspace-write',
+  'fase-debugger': 'workspace-write',
+  'fase-plan-checker': 'read-only',
+  'fase-integration-checker': 'read-only',
 };
 
 // Get version from package.json
@@ -183,6 +183,7 @@ const banner = '\n' +
   '  ╚═╝      ╚═╝  ╚═╝╚══════╝╚══════╝' + reset + '\n' +
   '\n' +
   '  FASE ' + dim + 'v' + pkg.version + reset + '\n' +
+  '  Framework de Automação Sem Enrolação\n' +
   '  Sistema de meta-prompting, context engineering e\n' +
   '  desenvolvimento spec-driven para Claude Code, OpenCode, Gemini e Codex.\n';
 
@@ -453,10 +454,10 @@ function extractFrontmatterField(frontmatter, fieldName) {
 }
 
 function convertSlashCommandsToCodexSkillMentions(content) {
-  let converted = content.replace(/\/gsd:([a-z0-9-]+)/gi, (_, commandName) => {
-    return `$gsd-${String(commandName).toLowerCase()}`;
+  let converted = content.replace(/\/fase-([a-z0-9-]+)/gi, (_, commandName) => {
+    return `$fase-${String(commandName).toLowerCase()}`;
   });
-  converted = converted.replace(/\/gsd-help\b/g, '$gsd-help');
+  converted = converted.replace(/\/fase-help\b/g, '$fase-help');
   return converted;
 }
 
@@ -842,8 +843,8 @@ function convertClaudeToOpencodeFrontmatter(content) {
   convertedContent = convertedContent.replace(/\bAskUserQuestion\b/g, 'question');
   convertedContent = convertedContent.replace(/\bSlashCommand\b/g, 'skill');
   convertedContent = convertedContent.replace(/\bTodoWrite\b/g, 'todowrite');
-  // Replace /gsd:command with /gsd-command for opencode (flat command structure)
-  convertedContent = convertedContent.replace(/\/gsd:/g, '/gsd-');
+  // Replace /fase:command with /fase-command for opencode (flat command structure)
+  convertedContent = convertedContent.replace(/\/fase:/g, '/fase-');
   // Replace ~/.claude and $HOME/.claude with OpenCode's config location
   convertedContent = convertedContent.replace(/~\/\.claude\b/g, '~/.config/opencode');
   convertedContent = convertedContent.replace(/\$HOME\/\.claude\b/g, '$HOME/.config/opencode');
@@ -986,12 +987,12 @@ function convertClaudeToGeminiToml(content) {
 
 /**
  * Copy commands to a flat structure for OpenCode
- * OpenCode expects: command/gsd-help.md (invoked as /gsd-help)
- * Source structure: commands/gsd/help.md
+ * OpenCode expects: command/fase-help.md (invoked as /fase-help)
+ * Source structure: comandos/help.md
  * 
- * @param {string} srcDir - Source directory (e.g., commands/gsd/)
+ * @param {string} srcDir - Source directory (e.g., comandos/)
  * @param {string} destDir - Destination directory (e.g., command/)
- * @param {string} prefix - Prefix for filenames (e.g., 'gsd')
+ * @param {string} prefix - Prefix for filenames (e.g., 'fase')
  * @param {string} pathPrefix - Path prefix for file references
  * @param {string} runtime - Target runtime ('claude' or 'opencode')
  */
@@ -1000,7 +1001,7 @@ function copyFlattenedCommands(srcDir, destDir, prefix, pathPrefix, runtime) {
     return;
   }
   
-  // Remove old gsd-*.md files before copying new ones
+  // Remove old fase-*.md files before copying new ones
   if (fs.existsSync(destDir)) {
     for (const file of fs.readdirSync(destDir)) {
       if (file.startsWith(`${prefix}-`) && file.endsWith('.md')) {
@@ -1018,10 +1019,10 @@ function copyFlattenedCommands(srcDir, destDir, prefix, pathPrefix, runtime) {
     
     if (entry.isDirectory()) {
       // Recurse into subdirectories, adding to prefix
-      // e.g., commands/gsd/debug/start.md -> command/gsd-debug-start.md
+      // e.g., comandos/debug/start.md -> command/fase-debug-start.md
       copyFlattenedCommands(srcPath, destDir, `${prefix}-${entry.name}`, pathPrefix, runtime);
     } else if (entry.name.endsWith('.md')) {
-      // Flatten: help.md -> gsd-help.md
+      // Flatten: help.md -> fase-help.md
       const baseName = entry.name.replace('.md', '');
       const destName = `${prefix}-${baseName}.md`;
       const destPath = path.join(destDir, destName);
@@ -1043,7 +1044,7 @@ function copyFlattenedCommands(srcDir, destDir, prefix, pathPrefix, runtime) {
   }
 }
 
-function listCodexSkillNames(skillsDir, prefix = 'gsd-') {
+function listCodexSkillNames(skillsDir, prefix = 'fase-') {
   if (!fs.existsSync(skillsDir)) return [];
   const entries = fs.readdirSync(skillsDir, { withFileTypes: true });
   return entries
@@ -1060,7 +1061,7 @@ function copyCommandsAsCodexSkills(srcDir, skillsDir, prefix, pathPrefix, runtim
 
   fs.mkdirSync(skillsDir, { recursive: true });
 
-  // Remove previous GSD Codex skills to avoid stale command skills.
+  // Remove previous FASE Codex skills to avoid stale command skills.
   const existing = fs.readdirSync(skillsDir, { withFileTypes: true });
   for (const entry of existing) {
     if (entry.isDirectory() && entry.name.startsWith(`${prefix}-`)) {
@@ -1877,7 +1878,7 @@ function install(isGlobal, runtime = 'claude') {
   const isGemini = runtime === 'gemini';
   const isCodex = runtime === 'codex';
   const dirName = getDirName(runtime);
-  const src = path.join(__dirname, '..');
+  const src = __dirname;
 
   // Get the target directory based on runtime and install type
   const targetDir = isGlobal
@@ -1917,9 +1918,9 @@ function install(isGlobal, runtime = 'claude') {
     const commandDir = path.join(targetDir, 'command');
     fs.mkdirSync(commandDir, { recursive: true });
     
-    // Copy commands/gsd/*.md as command/gsd-*.md (flatten structure)
-    const gsdSrc = path.join(src, 'commands', 'gsd');
-    copyFlattenedCommands(gsdSrc, commandDir, 'gsd', pathPrefix, runtime);
+    // Copy comandos/*.md as command/fase-*.md (flatten structure)
+    const gsdSrc = path.join(src, 'comandos');
+    copyFlattenedCommands(gsdSrc, commandDir, 'fase', pathPrefix, runtime);
     if (verifyInstalled(commandDir, 'command/gsd-*')) {
       const count = fs.readdirSync(commandDir).filter(f => f.startsWith('gsd-')).length;
       console.log(`  ${green}✓${reset} Instalados ${count} comandos em command/`);
@@ -1928,8 +1929,8 @@ function install(isGlobal, runtime = 'claude') {
     }
   } else if (isCodex) {
     const skillsDir = path.join(targetDir, 'skills');
-    const gsdSrc = path.join(src, 'commands', 'gsd');
-    copyCommandsAsCodexSkills(gsdSrc, skillsDir, 'gsd', pathPrefix, runtime);
+    const gsdSrc = path.join(src, 'comandos');
+    copyCommandsAsCodexSkills(gsdSrc, skillsDir, 'fase', pathPrefix, runtime);
     const installedSkillNames = listCodexSkillNames(skillsDir);
     if (installedSkillNames.length > 0) {
       console.log(`  ${green}✓${reset} Instaladas ${installedSkillNames.length} skills em skills/`);
@@ -1941,36 +1942,38 @@ function install(isGlobal, runtime = 'claude') {
     const commandsDir = path.join(targetDir, 'commands');
     fs.mkdirSync(commandsDir, { recursive: true });
     
-    const gsdSrc = path.join(src, 'commands', 'gsd');
-    const gsdDest = path.join(commandsDir, 'gsd');
+    const gsdSrc = path.join(src, 'comandos');
+    const gsdDest = path.join(commandsDir, 'fase');
     copyWithPathReplacement(gsdSrc, gsdDest, pathPrefix, runtime, true);
-    if (verifyInstalled(gsdDest, 'commands/gsd')) {
-      console.log(`  ${green}✓${reset} Instalado comandos/`);
+    if (verifyInstalled(gsdDest, 'commands/fase')) {
+      console.log(`  ${green}✓${reset} Instalado commands/fase/`);
     } else {
-      failures.push('commands/gsd');
+      failures.push('commands/fase');
     }
   }
 
-  // Copy get-shit-done skill with path replacement
-  const skillSrc = path.join(src, 'get-shit-done');
-  const skillDest = path.join(targetDir, 'get-shit-done');
-  copyWithPathReplacement(skillSrc, skillDest, pathPrefix, runtime);
-  if (verifyInstalled(skillDest, 'get-shit-done')) {
-    console.log(`  ${green}✓${reset} Instalado get-shit-done`);
-  } else {
-    failures.push('get-shit-done');
+  // Copy FASE docs with path replacement
+  const skillSrc = path.join(src, 'docs');
+  const skillDest = path.join(targetDir, 'fase');
+  if (fs.existsSync(skillSrc)) {
+    copyWithPathReplacement(skillSrc, skillDest, pathPrefix, runtime);
+    if (verifyInstalled(skillDest, 'fase')) {
+      console.log(`  ${green}✓${reset} Instalado fase/`);
+    } else {
+      failures.push('fase');
+    }
   }
 
   // Copy agents to agents directory
-  const agentsSrc = path.join(src, 'agents');
+  const agentsSrc = path.join(src, 'agentes');
   if (fs.existsSync(agentsSrc)) {
     const agentsDest = path.join(targetDir, 'agents');
     fs.mkdirSync(agentsDest, { recursive: true });
 
-    // Remove old GSD agents (gsd-*.md) before copying new ones
+    // Remove old FASE agents (fase-*.md) before copying new ones
     if (fs.existsSync(agentsDest)) {
       for (const file of fs.readdirSync(agentsDest)) {
-        if (file.startsWith('gsd-') && file.endsWith('.md')) {
+        if (file.startsWith('fase-') && file.endsWith('.md')) {
           fs.unlinkSync(path.join(agentsDest, file));
         }
       }
