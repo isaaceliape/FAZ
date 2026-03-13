@@ -7,7 +7,7 @@
     "bin"
   ],
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky install || true",
     "verificar": "cd bin && npm pack --dry-run"
   },
   "devDependencies": {

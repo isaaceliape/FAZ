@@ -36,7 +36,6 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "prepare": "cd .. && husky install bin/.husky || true",
     "verificar-pacote": "npm pack --dry-run"
   },
   "devDependencies": {
