@@ -3,6 +3,9 @@
 .gitignore
 .github/
 
+# npm config
+.npmrc
+
 # Node
 node_modules/
 package-lock.json
