@@ -3,8 +3,8 @@
   "version": "2.4.0",
   "description": "F.A.S.E. - Framework de Automação Sem Enrolação. Brazilian Portuguese translation of get-shit-done for AI coding assistants",
   "bin": {
-    "fase-ai": "./install.js",
-    "fase": "./install.js"
+    "fase-ai": "install.js",
+    "fase": "install.js"
   },
   "repository": {
     "type": "git",
@@ -36,11 +36,10 @@
     "node": ">=14.0.0"
   },
   "files": [
-    "./",
     "lib/",
-    "install.js",
-    "README.md",
     "agentes/",
-    "comandos/"
+    "comandos/",
+    "install.js",
+    "README.md"
   ]
 }
