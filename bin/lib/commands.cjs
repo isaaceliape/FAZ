@@ -9,7 +9,7 @@ const { extractFrontmatter } = require('./frontmatter.cjs');
 
 function cmdGenerateSlug(text, raw) {
   if (!text) {
-    error('text required for slug generation');
+    error('texto obrigatório para geração de slug');
   }
 
   const slug = text
@@ -66,7 +66,7 @@ function cmdListTodos(cwd, area, raw) {
         todos.push({
           file,
           created: createdMatch ? createdMatch[1].trim() : 'unknown',
-          title: titleMatch ? titleMatch[1].trim() : 'Untitled',
+          title: titleMatch ? titleMatch[1].trim() : 'Sem título',
           area: todoArea,
           path: toPosixPath(path.join('.planning', 'todos', 'pending', file)),
         });
@@ -80,7 +80,7 @@ function cmdListTodos(cwd, area, raw) {
 
 function cmdVerifyPathExists(cwd, targetPath, raw) {
   if (!targetPath) {
-    error('path required for verification');
+    error('caminho obrigatório para verificação');
   }
 
   const fullPath = path.isAbsolute(targetPath) ? targetPath : path.join(cwd, targetPath);
@@ -193,13 +193,13 @@ function cmdHistoryDigest(cwd, raw) {
 
     output(digest, raw);
   } catch (e) {
-    error('Failed to generate history digest: ' + e.message);
+    error('Falha ao gerar resumo do histórico: ' + e.message);
   }
 }
 
 function cmdResolveModel(cwd, agentType, raw) {
   if (!agentType) {
-    error('agent-type required');
+    error('agent-type obrigatório');
   }
 
   const config = loadConfig(cwd);
@@ -215,7 +215,7 @@ function cmdResolveModel(cwd, agentType, raw) {
 
 function cmdCommit(cwd, message, files, raw, amend) {
   if (!message && !amend) {
-    error('commit message required');
+    error('mensagem de commit obrigatória');
   }
 
   const config = loadConfig(cwd);
@@ -263,13 +263,13 @@ function cmdCommit(cwd, message, files, raw, amend) {
 
 function cmdSummaryExtract(cwd, summaryPath, fields, raw) {
   if (!summaryPath) {
-    error('summary-path required for summary-extract');
+    error('caminho-do-resumo obrigatório para extração de resumo');
   }
 
   const fullPath = path.join(cwd, summaryPath);
 
   if (!fs.existsSync(fullPath)) {
-    output({ error: 'File not found', path: summaryPath }, raw);
+    output({ error: 'Arquivo não encontrado', path: summaryPath }, raw);
     return;
   }
 
@@ -327,7 +327,7 @@ async function cmdWebsearch(query, options, raw) {
   }
 
   if (!query) {
-    output({ available: false, error: 'Query required' }, raw, '');
+    output({ available: false, error: 'Consulta obrigatória' }, raw, '');
     return;
   }
 
@@ -355,7 +355,7 @@ async function cmdWebsearch(query, options, raw) {
     );
 
     if (!response.ok) {
-      output({ available: false, error: `API error: ${response.status}` }, raw, '');
+      output({ available: false, error: `Erro da API: ${response.status}` }, raw, '');
       return;
     }
 
@@ -449,7 +449,7 @@ function cmdProgressRender(cwd, format, raw) {
 
 function cmdTodoComplete(cwd, filename, raw) {
   if (!filename) {
-    error('filename required for todo complete');
+    error('nome de arquivo obrigatório para completar tarefa');
   }
 
   const pendingDir = path.join(cwd, '.planning', 'todos', 'pending');
@@ -457,7 +457,7 @@ function cmdTodoComplete(cwd, filename, raw) {
   const sourcePath = path.join(pendingDir, filename);
 
   if (!fs.existsSync(sourcePath)) {
-    error(`Todo not found: ${filename}`);
+    error(`Tarefa não encontrada: ${filename}`);
   }
 
   // Ensure completed directory exists
@@ -519,7 +519,7 @@ function cmdScaffold(cwd, type, options, raw) {
       return;
     }
     default:
-      error(`Unknown scaffold type: ${type}. Available: context, uat, verification, phase-dir`);
+      error(`Tipo de scaffold desconhecido: ${type}. Disponíveis: context, uat, verification, phase-dir`);
   }
 
   if (fs.existsSync(filePath)) {

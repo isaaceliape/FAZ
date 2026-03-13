@@ -101,9 +101,9 @@ function cmdStateGet(cwd, section, raw) {
       return;
     }
 
-    output({ error: `Section or field "${section}" not found` }, raw, '');
+    output({ error: `Seção ou campo "${section}" não encontrado` }, raw, '');
   } catch {
-    error('STATE.md not found');
+    error('STATE.md não encontrado');
   }
 }
 
@@ -153,7 +153,7 @@ function cmdStatePatch(cwd, patches, raw) {
 
 function cmdStateUpdate(cwd, field, value) {
   if (!field || value === undefined) {
-    error('field and value required for state update');
+    error('campo e valor obrigatórios para atualização de estado');
   }
 
   const statePath = path.join(cwd, '.planning', 'STATE.md');
@@ -172,7 +172,7 @@ function cmdStateUpdate(cwd, field, value) {
       writeStateMd(statePath, content, cwd);
       output({ updated: true });
     } else {
-      output({ updated: false, reason: `Field "${field}" not found in STATE.md` });
+      output({ updated: false, reason: `Campo "${field}" não encontrado em STATE.md` });
     }
   } catch {
     output({ updated: false, reason: 'STATE.md not found' });
@@ -217,19 +217,19 @@ function cmdStateAdvancePlan(cwd, raw) {
   const today = new Date().toISOString().split('T')[0];
 
   if (isNaN(currentPlan) || isNaN(totalPlans)) {
-    output({ error: 'Cannot parse Current Plan or Total Plans in Phase from STATE.md' }, raw);
+    output({ error: 'Não é possível analisar Plano Atual ou Total de Planos da Fase do STATE.md' }, raw);
     return;
   }
 
   if (currentPlan >= totalPlans) {
-    content = stateReplaceField(content, 'Status', 'Phase complete — ready for verification') || content;
+    content = stateReplaceField(content, 'Status', 'Fase completa — pronta para verificação') || content;
     content = stateReplaceField(content, 'Last Activity', today) || content;
     writeStateMd(statePath, content, cwd);
     output({ advanced: false, reason: 'last_plan', current_plan: currentPlan, total_plans: totalPlans, status: 'ready_for_verification' }, raw, 'false');
   } else {
     const newPlan = currentPlan + 1;
-    content = stateReplaceField(content, 'Current Plan', String(newPlan)) || content;
-    content = stateReplaceField(content, 'Status', 'Ready to execute') || content;
+    content = stateReplaceField(content, 'Plano Atual', String(newPlan)) || content;
+    content = stateReplaceField(content, 'Status', 'Pronto para executar') || content;
     content = stateReplaceField(content, 'Last Activity', today) || content;
     writeStateMd(statePath, content, cwd);
     output({ advanced: true, previous_plan: currentPlan, current_plan: newPlan, total_plans: totalPlans }, raw, 'true');
@@ -244,12 +244,12 @@ function cmdStateRecordMetric(cwd, options, raw) {
   const { phase, plan, duration, tasks, files } = options;
 
   if (!phase || !plan || !duration) {
-    output({ error: 'phase, plan, and duration required' }, raw);
+    output({ error: 'fase, plano e duração obrigatórios' }, raw);
     return;
   }
 
   // Find Performance Metrics section and its table
-  const metricsPattern = /(##\s*Performance Metrics[\s\S]*?\n\|[^\n]+\n\|[-|\s]+\n)([\s\S]*?)(?=\n##|\n$|$)/i;
+  const metricsPattern = /(##\s*Métricas de Desempenho[\s\S]*?\n\|[^\n]+\n\|[-|\s]+\n)([\s\S]*?)(?=\n##|\n$|$)/i;
   const metricsMatch = content.match(metricsPattern);
 
   if (metricsMatch) {
@@ -266,7 +266,7 @@ function cmdStateRecordMetric(cwd, options, raw) {
     writeStateMd(statePath, content, cwd);
     output({ recorded: true, phase, plan, duration }, raw, 'true');
   } else {
-    output({ recorded: false, reason: 'Performance Metrics section not found in STATE.md' }, raw, 'false');
+    output({ recorded: false, reason: 'Seção de Métricas de Desempenho não encontrada em STATE.md' }, raw, 'false');
   }
 }
 
@@ -298,8 +298,8 @@ function cmdStateUpdateProgress(cwd, raw) {
   const progressStr = `[${bar}] ${percent}%`;
 
   // Try **Progress:** bold format first, then plain Progress: format
-  const boldProgressPattern = /(\*\*Progress:\*\*\s*).*/i;
-  const plainProgressPattern = /^(Progress:\s*).*/im;
+  const boldProgressPattern = /(\*\*Progresso:\*\*\s*).*/i;
+  const plainProgressPattern = /^(Progresso:\s*).*/im;
   if (boldProgressPattern.test(content)) {
     content = content.replace(boldProgressPattern, (_match, prefix) => `${prefix}${progressStr}`);
     writeStateMd(statePath, content, cwd);
@@ -309,7 +309,7 @@ function cmdStateUpdateProgress(cwd, raw) {
     writeStateMd(statePath, content, cwd);
     output({ updated: true, percent, completed: totalSummaries, total: totalPlans, bar: progressStr }, raw, progressStr);
   } else {
-    output({ updated: false, reason: 'Progress field not found in STATE.md' }, raw, 'false');
+    output({ updated: false, reason: 'Campo de Progresso não encontrado em STATE.md' }, raw, 'false');
   }
 }
 
@@ -329,25 +329,25 @@ function cmdStateAddDecision(cwd, options, raw) {
     return;
   }
 
-  if (!summaryText) { output({ error: 'summary required' }, raw); return; }
+  if (!summaryText) { output({ error: 'resumo obrigatório' }, raw); return; }
 
   let content = fs.readFileSync(statePath, 'utf-8');
   const entry = `- [Phase ${phase || '?'}]: ${summaryText}${rationaleText ? ` — ${rationaleText}` : ''}`;
 
   // Find Decisions section (various heading patterns)
-  const sectionPattern = /(###?\s*(?:Decisions|Decisions Made|Accumulated.*Decisions)\s*\n)([\s\S]*?)(?=\n###?|\n##[^#]|$)/i;
+  const sectionPattern = /(###?\s*(?:Decisões|Decisões Tomadas|Decisões Acumuladas)\s*\n)([\s\S]*?)(?=\n###?|\n##[^#]|$)/i;
   const match = content.match(sectionPattern);
 
   if (match) {
     let sectionBody = match[2];
     // Remove placeholders
-    sectionBody = sectionBody.replace(/None yet\.?\s*\n?/gi, '').replace(/No decisions yet\.?\s*\n?/gi, '');
+    sectionBody = sectionBody.replace(/Nenhuma ainda\.?\s*\n?/gi, '').replace(/Nenhuma decisão ainda\.?\s*\n?/gi, '');
     sectionBody = sectionBody.trimEnd() + '\n' + entry + '\n';
     content = content.replace(sectionPattern, (_match, header) => `${header}${sectionBody}`);
     writeStateMd(statePath, content, cwd);
     output({ added: true, decision: entry }, raw, 'true');
   } else {
-    output({ added: false, reason: 'Decisions section not found in STATE.md' }, raw, 'false');
+    output({ added: false, reason: 'Seção de Decisões não encontrada em STATE.md' }, raw, 'false');
   }
 }
 
@@ -364,34 +364,34 @@ function cmdStateAddBlocker(cwd, text, raw) {
     return;
   }
 
-  if (!blockerText) { output({ error: 'text required' }, raw); return; }
+  if (!blockerText) { output({ error: 'texto obrigatório' }, raw); return; }
 
   let content = fs.readFileSync(statePath, 'utf-8');
   const entry = `- ${blockerText}`;
 
-  const sectionPattern = /(###?\s*(?:Blockers|Blockers\/Concerns|Concerns)\s*\n)([\s\S]*?)(?=\n###?|\n##[^#]|$)/i;
+  const sectionPattern = /(###?\s*(?:Bloqueadores|Bloqueadores\/Preocupações|Preocupações)\s*\n)([\s\S]*?)(?=\n###?|\n##[^#]|$)/i;
   const match = content.match(sectionPattern);
 
   if (match) {
     let sectionBody = match[2];
-    sectionBody = sectionBody.replace(/None\.?\s*\n?/gi, '').replace(/None yet\.?\s*\n?/gi, '');
+    sectionBody = sectionBody.replace(/Nenhum\.?\s*\n?/gi, '').replace(/Nenhum ainda\.?\s*\n?/gi, '');
     sectionBody = sectionBody.trimEnd() + '\n' + entry + '\n';
     content = content.replace(sectionPattern, (_match, header) => `${header}${sectionBody}`);
     writeStateMd(statePath, content, cwd);
     output({ added: true, blocker: blockerText }, raw, 'true');
   } else {
-    output({ added: false, reason: 'Blockers section not found in STATE.md' }, raw, 'false');
+    output({ added: false, reason: 'Seção de Bloqueadores não encontrada em STATE.md' }, raw, 'false');
   }
 }
 
 function cmdStateResolveBlocker(cwd, text, raw) {
   const statePath = path.join(cwd, '.planning', 'STATE.md');
-  if (!fs.existsSync(statePath)) { output({ error: 'STATE.md not found' }, raw); return; }
-  if (!text) { output({ error: 'text required' }, raw); return; }
+  if (!fs.existsSync(statePath)) { output({ error: 'STATE.md não encontrado' }, raw); return; }
+  if (!text) { output({ error: 'texto obrigatório' }, raw); return; }
 
   let content = fs.readFileSync(statePath, 'utf-8');
 
-  const sectionPattern = /(###?\s*(?:Blockers|Blockers\/Concerns|Concerns)\s*\n)([\s\S]*?)(?=\n###?|\n##[^#]|$)/i;
+  const sectionPattern = /(###?\s*(?:Bloqueadores|Bloqueadores\/Preocupações|Preocupações)\s*\n)([\s\S]*?)(?=\n###?|\n##[^#]|$)/i;
   const match = content.match(sectionPattern);
 
   if (match) {
@@ -405,14 +405,14 @@ function cmdStateResolveBlocker(cwd, text, raw) {
     let newBody = filtered.join('\n');
     // If section is now empty, add placeholder
     if (!newBody.trim() || !newBody.includes('- ')) {
-      newBody = 'None\n';
+      newBody = 'Nenhum\n';
     }
 
     content = content.replace(sectionPattern, (_match, header) => `${header}${newBody}`);
     writeStateMd(statePath, content, cwd);
     output({ resolved: true, blocker: text }, raw, 'true');
   } else {
-    output({ resolved: false, reason: 'Blockers section not found in STATE.md' }, raw, 'false');
+    output({ resolved: false, reason: 'Seção de Bloqueadores não encontrada em STATE.md' }, raw, 'false');
   }
 }
 
@@ -425,29 +425,29 @@ function cmdStateRecordSession(cwd, options, raw) {
   const updated = [];
 
   // Update Last session / Last Date
-  let result = stateReplaceField(content, 'Last session', now);
-  if (result) { content = result; updated.push('Last session'); }
-  result = stateReplaceField(content, 'Last Date', now);
-  if (result) { content = result; updated.push('Last Date'); }
+  let result = stateReplaceField(content, 'Última sessão', now);
+  if (result) { content = result; updated.push('Última sessão'); }
+  result = stateReplaceField(content, 'Última Data', now);
+  if (result) { content = result; updated.push('Última Data'); }
 
   // Update Stopped at
   if (options.stopped_at) {
-    result = stateReplaceField(content, 'Stopped At', options.stopped_at);
-    if (!result) result = stateReplaceField(content, 'Stopped at', options.stopped_at);
-    if (result) { content = result; updated.push('Stopped At'); }
+    result = stateReplaceField(content, 'Parado Em', options.stopped_at);
+    if (!result) result = stateReplaceField(content, 'Parado em', options.stopped_at);
+    if (result) { content = result; updated.push('Parado Em'); }
   }
 
   // Update Resume file
-  const resumeFile = options.resume_file || 'None';
-  result = stateReplaceField(content, 'Resume File', resumeFile);
-  if (!result) result = stateReplaceField(content, 'Resume file', resumeFile);
-  if (result) { content = result; updated.push('Resume File'); }
+  const resumeFile = options.resume_file || 'Nenhum';
+  result = stateReplaceField(content, 'Arquivo para Retomar', resumeFile);
+  if (!result) result = stateReplaceField(content, 'Arquivo para retomar', resumeFile);
+  if (result) { content = result; updated.push('Arquivo para Retomar'); }
 
   if (updated.length > 0) {
     writeStateMd(statePath, content, cwd);
     output({ recorded: true, updated }, raw, 'true');
   } else {
-    output({ recorded: false, reason: 'No session fields found in STATE.md' }, raw, 'false');
+    output({ recorded: false, reason: 'Nenhum campo de sessão encontrado em STATE.md' }, raw, 'false');
   }
 }
 
@@ -480,7 +480,7 @@ function cmdStateSnapshot(cwd, raw) {
 
   // Extract decisions table
   const decisions = [];
-  const decisionsMatch = content.match(/##\s*Decisions Made[\s\S]*?\n\|[^\n]+\n\|[-|\s]+\n([\s\S]*?)(?=\n##|\n$|$)/i);
+  const decisionsMatch = content.match(/##\s*Decisões Tomadas[\s\S]*?\n\|[^\n]+\n\|[-|\s]+\n([\s\S]*?)(?=\n##|\n$|$)/i);
   if (decisionsMatch) {
     const tableBody = decisionsMatch[1];
     const rows = tableBody.trim().split('\n').filter(r => r.includes('|'));
@@ -498,7 +498,7 @@ function cmdStateSnapshot(cwd, raw) {
 
   // Extract blockers list
   const blockers = [];
-  const blockersMatch = content.match(/##\s*Blockers\s*\n([\s\S]*?)(?=\n##|$)/i);
+  const blockersMatch = content.match(/##\s*Bloqueadores\s*\n([\s\S]*?)(?=\n##|$)/i);
   if (blockersMatch) {
     const blockersSection = blockersMatch[1];
     const items = blockersSection.match(/^-\s+(.+)$/gm) || [];
@@ -514,15 +514,15 @@ function cmdStateSnapshot(cwd, raw) {
     resume_file: null,
   };
 
-  const sessionMatch = content.match(/##\s*Session\s*\n([\s\S]*?)(?=\n##|$)/i);
+  const sessionMatch = content.match(/##\s*Sessão\s*\n([\s\S]*?)(?=\n##|$)/i);
   if (sessionMatch) {
     const sessionSection = sessionMatch[1];
-    const lastDateMatch = sessionSection.match(/\*\*Last Date:\*\*\s*(.+)/i)
-      || sessionSection.match(/^Last Date:\s*(.+)/im);
-    const stoppedAtMatch = sessionSection.match(/\*\*Stopped At:\*\*\s*(.+)/i)
-      || sessionSection.match(/^Stopped At:\s*(.+)/im);
-    const resumeFileMatch = sessionSection.match(/\*\*Resume File:\*\*\s*(.+)/i)
-      || sessionSection.match(/^Resume File:\s*(.+)/im);
+    const lastDateMatch = sessionSection.match(/\*\*Última Data:\*\*\s*(.+)/i)
+      || sessionSection.match(/^Última Data:\s*(.+)/im);
+    const stoppedAtMatch = sessionSection.match(/\*\*Parado Em:\*\*\s*(.+)/i)
+      || sessionSection.match(/^Parado Em:\s*(.+)/im);
+    const resumeFileMatch = sessionSection.match(/\*\*Arquivo para Retomar:\*\*\s*(.+)/i)
+      || sessionSection.match(/^Arquivo para Retomar:\s*(.+)/im);
 
     if (lastDateMatch) session.last_date = lastDateMatch[1].trim();
     if (stoppedAtMatch) session.stopped_at = stoppedAtMatch[1].trim();
@@ -556,16 +556,16 @@ function cmdStateSnapshot(cwd, raw) {
  * reliably via `state json` instead of fragile regex parsing.
  */
 function buildStateFrontmatter(bodyContent, cwd) {
-  const currentPhase = stateExtractField(bodyContent, 'Current Phase');
-  const currentPhaseName = stateExtractField(bodyContent, 'Current Phase Name');
-  const currentPlan = stateExtractField(bodyContent, 'Current Plan');
-  const totalPhasesRaw = stateExtractField(bodyContent, 'Total Phases');
-  const totalPlansRaw = stateExtractField(bodyContent, 'Total Plans in Phase');
+  const currentPhase = stateExtractField(bodyContent, 'Fase Atual');
+  const currentPhaseName = stateExtractField(bodyContent, 'Nome da Fase Atual');
+  const currentPlan = stateExtractField(bodyContent, 'Plano Atual');
+  const totalPhasesRaw = stateExtractField(bodyContent, 'Total de Fases');
+  const totalPlansRaw = stateExtractField(bodyContent, 'Total de Planos na Fase');
   const status = stateExtractField(bodyContent, 'Status');
-  const progressRaw = stateExtractField(bodyContent, 'Progress');
-  const lastActivity = stateExtractField(bodyContent, 'Last Activity');
-  const stoppedAt = stateExtractField(bodyContent, 'Stopped At') || stateExtractField(bodyContent, 'Stopped at');
-  const pausedAt = stateExtractField(bodyContent, 'Paused At');
+  const progressRaw = stateExtractField(bodyContent, 'Progresso');
+  const lastActivity = stateExtractField(bodyContent, 'Última Atividade');
+  const stoppedAt = stateExtractField(bodyContent, 'Parado Em') || stateExtractField(bodyContent, 'Parado em');
+  const pausedAt = stateExtractField(bodyContent, 'Pausado Em');
 
   let milestone = null;
   let milestoneName = null;

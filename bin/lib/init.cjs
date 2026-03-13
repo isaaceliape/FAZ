@@ -9,7 +9,7 @@ const { loadConfig, resolveModelInternal, findPhaseInternal, getRoadmapPhaseInte
 
 function cmdInitExecutePhase(cwd, phase, raw) {
   if (!phase) {
-    error('phase required for init execute-phase');
+    error('fase obrigatória para iniciar execução de fase');
   }
 
   const config = loadConfig(cwd);
@@ -82,7 +82,7 @@ function cmdInitExecutePhase(cwd, phase, raw) {
 
 function cmdInitPlanPhase(cwd, phase, raw) {
   if (!phase) {
-    error('phase required for init plan-phase');
+    error('fase obrigatória para iniciar planejamento de fase');
   }
 
   const config = loadConfig(cwd);
@@ -334,7 +334,7 @@ function cmdInitResume(cwd, raw) {
 
 function cmdInitVerifyWork(cwd, phase, raw) {
   if (!phase) {
-    error('phase required for init verify-work');
+    error('fase obrigatória para iniciar verificação de trabalho');
   }
 
   const config = loadConfig(cwd);

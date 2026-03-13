@@ -8,7 +8,7 @@ const { execSync } = require('child_process');
 
 // ─── Path helpers ────────────────────────────────────────────────────────────
 
-/** Normalize a relative path to always use forward slashes (cross-platform). */
+/** Normaliza caminho relativo para usar sempre barras dianteiras (multi-plataforma). */
 function toPosixPath(p) {
   return p.split(path.sep).join('/');
 }
@@ -51,7 +51,7 @@ function output(result, raw, rawValue) {
 }
 
 function error(message) {
-  process.stderr.write('Error: ' + message + '\n');
+  process.stderr.write('Erro: ' + message + '\n');
   process.exit(1);
 }
 
