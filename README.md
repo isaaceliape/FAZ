@@ -1,19 +1,20 @@
 <div align="center">
 
-# F.A.S.E.
+# F.A.S.E. v2.7.1
 
 ## Framework de Automação Sem Enrolação
 
-**🇧🇷 Tradução brasileira do [get-shit-done](https://github.com/gsd-build/get-shit-done) para Claude Code.**
+**🇧🇷 Tradução brasileira do [get-shit-done](https://github.com/gsd-build/get-shit-done) para Claude Code, OpenCode, Gemini e Codex.**
 
 Spec-driven development, context engineering e meta-prompting — agora em português brasileiro.
 
 [![Original](https://img.shields.io/badge/Original-get--shit--done-blue?style=for-the-badge&logo=github)](https://github.com/gsd-build/get-shit-done)
 [![npm version](https://img.shields.io/npm/v/fase-ai?style=for-the-badge&logo=npm&logoColor=white&color=CB3837)](https://www.npmjs.com/package/fase-ai)
 [![npm downloads](https://img.shields.io/npm/dm/fase-ai?style=for-the-badge&logo=npm&logoColor=white&color=CB3837)](https://www.npmjs.com/package/fase-ai)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 <br>
 
-**Funciona no Mac, Windows e Linux.**
+**Funciona no Mac, Windows e Linux. Node.js 14+**
 
 <br>
 
@@ -29,193 +30,286 @@ Spec-driven development, context engineering e meta-prompting — agora em portu
 
 ## 🤔 O Que É Isso?
 
-O **F.A.S.E.** é a versão em português brasileiro do **Get Shit Done (GSD)** — um sistema de meta-prompting e context engineering que faz o Claude Code funcionar de verdade.
+O **F.A.S.E.** é a versão em português brasileiro do **Get Shit Done (GSD)** — um sistema de meta-prompting e context engineering que faz os assistentes de IA (Claude Code, OpenCode, Gemini, Codex) funcionarem de verdade em projetos de software.
+
+Ele traz:
+- 🎯 **Spec-driven development** — descreva o que quer, o AI constrói
+- 🧠 **Context engineering avançado** — organize prompts para máximo proveito
+- 🔄 **Meta-prompting** — direcione o AI com precisão
+- 📊 **Workflow estruturado** — 12 agentes especializados
+- 💬 **32 comandos** em português brasileiro para um fluxo contínuo
 
 **Traduzimos:**
-- ✅ Agents (arquivos de prompt)
-- ✅ Comandos
-- ✅ Documentação
+- ✅ 12 agentes de prompt (pesquisadores, verificadores, planejadores, executores)
+- ✅ 32 comandos interativos
+- ✅ Documentação completa
 - ✅ Mensagens e outputs
 
 **Mantivemos em inglês:**
-- 🔧 Termos técnicos consagrados (ex: "context window", "checkpoint", "prompt")
-- 💻 Comandos e código
-- 📦 Nomes de pacotes npm
+- 🔧 Termos técnicos consolidados (ex: "context window", "checkpoint", "hooks")
+- 💻 Comandos de terminal e código-fonte
+- 📦 Nomes de pacotes npm e APIs
 
 ---
 
-## 🚀 Instalação
+## 🚀 Instalação Rápida
 
-Execute o instalador:
+### Instalação Interativa (Recomendado)
 
 ```bash
-# Instalação interativa (recomendado)
 npx fase-ai
-
-# Ou instale para um runtime específico
-npx fase-ai --opencode --global
 ```
 
-O instalador vai te perguntar:
-1. **Runtime** — Claude Code, OpenCode, Gemini, Codex, ou todos
-2. **Localização** — Global (todos os projetos) ou local (projeto atual)
+O instalador perguntará:
+1. **Runtime** — qual assistente você quer usar (Claude Code, OpenCode, Gemini, Codex, ou todos)
+2. **Escopo** — global (todos os projetos) ou local (apenas projeto atual)
 
-### Verificar Instalação
-
-- Claude Code / Gemini: `/fase-ajuda`
-- OpenCode: `/fase-ajuda`
-- Codex: `$fase-ajuda`
-
-### Opções de Instalação
+### Instalação Direta por Runtime
 
 ```bash
-# Claude Code global
+# Claude Code global (padrão)
 npx fase-ai --claude --global
 
 # OpenCode global
 npx fase-ai --opencode --global
 
+# Gemini global
+npx fase-ai --gemini --global
+
+# Codex global
+npx fase-ai --codex --global
+
 # Todos os runtimes
 npx fase-ai --all --global
 
-# Projeto local
+# Instalação local (apenas no projeto atual)
 npx fase-ai --claude --local
-
-# Ver ajuda
-npx fase-ai --help
 ```
-
-### Via Instalador
-
-O instalador vai te perguntar:
-1. **Runtime** — Claude Code, OpenCode, Gemini, Codex, ou todos
-2. **Localização** — Global (todos os projetos) ou local (projeto atual)
 
 ### Verificar Instalação
 
-- Claude Code / Gemini: `/fase-ajuda`
-- OpenCode: `/fase-ajuda`
-- Codex: `$fase-ajuda`
-
-### Uso do CLI
+Após instalar, teste o comando de ajuda:
 
 ```bash
-# Usar o comando fase diretamente (se instalado globalmente)
-fase-tools <comando> [args]
+# Claude Code / OpenCode / Gemini
+/fase-ajuda
 
-# Exemplos:
-fase-tools state json
-fase-tools resolve-model planner
-fase-tools find-phase 1
+# Codex
+$fase-ajuda
+```
+
+Se vir a mensagem de boas-vindas, FASE foi instalado com sucesso! ✅
+
+### Desinstalação
+
+```bash
+# Remove FASE do seu sistema
+npx fase-ai --uninstall
+```
+
+### Atualizar FASE
+
+```bash
+# Dentro do Claude Code / assistente
+/fase-atualizar
+```
+
+Ou via npm:
+
+```bash
+npm install -g fase-ai@latest
 ```
 
 ---
 
+## 🏗️ Arquitetura
+
+FASE é organizado em **4 camadas principais**:
+
+### 1. **Agentes (12 especializados)**
+Cada agente tem um propósito específico no ciclo de desenvolvimento:
+
+- **Planejadores**: `fase-planejador`, `fase-roadmapper`
+- **Pesquisadores**: `fase-pesquisador-fase`, `fase-pesquisador-projeto`, `fase-sintetizador-pesquisa`
+- **Executores**: `fase-executor`, `fase-mapeador-codigo`
+- **Verificadores**: `fase-verificador`, `fase-verificador-plano`, `fase-verificador-integracao`
+- **Especialistas**: `fase-depurador`, `fase-auditor-nyquist`
+
+### 2. **Comandos (32 operacionais)**
+Organize em categorias por função (planning, research, execution, verification, debug, utility)
+
+### 3. **Sistema de Hooks**
+Context monitoring para gerenciar estado e histórico automaticamente via integração nativa (settings.json)
+
+### 4. **Instalador Universal**
+Suporta múltiplos runtimes (Claude Code, OpenCode, Gemini, Codex) com detecção automática
+
 ## 📖 Por Que "F.A.S.E."?
 
-**F.A.S.E.** significa **Framework de Automação Sem Enrolação**.
+**F.A.S.E.** = **Framework de Automação Sem Enrolação**
 
-É um trocadilho com o conceito de "fases de desenvolvimento" — porque cada entrega é uma fase concluída, sem burocracia, sem enrolação.
+É um trocadilho com "fases de desenvolvimento" porque cada entrega é uma fase concluída, sem burocracia.
 
-A filosofia é a mesma do original:
-- Sem teatro enterprise (reunião que podia ser email)
-- Sem burocracia desnecessária
-- Sem story points, sprint ceremonies, retrospective
-- Só você, sua visão, e o Claude Code construindo
+A filosofia:
+- 🚫 Sem teatro enterprise (reunião que podia ser email)
+- 🚫 Sem burocracia desnecessária
+- 🚫 Sem story points, sprint ceremonies, retrospectives
+- ✅ Só você, sua visão, e o assistente de IA construindo
 
 ---
 
 ## 📋 Comandos Disponíveis
 
-**32 comandos em português brasileiro:**
+FASE oferece **32 comandos em português brasileiro**, organizados por função:
 
-### Core
+### 🎯 Core / Inicialização
 ```bash
-/fase-ajuda              # Mostra ajuda
-/fase-novo-projeto       # Inicia novo projeto
-/fase-planejar-fase      # Planeja uma fase
-/fase-executar-fase      # Executa uma fase
-/fase-configuracoes      # Ajusta configurações
+/fase-ajuda              # Mostra ajuda completa
+/fase-novo-projeto       # Inicializa novo projeto com FASE
+/fase-configuracoes      # Abre painel de configurações
 ```
 
-### Planning
+### 📐 Planning & Roadmapping
 ```bash
-/fase-novo-marco         # Cria novo marco/milestone
-/fase-adicionar-fase     # Adiciona uma fase
+/fase-novo-marco         # Cria novo milestone
+/fase-planejar-fase      # Detalha planejamento de uma fase
+/fase-adicionar-fase     # Adiciona fase ao roadmap
 /fase-inserir-fase       # Insere fase em posição específica
-/fase-remover-fase       # Remove uma fase
-/fase-pausar-trabalho    # Pausa o trabalho
-/fase-retomar-trabalho   # Retoma o trabalho
-/fase-progresso          # Mostra progresso atual
+/fase-remover-fase       # Remove fase do plano
+/fase-progresso          # Mostra status de conclusão
+/fase-roadmapper         # Cria roadmap visual (via agente)
 ```
 
-### Research
+### 🔍 Research & Analysis
 ```bash
-/fase-pesquisar-fase     # Pesquisa para uma fase
+/fase-pesquisar-fase     # Pesquisa contexto para uma fase
 /fase-mapear-codigo      # Mapeia codebase existente
-/fase-listar-premissas   # Lista premissas da fase
+/fase-listar-premissas   # Lista assunções da fase
+/fase-planejar-lacunas   # Identifica gaps no plano
 ```
 
-### Verification
+### ✅ Verification & Validation
 ```bash
-/fase-verificar-trabalho # Verifica trabalho feito
-/fase-validar-fase       # Valida uma fase
-/fase-auditar-marco      # Audita um marco
+/fase-verificar-trabalho # Valida código executado
+/fase-validar-fase       # Verifica completude de fase
+/fase-auditar-marco      # Audita um milestone
+/fase-checar-tarefas     # Revisa task list
 ```
 
-### Debug
+### 🔧 Execution & Development
 ```bash
-/fase-debug              # Debuga problemas
-/fase-checar-tarefas     # Checa lista de tarefas
-/fase-adicionar-tarefa   # Adiciona uma tarefa
-/fase-adicionar-testes   # Adiciona testes
+/fase-executar-fase      # Executa uma fase completa
+/fase-rapido             # Modo fast-track para tarefas simples
+/fase-adicionar-testes   # Gera testes para código
+/fase-adicionar-tarefa   # Adiciona task ao histórico
 ```
 
-### Utility
+### 🐛 Debug & Troubleshooting
 ```bash
-/fase-discutir-fase      # Discute uma fase
-/fase-completar-marco    # Completa um marco
-/fase-planejar-lacunas   # Planeja como fechar lacunas
-/fase-limpar             # Limpa arquivos temporários
+/fase-debug              # Diagnostica problemas
+/fase-depurador          # Invoca agente debugger (via agente)
+/fase-discutir-fase      # Abre discussão estruturada
+```
+
+### 🛠️ Maintenance & Administration
+```bash
+/fase-pausar-trabalho    # Pausa execução
+/fase-retomar-trabalho   # Continua de onde parou
+/fase-completar-marco    # Marca milestone como concluído
+/fase-reaplicar-patches  # Reaplica correções versionadas
+/fase-definir-perfil     # Configura perfil de modelo/agente
+/fase-limpar             # Remove arquivos temporários
 /fase-saude              # Checkup de saúde do projeto
-/fase-atualizar          # Atualiza o F.A.S.E.
-/fase-rapido             # Modo rápido para tarefas simples
-/fase-reaplicar-patches  # Reaplica patches
-/fase-definir-perfil     # Define perfil de modelo
+/fase-atualizar          # Atualiza FASE para versão latest
 ```
 
-**Veja a lista completa:** [📚 COMANDOS.md](docs/COMANDOS.md)
+**→ Documentação completa:** [📚 COMANDOS.md](docs/COMANDOS.md)
 
 ---
 
 ## 🎯 Pra Quem É Isso?
 
-- **Devs brasileiros** que querem usar o GSD em português
+### Perfil Ideal
 - **Solo devs** que não querem fingir que são uma empresa de 50 pessoas
-- **Pessoas criativas** que querem construir coisas que funcionam
-- **Quem cansou** de descrever algo pro Claude e receber lixo inconsistente
+- **Devs brasileiros** que preferem trabalhar em português
+- **Pessoas criativas** que querem construir coisas que *funcionam*
+- **Quem cansou** de descrever algo e receber respostas inconsistentes do AI
+
+### Casos de Uso
+✅ Projetos pessoais com requisitos bem definidos
+✅ MVPs que precisam ir para produção rápido
+✅ Refatorações estruturadas de legacies
+✅ Automation scripts e ferramentas internas
+✅ Prototipagem rápida de ideias
+✅ Aprendizado de novas tecnologias/linguagens
+
+### O Que FASE Não É
+❌ Substituto para design de sistema em time
+❌ Solução para requisitos vagos ou mal definidos
+❌ Ferramenta para escrever documentação de produto
+❌ Gerenciador de sprint/kanban (use Jira/Linear para isso)
 
 ---
 
-## 📚 Documentação
+## 📚 Documentação Completa
 
-- [📖 Guia do Usuário](docs/USER-GUIDE.md)
-- [📝 Guia de Tradução](TRANSLATION_GUIDE.md)
-- [🔧 Comandos Disponíveis](docs/COMANDOS.md)
-- [📊 Progresso do Projeto](PROGRESSO.md)
-- [🤔 FAQ](docs/FAQ.md)
+### Guias Essenciais
+- [📖 Guia do Usuário](docs/guia-do-usuario.md) — Como usar FASE passo-a-passo
+- [🔧 Todos os Comandos](docs/COMANDOS.md) — Referência completa com exemplos
+- [📊 Agentes Disponíveis](AGENTS.md) — Como cada agente funciona
+- [🤔 FAQ](docs/FAQ.md) — Perguntas frequentes
+
+### Para Contribuidores
+- [🤝 Como Contribuir](CONTRIBUTING.md) — Instruções para contribuições
+- [📝 Guia de Tradução](TRANSLATION_GUIDE.md) — Se quer traduzir para outro idioma
+- [🔌 System Hooks](docs/HOOKS.md) — Como adicionar automações
+
+### Informações do Projeto
+- [📊 Histórico de Mudanças](CHANGELOG.md) — Todas as versões
+- [👥 Maintainers](MAINTAINERS.md) — Quem cuida do projeto
+- [📈 Progresso](PROGRESSO.md) — Status atual de desenvolvimento
 
 ---
 
-## 🙏 Créditos
+## ✨ Recursos Principais
 
-Este projeto é uma **tradução comunitária** do trabalho original do **TÂCHES**.
+### 🎯 Spec-Driven Development
+Trabalhe com especificações claras e deixe o AI transformar em código funcional. Cada fase é uma entrega concreta.
 
-- **Original:** [gsd-build/get-shit-done](https://github.com/gsd-build/get-shit-done)
+### 🧠 Context Engineering
+FASE organiza automaticamente o contexto da sua sessão para que o AI sempre tenha as informações certas no local certo.
+
+### 🔄 Ciclo de Vida Estruturado
+**Pesquisa → Planejamento → Execução → Verificação → Iteração**
+
+Cada etapa tem seu agente especializado.
+
+### 📋 Rastreamento de Estado
+Histórico automático de fases, tarefas e checkpoints. Retome trabalho de onde parou, semanas depois.
+
+### 🔌 Extensível
+Crie seus próprios hooks e customize o comportamento via `settings.json` nativa.
+
+### 🌍 Multi-Runtime
+Funciona com:
+- **Claude Code** (Anthropic)
+- **OpenCode** (OpenAI)
+- **Gemini Code** (Google)
+- **Codex** (Microsoft)
+
+---
+
+## 🙏 Créditos & Origem
+
+**F.A.S.E.** é uma **tradução comunitária em português brasileiro** do projeto original:
+
+- **Original:** [gsd-build/get-shit-done](https://github.com/gsd-build/get-shit-done) por TÂCHES
+- **Tradução & Manutenção:** Isaac Eliape
 - **Licença:** MIT (mesma do original)
-- **Criador do GSD:** TÂCHES
 
-Sem o trabalho incrível deles, isso não existiria. 🙌
+Sem o trabalho incrível da comunidade GSD, isso não existiria. 🙌
+
+**Compatibilidade com GSD:** FASE mantém total compatibilidade com GSD — todos os agents e comandos usam a mesma arquitetura subjacente, apenas traduzidos para português.
 
 ---
 
@@ -231,16 +325,59 @@ Quer ajudar a traduzir ou melhorar o F.A.S.E.?
 
 ---
 
-## 📞 Comunidade
+## ⚡ Quick Start
 
-- **GitHub Issues:** [Reportar bugs / sugerir melhorias](https://github.com/isaaceliape/FASE/issues)
+1. **Instale FASE:**
+   ```bash
+   npx fase-ai
+   ```
+
+2. **Abra seu IDE e inicie um novo projeto:**
+   ```bash
+   /fase-novo-projeto
+   ```
+
+3. **Descreva o que quer construir:**
+   - Use `/fase-planejar-fase` para quebrar em fases
+   - Cada fase é uma entrega concreta
+
+4. **Execute as fases:**
+   ```bash
+   /fase-executar-fase
+   ```
+
+5. **Verifique o trabalho:**
+   ```bash
+   /fase-verificar-trabalho
+   ```
+
+Para mais detalhes, veja [📖 Guia do Usuário](docs/guia-do-usuario.md).
+
+---
+
+## 📞 Comunidade & Suporte
+
+### Reportar Issues
+- 🐛 [Bugs](https://github.com/isaaceliape/FASE/issues/new?labels=bug)
+- ✨ [Sugestões](https://github.com/isaaceliape/FASE/issues/new?labels=enhancement)
+- 🌐 [Traduções](https://github.com/isaaceliape/FASE/issues/new?labels=traducao)
+
+### Discussões
+- 💬 [Discussions no GitHub](https://github.com/isaaceliape/FASE/discussions)
+- 🎓 Compartilhe workflows, dicas e best practices
 
 ---
 
 <div align="center">
 
-**"Se você sabe claramente o que quer, isso VAI construir pra você. Sem BS."**
+### 💡 Filosofia FASE
+
+**"Se você sabe claramente o que quer, isso VAI construir pra você. Sem burocracia, sem enrolação."**
+
+---
 
 Feito com 🇧🇷 e 💙 para a comunidade brasileira de devs.
+
+[⭐ Dê uma star se FASE foi útil!](https://github.com/isaaceliape/FASE)
 
 </div>
