@@ -38,14 +38,29 @@ jobs:
           cd www/docs
           npm install
           npm run build
+          # Copy built docs to www/docs-build for deployment
+          mkdir -p ../docs-build
+          cp -r dist/* ../docs-build/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
+      - name: Create deployment directory
+        run: |
+          mkdir -p deploy
+          # Copy landing page
+          cp www/index.html deploy/
+          # Copy other www assets
+          cp -r www/*.png deploy/ 2>/dev/null || true
+          cp -r www/fonts deploy/ 2>/dev/null || true
+          # Copy built docs to /docs subdirectory
+          mkdir -p deploy/docs
+          cp -r www/docs-build/* deploy/docs/
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'www'
+          path: 'deploy'
 
       - name: Deploy to GitHub Pages
         id: deployment
