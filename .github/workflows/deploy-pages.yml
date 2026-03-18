@@ -34,11 +34,11 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Prepare Documentation
-        run: |
-          # Copy markdown documentation to build directory
-          mkdir -p www/docs-build
-          cp -r docs/* www/docs-build/ 2>/dev/null || true
+      - name: Install dependencies
+        run: npm install marked
+
+      - name: Build documentation
+        run: node build-docs.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -46,67 +46,14 @@ jobs:
       - name: Create deployment directory
         run: |
           mkdir -p deploy
-          # Copy landing page
+          # Copy landing page and assets
           cp www/index.html deploy/
-          # Copy other www assets
           cp -r www/*.png deploy/ 2>/dev/null || true
           cp -r www/fonts deploy/ 2>/dev/null || true
-          # Copy built docs to /docs subdirectory
+          # Copy generated HTML docs to /docs subdirectory
           mkdir -p deploy/docs
-          cp -r www/docs-build/* deploy/docs/
-
-      - name: Create docs index
-        run: |
-          cat > deploy/docs/index.html << 'EOF'
-          <!DOCTYPE html>
-          <html lang="pt-BR">
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Documentação FASE</title>
-            <style>
-              * { margin: 0; padding: 0; box-sizing: border-box; }
-              body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; line-height: 1.6; color: #333; background: #f5f5f5; }
-              .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-              h1 { color: #0066cc; margin-bottom: 10px; }
-              .subtitle { color: #666; margin-bottom: 40px; font-size: 18px; }
-              .section { background: white; padding: 30px; margin-bottom: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-              .section h2 { color: #0066cc; font-size: 20px; margin-bottom: 20px; }
-              ul { list-style: none; }
-              li { margin-bottom: 12px; }
-              a { color: #0066cc; text-decoration: none; font-weight: 500; }
-              a:hover { text-decoration: underline; }
-              .readme-link { display: inline-block; background: #0066cc; color: white; padding: 10px 20px; border-radius: 4px; text-decoration: none; margin-bottom: 30px; }
-              .readme-link:hover { background: #0052a3; text-decoration: none; }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <h1>📚 Documentação do FASE</h1>
-              <p class="subtitle">Framework de Automação Sem Enrolação</p>
-
-              <a href="README.md" class="readme-link">📖 Leia o guia principal</a>
-
-              <div class="section">
-                <h2>📄 Documentos Disponíveis</h2>
-                <ul>
-                  <li><a href="README.md">README.md</a> - Índice principal da documentação</li>
-                  <li><a href="COMANDOS.md">COMANDOS.md</a> - Lista de todos os 32 comandos</li>
-                  <li><a href="guia-do-usuario.md">guia-do-usuario.md</a> - Guia completo de uso</li>
-                  <li><a href="HOOKS.md">HOOKS.md</a> - Documentação de Git hooks</li>
-                  <li><a href="NPM-REGISTRY.md">NPM-REGISTRY.md</a> - Configuração do npm registry</li>
-                  <li><a href="context-monitor.md">context-monitor.md</a> - Monitoramento de contexto</li>
-                </ul>
-              </div>
-
-              <div class="section">
-                <h2>💻 Ver no GitHub</h2>
-                <p><a href="https://github.com/isaaceliape/FASE">isaaceliape/FASE</a> - Repositório oficial do projeto</p>
-              </div>
-            </div>
-          </body>
-          </html>
-          EOF
+          cp -r docs/*.html deploy/docs/
+          cp -r docs/*.md deploy/docs/ 2>/dev/null || true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
