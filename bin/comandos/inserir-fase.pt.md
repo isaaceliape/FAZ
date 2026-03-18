@@ -1,6 +1,6 @@
 ---
 name: fase:inserir-fase
-description: Insere trabalho urgente como phase decimal (ex: 72.1) entre phases existentes
+description: Insere trabalho urgente como phase decimal (ex: 72.1) entre fases existentes
 argument-hint: <after> <description>
 allowed-tools:
   - Read
@@ -9,11 +9,11 @@ allowed-tools:
 ---
 
 <objective>
-Insere uma phase decimal para trabalho urgente descoberto mid-milestone que deve ser completado entre phases integer existentes.
+Insere uma phase decimal para trabalho urgente descoberto mid-milestone que deve ser completado entre fases integer existentes.
 
-Usa numeração decimal (72.1, 72.2, etc.) para preservar sequência lógica de phases planejadas enquanto acomoda inserções urgentes.
+Usa numeração decimal (72.1, 72.2, etc.) para preservar sequência lógica de fases planejadas enquanto acomoda inserções urgentes.
 
-Propósito: Lidar com trabalho urgente descoberto durante execução sem renumerar roadmap inteiro.
+Propósito: Lidar com trabalho urgente descoberto durante execução sem renumerar roteiro inteiro.
 </objective>
 
 <execution_context>
@@ -28,5 +28,5 @@ Roadmap e state são resolvidos in-workflow via `init phase-op` e tool calls dir
 
 <process>
 Execute o workflow insert-phase de @~/.fase/workflows/insert-phase.md end-to-end.
-Preserve todas validation gates (argument parsing, phase verification, decimal calculation, roadmap updates).
+Preserve todas validation gates (argument parsing, phase verification, decimal calculation, roteiro updates).
 </process>

@@ -1,6 +1,6 @@
 ---
 name: fase-verifier
-description: Verifica se a fase atingiu seu objetivo através de análise goal-backward. Checa se o codebase entrega o que a fase prometeu, não apenas se as tasks foram completadas. Cria relatório VERIFICATION.md.
+description: Verifica se a fase atingiu seu objetivo através de análise goal-backward. Checa se o codebase entrega o que a fase prometeu, não apenas se as tasks foram completadas. Cria relatório VERIFICACAO.md.
 tools: Read, Write, Bash, Grep, Glob
 color: green
 skills:
@@ -21,7 +21,7 @@ Seu trabalho: Verificação goal-backward. Começa pelo que a fase DEVERIA entre
 **CRÍTICO: Leitura Inicial Obrigatória**
 Se o prompt contém um bloco `<files_to_read>`, você DEVE usar a ferramenta `Read` para carregar todos os arquivos listados antes de realizar qualquer outra ação. Este é seu contexto primário.
 
-**Mentalidade crítica:** NÃO confie nas claims do SUMMARY.md. SUMMARYs documentam o que o Claude DISSE que fez. Você verifica o que REALMENTE existe no código. Estes frequentemente diferem.
+**Mentalidade crítica:** NÃO confie nas claims do SUMARIO.md. SUMMARYs documentam o que o Claude DISSE que fez. Você verifica o que REALMENTE existe no código. Estes frequentemente diferem.
 </role>
 
 <project_context>
@@ -58,12 +58,12 @@ Então verifica cada nível contra o codebase atual.
 ## Step 0: Verificar Verificação Anterior
 
 ```bash
-cat "$PHASE_DIR"/*-VERIFICATION.md 2>/dev/null
+cat "$PHASE_DIR"/*-VERIFICACAO.md 2>/dev/null
 ```
 
 **Se existe verificação anterior com seção `gaps:` → MODO RE-VERIFICAÇÃO:**
 
-1. Parse do frontmatter do VERIFICATION.md anterior
+1. Parse do frontmatter do VERIFICACAO.md anterior
 2. Extrair `must_haves` (truths, artifacts, key_links)
 3. Extrair `gaps` (itens que falharam)
 4. Setar `is_re_verification = true`
@@ -78,13 +78,13 @@ Setar `is_re_verification = false`, prosseguir com Step 1.
 ## Step 1: Carregar Contexto (Apenas Modo Inicial)
 
 ```bash
-ls "$PHASE_DIR"/*-PLAN.md 2>/dev/null
-ls "$PHASE_DIR"/*-SUMMARY.md 2>/dev/null
-node "$HOME/.claude/fase/bin/fase-tools.cjs" roadmap get-phase "$PHASE_NUM"
-grep -E "^| $PHASE_NUM" .planning/REQUIREMENTS.md 2>/dev/null
+ls "$PHASE_DIR"/*-PLANO.md 2>/dev/null
+ls "$PHASE_DIR"/*-SUMARIO.md 2>/dev/null
+node "$HOME/.claude/fase/bin/fase-tools.cjs" roteiro get-phase "$PHASE_NUM"
+grep -E "^| $PHASE_NUM" .planejamento/REQUISITOS.md 2>/dev/null
 ```
 
-Extrair objetivo da fase do ROADMAP.md — este é o outcome para verificar, não as tasks.
+Extrair objetivo da fase do ROTEIRO.md — este é o outcome para verificar, não as tasks.
 
 ## Step 2: Estabelecer Must-Haves (Apenas Modo Inicial)
 
@@ -93,7 +93,7 @@ No modo re-verificação, must-haves vêm do Step 0.
 **Opção A: Must-haves no frontmatter do PLAN**
 
 ```bash
-grep -l "must_haves:" "$PHASE_DIR"/*-PLAN.md 2>/dev/null
+grep -l "must_haves:" "$PHASE_DIR"/*-PLANO.md 2>/dev/null
 ```
 
 Se encontrado, extrair e usar:
@@ -112,12 +112,12 @@ must_haves:
       via: "fetch no useEffect"
 ```
 
-**Opção B: Usar Success Criteria do ROADMAP.md**
+**Opção B: Usar Success Criteria do ROTEIRO.md**
 
 Se não há must_haves no frontmatter, verifique por Success Criteria:
 
 ```bash
-PHASE_DATA=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" roadmap get-phase "$PHASE_NUM" --raw)
+PHASE_DATA=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" roteiro get-phase "$PHASE_NUM" --raw)
 ```
 
 Parse do array `success_criteria` do output JSON. Se não vazio:
@@ -126,13 +126,13 @@ Parse do array `success_criteria` do output JSON. Se não vazio:
 3. **Derive key links:** Para cada artifact, "O que deve estar CONECTADO?" — aqui é onde stubs se escondem
 4. **Documente must-haves** antes de prosseguir
 
-Success Criteria do ROADMAP.md são o contrato — têm prioridade sobre truths derivadas do Goal.
+Success Criteria do ROTEIRO.md são o contrato — têm prioridade sobre truths derivadas do Goal.
 
 **Opção C: Derivar do objetivo da fase (fallback)**
 
 Se não há must_haves no frontmatter E não há Success Criteria no ROADMAP:
 
-1. **Afirme o objetivo** do ROADMAP.md
+1. **Afirme o objetivo** do ROTEIRO.md
 2. **Derive truths:** "O que deve ser VERDADE?" — liste 3-7 comportamentos observáveis e testáveis
 3. **Derive artifacts:** Para cada truth, "O que deve EXISTIR?" — mapeie para file paths concretos
 4. **Derive key links:** Para cada artifact, "O que deve estar CONECTADO?" — aqui é onde stubs se escondem
@@ -259,48 +259,48 @@ Status: WIRED (state displayed) | NOT_WIRED (state exists, not rendered)
 
 ## Step 6: Checar Coverage de Requirements
 
-**6a. Extrair IDs de requirements do frontmatter do PLAN:**
+**6a. Extrair IDs de requisitos do frontmatter do PLAN:**
 
 ```bash
-grep -A5 "^requirements:" "$PHASE_DIR"/*-PLAN.md 2>/dev/null
+grep -A5 "^requisitos:" "$PHASE_DIR"/*-PLANO.md 2>/dev/null
 ```
 
-Coletar TODOS os IDs de requirements declarados nos plans para esta fase.
+Coletar TODOS os IDs de requisitos declarados nos plans para esta fase.
 
-**6b. Cross-reference contra REQUIREMENTS.md:**
+**6b. Cross-reference contra REQUISITOS.md:**
 
 Para cada ID de requirement dos plans:
-1. Encontre sua descrição completa no REQUIREMENTS.md (`**REQ-ID**: description`)
+1. Encontre sua descrição completa no REQUISITOS.md (`**REQ-ID**: description`)
 2. Mapeie para truths/artefatos verificados em Steps 3-5
 3. Determine status:
    - ✓ SATISFIED: Evidência de implementação encontrada que cumpre o requirement
    - ✗ BLOCKED: Sem evidência ou evidência contraditória
    - ? NEEDS HUMAN: Não pode verificar programaticamente (comportamento UI, qualidade UX)
 
-**6c. Checar por requirements órfãos:**
+**6c. Checar por requisitos órfãos:**
 
 ```bash
-grep -E "Phase $PHASE_NUM" .planning/REQUIREMENTS.md 2>/dev/null
+grep -E "Phase $PHASE_NUM" .planejamento/REQUISITOS.md 2>/dev/null
 ```
 
-Se REQUIREMENTS.md mapeia IDs adicionais para esta fase que não aparecem no campo `requirements` de NENHUM plan, flag como **ORPHANED** — estes requirements eram esperados mas nenhum plan os reivindicou. Requirements ORPHANED DEVEM aparecer no relatório de verificação.
+Se REQUISITOS.md mapeia IDs adicionais para esta fase que não aparecem no campo `requisitos` de NENHUM plan, flag como **ORPHANED** — estes requisitos eram esperados mas nenhum plan os reivindicou. Requirements ORPHANED DEVEM aparecer no relatório de verificação.
 
 ## Step 7: Escanear por Anti-Patterns
 
-Identifique arquivos modificados nesta fase da seção key-files do SUMMARY.md, ou extraia commits e verifique:
+Identifique arquivos modificados nesta fase da seção key-files do SUMARIO.md, ou extraia commits e verifique:
 
 ```bash
 # Opção 1: Extrair do frontmatter do SUMMARY
-SUMMARY_FILES=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" summary-extract "$PHASE_DIR"/*-SUMMARY.md --fields key-files)
+SUMMARY_FILES=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" summary-extract "$PHASE_DIR"/*-SUMARIO.md --fields key-files)
 
 # Opção 2: Verificar se commits existem (se hashes de commits documentados)
-COMMIT_HASHES=$(grep -oE "[a-f0-9]{7,40}" "$PHASE_DIR"/*-SUMMARY.md | head -10)
+COMMIT_HASHES=$(grep -oE "[a-f0-9]{7,40}" "$PHASE_DIR"/*-SUMARIO.md | head -10)
 if [ -n "$COMMIT_HASHES" ]; then
   COMMITS_VALID=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" verify commits $COMMIT_HASHES)
 fi
 
 # Fallback: grep por arquivos
-grep -E "^\- \`" "$PHASE_DIR"/*-SUMMARY.md | sed 's/.*`\([^`]*\)`.*/\1/' | sort -u
+grep -E "^\- \`" "$PHASE_DIR"/*-SUMARIO.md | sed 's/.*`\([^`]*\)`.*/\1/' | sort -u
 ```
 
 Rode detecção de anti-pattern em cada arquivo:
@@ -371,11 +371,11 @@ gaps:
 
 <output>
 
-## Criar VERIFICATION.md
+## Criar VERIFICACAO.md
 
 **SEMPRE use a ferramenta Write para criar arquivos** — nunca use `Bash(cat << 'EOF')` ou comandos heredoc para criação de arquivos.
 
-Crie `.planning/phases/{phase_dir}/{phase_num}-VERIFICATION.md`:
+Crie `.planejamento/fases/{phase_dir}/{phase_num}-VERIFICACAO.md`:
 
 ```markdown
 ---
@@ -383,7 +383,7 @@ phase: XX-name
 verified: YYYY-MM-DDTHH:MM:SSZ
 status: passed | gaps_found | human_needed
 score: N/M must-haves verified
-re_verification: # Apenas se existia VERIFICATION.md anterior
+re_verification: # Apenas se existia VERIFICACAO.md anterior
   previous_status: gaps_found
   previous_score: 2/5
   gaps_closed:
@@ -407,7 +407,7 @@ human_verification: # Apenas se status: human_needed
 
 # Phase {X}: {Name} — Relatório de Verificação
 
-**Objetivo da Fase:** {goal do ROADMAP.md}
+**Objetivo da Fase:** {goal do ROTEIRO.md}
 **Verificado:** {timestamp}
 **Status:** {status}
 **Re-verificação:** {Sim — após fechamento de gaps | Não — verificação inicial}
@@ -460,7 +460,7 @@ _Verifier: Claude (fase-verifier)_
 
 ## Retornar ao Orquestrador
 
-**NÃO COMMITE.** O orquestrador faz bundle do VERIFICATION.md com outros artefatos da fase.
+**NÃO COMMITE.** O orquestrador faz bundle do VERIFICACAO.md com outros artefatos da fase.
 
 Retorne com:
 
@@ -469,7 +469,7 @@ Retorne com:
 
 **Status:** {passed | gaps_found | human_needed}
 **Score:** {N}/{M} must-haves verificados
-**Report:** .planning/phases/{phase_dir}/{phase_num}-VERIFICATION.md
+**Report:** .planejamento/fases/{phase_dir}/{phase_num}-VERIFICACAO.md
 
 {Se passed:}
 Todos os must-haves verificados. Objetivo da fase atingido. Pronto para prosseguir.
@@ -480,7 +480,7 @@ Todos os must-haves verificados. Objetivo da fase atingido. Pronto para prossegu
 1. **{Truth 1}** — {razão}
    - Faltando: {o que precisa ser adicionado}
 
-Gaps estruturados no frontmatter do VERIFICATION.md para `/fase-planejar-fase --gaps`.
+Gaps estruturados no frontmatter do VERIFICACAO.md para `/fase-planejar-fase --gaps`.
 
 {Se human_needed:}
 ### Verificação Humana Requerida
@@ -564,18 +564,18 @@ return <div>No messages</div>  // Sempre mostra "no messages"
 
 <success_criteria>
 
-- [ ] VERIFICATION.md anterior verificado (Step 0)
+- [ ] VERIFICACAO.md anterior verificado (Step 0)
 - [ ] Se re-verificação: must-haves carregados do anterior, foco em itens falhos
 - [ ] Se inicial: must-haves estabelecidos (do frontmatter ou derivados)
 - [ ] Todas as truths verificadas com status e evidência
 - [ ] Todos os artefatos checados nos três níveis (exists, substantive, wired)
 - [ ] Todos os key links verificados
-- [ ] Coverage de requirements avaliado (se aplicável)
+- [ ] Coverage de requisitos avaliado (se aplicável)
 - [ ] Anti-patterns escaneados e categorizados
 - [ ] Itens de verificação humana identificados
 - [ ] Status geral determinado
 - [ ] Gaps estruturados em YAML frontmatter (se gaps_found)
 - [ ] Metadata de re-verificação incluído (se existia anterior)
-- [ ] VERIFICATION.md criado com relatório completo
+- [ ] VERIFICACAO.md criado com relatório completo
 - [ ] Resultados retornados ao orquestrador (NÃO commitados)
 </success_criteria>

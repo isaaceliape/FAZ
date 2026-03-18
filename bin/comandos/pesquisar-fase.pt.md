@@ -9,16 +9,16 @@ allowed-tools:
 ---
 
 <objective>
-Pesquisar como implementar uma fase. Spawna agent faz-phase-researcher com contexto da fase.
+Pesquisar como implementar uma fase. Spawna agent faz-phase-pesquisador com contexto da fase.
 
-**Nota:** Este é um comando de research standalone. Para a maioria dos workflows, use `/fase-planejar-fase` que integra research automaticamente.
+**Nota:** Este é um comando de pesquisa standalone. Para a maioria dos workflows, use `/fase-planejar-fase` que integra pesquisa automaticamente.
 
 **Use este comando quando:**
 - Quer pesquisar sem planejar ainda
-- Quer re-research após planejamento estar completo
+- Quer re-pesquisa após planejamento estar completo
 - Precisa investigar antes de decidir se uma fase é viável
 
-**Papel do orquestrador:** Parsear fase, validar contra roadmap, checar research existente, coletar contexto, spawnar agent researcher, apresentar resultados.
+**Papel do orquestrador:** Parsear fase, validar contra roteiro, checar pesquisa existente, coletar contexto, spawnar agent pesquisador, apresentar resultados.
 
 **Por que subagent:** Research queima contexto rápido (WebSearch, queries Context7, verificação de sources). Contexto fresh de 200k para investigação. Contexto principal permanece enxuto para interação com usuário.
 </objective>
@@ -38,17 +38,17 @@ INIT=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" init phase-op "$ARGUMENTS")
 if [[ "$INIT" == @file:* ]]; then INIT=$(cat "${INIT#@file:}"); fi
 ```
 
-Extraia do init JSON: `phase_dir`, `phase_number`, `phase_name`, `phase_found`, `commit_docs`, `has_research`, `state_path`, `requirements_path`, `context_path`, `research_path`.
+Extraia do init JSON: `phase_dir`, `phase_number`, `phase_name`, `phase_found`, `commit_docs`, `has_pesquisa`, `state_path`, `requisitos_path`, `context_path`, `pesquisa_path`.
 
-Resolva modelo do researcher:
+Resolva modelo do pesquisador:
 ```bash
-RESEARCHER_MODEL=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" resolve-model faz-phase-researcher --raw)
+RESEARCHER_MODEL=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" resolve-model faz-phase-pesquisador --raw)
 ```
 
 ## 1. Validar Fase
 
 ```bash
-PHASE_INFO=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" roadmap get-phase "${phase_number}")
+PHASE_INFO=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" roteiro get-phase "${phase_number}")
 ```
 
 **Se `found` é false:** Erro e exit. **Se `found` é true:** Extraia `phase_number`, `phase_name`, `goal` do JSON.
@@ -56,30 +56,30 @@ PHASE_INFO=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" roadmap get-phase "${p
 ## 2. Checar Research Existente
 
 ```bash
-ls .planning/phases/${PHASE}-*/RESEARCH.md 2>/dev/null
+ls .planejamento/fases/${PHASE}-*/RESEARCH.md 2>/dev/null
 ```
 
-**Se existe:** Ofereça: 1) Atualizar research, 2) Ver existente, 3) Pular. Aguarde resposta.
+**Se existe:** Ofereça: 1) Atualizar pesquisa, 2) Ver existente, 3) Pular. Aguarde resposta.
 
 **Se não existe:** Continue.
 
 ## 3. Coletar Contexto da Fase
 
 Use paths do INIT (não inline conteúdos de arquivos no contexto do orquestrador):
-- `requirements_path`
+- `requisitos_path`
 - `context_path`
 - `state_path`
 
-Apresente sumário com descrição da fase e quais arquivos o researcher vai carregar.
+Apresente sumário com descrição da fase e quais arquivos o pesquisador vai carregar.
 
-## 4. Spawnar Agent faz-phase-researcher
+## 4. Spawnar Agent faz-phase-pesquisador
 
-Modos de research: ecosystem (padrão), feasibility, implementation, comparison.
+Modos de pesquisa: ecosystem (padrão), feasibility, implementation, comparison.
 
 ```markdown
-<research_type>
+<pesquisa_type>
 Phase Research — investigando COMO implementar uma fase específica bem.
-</research_type>
+</pesquisa_type>
 
 <key_insight>
 A questão NÃO é "qual biblioteca devo usar?"
@@ -100,9 +100,9 @@ Modo: ecosystem
 </objective>
 
 <files_to_read>
-@.planning/ROADMAP.md
-@.planning/REQUIREMENTS.md
-@.planning/STATE.md
+@.planejamento/ROTEIRO.md
+@.planejamento/REQUISITOS.md
+@.planejamento/ESTADO.md
 </files_to_read>
 ```
 
@@ -118,15 +118,15 @@ Modo: ecosystem
 ### 4b. Spawn com Contexto Enxuto
 
 Carregue apenas arquivos essenciais no `<files_to_read>`:
-- ROADMAP.md (goal da fase)
-- REQUIREMENTS.md (requisitos)
-- STATE.md (decisões, tech stack)
+- ROTEIRO.md (goal da fase)
+- REQUISITOS.md (requisitos)
+- ESTADO.md (decisões, tech stack)
 
-NÃO carregue código-fonte completo (o researcher explora conforme necessário).
+NÃO carregue código-fonte completo (o pesquisador explora conforme necessário).
 
 ## 5. Aguardar Resultados
 
-O researcher retorna:
+O pesquisador retorna:
 - **RESEARCH.md estruturado** (salvo na pasta da fase)
 - **Resumo para orquestrador** (2-3 parágrafos)
 
@@ -135,8 +135,8 @@ O researcher retorna:
 ```markdown
 ## Research Completo para Fase {phase_number}
 
-**Arquivo:** `.planning/phases/{phase_dir}/RESEARCH.md`
-**Modo:** {research_mode}
+**Arquivo:** `.planejamento/fases/{phase_dir}/RESEARCH.md`
+**Modo:** {pesquisa_mode}
 
 ### Resumo
 {2-3 parágrafos cobrindo stack padrão, padrões recomendados, armadilhas comuns}
@@ -146,24 +146,24 @@ O researcher retorna:
 
 ### Próximos Passos
 - Para planejamento: `/fase-planejar-fase {phase_number}`
-- Para ver research completo: @.planning/phases/{phase_dir}/RESEARCH.md
+- Para ver pesquisa completo: @.planejamento/fases/{phase_dir}/RESEARCH.md
 ```
 
 ## 7. Roteamento
 
-Após research:
+Após pesquisa:
 - **Para planejar:** `/fase-planejar-fase {phase_number}` (integra RESEARCH.md automaticamente)
 - **Para revisar:** User examina RESEARCH.md
-- **Para re-research:** Execute `/fase-pesquisar-fase {phase_number}` novamente
+- **Para re-pesquisa:** Execute `/fase-pesquisar-fase {phase_number}` novamente
 
-**NÃO commite** — o orquestrador principal (plan-phase ou research-phase) faz bundle dos artefatos.
+**NÃO commite** — o orquestrador principal (plan-phase ou pesquisa-phase) faz bundle dos artefatos.
 
 </process>
 
 <success_criteria>
-- [ ] Fase validada contra roadmap
+- [ ] Fase validada contra roteiro
 - [ ] Research existente verificado (se houver)
-- [ ] Agent researcher spawnado com contexto apropriado
+- [ ] Agent pesquisador spawnado com contexto apropriado
 - [ ] RESEARCH.md criado na pasta da fase
 - [ ] Resultados apresentados ao usuário
 - [ ] Roteamento claro para próximo passo

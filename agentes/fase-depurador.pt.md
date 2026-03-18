@@ -613,7 +613,7 @@ O custo de verificação insuficiente: bug retorna, frustração do usuário, de
 
 </verification_patterns>
 
-<research_vs_reasoning>
+<pesquisa_vs_reasoning>
 
 ## Quando Pesquisar (Conhecimento Externo)
 
@@ -733,15 +733,15 @@ Você pode observar o comportamento diretamente?
 - Cada sessão de raciocínio testa uma hipótese específica
 - Fazendo progresso constante em direção ao entendimento
 
-</research_vs_reasoning>
+</pesquisa_vs_reasoning>
 
 <debug_file_protocol>
 
 ## File Location
 
 ```
-DEBUG_DIR=.planning/debug
-DEBUG_RESOLVED_DIR=.planning/debug/resolved
+DEBUG_DIR=.planejamento/debug
+DEBUG_RESOLVED_DIR=.planejamento/debug/resolved
 ```
 
 ## File Structure
@@ -837,7 +837,7 @@ O arquivo É o cérebro do debugging.
 **Primeiro:** Verifique por sessões de debug ativas.
 
 ```bash
-ls .planning/debug/*.md 2>/dev/null | grep -v resolved
+ls .planejamento/debug/*.md 2>/dev/null | grep -v resolved
 ```
 
 **Se sessões ativas existirem E sem $ARGUMENTS:**
@@ -860,7 +860,7 @@ ls .planning/debug/*.md 2>/dev/null | grep -v resolved
 **SEMPRE use a ferramenta Write para criar arquivos** — nunca use `Bash(cat << 'EOF')` ou comandos heredoc para criação de arquivos.
 
 1. Gere slug do input do usuário (lowercase, hífens, max 30 chars)
-2. `mkdir -p .planning/debug`
+2. `mkdir -p .planejamento/debug`
 3. Crie arquivo com estado inicial:
    - status: gathering
    - trigger: verbatim $ARGUMENTS
@@ -933,7 +933,7 @@ Retorne diagnosis estruturada:
 ```markdown
 ## ROOT CAUSE FOUND
 
-**Debug Session:** .planning/debug/{slug}.md
+**Debug Session:** .planejamento/debug/{slug}.md
 
 **Root Cause:** {de Resolution.root_cause}
 
@@ -952,7 +952,7 @@ Se inconclusivo:
 ```markdown
 ## INVESTIGATION INCONCLUSIVE
 
-**Debug Session:** .planning/debug/{slug}.md
+**Debug Session:** .planejamento/debug/{slug}.md
 
 **What Was Checked:**
 - {area}: {finding}
@@ -994,7 +994,7 @@ Retorne:
 ## CHECKPOINT REACHED
 
 **Type:** human-verify
-**Debug Session:** .planning/debug/{slug}.md
+**Debug Session:** .planejamento/debug/{slug}.md
 **Progress:** {evidence_count} evidence entries, {eliminated_count} hypotheses eliminated
 
 ### Investigation State
@@ -1030,8 +1030,8 @@ Só execute este step quando resposta de checkpoint confirmar que o fix funciona
 Atualize status para "resolved".
 
 ```bash
-mkdir -p .planning/debug/resolved
-mv .planning/debug/{slug}.md .planning/debug/resolved/
+mkdir -p .planejamento/debug/resolved
+mv .planejamento/debug/{slug}.md .planejamento/debug/resolved/
 ```
 
 **Verifique planning config usando state load (commit_docs está disponível no output):**
@@ -1055,7 +1055,7 @@ Root cause: {root_cause}"
 
 Então commit planning docs via CLI (respeita `commit_docs` config automaticamente):
 ```bash
-node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "docs: resolve debug {slug}" --files .planning/debug/resolved/{slug}.md
+node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "docs: resolve debug {slug}" --files .planejamento/debug/resolved/{slug}.md
 ```
 
 Reporte completion e ofereça próximos passos.
@@ -1078,7 +1078,7 @@ Retorne um checkpoint quando:
 ## CHECKPOINT REACHED
 
 **Type:** [human-verify | human-action | decision]
-**Debug Session:** .planning/debug/{slug}.md
+**Debug Session:** .planejamento/debug/{slug}.md
 **Progress:** {evidence_count} evidence entries, {eliminated_count} hypotheses eliminated
 
 ### Investigation State
@@ -1149,7 +1149,7 @@ Orquestrador apresenta checkpoint para usuário, obtém resposta, gera agent de 
 ```markdown
 ## ROOT CAUSE FOUND
 
-**Debug Session:** .planning/debug/{slug}.md
+**Debug Session:** .planejamento/debug/{slug}.md
 
 **Root Cause:** {causa específica com evidência}
 
@@ -1170,7 +1170,7 @@ Orquestrador apresenta checkpoint para usuário, obtém resposta, gera agent de 
 ```markdown
 ## DEBUG COMPLETE
 
-**Debug Session:** .planning/debug/resolved/{slug}.md
+**Debug Session:** .planejamento/debug/resolved/{slug}.md
 
 **Root Cause:** {o que estava errado}
 **Fix Applied:** {o que foi mudado}
@@ -1190,7 +1190,7 @@ Só retorne isso após verificação humana confirmar o fix.
 ```markdown
 ## INVESTIGATION INCONCLUSIVE
 
-**Debug Session:** .planning/debug/{slug}.md
+**Debug Session:** .planejamento/debug/{slug}.md
 
 **What Was Checked:**
 - {area 1}: {finding}

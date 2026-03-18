@@ -1,6 +1,6 @@
 ---
 name: fase:mapear-codigo
-description: Analisa codebase com agents mapper paralelos para produzir documentos .planning/codebase/
+description: Analisa codebase com agents mapper paralelos para produzir documentos .planejamento/codigo/
 argument-hint: "[opcional: área específica para mapear, ex: 'api' ou 'auth']"
 allowed-tools:
   - Read
@@ -14,9 +14,9 @@ allowed-tools:
 <objective>
 Analisar codebase existente usando agents faz-codebase-mapper paralelos para produzir documentos de codebase estruturados.
 
-Cada agent mapper explora uma área de foco e **escreve documentos diretamente** em `.planning/codebase/`. O orquestrador apenas recebe confirmações, mantendo uso de contexto mínimo.
+Cada agent mapper explora uma área de foco e **escreve documentos diretamente** em `.planejamento/codigo/`. O orquestrador apenas recebe confirmações, mantendo uso de contexto mínimo.
 
-Output: pasta `.planning/codebase/` com 7 documentos estruturados sobre o estado do codebase.
+Output: pasta `.planejamento/codigo/` com 7 documentos estruturados sobre o estado do codebase.
 </objective>
 
 <execution_context>
@@ -27,7 +27,7 @@ Output: pasta `.planning/codebase/` com 7 documentos estruturados sobre o estado
 Área de foco: $ARGUMENTS (opcional - se fornecido, diz aos agents para focarem em subsystem específico)
 
 **Carregar estado do projeto se existir:**
-Verifique por .planning/STATE.md - carrega contexto se projeto já inicializado
+Verifique por .planejamento/ESTADO.md - carrega contexto se projeto já inicializado
 
 **Este comando pode rodar:**
 - Antes de /fase-novo-projeto (codebases brownfield) - cria mapa do codebase primeiro
@@ -41,7 +41,7 @@ Verifique por .planning/STATE.md - carrega contexto se projeto já inicializado
 - Refrescar mapa do codebase após mudanças significativas
 - Onboarding em codebase desconhecido
 - Antes de refatoração major (entenda estado atual)
-- Quando STATE.md referencia info desatualizada do codebase
+- Quando ESTADO.md referencia info desatualizada do codebase
 
 **Pule map-codebase para:**
 - Projetos greenfield sem código ainda (nada para mapear)
@@ -49,11 +49,11 @@ Verifique por .planning/STATE.md - carrega contexto se projeto já inicializado
 </when_to_use>
 
 <process>
-1. Verificar se .planning/codebase/ já existe (oferecer refrescar ou pular)
-2. Criar estrutura de diretório .planning/codebase/
+1. Verificar se .planejamento/codigo/ já existe (oferecer refrescar ou pular)
+2. Criar estrutura de diretório .planejamento/codigo/
 3. Spawnar 4 agents faz-codebase-mapper paralelos:
    - Agent 1: foco tech → escreve STACK.md, INTEGRATIONS.md
-   - Agent 2: foco arch → escreve ARCHITECTURE.md, STRUCTURE.md
+   - Agent 2: foco arch → escreve ARQUITETURA.md, STRUCTURE.md
    - Agent 3: foco quality → escreve CONVENTIONS.md, TESTING.md
    - Agent 4: foco concerns → escreve CONCERNS.md
 4. Aguardar agents completarem, coletar confirmações (NÃO conteúdos dos documentos)
@@ -63,7 +63,7 @@ Verifique por .planning/STATE.md - carrega contexto se projeto já inicializado
 </process>
 
 <success_criteria>
-- [ ] Diretório .planning/codebase/ criado
+- [ ] Diretório .planejamento/codigo/ criado
 - [ ] Todos os 7 documentos de codebase escritos por mapper agents
 - [ ] Documentos seguem estrutura do template
 - [ ] Agents paralelos completaram sem erros

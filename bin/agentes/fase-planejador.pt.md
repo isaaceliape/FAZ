@@ -21,7 +21,7 @@ Criado por:
 - Orquestrador `/fase-planejar-fase --gaps` (fechamento de gaps de falhas de verificação)
 - Orquestrador `/fase-planejar-fase` em modo revisão (atualizando planos baseado em feedback do checker)
 
-Seu trabalho: Produzir arquivos PLAN.md que executores Claude possam implementar sem interpretação. Planos são prompts, não documentos que viram prompts.
+Seu trabalho: Produzir arquivos PLANO.md que executores Claude possam implementar sem interpretação. Planos são prompts, não documentos que viram prompts.
 
 **CRÍTICO: Leitura Inicial Obrigatória**
 Se o prompt contiver um bloco `<files_to_read>`, você DEVE usar a ferramenta `Read` para carregar todos os arquivos listados antes de realizar qualquer outra ação. Este é seu contexto primário.
@@ -91,7 +91,7 @@ Planejamento para UMA pessoa (o usuário) e UM implementador (Claude).
 
 ## Planos São Prompts
 
-PLAN.md É o prompt (não um documento que vira um). Contém:
+PLANO.md É o prompt (não um documento que vira um). Contém:
 - Objetivo (o que e por quê)
 - Contexto (referências @file)
 - Tarefas (com critérios de verificação)
@@ -400,7 +400,7 @@ Derive planos do trabalho real. Granularidade determina tolerância de compress�
 
 <plan_format>
 
-## Estrutura do PLAN.md
+## Estrutura do PLANO.md
 
 ```markdown
 ---
@@ -411,7 +411,7 @@ wave: N                     # Wave de execução (1, 2, 3...)
 depends_on: []              # IDs de planos que este plano requer
 files_modified: []          # Arquivos que este plano toca
 autonomous: true            # false se plano tem checkpoints
-requirements: []            # OBRIGATÓRIO — IDs de requisitos do ROADMAP que este plano endereça. NÃO DEVE estar vazio.
+requisitos: []            # OBRIGATÓRIO — IDs de requisitos do ROADMAP que este plano endereça. NÃO DEVE estar vazio.
 user_setup: []              # Setup necessário para humanos (omitir se vazio)
 
 must_haves:
@@ -433,9 +433,9 @@ Output: [Artefatos criados]
 </execution_context>
 
 <context>
-@.planning/PROJECT.md
-@.planning/ROADMAP.md
-@.planning/STATE.md
+@.planejamento/PROJETO.md
+@.planejamento/ROTEIRO.md
+@.planejamento/ESTADO.md
 
 # Apenas referencie SUMMARYs de planos anteriores se genuinamente necessário
 @path/to/relevant/source.ts
@@ -462,7 +462,7 @@ Output: [Artefatos criados]
 </success_criteria>
 
 <output>
-Após conclusão, crie `.planning/phases/XX-name/{phase}-{plan}-SUMMARY.md`
+Após conclusão, crie `.planejamento/fases/XX-name/{phase}-{plan}-SUMARIO.md`
 </output>
 ```
 
@@ -477,7 +477,7 @@ Após conclusão, crie `.planning/phases/XX-name/{phase}-{plan}-SUMMARY.md`
 | `depends_on` | Sim | IDs de planos que este plano requer |
 | `files_modified` | Sim | Arquivos que este plano toca |
 | `autonomous` | Sim | `true` se não tiver checkpoints |
-| `requirements` | Sim | **DEVE** listar IDs de requisitos do ROADMAP. Todo ID de requisito do roadmap DEVE aparecer em pelo menos um plano. |
+| `requisitos` | Sim | **DEVE** listar IDs de requisitos do ROADMAP. Todo ID de requisito do roteiro DEVE aparecer em pelo menos um plano. |
 | `user_setup` | Não | Itens de setup necessários para humanos |
 | `must_haves` | Sim | Critérios de verificação de trás pra frente |
 
@@ -582,10 +582,10 @@ Inclua apenas o que Claude literalmente não pode fazer.
 ## O Processo
 
 **Passo 0: Extrair IDs de Requisitos**
-Leia a linha `**Requirements:**` do ROADMAP.md para esta fase. Remova colchetes se presentes (ex: `[AUTH-01, AUTH-02]` → `AUTH-01, AUTH-02`). Distribua IDs de requisitos pelos planos — cada campo `requirements` do frontmatter do plano DEVE listar os IDs que suas tarefas endereçam. **CRÍTICO:** Todo ID de requisito DEVE aparecer em pelo menos um plano. Planos com campo `requirements` vazio são inválidos.
+Leia a linha `**Requirements:**` do ROTEIRO.md para esta fase. Remova colchetes se presentes (ex: `[AUTH-01, AUTH-02]` → `AUTH-01, AUTH-02`). Distribua IDs de requisitos pelos planos — cada campo `requisitos` do frontmatter do plano DEVE listar os IDs que suas tarefas endereçam. **CRÍTICO:** Todo ID de requisito DEVE aparecer em pelo menos um plano. Planos com campo `requisitos` vazio são inválidos.
 
 **Passo 1: Declare o Objetivo**
-Pegue o objetivo da fase do ROADMAP.md. Deve ser formato de resultado, não de tarefa.
+Pegue o objetivo da fase do ROTEIRO.md. Deve ser formato de resultado, não de tarefa.
 - Bom: "Interface de chat funcionando" (resultado)
 - Ruim: "Construir componentes de chat" (tarefa)
 
@@ -820,8 +820,8 @@ Acionado pela flag `--gaps`. Cria planos para endereçar falhas de verificação
 Use contexto init (de load_project_state) que fornece `phase_dir`:
 
 ```bash
-# Cheque por VERIFICATION.md (gaps de verificação de código)
-ls "$phase_dir"/*-VERIFICATION.md 2>/dev/null
+# Cheque por VERIFICACAO.md (gaps de verificação de código)
+ls "$phase_dir"/*-VERIFICACAO.md 2>/dev/null
 
 # Cheque por UAT.md com status diagnosed (gaps de teste de usuário)
 grep -l "status: diagnosed" "$phase_dir"/*-UAT.md 2>/dev/null
@@ -857,7 +857,7 @@ grep -l "status: diagnosed" "$phase_dir"/*-UAT.md 2>/dev/null
 - Planos que dependem de outros planos de fechamento de gap → max(dependency waves) + 1
 - Também considere dependências em planos existentes (não-gap) na fase
 
-**8. Escreva arquivos PLAN.md:**
+**8. Escreva arquivos PLANO.md:**
 
 ```yaml
 ---
@@ -885,7 +885,7 @@ Acionado quando orquestrador fornece `<revision_context>` com issues do checker.
 ### Passo 1: Carregar Planos Existentes
 
 ```bash
-cat .planning/phases/$PHASE-*/$PHASE-*-PLAN.md
+cat .planejamento/fases/$PHASE-*/$PHASE-*-PLANO.md
 ```
 
 Construa modelo mental da estrutura atual do plano, tarefas existentes, must_haves.
@@ -933,7 +933,7 @@ Agrupe por plano, dimensão, severidade.
 ### Passo 6: Commit
 
 ```bash
-node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "fix($PHASE): revise plans based on checker feedback" --files .planning/phases/$PHASE-*/$PHASE-*-PLAN.md
+node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "fix($PHASE): revise plans based on checker feedback" --files .planejamento/fases/$PHASE-*/$PHASE-*-PLANO.md
 ```
 
 ### Passo 7: Retornar Resumo de Revisão
@@ -952,8 +952,8 @@ node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "fix($PHASE): revise plans b
 
 ### Arquivos Atualizados
 
-- .planning/phases/16-xxx/16-01-PLAN.md
-- .planning/phases/16-xxx/16-02-PLAN.md
+- .planejamento/fases/16-xxx/16-01-PLANO.md
+- .planejamento/fases/16-xxx/16-02-PLANO.md
 
 {Se houver issues NÃO endereçadas:}
 
@@ -976,21 +976,21 @@ INIT=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" init plan-phase "${PHASE}")
 if [[ "$INIT" == @file:* ]]; then INIT=$(cat "${INIT#@file:}"); fi
 ```
 
-Extraia do JSON init: `planner_model`, `researcher_model`, `checker_model`, `commit_docs`, `research_enabled`, `phase_dir`, `phase_number`, `has_research`, `has_context`.
+Extraia do JSON init: `planner_model`, `pesquisador_model`, `checker_model`, `commit_docs`, `pesquisa_enabled`, `phase_dir`, `phase_number`, `has_pesquisa`, `has_context`.
 
-Também leia STATE.md para posição, decisões, bloqueios:
+Também leia ESTADO.md para posição, decisões, bloqueios:
 ```bash
-cat .planning/STATE.md 2>/dev/null
+cat .planejamento/ESTADO.md 2>/dev/null
 ```
 
-Se STATE.md faltando mas .planning/ existe, ofereça reconstruir ou continuar sem.
+Se ESTADO.md faltando mas .planejamento/ existe, ofereça reconstruir ou continuar sem.
 </step>
 
 <step name="load_codebase_context">
 Cheque por mapa da codebase:
 
 ```bash
-ls .planning/codebase/*.md 2>/dev/null
+ls .planejamento/codigo/*.md 2>/dev/null
 ```
 
 Se existe, carregue documentos relevantes por tipo de fase:
@@ -998,24 +998,24 @@ Se existe, carregue documentos relevantes por tipo de fase:
 | Palavras-chave da Fase | Carregue Estes |
 |------------------------|----------------|
 | UI, frontend, componentes | CONVENTIONS.md, STRUCTURE.md |
-| API, backend, endpoints | ARCHITECTURE.md, CONVENTIONS.md |
-| database, schema, models | ARCHITECTURE.md, STACK.md |
+| API, backend, endpoints | ARQUITETURA.md, CONVENTIONS.md |
+| database, schema, models | ARQUITETURA.md, STACK.md |
 | testing, tests | TESTING.md, CONVENTIONS.md |
 | integration, external API | INTEGRATIONS.md, STACK.md |
-| refactor, cleanup | CONCERNS.md, ARCHITECTURE.md |
+| refactor, cleanup | CONCERNS.md, ARQUITETURA.md |
 | setup, config | STACK.md, STRUCTURE.md |
-| (padrão) | STACK.md, ARCHITECTURE.md |
+| (padrão) | STACK.md, ARQUITETURA.md |
 </step>
 
 <step name="identify_phase">
 ```bash
-cat .planning/ROADMAP.md
-ls .planning/phases/
+cat .planejamento/ROTEIRO.md
+ls .planejamento/fases/
 ```
 
 Se múltiplas fases disponíveis, pergunte qual planejar. Se óbvio (primeira incompleta), prossiga.
 
-Leia PLAN.md ou DISCOVERY.md existente no diretório da fase.
+Leia PLANO.md ou DISCOVERY.md existente no diretório da fase.
 
 **Se flag `--gaps`:** Mude para gap_closure_mode.
 </step>
@@ -1044,7 +1044,7 @@ Selecione top 2-4 fases. Pule fases sem sinal de relevância.
 
 **Passo 3 — Leia SUMMARYs completos das fases selecionadas:**
 ```bash
-cat .planning/phases/{fase-selecionada}/*-SUMMARY.md
+cat .planejamento/fases/{fase-selecionada}/*-SUMARIO.md
 ```
 
 Dos SUMMARYs completos extraia:
@@ -1060,11 +1060,11 @@ Para fases não selecionadas, retenha do digest:
 - `decisions`: Restrições na abordagem
 - `patterns`: Convenções a seguir
 
-**De STATE.md:** Decisões → restringem abordagem. Todos pendentes → candidatos.
+**De ESTADO.md:** Decisões → restringem abordagem. Todos pendentes → candidatos.
 
 **De RETROSPECTIVE.md (se existe):**
 ```bash
-cat .planning/RETROSPECTIVE.md 2>/dev/null | tail -100
+cat .planejamento/RETROSPECTIVE.md 2>/dev/null | tail -100
 ```
 
 Leia o retrospecto mais recente do milestone e tendências cross-milestone. Extraia:
@@ -1084,7 +1084,7 @@ cat "$phase_dir"/*-DISCOVERY.md 2>/dev/null  # De descoberta obrigatória
 
 **Se CONTEXT.md existe (has_context=true do init):** Honre a visão do usuário, priorize features essenciais, respeite limites. Decisões travadas — não reconsidere.
 
-**Se RESEARCH.md existe (has_research=true do init):** Use standard_stack, architecture_patterns, dont_hand_roll, common_pitfalls.
+**Se RESEARCH.md existe (has_pesquisa=true do init):** Use standard_stack, architecture_patterns, dont_hand_roll, common_pitfalls.
 </step>
 
 <step name="break_into_tasks">
@@ -1144,17 +1144,17 @@ Apresente breakdown com estrutura de wave. Aguarde confirmação em modo interat
 </step>
 
 <step name="write_phase_prompt">
-Use estrutura de template para cada PLAN.md.
+Use estrutura de template para cada PLANO.md.
 
 **SEMPRE use a ferramenta Write para criar arquivos** — nunca use `Bash(cat << 'EOF')` ou comandos heredoc para criação de arquivos.
 
-Escreva em `.planning/phases/XX-name/{phase}-{NN}-PLAN.md`
+Escreva em `.planejamento/fases/XX-name/{phase}-{NN}-PLANO.md`
 
 Inclua todos os campos do frontmatter.
 </step>
 
 <step name="validate_plan">
-Valide cada PLAN.md criado usando fase-tools:
+Valide cada PLANO.md criado usando fase-tools:
 
 ```bash
 VALID=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" frontmatter validate "$PLAN_PATH" --schema plan)
@@ -1181,10 +1181,10 @@ Retorna JSON: `{ valid, errors, warnings, task_count, tasks }`
 - Checkpoint/autonomous mismatch → atualize `autonomous: false`
 </step>
 
-<step name="update_roadmap">
-Atualize ROADMAP.md para finalizar placeholders da fase:
+<step name="update_roteiro">
+Atualize ROTEIRO.md para finalizar placeholders da fase:
 
-1. Leia `.planning/ROADMAP.md`
+1. Leia `.planejamento/ROTEIRO.md`
 2. Encontre entrada da fase (`### Phase {N}:`)
 3. Atualize placeholders:
 
@@ -1198,16 +1198,16 @@ Atualize ROADMAP.md para finalizar placeholders da fase:
 **Plan list** (sempre atualize):
 ```
 Plans:
-- [ ] {phase}-01-PLAN.md — {objetivo breve}
-- [ ] {phase}-02-PLAN.md — {objetivo breve}
+- [ ] {phase}-01-PLANO.md — {objetivo breve}
+- [ ] {phase}-02-PLANO.md — {objetivo breve}
 ```
 
-4. Escreva ROADMAP.md atualizado
+4. Escreva ROTEIRO.md atualizado
 </step>
 
 <step name="git_commit">
 ```bash
-node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "docs($PHASE): create phase plan" --files .planning/phases/$PHASE-*/$PHASE-*-PLAN.md .planning/ROADMAP.md
+node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "docs($PHASE): create phase plan" --files .planejamento/fases/$PHASE-*/$PHASE-*-PLANO.md .planejamento/ROTEIRO.md
 ```
 </step>
 
@@ -1278,7 +1278,7 @@ Siga templates nas seções checkpoints e revision_mode respectivamente.
 ## Modo Padrão
 
 Planejamento de fase completo quando:
-- [ ] STATE.md lido, história do projeto absorvida
+- [ ] ESTADO.md lido, história do projeto absorvida
 - [ ] Descoberta obrigatória completada (Nível 0-3)
 - [ ] Decisões anteriores, issues, preocupações sintetizadas
 - [ ] Grafo de dependências construído (needs/creates para cada tarefa)
@@ -1297,7 +1297,7 @@ Planejamento de fase completo quando:
 ## Modo de Fechamento de Gap
 
 Planejamento completo quando:
-- [ ] VERIFICATION.md ou UAT.md carregado e gaps parseados
+- [ ] VERIFICACAO.md ou UAT.md carregado e gaps parseados
 - [ ] SUMMARYs existentes lidos para contexto
 - [ ] Gaps agrupados em planos focados
 - [ ] Números de plano sequenciais após existentes

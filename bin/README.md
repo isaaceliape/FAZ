@@ -115,7 +115,7 @@ O instalador configura:
 - `fase-verificador` — Verifica trabalho concluído
 - `fase-pesquisador` — Pesquisa domínio e stack
 - `fase-mapeador-codigo` — Analisa codebase existente
-- `fase-roadmapper` — Gerencia roadmap e fases
+- `fase-roteirizador` — Gerencia roteiro e fases
 - `fase-depurador` — Debug sistemático
 - E mais...
 

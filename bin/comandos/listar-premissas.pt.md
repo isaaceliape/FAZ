@@ -23,14 +23,14 @@ Output: Apenas output conversacional (sem criação de arquivo) — termina com 
 <context>
 Phase number: $ARGUMENTS (required)
 
-Estado do projeto e roadmap são carregados in-workflow usando reads direcionados.
+Estado do projeto e roteiro são carregados in-workflow usando reads direcionados.
 </context>
 
 <process>
 1. Valide argumento phase number (erro se ausente ou inválido)
-2. Cheque se phase existe no roadmap
+2. Cheque se phase existe no roteiro
 3. Siga workflow list-phase-assumptions.md:
-   - Analise descrição do roadmap
+   - Analise descrição do roteiro
    - exponha suposições sobre: abordagem técnica, ordem de implementação, escopo, riscos, dependências
    - Apresente suposições claramente
    - Prompt "O que você acha?"
@@ -39,7 +39,7 @@ Estado do projeto e roadmap são carregados in-workflow usando reads direcionado
 
 <success_criteria>
 
-- Phase validada contra roadmap
+- Phase validada contra roteiro
 - Suposições expostas em cinco áreas
 - Usuário prompted para feedback
 - Usuário sabe próximos passos (discutir context, planejar phase, ou corrigir suposições)

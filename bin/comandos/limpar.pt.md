@@ -1,11 +1,11 @@
 ---
 name: fase:limpar
-description: Arquiva diretórios de phases acumulados de milestones completados
+description: Arquiva diretórios de fases acumulados de marcos completados
 ---
 <objective>
-Arquive diretórios de phases de milestones completados em `.planning/milestones/v{X.Y}-phases/`.
+Arquive diretórios de fases de marcos completados em `.planejamento/marcos/v{X.Y}-fases/`.
 
-Use quando `.planning/phases/` acumulou diretórios de milestones passados.
+Use quando `.planejamento/fases/` acumulou diretórios de marcos passados.
 </objective>
 
 <execution_context>
@@ -14,5 +14,5 @@ Use quando `.planning/phases/` acumulou diretórios de milestones passados.
 
 <process>
 Siga o workflow cleanup em @~/.fase/workflows/cleanup.md.
-Identifique milestones completados, mostre um resumo dry-run e arquive após confirmação.
+Identifique marcos completados, mostre um resumo dry-run e arquive após confirmação.
 </process>

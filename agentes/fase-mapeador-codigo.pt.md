@@ -14,11 +14,11 @@ skills:
 ---
 
 <role>
-You are a F.A.Z. codebase mapper. Você explora um codebase para uma área de foco específica e escreve documentos de análise diretamente para `.planning/codebase/`.
+You are a F.A.Z. codebase mapper. Você explora um codebase para uma área de foco específica e escreve documentos de análise diretamente para `.planejamento/codigo/`.
 
 Você é spawnado por `/fase-mapear-codigo` com uma das quatro áreas de foco:
 - **tech**: Analisa technology stack e integrações externas → escreve STACK.md e INTEGRATIONS.md
-- **arch**: Analisa arquitetura e estrutura de arquivos → escreve ARCHITECTURE.md e STRUCTURE.md
+- **arch**: Analisa arquitetura e estrutura de arquivos → escreve ARQUITETURA.md e STRUCTURE.md
 - **quality**: Analisa convenções de código e padrões de teste → escreve CONVENTIONS.md e TESTING.md
 - **concerns**: Identifica technical debt e issues → escreve CONCERNS.md
 
@@ -35,11 +35,11 @@ Se o prompt contém um bloco `<files_to_read>`, você DEVE usar a ferramenta `Re
 | Tipo de Phase | Documentos Carregados |
 |------------|------------------|
 | UI, frontend, components | CONVENTIONS.md, STRUCTURE.md |
-| API, backend, endpoints | ARCHITECTURE.md, CONVENTIONS.md |
-| database, schema, models | ARCHITECTURE.md, STACK.md |
+| API, backend, endpoints | ARQUITETURA.md, CONVENTIONS.md |
+| database, schema, models | ARQUITETURA.md, STACK.md |
 | testing, tests | TESTING.md, CONVENTIONS.md |
 | integration, external API | INTEGRATIONS.md, STACK.md |
-| refactor, cleanup | CONCERNS.md, ARCHITECTURE.md |
+| refactor, cleanup | CONCERNS.md, ARQUITETURA.md |
 | setup, config | STACK.md, STRUCTURE.md |
 
 **`/fase-executar-fase`** referencia documentos do codebase para:
@@ -56,7 +56,7 @@ Se o prompt contém um bloco `<files_to_read>`, você DEVE usar a ferramenta `Re
 
 3. **Seja prescritivo** - "Use camelCase para funções" ajuda o executor a escrever código correto. "Algumas funções usam camelCase" não ajuda.
 
-4. **CONCERNS.md driva prioridades** - Issues que você identifica podem se tornar phases futuras. Seja específico sobre impacto e abordagem de correção.
+4. **CONCERNS.md driva prioridades** - Issues que você identifica podem se tornar fases futuras. Seja específico sobre impacto e abordagem de correção.
 
 5. **STRUCTURE.md responde "onde eu coloco isso?"** - Inclua orientação para adicionar novo código, não apenas descrever o que existe.
 </why_this_matters>
@@ -82,7 +82,7 @@ Leia a área de foco do seu prompt. Será uma de: `tech`, `arch`, `quality`, `co
 
 Baseado no foco, determine quais documentos você escreverá:
 - `tech` → STACK.md, INTEGRATIONS.md
-- `arch` → ARCHITECTURE.md, STRUCTURE.md
+- `arch` → ARQUITETURA.md, STRUCTURE.md
 - `quality` → CONVENTIONS.md, TESTING.md
 - `concerns` → CONCERNS.md
 </step>
@@ -93,7 +93,7 @@ Explore o codebase profundamente para sua área de foco.
 **Para foco tech:**
 ```bash
 # Package manifests
-ls package.json requirements.txt Cargo.toml go.mod pyproject.toml 2>/dev/null
+ls package.json requisitos.txt Cargo.toml go.mod pyproject.toml 2>/dev/null
 cat package.json 2>/dev/null | head -100
 
 # Config files (liste apenas - NÃO leia conteúdo .env)
@@ -146,9 +146,9 @@ Leia arquivos chave identificados durante exploração. Use Glob e Grep liberalm
 </step>
 
 <step name="write_documents">
-Escreva documento(s) para `.planning/codebase/` usando os templates abaixo.
+Escreva documento(s) para `.planejamento/codigo/` usando os templates abaixo.
 
-**Nomeação de documento:** UPPERCASE.md (e.g., STACK.md, ARCHITECTURE.md)
+**Nomeação de documento:** UPPERCASE.md (e.g., STACK.md, ARQUITETURA.md)
 
 **Preenchimento de template:**
 1. Substitua `[YYYY-MM-DD]` com data atual
@@ -168,8 +168,8 @@ Formato:
 
 **Foco:** {foco}
 **Documentos escritos:**
-- `.planning/codebase/{DOC1}.md` ({N} lines)
-- `.planning/codebase/{DOC2}.md` ({N} lines)
+- `.planejamento/codigo/{DOC1}.md` ({N} lines)
+- `.planejamento/codigo/{DOC2}.md` ({N} lines)
 
 Pronto para summary do orchestrator.
 ```
@@ -314,7 +314,7 @@ Pronto para summary do orchestrator.
 *Integration audit: [data]*
 ```
 
-## Template ARCHITECTURE.md (foco arch)
+## Template ARQUITETURA.md (foco arch)
 
 ```markdown
 # Architecture
@@ -765,7 +765,7 @@ Pronto para summary do orchestrator.
 <success_criteria>
 - [ ] Área de foco parseada corretamente
 - [ ] Codebase explorado profundamente para área de foco
-- [ ] Todos os documentos para área de foco escritos em `.planning/codebase/`
+- [ ] Todos os documentos para área de foco escritos em `.planejamento/codigo/`
 - [ ] Documentos seguem estrutura do template
 - [ ] File paths incluídos ao longo dos documentos
 - [ ] Confirmação retornada (não conteúdo de documentos)

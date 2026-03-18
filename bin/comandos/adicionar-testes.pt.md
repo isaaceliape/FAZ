@@ -17,7 +17,7 @@ argument-instructions: |
   Exemplo: /fase-adicionar-testes 12 focar em edge cases no módulo de pricing
 ---
 <objective>
-Gerar testes unit e E2E para uma fase completada, usando seu SUMMARY.md, CONTEXT.md, e VERIFICATION.md como especificações.
+Gerar testes unit e E2E para uma fase completada, usando seu SUMARIO.md, CONTEXT.md, e VERIFICACAO.md como especificações.
 
 Analisa arquivos de implementação, classifica em TDD (unit), E2E (browser), ou Skip categories, apresenta um plano de teste para aprovação do usuário, então gera testes seguindo convenções RED-GREEN.
 
@@ -31,8 +31,8 @@ Output: Arquivos de teste commitados com mensagem `test(phase-{N}): add unit and
 <context>
 Fase: $ARGUMENTS
 
-@.planning/STATE.md
-@.planning/ROADMAP.md
+@.planejamento/ESTADO.md
+@.planejamento/ROTEIRO.md
 </context>
 
 <process>

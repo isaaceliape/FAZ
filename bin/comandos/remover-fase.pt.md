@@ -1,6 +1,6 @@
 ---
 name: fase:remover-fase
-description: Remover fase futura do roadmap e renumerar fases subsequentes
+description: Remover fase futura do roteiro e renumerar fases subsequentes
 argument-hint: <numero-da-fase>
 allowed-tools:
   - Read
@@ -9,7 +9,7 @@ allowed-tools:
   - Glob
 ---
 <objective>
-Remover uma fase futura não iniciada do roadmap e renumerar todas fases subsequentes para manter sequência limpa e linear.
+Remover uma fase futura não iniciada do roteiro e renumerar todas fases subsequentes para manter sequência limpa e linear.
 
 Propósito: Remoção limpa de trabalho que decidiu não fazer, sem poluir contexto com marcadores de cancelled/deferred.
 Output: Fase deletada, todas fases subsequentes renumeradas, git commit como registro histórico.

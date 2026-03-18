@@ -22,7 +22,7 @@ Issue do usuário: $ARGUMENTS
 
 Verifique por sessões ativas:
 ```bash
-ls .planning/debug/*.md 2>/dev/null | grep -v resolved | head -5
+ls .planejamento/debug/*.md 2>/dev/null | grep -v resolved | head -5
 ```
 </context>
 
@@ -86,7 +86,7 @@ goal: find_and_fix
 </mode>
 
 <debug_file>
-Criar: .planning/debug/{slug}.md
+Criar: .planejamento/debug/{slug}.md
 </debug_file>
 ```
 
@@ -110,7 +110,7 @@ O debugger retorna quando:
 ## 5. Lidar com Respostas
 
 **Se usuário aprova fix:**
-- Gere PLAN.md para correção
+- Gere PLANO.md para correção
 - Pergunte: executar agora ou adicionar à lista?
 
 **Se usuário rejeita fix:**
@@ -125,7 +125,7 @@ O debugger retorna quando:
 Quando usuário executa `/fase-debug` sem argumentos:
 
 ```bash
-ls .planning/debug/*.md 2>/dev/null | grep -v resolved | head -10
+ls .planejamento/debug/*.md 2>/dev/null | grep -v resolved | head -10
 ```
 
 Liste cada sessão:
@@ -146,7 +146,7 @@ Continuar investigação: {slug}
 </objective>
 
 <debug_file>
-@.planning/debug/{slug}.md
+@.planejamento/debug/{slug}.md
 </debug_file>
 
 <mode>
@@ -174,7 +174,7 @@ Quando debugging completa:
 ### Fix Recomendado
 {fix_description}
 
-**Arquivo de debug:** .planning/debug/{slug}.md
+**Arquivo de debug:** .planejamento/debug/{slug}.md
 ```
 
 **Se precisar de ação humana:**
@@ -182,7 +182,7 @@ Quando debugging completa:
 - Documente no debug file
 
 **Se fix automatizado:**
-- Gere PLAN.md com tasks específicas
+- Gere PLANO.md com tasks específicas
 - Coordene com `/fase-executar-fase` se necessário
 
 </process>

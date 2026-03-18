@@ -1,6 +1,6 @@
 ---
 name: fase:novo-projeto
-description: Inicializa um novo projeto com coleta profunda de contexto e PROJECT.md
+description: Inicializa um novo projeto com coleta profunda de contexto e PROJETO.md
 argument-hint: "[--auto]"
 allowed-tools:
   - Read
@@ -11,19 +11,19 @@ allowed-tools:
 ---
 <context>
 **Flags:**
-- `--auto` — Modo automático. Após perguntas de configuração, executa research → requirements → roadmap sem interação adicional. Espera documento de ideia via @ reference.
+- `--auto` — Modo automático. Após perguntas de configuração, executa pesquisa → requisitos → roteiro sem interação adicional. Espera documento de ideia via @ reference.
 </context>
 
 <objective>
-Inicializar um novo projeto através de fluxo unificado: questionamento → research (opcional) → requirements → roadmap.
+Inicializar um novo projeto através de fluxo unificado: questionamento → pesquisa (opcional) → requisitos → roteiro.
 
 **Cria:**
-- `.planning/PROJECT.md` — contexto do projeto
-- `.planning/config.json` — preferências de workflow
-- `.planning/research/` — pesquisa de domínio (opcional)
-- `.planning/REQUIREMENTS.md` — requisitos definidos
-- `.planning/ROADMAP.md` — estrutura de fases
-- `.planning/STATE.md` — memória do projeto
+- `.planejamento/PROJETO.md` — contexto do projeto
+- `.planejamento/config.json` — preferências de workflow
+- `.planejamento/pesquisa/` — pesquisa de domínio (opcional)
+- `.planejamento/REQUISITOS.md` — requisitos definidos
+- `.planejamento/ROTEIRO.md` — estrutura de fases
+- `.planejamento/ESTADO.md` — memória do projeto
 
 **Após este comando:** Execute `/fase-planejar-fase 1` para iniciar a execução.
 </objective>
@@ -33,7 +33,7 @@ Inicializar um novo projeto através de fluxo unificado: questionamento → rese
 @~/.claude/fase/references/questioning.md
 @~/.claude/fase/references/ui-brand.md
 @~/.claude/fase/templates/project.md
-@~/.claude/fase/templates/requirements.md
+@~/.claude/fase/templates/requisitos.md
 </execution_context>
 
 <process>

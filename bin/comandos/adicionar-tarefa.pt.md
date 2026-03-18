@@ -18,7 +18,7 @@ Roteia para o workflow add-todo que gerencia:
 - Inferência de área dos file paths
 - Detecção e resolução de duplicados
 - Criação de arquivo de tarefa com frontmatter
-- Atualizações no STATE.md
+- Atualizações no ESTADO.md
 - Commits git
 </objective>
 
@@ -42,7 +42,7 @@ O workflow gerencia toda a lógica incluindo:
 4. Inferência de área
 5. Checagem de duplicados
 6. Criação de arquivo com geração de slug
-7. Atualizações no STATE.md
+7. Atualizações no ESTADO.md
 8. Commits git
 </process>
 </output>

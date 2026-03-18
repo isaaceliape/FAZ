@@ -1,6 +1,6 @@
 ---
 name: fase:novo-marco
-description: Inicia um novo ciclo de milestone — atualiza PROJECT.md e roteia para requirements
+description: Inicia um novo ciclo de milestone — atualiza PROJETO.md e roteia para requisitos
 argument-hint: "[nome do milestone, ex: 'v1.1 Notifications']"
 allowed-tools:
   - Read
@@ -10,16 +10,16 @@ allowed-tools:
   - AskUserQuestion
 ---
 <objective>
-Iniciar um novo milestone: questionamento → research (opcional) → requirements → roadmap.
+Iniciar um novo milestone: questionamento → pesquisa (opcional) → requisitos → roteiro.
 
-Equivalente brownfield de new-project. Projeto existe, PROJECT.md tem histórico. Coleta "o que vem depois", atualiza PROJECT.md, então executa ciclo requirements → roadmap.
+Equivalente brownfield de new-project. Projeto existe, PROJETO.md tem histórico. Coleta "o que vem depois", atualiza PROJETO.md, então executa ciclo requisitos → roteiro.
 
 **Cria/Atualiza:**
-- `.planning/PROJECT.md` — atualizado com novos objetivos do milestone
-- `.planning/research/` — pesquisa de domínio (opcional, apenas features NOVAS)
-- `.planning/REQUIREMENTS.md` — requisitos definidos para este milestone
-- `.planning/ROADMAP.md` — estrutura de fases (continua numeração)
-- `.planning/STATE.md` — resetado para novo milestone
+- `.planejamento/PROJETO.md` — atualizado com novos objetivos do milestone
+- `.planejamento/pesquisa/` — pesquisa de domínio (opcional, apenas features NOVAS)
+- `.planejamento/REQUISITOS.md` — requisitos definidos para este milestone
+- `.planejamento/ROTEIRO.md` — estrutura de fases (continua numeração)
+- `.planejamento/ESTADO.md` — resetado para novo milestone
 
 **Depois:** `/fase-planejar-fase [N]` para iniciar execução.
 </objective>
@@ -29,7 +29,7 @@ Equivalente brownfield de new-project. Projeto existe, PROJECT.md tem histórico
 @~/.claude/fase/references/questioning.md
 @~/.claude/fase/references/ui-brand.md
 @~/.claude/fase/templates/project.md
-@~/.claude/fase/templates/requirements.md
+@~/.claude/fase/templates/requisitos.md
 </execution_context>
 
 <context>
@@ -40,5 +40,5 @@ Arquivos de contexto de projeto e milestone são resolvidos dentro do workflow (
 
 <process>
 Execute o workflow new-milestone de @~/.claude/fase/workflows/new-milestone.md ponta a ponta.
-Preserve todos os gates do workflow (validação, questionamento, research, requirements, aprovação de roadmap, commits).
+Preserve todos os gates do workflow (validação, questionamento, pesquisa, requisitos, aprovação de roteiro, commits).
 </process>

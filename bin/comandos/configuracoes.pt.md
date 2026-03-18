@@ -14,7 +14,7 @@ Configuração interativa de agents e perfil de model do workflow FASE via promp
 Direciona para o workflow settings que lida com:
 - Garantia de existência de config
 - Leitura e parsing de configurações atuais
-- Prompt interativo de 5 questões (model, research, plan_check, verifier, branching)
+- Prompt interativo de 5 questões (model, pesquisa, plan_check, verifier, branching)
 - Merge e escrita de config
 - Exibição de confirmação com referências rápidas de comandos
 </objective>

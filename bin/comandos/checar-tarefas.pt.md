@@ -15,9 +15,9 @@ Listar todas as tarefas pendentes, permitir seleção, carregar contexto complet
 Roteia para o workflow check-todos que gerencia:
 - Contagem e listagem de tarefas com filtro de área
 - Seleção interativa com carregamento de contexto completo
-- Checagem de correlação com roadmap
+- Checagem de correlação com roteiro
 - Roteamento de ação (trabalhar agora, adicionar à fase, brainstorm, criar fase)
-- Atualizações no STATE.md e commits git
+- Atualizações no ESTADO.md e commits git
 </objective>
 
 <execution_context>
@@ -27,7 +27,7 @@ Roteia para o workflow check-todos que gerencia:
 <context>
 Argumentos: $ARGUMENTS (filtro de área opcional)
 
-Estado de tarefas e correlação com roadmap são carregados in-workflow usando `init todos` e reads direcionados.
+Estado de tarefas e correlação com roteiro são carregados in-workflow usando `init todos` e reads direcionados.
 </context>
 
 <process>
@@ -38,9 +38,9 @@ O workflow gerencia toda a lógica incluindo:
 2. Filtro de área
 3. Listagem e seleção interativa
 4. Carregamento de contexto completo com sumários de arquivos
-5. Checagem de correlação com roadmap
+5. Checagem de correlação com roteiro
 6. Oferecimento e execução de ação
-7. Atualizações no STATE.md
+7. Atualizações no ESTADO.md
 8. Commits git
 </process>
 </output>

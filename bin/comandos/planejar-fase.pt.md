@@ -1,7 +1,7 @@
 ---
 name: fase:planejar-fase
-description: Cria plano detalhado da fase (PLAN.md) com loop de verificação
-argument-hint: "[fase] [--auto] [--research] [--skip-research] [--gaps] [--skip-verify] [--prd <arquivo>]"
+description: Cria plano detalhado da fase (PLANO.md) com loop de verificação
+argument-hint: "[fase] [--auto] [--pesquisa] [--skip-pesquisa] [--gaps] [--skip-verify] [--prd <arquivo>]"
 agent: faz-planner
 allowed-tools:
   - Read
@@ -14,7 +14,7 @@ allowed-tools:
   - mcp__context7__*
 ---
 <objective>
-Criar prompts executáveis da fase (arquivos PLAN.md) para uma fase do roadmap com research e verificação integrados.
+Criar prompts executáveis da fase (arquivos PLANO.md) para uma fase do roteiro com pesquisa e verificação integrados.
 
 **Fluxo padrão:** Research (se necessário) → Plano → Verificar → Concluir
 
@@ -30,9 +30,9 @@ Criar prompts executáveis da fase (arquivos PLAN.md) para uma fase do roadmap c
 Número da fase: $ARGUMENTS (opcional — auto-detecta próxima fase não planejada se omitido)
 
 **Flags:**
-- `--research` — Força re-research mesmo se RESEARCH.md existir
-- `--skip-research` — Pula research, vai direto para planejamento
-- `--gaps` — Modo de fechamento de gaps (lê VERIFICATION.md, pula research)
+- `--pesquisa` — Força re-pesquisa mesmo se RESEARCH.md existir
+- `--skip-pesquisa` — Pula pesquisa, vai direto para planejamento
+- `--gaps` — Modo de fechamento de gaps (lê VERIFICACAO.md, pula pesquisa)
 - `--skip-verify` — Pula loop de verificação
 - `--prd <arquivo>` — Usa um arquivo PRD/critérios de aceitação em vez de discuss-phase. Parseia requisitos em CONTEXT.md automaticamente. Pula discuss-phase completamente.
 
@@ -41,5 +41,5 @@ Normalizar input da fase no passo 2 antes de qualquer lookup de diretório.
 
 <process>
 Execute o workflow plan-phase de @~/.claude/fase/workflows/plan-phase.md ponta a ponta.
-Preservar todos os gates do workflow (validação, research, planejamento, loop de verificação, roteamento).
+Preservar todos os gates do workflow (validação, pesquisa, planejamento, loop de verificação, roteamento).
 </process>

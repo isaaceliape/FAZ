@@ -13,12 +13,12 @@ allowed-tools:
   - AskUserQuestion
 ---
 <objective>
-Executar tarefas pequenas e ad-hoc com garantias FASE (commits atômicos, rastreamento STATE.md).
+Executar tarefas pequenas e ad-hoc com garantias FASE (commits atômicos, rastreamento ESTADO.md).
 
 Modo rápido é o mesmo sistema com caminho mais curto:
 - Spawn fase-planner (modo rápido) + fase-executor(s)
-- Tarefas rápidas vivem em `.planning/quick/` separado de fases planejadas
-- Atualiza tabela "Tarefas Rápidas Completas" do STATE.md (NÃO ROADMAP.md)
+- Tarefas rápidas vivem em `.planejamento/quick/` separado de fases planejadas
+- Atualiza tabela "Tarefas Rápidas Completas" do ESTADO.md (NÃO ROTEIRO.md)
 
 **Padrão:** Pula pesquisa, discussão, plan-checker, verifier. Use quando souber exatamente o que fazer.
 

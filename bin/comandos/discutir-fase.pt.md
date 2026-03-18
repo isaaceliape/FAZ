@@ -15,15 +15,15 @@ allowed-tools:
 ---
 
 <objective>
-Extraia decisões de implementação que downstream agents precisam — researcher e planner usarão CONTEXT.md para saber o que investigar e quais escolhas estão locked.
+Extraia decisões de implementação que downstream agents precisam — pesquisador e planner usarão CONTEXT.md para saber o que investigar e quais escolhas estão locked.
 
 **Como funciona:**
-1. Carregue context anterior (PROJECT.md, REQUIREMENTS.md, STATE.md, arquivos CONTEXT.md anteriores)
+1. Carregue context anterior (PROJETO.md, REQUISITOS.md, ESTADO.md, arquivos CONTEXT.md anteriores)
 2. Scout codebase por reusable assets e patterns
-3. Analise phase — pule gray areas já decididas em phases anteriores
+3. Analise phase — pule gray areas já decididas em fases anteriores
 4. Apresente gray areas restantes — usuário seleciona quais discutir
 5. Deep-dive cada área selecionada até satisfazer
-6. Crie CONTEXT.md com decisões que guiam research e planning
+6. Crie CONTEXT.md com decisões que guiam pesquisa e planning
 
 **Output:** `{phase_num}-CONTEXT.md` — decisões claras o suficiente para downstream agents agirem sem perguntar ao usuário novamente
 </objective>
@@ -36,13 +36,13 @@ Extraia decisões de implementação que downstream agents precisam — research
 <context>
 Phase number: $ARGUMENTS (required)
 
-Arquivos de context são resolvidos in-workflow usando `init phase-op` e tool calls de roadmap/state.
+Arquivos de context são resolvidos in-workflow usando `init phase-op` e tool calls de roteiro/state.
 </context>
 
 <process>
-1. Valide phase number (erro se ausente ou não está no roadmap)
+1. Valide phase number (erro se ausente ou não está no roteiro)
 2. Cheque se CONTEXT.md existe (ofereça update/view/skip se sim)
-3. **Carregue context anterior** — Leia PROJECT.md, REQUIREMENTS.md, STATE.md, e todos arquivos CONTEXT.md anteriores
+3. **Carregue context anterior** — Leia PROJETO.md, REQUISITOS.md, ESTADO.md, e todos arquivos CONTEXT.md anteriores
 4. **Scout codebase** — Encontre reusable assets, patterns, e integration points
 5. **Analise phase** — Cheque decisões anteriores, pule áreas já decididas, gere gray areas restantes
 6. **Apresente gray areas** — Multi-select: quais discutir? Anote com decisões anteriores + context do código
@@ -50,7 +50,7 @@ Arquivos de context são resolvidos in-workflow usando `init phase-op` e tool ca
 8. **Escreva CONTEXT.md** — Seções matching áreas discutidas + seção code_context
 
 **CRÍTICO: Scope guardrail**
-- Phase boundary do ROADMAP.md é FIXO
+- Phase boundary do ROTEIRO.md é FIXO
 - Discussão clarifica COMO implementar, não SE deve adicionar mais
 - Se usuário sugerir novas capacidades: "Isso é sua própria phase. Vou anotar para depois."
 - Capture ideias deferidas — não perca elas, não aja sobre elas

@@ -9,7 +9,7 @@ allowed-tools:
   - AskUserQuestion
 ---
 <objective>
-Valide integridade do diretório `.planning/` e reporte issues acionáveis. Checa por arquivos ausentes, configurações inválidas, estado inconsistente, e plans orphaned.
+Valide integridade do diretório `.planejamento/` e reporte issues acionáveis. Checa por arquivos ausentes, configurações inválidas, estado inconsistente, e plans orphaned.
 </objective>
 
 <execution_context>

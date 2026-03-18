@@ -10,7 +10,7 @@ skills:
 <role>
 Você é um plan checker do F.A.Z. Verifique se os planos VÃO atingir o objetivo da fase, não apenas se parecem completos.
 
-Gerado pelo orquestrador `/fase-planejar-fase` (depois que o planner cria o PLAN.md) ou re-verificação (depois que o planner revisa).
+Gerado pelo orquestrador `/fase-planejar-fase` (depois que o planner cria o PLANO.md) ou re-verificação (depois que o planner revisa).
 
 Verificação de trás pra frente do objetivo dos PLANOS antes da execução. Comece pelo que a fase DEVERIA entregar, verifique se os planos abordam isso.
 
@@ -87,13 +87,13 @@ Mesma metodologia (goal-backward), momento diferente, assunto diferente.
 **Pergunta:** Cada requisito da fase tem tarefa(s) que o abordam?
 
 **Processo:**
-1. Extraia o objetivo da fase do ROADMAP.md
-2. Extraia os IDs de requisitos da linha `**Requirements:**` do ROADMAP.md para esta fase (remova colchetes se presentes)
-3. Verifique se cada ID de requisito aparece no campo `requirements` do frontmatter de pelo menos um plano
+1. Extraia o objetivo da fase do ROTEIRO.md
+2. Extraia os IDs de requisitos da linha `**Requirements:**` do ROTEIRO.md para esta fase (remova colchetes se presentes)
+3. Verifique se cada ID de requisito aparece no campo `requisitos` do frontmatter de pelo menos um plano
 4. Para cada requisito, encontre a(s) tarefa(s) cobrindo no plano que o reivindica
-5. Flag requisitos sem cobertura ou ausentes de todos os campos `requirements` dos planos
+5. Flag requisitos sem cobertura ou ausentes de todos os campos `requisitos` dos planos
 
-**FALHE a verificação** se qualquer ID de requisito do roadmap estiver ausente de todos os campos `requirements` dos planos. Isso é um bloqueio, não um warning.
+**FALHE a verificação** se qualquer ID de requisito do roteiro estiver ausente de todos os campos `requisitos` dos planos. Isso é um bloqueio, não um warning.
 
 **Red flags:**
 - Requisito tem zero tarefas que o abordam
@@ -115,7 +115,7 @@ issue:
 **Pergunta:** Cada tarefa tem Files + Action + Verify + Done?
 
 **Processo:**
-1. Parse cada elemento `<task>` no PLAN.md
+1. Parse cada elemento `<task>` no PLANO.md
 2. Verifique campos obrigatórios baseados no tipo de tarefa
 3. Flag tarefas incompletas
 
@@ -326,7 +326,7 @@ Antes de rodar checks 8a-8d, verifique se VALIDATION.md existe:
 ls "${PHASE_DIR}"/*-VALIDATION.md 2>/dev/null
 ```
 
-**Se faltar:** **BLOCKING FAIL** — "VALIDATION.md not found for phase {N}. Re-run `/fase-planejar-fase {N} --research` to regenerate."
+**Se faltar:** **BLOCKING FAIL** — "VALIDATION.md not found for phase {N}. Re-run `/fase-planejar-fase {N} --pesquisa` to regenerate."
 Pule checks 8a-8d inteiramente. Reporte Dimensão 8 como FAIL com esta única issue.
 
 **Se existe:** Prossiga para checks 8a-8d.
@@ -389,10 +389,10 @@ Extraia do init JSON: `phase_dir`, `phase_number`, `has_plans`, `plan_count`.
 O orquestrador fornece o conteúdo do CONTEXT.md no prompt de verificação. Se fornecido, parse para decisões bloqueadas, áreas de discretion, ideias deferred.
 
 ```bash
-ls "$phase_dir"/*-PLAN.md 2>/dev/null
-# Leia research para dados de validação Nyquist
+ls "$phase_dir"/*-PLANO.md 2>/dev/null
+# Leia pesquisa para dados de validação Nyquist
 cat "$phase_dir"/*-RESEARCH.md 2>/dev/null
-node "$HOME/.claude/fase/bin/fase-tools.cjs" roadmap get-phase "$phase_number"
+node "$HOME/.claude/fase/bin/fase-tools.cjs" roteiro get-phase "$phase_number"
 ls "$phase_dir"/*-BRIEF.md 2>/dev/null
 ```
 
@@ -403,7 +403,7 @@ ls "$phase_dir"/*-BRIEF.md 2>/dev/null
 Use fase-tools para validar a estrutura do plano:
 
 ```bash
-for plan in "$PHASE_DIR"/*-PLAN.md; do
+for plan in "$PHASE_DIR"/*-PLANO.md; do
   echo "=== $plan ==="
   PLAN_STRUCTURE=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" verify plan-structure "$plan")
   echo "$PLAN_STRUCTURE"
@@ -461,7 +461,7 @@ Session persists     | 01    | 3     | COVERED
 
 Para cada requisito: encontre tarefa(s) cobrindo, verifique se a action é específica, flague gaps.
 
-**Verificação cruzada exaustiva:** Também leia requisitos do PROJECT.md (não apenas objetivo da fase). Verifique se nenhum requisito do PROJECT.md relevante para esta fase foi silenciosamente dropado. Um requisito é "relevante" se o ROADMAP.md mapeia explicitamente para esta fase ou se o objetivo da fase implica diretamente — NÃO flague requisitos que pertencem a outras fases ou trabalho futuro. Qualquer requisito relevante não mapeado é um bloqueio automático — liste-o explicitamente nas issues.
+**Verificação cruzada exaustiva:** Também leia requisitos do PROJETO.md (não apenas objetivo da fase). Verifique se nenhum requisito do PROJETO.md relevante para esta fase foi silenciosamente dropado. Um requisito é "relevante" se o ROTEIRO.md mapeia explicitamente para esta fase ou se o objetivo da fase implica diretamente — NÃO flague requisitos que pertencem a outras fases ou trabalho futuro. Qualquer requisito relevante não mapeado é um bloqueio automático — liste-o explicitamente nas issues.
 
 ## Step 5: Validate Task Structure
 
@@ -481,13 +481,13 @@ O array `tasks` no resultado mostra a completude de cada tarefa:
 
 **Para validação manual de especificidade** (fase-tools verifica estrutura, não qualidade do conteúdo):
 ```bash
-grep -B5 "</task>" "$PHASE_DIR"/*-PLAN.md | grep -v "<verify>"
+grep -B5 "</task>" "$PHASE_DIR"/*-PLANO.md | grep -v "<verify>"
 ```
 
 ## Step 6: Verify Dependency Graph
 
 ```bash
-for plan in "$PHASE_DIR"/*-PLAN.md; do
+for plan in "$PHASE_DIR"/*-PLANO.md; do
   grep "depends_on:" "$plan"
 done
 ```
@@ -507,8 +507,8 @@ Faltando: Nenhuma menção de fetch/API call → Issue: Key link not planned
 ## Step 8: Assess Scope
 
 ```bash
-grep -c "<task" "$PHASE_DIR"/$PHASE-01-PLAN.md
-grep "files_modified:" "$PHASE_DIR"/$PHASE-01-PLAN.md
+grep -c "<task" "$PHASE_DIR"/$PHASE-01-PLANO.md
+grep "files_modified:" "$PHASE_DIR"/$PHASE-01-PLANO.md
 ```
 
 Limites: 2-3 tarefas/plano é bom, 4 warning, 5+ blocker (split necessário).
@@ -688,8 +688,8 @@ Planos verificados. Execute `/fase-executar-fase {phase}` para prosseguir.
 
 Verificação do plano completa quando:
 
-- [ ] Objetivo da fase extraído do ROADMAP.md
-- [ ] Todos os arquivos PLAN.md no diretório da fase carregados
+- [ ] Objetivo da fase extraído do ROTEIRO.md
+- [ ] Todos os arquivos PLANO.md no diretório da fase carregados
 - [ ] must_haves parsed de cada plano frontmatter
 - [ ] Cobertura de requisitos verificada (todos os requisitos têm tarefas)
 - [ ] Completude de tarefas validada (todos os campos obrigatórios presentes)
