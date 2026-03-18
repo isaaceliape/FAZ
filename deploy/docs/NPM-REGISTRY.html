@@ -1,395 +1,382 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>NPM-REGISTRY - FASE Docs</title>
-        <style>
-            :root {
-                --primary: #00ff88;
-                --secondary: #00bfff;
-                --warning: #ffaa00;
-                --danger: #ff3366;
-                --dark-bg: #0a0e27;
-                --grid-bg: #111827;
-                --text: #e5e7eb;
-                --dim: #9ca3af;
-            }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NPM-REGISTRY - FASE Docs</title>
+  <style>
+    :root {
+      --primary: #00ff88;
+      --secondary: #00bfff;
+      --warning: #ffaa00;
+      --danger: #ff3366;
+      --dark-bg: #0a0e27;
+      --grid-bg: #111827;
+      --text: #e5e7eb;
+      --dim: #9ca3af;
+    }
 
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-            body {
-                background-color: var(--dark-bg);
-                color: var(--text);
-                font-family:
-                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                    Oxygen, Ubuntu, Cantarell, sans-serif;
-                line-height: 1.6;
-                display: flex;
-                flex-direction: column;
-                height: 100vh;
-            }
+    body {
+      background-color: var(--dark-bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
 
-            .header {
-                background-color: var(--grid-bg);
-                border-bottom: 1px solid rgba(0, 255, 136, 0.1);
-                padding: 20px 40px;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
+    .header {
+      background-color: var(--grid-bg);
+      border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-            .logo {
-                font-size: 1.5rem;
-                font-weight: 700;
-                color: var(--text);
-                letter-spacing: -0.5px;
-            }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
 
-            .logo span {
-                color: var(--primary);
-            }
+    .logo span {
+      color: var(--primary);
+    }
 
-            .nav-links {
-                display: flex;
-                gap: 20px;
-            }
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
 
-            .nav-links a {
-                color: var(--text);
-                text-decoration: none;
-                transition: color 0.2s ease;
-                border: none;
-            }
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      border: none;
+    }
 
-            .nav-links a:hover {
-                color: var(--primary);
-            }
+    .nav-links a:hover {
+      color: var(--primary);
+    }
 
-            .content-wrapper {
-                display: flex;
-                flex: 1;
-                overflow: hidden;
-            }
+    .content-wrapper {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
 
-            .sidebar {
-                width: 250px;
-                background-color: var(--grid-bg);
-                border-right: 1px solid rgba(0, 255, 136, 0.1);
-                padding: 20px;
-                overflow-y: auto;
-                flex-shrink: 0;
-            }
+    .sidebar {
+      width: 250px;
+      background-color: var(--grid-bg);
+      border-right: 1px solid rgba(0, 255, 136, 0.1);
+      padding: 20px;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
 
-            .sidebar h3 {
-                color: var(--primary);
-                font-size: 0.875rem;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                margin-bottom: 15px;
-                margin-top: 20px;
-            }
+    .sidebar h3 {
+      color: var(--primary);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+      margin-top: 20px;
+    }
 
-            .sidebar h3:first-child {
-                margin-top: 0;
-            }
+    .sidebar h3:first-child {
+      margin-top: 0;
+    }
 
-            .sidebar-link {
-                display: block;
-                color: var(--text);
-                text-decoration: none;
-                padding: 10px 12px;
-                margin-bottom: 8px;
-                border-radius: 4px;
-                transition: all 0.2s ease;
-                border-left: 3px solid transparent;
-            }
+    .sidebar-link {
+      display: block;
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
 
-            .sidebar-link:hover {
-                color: var(--primary);
-                background-color: rgba(0, 255, 136, 0.1);
-                border-left-color: var(--primary);
-            }
+    .sidebar-link:hover {
+      color: var(--primary);
+      background-color: rgba(0, 255, 136, 0.1);
+      border-left-color: var(--primary);
+    }
 
-            .sidebar-link.active {
-                color: var(--primary);
-                background-color: rgba(0, 255, 136, 0.15);
-                border-left-color: var(--primary);
-                font-weight: 600;
-            }
+    .sidebar-link.active {
+      color: var(--primary);
+      background-color: rgba(0, 255, 136, 0.15);
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
 
-            .main {
-                flex: 1;
-                overflow-y: auto;
-                padding: 40px;
-            }
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+    }
 
-            h1 {
-                color: var(--primary);
-                font-size: 2rem;
-                margin-bottom: 20px;
-                border-bottom: 2px solid var(--primary);
-                padding-bottom: 10px;
-            }
+    h1 {
+      color: var(--primary);
+      font-size: 2rem;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 10px;
+    }
 
-            h2 {
-                color: var(--secondary);
-                font-size: 1.5rem;
-                margin-top: 30px;
-                margin-bottom: 15px;
-            }
+    h2 {
+      color: var(--secondary);
+      font-size: 1.5rem;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
 
-            h3 {
-                color: var(--primary);
-                font-size: 1.2rem;
-                margin-top: 20px;
-                margin-bottom: 10px;
-            }
+    h3 {
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
 
-            p {
-                margin-bottom: 15px;
-                color: var(--text);
-            }
+    p {
+      margin-bottom: 15px;
+      color: var(--text);
+    }
 
-            a {
-                color: var(--primary);
-                text-decoration: none;
-                border-bottom: 1px dotted var(--primary);
-                transition: all 0.2s ease;
-            }
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      border-bottom: 1px dotted var(--primary);
+      transition: all 0.2s ease;
+    }
 
-            a:hover {
-                color: var(--secondary);
-                border-bottom-style: solid;
-            }
+    a:hover {
+      color: var(--secondary);
+      border-bottom-style: solid;
+    }
 
-            code {
-                background-color: var(--dark-bg);
-                color: var(--primary);
-                padding: 0.2rem 0.4rem;
-                border-radius: 2px;
-                font-family: "Courier New", monospace;
-                font-size: 0.9em;
-            }
+    code {
+      background-color: var(--dark-bg);
+      color: var(--primary);
+      padding: 0.2rem 0.4rem;
+      border-radius: 2px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
 
-            pre {
-                background-color: var(--dark-bg);
-                border: 1px solid var(--dim);
-                border-radius: 4px;
-                padding: 15px;
-                overflow-x: auto;
-                margin: 15px 0;
-            }
+    pre {
+      background-color: var(--dark-bg);
+      border: 1px solid var(--dim);
+      border-radius: 4px;
+      padding: 15px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
 
-            pre code {
-                padding: 0;
-                background: none;
-                color: var(--primary);
-            }
+    pre code {
+      padding: 0;
+      background: none;
+      color: var(--primary);
+    }
 
-            ul,
-            ol {
-                margin-left: 20px;
-                margin-bottom: 15px;
-            }
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
 
-            li {
-                margin-bottom: 8px;
-                color: var(--text);
-            }
+    li {
+      margin-bottom: 8px;
+      color: var(--text);
+    }
 
-            blockquote {
-                border-left: 4px solid var(--primary);
-                background-color: var(--dark-bg);
-                padding: 15px;
-                margin: 15px 0;
-                color: var(--dim);
-            }
+    blockquote {
+      border-left: 4px solid var(--primary);
+      background-color: var(--dark-bg);
+      padding: 15px;
+      margin: 15px 0;
+      color: var(--dim);
+    }
 
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin: 15px 0;
-                border: 1px solid var(--dim);
-            }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      border: 1px solid var(--dim);
+    }
 
-            th {
-                background-color: var(--dark-bg);
-                color: var(--primary);
-                padding: 12px;
-                text-align: left;
-                border-bottom: 2px solid var(--primary);
-                border-right: 1px solid var(--dim);
-                font-weight: 600;
-            }
+    th {
+      background-color: var(--dark-bg);
+      color: var(--primary);
+      padding: 12px;
+      text-align: left;
+      border-bottom: 2px solid var(--primary);
+      border-right: 1px solid var(--dim);
+      font-weight: 600;
+    }
 
-            th:last-child {
-                border-right: none;
-            }
+    th:last-child {
+      border-right: none;
+    }
 
-            td {
-                padding: 12px;
-                border-bottom: 1px solid var(--dim);
-                border-right: 1px solid var(--dim);
-            }
+    td {
+      padding: 12px;
+      border-bottom: 1px solid var(--dim);
+      border-right: 1px solid var(--dim);
+    }
 
-            td:last-child {
-                border-right: none;
-            }
+    td:last-child {
+      border-right: none;
+    }
 
-            tr:hover {
-                background-color: rgba(0, 255, 136, 0.05);
-            }
+    tr:hover {
+      background-color: rgba(0, 255, 136, 0.05);
+    }
 
-            strong {
-                color: var(--secondary);
-                font-weight: 600;
-            }
+    strong {
+      color: var(--secondary);
+      font-weight: 600;
+    }
 
-            em {
-                color: var(--dim);
-                font-style: italic;
-            }
+    em {
+      color: var(--dim);
+      font-style: italic;
+    }
 
-            hr {
-                border: none;
-                border-top: 1px solid var(--dim);
-                margin: 30px 0;
-            }
+    hr {
+      border: none;
+      border-top: 1px solid var(--dim);
+      margin: 30px 0;
+    }
 
-            /* Scrollbar */
-            ::-webkit-scrollbar {
-                width: 8px;
-            }
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
 
-            ::-webkit-scrollbar-track {
-                background: var(--dark-bg);
-            }
+    ::-webkit-scrollbar-track {
+      background: var(--dark-bg);
+    }
 
-            ::-webkit-scrollbar-thumb {
-                background: var(--primary);
-                border-radius: 4px;
-            }
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
 
-            ::-webkit-scrollbar-thumb:hover {
-                background: var(--secondary);
-            }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--secondary);
+    }
 
-            /* Mobile */
-            @media (max-width: 768px) {
-                .content-wrapper {
-                    flex-direction: column;
-                }
+    /* Mobile */
+    @media (max-width: 768px) {
+      .content-wrapper {
+        flex-direction: column;
+      }
 
-                .sidebar {
-                    width: 100%;
-                    border-right: none;
-                    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
-                    max-height: 150px;
-                    overflow-x: auto;
-                    display: flex;
-                    gap: 10px;
-                }
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+        max-height: 150px;
+        overflow-x: auto;
+        display: flex;
+        gap: 10px;
+      }
 
-                .sidebar h3 {
-                    display: none;
-                }
+      .sidebar h3 {
+        display: none;
+      }
 
-                .sidebar-link {
-                    white-space: nowrap;
-                    margin-bottom: 0;
-                }
+      .sidebar-link {
+        white-space: nowrap;
+        margin-bottom: 0;
+      }
 
-                .main {
-                    padding: 20px;
-                }
+      .main {
+        padding: 20px;
+      }
 
-                h1 {
-                    font-size: 1.5rem;
-                }
+      h1 {
+        font-size: 1.5rem;
+      }
 
-                h2 {
-                    font-size: 1.2rem;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="header">
-            <div class="logo">fase<span>-</span>ai</div>
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="https://github.com/isaaceliape/FASE">GitHub</a>
-            </div>
-        </div>
+      h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">fase<span>-</span>ai</div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="https://github.com/isaaceliape/FASE">GitHub</a>
+    </div>
+  </div>
 
-        <div class="content-wrapper">
-            <aside class="sidebar">
-                <h3>📚 Documentação</h3>
-                <a href="readme.html" class="sidebar-link">📖 README</a>
-                <a href="COMANDOS.html" class="sidebar-link">📋 Comandos</a>
-                <a href="guia-do-usuario.html" class="sidebar-link"
-                    >📘 Guia do Usuário</a
-                >
-                <a href="HOOKS.html" class="sidebar-link">🔧 Git Hooks</a>
-                <a href="NPM-REGISTRY.html" class="sidebar-link active"
-                    >📦 NPM Registry</a
-                >
-                <a href="context-monitor.html" class="sidebar-link"
-                    >📊 Context Monitor</a
-                >
-            </aside>
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <h3>📚 Documentação</h3>
+      <a href="readme.html" class="sidebar-link ">📖 README</a>
+<a href="COMANDOS.html" class="sidebar-link ">📋 Comandos</a>
+<a href="guia-do-usuario.html" class="sidebar-link ">📘 Guia do Usuário</a>
+<a href="HOOKS.html" class="sidebar-link ">🔧 Git Hooks</a>
+<a href="NPM-REGISTRY.html" class="sidebar-link active">📦 NPM Registry</a>
+<a href="context-monitor.html" class="sidebar-link ">📊 Context Monitor</a>
+    </aside>
 
-            <main class="main">
-                <h1>📦 Configuração do npm Registry</h1>
-                <p>
-                    O FASE está configurado para usar o
-                    <strong>npm registry oficial</strong> como fonte única de
-                    verdade para publicação e instalação.
-                </p>
-                <h2>🔧 Configuração Atual</h2>
-                <h3>Arquivo: <code>.npmrc</code> (raiz)</h3>
-                <pre><code>registry=https://registry.npmjs.org/
+    <main class="main">
+      <h1>📦 Configuração do npm Registry</h1>
+<p>O FASE está configurado para usar o <strong>npm registry oficial</strong> como fonte única de verdade para publicação e instalação.</p>
+<h2>🔧 Configuração Atual</h2>
+<h3>Arquivo: <code>.npmrc</code> (raiz)</h3>
+<pre><code>registry=https://registry.npmjs.org/
 audit=true
 engine-strict=true
 </code></pre>
-                <h3>Arquivo: <code>bin/.npmrc</code> (pacote)</h3>
-                <pre><code>registry=https://registry.npmjs.org/
+<h3>Arquivo: <code>bin/.npmrc</code> (pacote)</h3>
+<pre><code>registry=https://registry.npmjs.org/
 audit=true
 </code></pre>
-                <hr />
-                <h2>🚀 Instalação do FASE</h2>
-                <h3>Via npm (recomendado)</h3>
-                <pre><code class="language-bash"># Usar npm padrão - sempre busca do registry oficial
+<hr>
+<h2>🚀 Instalação do FASE</h2>
+<h3>Via npm (recomendado)</h3>
+<pre><code class="language-bash"># Usar npm padrão - sempre busca do registry oficial
 npm install -g fase-ai
 
 # Ou específico
 npm install -g fase-ai@latest
 </code></pre>
-                <h3>Se estiver usando cnpm</h3>
-                <pre><code class="language-bash"># Especificar registry explicitamente
+<h3>Se estiver usando cnpm</h3>
+<pre><code class="language-bash"># Especificar registry explicitamente
 npm install -g fase-ai --registry=https://registry.npmjs.org/
 
 # Ou configurar como default
 npm config set registry https://registry.npmjs.org/
 </code></pre>
-                <hr />
-                <h2>✅ Verificação</h2>
-                <p>Para confirmar que está usando o registry correto:</p>
-                <pre><code class="language-bash"># Ver registry configurado
+<hr>
+<h2>✅ Verificação</h2>
+<p>Para confirmar que está usando o registry correto:</p>
+<pre><code class="language-bash"># Ver registry configurado
 npm config get registry
 
 # Deve exibir:
 # https://registry.npmjs.org/
 </code></pre>
-                <hr />
-                <h2>📋 Para Contribuidores</h2>
-                <p>Se você está desenvolvendo o FASE localmente:</p>
-                <pre><code class="language-bash"># Clonar repositório
+<hr>
+<h2>📋 Para Contribuidores</h2>
+<p>Se você está desenvolvendo o FASE localmente:</p>
+<pre><code class="language-bash"># Clonar repositório
 git clone https://github.com/isaaceliape/FASE.git
 cd FASE
 
@@ -399,59 +386,40 @@ npm install
 # Testar instalador localmente
 node bin/install.js --help
 </code></pre>
-                <p>
-                    O arquivo <code>.npmrc</code> garante que todos os
-                    contribuidores usem o mesmo registry.
-                </p>
-                <hr />
-                <h2>🔐 Publicação</h2>
-                <p>Quando publicamos no npm:</p>
-                <ol>
-                    <li>✅ GitHub Actions valida o pacote</li>
-                    <li>✅ Autentica com <code>NPM_TOKEN</code> secret</li>
-                    <li>
-                        ✅ Publica em <code>https://registry.npmjs.org/</code>
-                    </li>
-                    <li>✅ Fica disponível globalmente em minutos</li>
-                </ol>
-                <hr />
-                <h2>🌍 Para Usuários Chineses</h2>
-                <p>Se você está na China e a instalação é lenta:</p>
-                <h3>Opção 1: Usar cnpm</h3>
-                <pre><code class="language-bash">cnpm install -g fase-ai
+<p>O arquivo <code>.npmrc</code> garante que todos os contribuidores usem o mesmo registry.</p>
+<hr>
+<h2>🔐 Publicação</h2>
+<p>Quando publicamos no npm:</p>
+<ol>
+<li>✅ GitHub Actions valida o pacote</li>
+<li>✅ Autentica com <code>NPM_TOKEN</code> secret</li>
+<li>✅ Publica em <code>https://registry.npmjs.org/</code></li>
+<li>✅ Fica disponível globalmente em minutos</li>
+</ol>
+<hr>
+<h2>🌍 Para Usuários Chineses</h2>
+<p>Se você está na China e a instalação é lenta:</p>
+<h3>Opção 1: Usar cnpm</h3>
+<pre><code class="language-bash">cnpm install -g fase-ai
 </code></pre>
-                <h3>Opção 2: Configurar como default</h3>
-                <pre><code class="language-bash">npm config set registry https://registry.npmmirror.com
+<h3>Opção 2: Configurar como default</h3>
+<pre><code class="language-bash">npm config set registry https://registry.npmmirror.com
 # Depois restaurar
 npm config set registry https://registry.npmjs.org/
 </code></pre>
-                <hr />
-                <h2>📊 Informações do Pacote</h2>
-                <ul>
-                    <li><strong>Pacote</strong>: fase-ai</li>
-                    <li>
-                        <strong>Registry Oficial</strong>:
-                        <a href="https://registry.npmjs.org/"
-                            >https://registry.npmjs.org/</a
-                        >
-                    </li>
-                    <li>
-                        <strong>URL npm</strong>:
-                        <a href="https://www.npmjs.com/package/fase-ai"
-                            >https://www.npmjs.com/package/fase-ai</a
-                        >
-                    </li>
-                    <li>
-                        <strong>Escopo</strong>: Public (qualquer um pode
-                        instalar)
-                    </li>
-                </ul>
-                <hr />
-                <p>
-                    <strong>Versão</strong>: 1.0
-                    <strong>Última atualização</strong>: 2026-03-13
-                </p>
-            </main>
-        </div>
-    </body>
+<hr>
+<h2>📊 Informações do Pacote</h2>
+<ul>
+<li><strong>Pacote</strong>: fase-ai</li>
+<li><strong>Registry Oficial</strong>: <a href="https://registry.npmjs.org/">https://registry.npmjs.org/</a></li>
+<li><strong>URL npm</strong>: <a href="https://www.npmjs.com/package/fase-ai">https://www.npmjs.com/package/fase-ai</a></li>
+<li><strong>Escopo</strong>: Public (qualquer um pode instalar)</li>
+</ul>
+<hr>
+<p><strong>Versão</strong>: 1.0
+<strong>Última atualização</strong>: 2026-03-13</p>
+
+    </main>
+  </div>
+</body>
 </html>

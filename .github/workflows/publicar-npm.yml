@@ -42,18 +42,17 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Criar release no GitHub
-        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            Publicado em npm: https://www.npmjs.com/package/fase-ai/v${{ github.ref_name }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          NOTES=$(cat <<'EOF'
+          Publicado em npm: https://www.npmjs.com/package/fase-ai/v${{ github.ref_name }}
 
-            Instale com:
-            ```bash
-            npx fase-ai@${{ github.ref_name }}
-            ```
-          draft: false
-          prerelease: false
+          Instale com:
+          ```bash
+          npx fase-ai@${{ github.ref_name }}
+          ```
+          EOF
+          )
+          gh release create "${{ github.ref }}" --title "Release ${{ github.ref_name }}" --notes "$NOTES" 2>/dev/null || gh release edit "${{ github.ref }}" --title "Release ${{ github.ref_name }}" --notes "$NOTES"

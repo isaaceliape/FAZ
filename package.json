@@ -10,5 +10,8 @@
   },
   "devDependencies": {
     "husky": "^9.0.0"
+  },
+  "dependencies": {
+    "marked": "^17.0.4"
   }
 }
