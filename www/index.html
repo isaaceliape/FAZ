@@ -6,15 +6,17 @@
         <title>FASE - Framework de Automação Sem Enrolação</title>
         <style>
             @font-face {
-                font-family: '0xProto';
-                src: url('https://cdn.jsdelivr.net/gh/0xType/0xproto@master/fonts/0xProto-Regular.woff2') format('woff2');
+                font-family: "0xProto";
+                src: url("https://cdn.jsdelivr.net/gh/0xType/0xproto@master/fonts/0xProto-Regular.woff2")
+                    format("woff2");
                 font-weight: 400;
                 font-style: normal;
             }
 
             @font-face {
-                font-family: '0xProto';
-                src: url('https://cdn.jsdelivr.net/gh/0xType/0xproto@master/fonts/0xProto-Bold.woff2') format('woff2');
+                font-family: "0xProto";
+                src: url("https://cdn.jsdelivr.net/gh/0xType/0xproto@master/fonts/0xProto-Bold.woff2")
+                    format("woff2");
                 font-weight: 700;
                 font-style: normal;
             }
@@ -40,8 +42,8 @@
                 background-color: var(--dark-bg);
                 color: var(--text);
                 font-family:
-                    "0xProto", "JetBrains Mono", "Courier New", "Monaco",
-                    "Menlo", "Ubuntu Mono", monospace;
+                    "0xProto", "Courier New", "Monaco",
+                    "Ubuntu Mono", monospace;
                 line-height: 1.6;
                 overflow-x: hidden;
             }
@@ -269,7 +271,7 @@
                 overflow-x: auto;
                 position: relative;
                 border-radius: 6px;
-                font-family: "JetBrains Mono", "Courier New", monospace;
+                font-family: "0xProto", "Courier New", monospace;
             }
 
             .command::before {
@@ -369,7 +371,7 @@
             .runtime-path {
                 color: var(--primary);
                 font-size: 0.75rem;
-                font-family: "JetBrains Mono", monospace;
+                font-family: "0xProto", monospace;
             }
 
             /* Stats */
@@ -537,7 +539,7 @@
         <div class="container">
             <!-- Header/Nav -->
             <header>
-                <div class="logo">FASE<span>.</span></div>
+                <div class="logo">fase<span>-</span>ai</div>
                 <nav>
                     <a href="#features" class="nav-item">O que faz</a>
                     <a href="#install" class="nav-item">Instalar</a>
@@ -557,7 +559,7 @@
                     src="fase-logo.png"
                     alt="FASE Logo"
                     class="hero-logo"
-                    style="filter: drop-shadow(0 0 20px rgba(0, 191, 255, 0.3));"
+                    style="filter: drop-shadow(0 0 20px rgba(0, 191, 255, 0.3))"
                 />
                 <div class="subtitle">Framework de Automação</div>
                 <h1>Automação que <span>realmente funciona</span></h1>
@@ -690,7 +692,16 @@
                 >
                     Exemplo do instalador interativo:
                 </p>
-                <pre style="background: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 6px; overflow-x: auto; font-size: 0.9rem; line-height: 1.6;">
+                <pre
+                    style="
+                        background: rgba(0, 0, 0, 0.5);
+                        padding: 20px;
+                        border-radius: 6px;
+                        overflow-x: auto;
+                        font-size: 0.9rem;
+                        line-height: 1.6;
+                    "
+                >
 $ npx fase-ai
 
 ╔════════════════════════════════════════════════════════════════╗
@@ -747,7 +758,17 @@ $ npx fase-ai
                     </button>
                 </div>
 
-                <pre style="background: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 6px; overflow-x: auto; font-size: 0.9rem; line-height: 1.6; margin-bottom: 30px;">
+                <pre
+                    style="
+                        background: rgba(0, 0, 0, 0.5);
+                        padding: 20px;
+                        border-radius: 6px;
+                        overflow-x: auto;
+                        font-size: 0.9rem;
+                        line-height: 1.6;
+                        margin-bottom: 30px;
+                    "
+                >
 $ npx fase-ai --claude --global
 
 ✓ Runtime: Claude Code
@@ -773,7 +794,17 @@ $ npx fase-ai --claude --global
                     </button>
                 </div>
 
-                <pre style="background: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 6px; overflow-x: auto; font-size: 0.9rem; line-height: 1.6; margin-bottom: 30px;">
+                <pre
+                    style="
+                        background: rgba(0, 0, 0, 0.5);
+                        padding: 20px;
+                        border-radius: 6px;
+                        overflow-x: auto;
+                        font-size: 0.9rem;
+                        line-height: 1.6;
+                        margin-bottom: 30px;
+                    "
+                >
 $ npx fase-ai --opencode --local
 
 ✓ Runtime: OpenCode
@@ -797,7 +828,16 @@ $ npx fase-ai --opencode --local
                     </button>
                 </div>
 
-                <pre style="background: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 6px; overflow-x: auto; font-size: 0.9rem; line-height: 1.6;">
+                <pre
+                    style="
+                        background: rgba(0, 0, 0, 0.5);
+                        padding: 20px;
+                        border-radius: 6px;
+                        overflow-x: auto;
+                        font-size: 0.9rem;
+                        line-height: 1.6;
+                    "
+                >
 $ npx fase-ai --all --global
 
 ✓ Instalando para todos os runtimes:
