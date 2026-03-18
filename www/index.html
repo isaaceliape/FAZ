@@ -7,8 +7,7 @@
         <style>
             @font-face {
                 font-family: "0xProto";
-                src: url("./fonts/0xProto-Regular.woff2")
-                    format("woff2");
+                src: url("./fonts/0xProto-Regular.woff2") format("woff2");
                 font-weight: 400;
                 font-style: normal;
                 font-display: block;
@@ -16,8 +15,7 @@
 
             @font-face {
                 font-family: "0xProto";
-                src: url("./fonts/0xProto-Bold.woff2")
-                    format("woff2");
+                src: url("./fonts/0xProto-Bold.woff2") format("woff2");
                 font-weight: 700;
                 font-style: normal;
                 font-display: block;
@@ -44,8 +42,7 @@
                 background-color: var(--dark-bg);
                 color: var(--text);
                 font-family:
-                    "0xProto", "Courier New", "Monaco",
-                    "Ubuntu Mono", monospace;
+                    "0xProto", "Courier New", "Monaco", "Ubuntu Mono", monospace;
                 line-height: 1.6;
                 overflow-x: hidden;
             }
@@ -189,6 +186,36 @@
 
             .nav-item:hover {
                 color: var(--primary);
+            }
+
+            .hamburger {
+                display: none;
+                flex-direction: column;
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 8px;
+                gap: 5px;
+            }
+
+            .hamburger span {
+                width: 25px;
+                height: 3px;
+                background-color: var(--text);
+                border-radius: 2px;
+                transition: all 0.3s ease;
+            }
+
+            .hamburger.active span:nth-child(1) {
+                transform: rotate(45deg) translate(10px, 10px);
+            }
+
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -7px);
             }
 
             /* Grid Layout */
@@ -478,19 +505,38 @@
                 }
 
                 header {
-                    flex-direction: column;
-                    align-items: flex-start;
-                    gap: 20px;
+                    align-items: center;
+                    gap: 0;
+                    justify-content: space-between;
+                    position: relative;
+                }
+
+                .hamburger {
+                    display: flex;
                 }
 
                 nav {
+                    display: none;
                     flex-direction: column;
                     gap: 20px;
-                    width: 100%;
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    right: 0;
+                    background-color: var(--dark-bg);
+                    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+                    padding: 20px;
+                    margin-top: 10px;
+                    z-index: 1000;
+                }
+
+                nav.active {
+                    display: flex;
                 }
 
                 .nav-item {
                     display: block;
+                    padding: 10px 0;
                 }
 
                 .hero h1 {
@@ -546,7 +592,12 @@
             <!-- Header/Nav -->
             <header>
                 <div class="logo">fase<span>-</span>ai</div>
-                <nav>
+                <button class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <nav id="nav-menu">
                     <a href="#features" class="nav-item">O que faz</a>
                     <a href="#install" class="nav-item">Instalar</a>
                     <a href="#runtimes" class="nav-item">Runtimes</a>
@@ -711,8 +762,8 @@
 $ npx fase-ai
 
 ╔════════════════════════════════════════════════════════════════╗
-║ F.A.S.E - Framework de Automação Sem Enrolação               ║
-║ Instalador Interativo v2.5.0                                 ║
+║ F.A.S.E - Framework de Automação Sem Enrolação                 ║
+║ Instalador Interativo v2.5.0                                   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ? Qual runtime você deseja usar? (use ↑↓ para navegar)
@@ -734,11 +785,11 @@ $ npx fase-ai
 ✓ Copiando agentes de IA...
 
 ╔════════════════════════════════════════════════════════════════╗
-║ ✓ Instalação concluída com sucesso!                          ║
-║                                                              ║
-║ Próximos passos:                                             ║
-║ $ fase:ajuda.pt        (ver comandos disponíveis)             ║
-║ $ fase:novo-projeto.pt (iniciar novo projeto)                ║
+║ ✓ Instalação concluída com sucesso!                            ║
+║                                                                ║
+║ Próximos passos:                                               ║
+║ $ fase:ajuda.pt        (ver comandos disponíveis)              ║
+║ $ fase:novo-projeto.pt (iniciar novo projeto)                  ║
 ╚════════════════════════════════════════════════════════════════╝
                 </pre>
 
@@ -784,7 +835,7 @@ $ npx fase-ai --claude --global
 ✓ Ativando comandos FASE...
 
 ╔════════════════════════════════════════════════════════════════╗
-║ ✓ Pronto! Use /fase:ajuda.pt para começar                    ║
+║ ✓ Pronto! Use /fase:ajuda.pt para começar                      ║
 ╚════════════════════════════════════════════════════════════════╝
                 </pre>
 
@@ -820,7 +871,7 @@ $ npx fase-ai --opencode --local
 ✓ Gerando configurações...
 
 ╔════════════════════════════════════════════════════════════════╗
-║ ✓ Pronto! Use fase:ajuda.pt no terminal                      ║
+║ ✓ Pronto! Use fase:ajuda.pt no terminal                        ║
 ╚════════════════════════════════════════════════════════════════╝
                 </pre>
 
@@ -854,9 +905,9 @@ $ npx fase-ai --all --global
 ✓ Modo: Global
 
 ╔════════════════════════════════════════════════════════════════╗
-║ ✓ Todos os runtimes configurados com sucesso!                ║
-║                                                              ║
-║ Comece agora:                                                ║
+║ ✓ Todos os runtimes configurados com sucesso!                  ║
+║                                                                ║
+║ Comece agora:                                                  ║
 ║ $ /fase:novo-projeto.pt                                        ║
 ║ $ /fase:novo-marco.pt                                          ║
 ║ $ /fase:executar-fase.pt                                       ║
@@ -986,6 +1037,35 @@ $ npx fase-ai --all --global
                         });
                     }
                 });
+            });
+
+            // Hamburger menu toggle
+            const hamburger = document.getElementById("hamburger");
+            const navMenu = document.getElementById("nav-menu");
+            const navItems = document.querySelectorAll(".nav-item");
+
+            hamburger.addEventListener("click", () => {
+                hamburger.classList.toggle("active");
+                navMenu.classList.toggle("active");
+            });
+
+            // Close menu when a link is clicked
+            navItems.forEach((item) => {
+                item.addEventListener("click", () => {
+                    hamburger.classList.remove("active");
+                    navMenu.classList.remove("active");
+                });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener("click", (e) => {
+                if (
+                    !hamburger.contains(e.target) &&
+                    !navMenu.contains(e.target)
+                ) {
+                    hamburger.classList.remove("active");
+                    navMenu.classList.remove("active");
+                }
             });
         </script>
     </body>
