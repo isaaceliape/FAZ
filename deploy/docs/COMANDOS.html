@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>COMANDOS - FASE Docs</title>
+        <style>
+            :root {
+                --primary: #00ff88;
+                --secondary: #00bfff;
+                --warning: #ffaa00;
+                --danger: #ff3366;
+                --dark-bg: #0a0e27;
+                --grid-bg: #111827;
+                --text: #e5e7eb;
+                --dim: #9ca3af;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                background-color: var(--dark-bg);
+                color: var(--text);
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    Oxygen, Ubuntu, Cantarell, sans-serif;
+                line-height: 1.6;
+                display: flex;
+                flex-direction: column;
+                height: 100vh;
+            }
+
+            .header {
+                background-color: var(--grid-bg);
+                border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+                padding: 20px 40px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--text);
+                letter-spacing: -0.5px;
+            }
+
+            .logo span {
+                color: var(--primary);
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 20px;
+            }
+
+            .nav-links a {
+                color: var(--text);
+                text-decoration: none;
+                transition: color 0.2s ease;
+                border: none;
+            }
+
+            .nav-links a:hover {
+                color: var(--primary);
+            }
+
+            .content-wrapper {
+                display: flex;
+                flex: 1;
+                overflow: hidden;
+            }
+
+            .sidebar {
+                width: 250px;
+                background-color: var(--grid-bg);
+                border-right: 1px solid rgba(0, 255, 136, 0.1);
+                padding: 20px;
+                overflow-y: auto;
+                flex-shrink: 0;
+            }
+
+            .sidebar h3 {
+                color: var(--primary);
+                font-size: 0.875rem;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-bottom: 15px;
+                margin-top: 20px;
+            }
+
+            .sidebar h3:first-child {
+                margin-top: 0;
+            }
+
+            .sidebar-link {
+                display: block;
+                color: var(--text);
+                text-decoration: none;
+                padding: 10px 12px;
+                margin-bottom: 8px;
+                border-radius: 4px;
+                transition: all 0.2s ease;
+                border-left: 3px solid transparent;
+            }
+
+            .sidebar-link:hover {
+                color: var(--primary);
+                background-color: rgba(0, 255, 136, 0.1);
+                border-left-color: var(--primary);
+            }
+
+            .sidebar-link.active {
+                color: var(--primary);
+                background-color: rgba(0, 255, 136, 0.15);
+                border-left-color: var(--primary);
+                font-weight: 600;
+            }
+
+            .main {
+                flex: 1;
+                overflow-y: auto;
+                padding: 40px;
+            }
+
+            h1 {
+                color: var(--primary);
+                font-size: 2rem;
+                margin-bottom: 20px;
+                border-bottom: 2px solid var(--primary);
+                padding-bottom: 10px;
+            }
+
+            h2 {
+                color: var(--secondary);
+                font-size: 1.5rem;
+                margin-top: 30px;
+                margin-bottom: 15px;
+            }
+
+            h3 {
+                color: var(--primary);
+                font-size: 1.2rem;
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+
+            p {
+                margin-bottom: 15px;
+                color: var(--text);
+            }
+
+            a {
+                color: var(--primary);
+                text-decoration: none;
+                border-bottom: 1px dotted var(--primary);
+                transition: all 0.2s ease;
+            }
+
+            a:hover {
+                color: var(--secondary);
+                border-bottom-style: solid;
+            }
+
+            code {
+                background-color: var(--dark-bg);
+                color: var(--primary);
+                padding: 0.2rem 0.4rem;
+                border-radius: 2px;
+                font-family: "Courier New", monospace;
+                font-size: 0.9em;
+            }
+
+            pre {
+                background-color: var(--dark-bg);
+                border: 1px solid var(--dim);
+                border-radius: 4px;
+                padding: 15px;
+                overflow-x: auto;
+                margin: 15px 0;
+            }
+
+            pre code {
+                padding: 0;
+                background: none;
+                color: var(--primary);
+            }
+
+            ul,
+            ol {
+                margin-left: 20px;
+                margin-bottom: 15px;
+            }
+
+            li {
+                margin-bottom: 8px;
+                color: var(--text);
+            }
+
+            blockquote {
+                border-left: 4px solid var(--primary);
+                background-color: var(--dark-bg);
+                padding: 15px;
+                margin: 15px 0;
+                color: var(--dim);
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 15px 0;
+                border: 1px solid var(--dim);
+            }
+
+            th {
+                background-color: var(--dark-bg);
+                color: var(--primary);
+                padding: 12px;
+                text-align: left;
+                border-bottom: 2px solid var(--primary);
+                border-right: 1px solid var(--dim);
+                font-weight: 600;
+            }
+
+            th:last-child {
+                border-right: none;
+            }
+
+            td {
+                padding: 12px;
+                border-bottom: 1px solid var(--dim);
+                border-right: 1px solid var(--dim);
+            }
+
+            td:last-child {
+                border-right: none;
+            }
+
+            tr:hover {
+                background-color: rgba(0, 255, 136, 0.05);
+            }
+
+            strong {
+                color: var(--secondary);
+                font-weight: 600;
+            }
+
+            em {
+                color: var(--dim);
+                font-style: italic;
+            }
+
+            hr {
+                border: none;
+                border-top: 1px solid var(--dim);
+                margin: 30px 0;
+            }
+
+            /* Scrollbar */
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: var(--dark-bg);
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: var(--primary);
+                border-radius: 4px;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: var(--secondary);
+            }
+
+            /* Mobile */
+            @media (max-width: 768px) {
+                .content-wrapper {
+                    flex-direction: column;
+                }
+
+                .sidebar {
+                    width: 100%;
+                    border-right: none;
+                    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+                    max-height: 150px;
+                    overflow-x: auto;
+                    display: flex;
+                    gap: 10px;
+                }
+
+                .sidebar h3 {
+                    display: none;
+                }
+
+                .sidebar-link {
+                    white-space: nowrap;
+                    margin-bottom: 0;
+                }
+
+                .main {
+                    padding: 20px;
+                }
+
+                h1 {
+                    font-size: 1.5rem;
+                }
+
+                h2 {
+                    font-size: 1.2rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <div class="logo">fase<span>-</span>ai</div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="https://github.com/isaaceliape/FASE">GitHub</a>
+            </div>
+        </div>
+
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                <h3>📚 Documentação</h3>
+                <a href="readme.html" class="sidebar-link">📖 README</a>
+                <a href="COMANDOS.html" class="sidebar-link active"
+                    >📋 Comandos</a
+                >
+                <a href="guia-do-usuario.html" class="sidebar-link"
+                    >📘 Guia do Usuário</a
+                >
+                <a href="HOOKS.html" class="sidebar-link">🔧 Git Hooks</a>
+                <a href="NPM-REGISTRY.html" class="sidebar-link"
+                    >📦 NPM Registry</a
+                >
+                <a href="context-monitor.html" class="sidebar-link"
+                    >📊 Context Monitor</a
+                >
+            </aside>
+
+            <main class="main">
+                <h1>🔧 Comandos do F.A.S.E.</h1>
+                <p>
+                    <strong
+                        >32 comandos em português brasileiro para Claude
+                        Code.</strong
+                    >
+                </p>
+                <hr />
+                <h2>📋 Índice</h2>
+                <ul>
+                    <li>
+                        <a href="#essenciais">Essenciais</a> — Comandos
+                        principais
+                    </li>
+                    <li>
+                        <a href="#planejamento">Planejamento</a> — Planejamento
+                        e milestones
+                    </li>
+                    <li>
+                        <a href="#pesquisa">Pesquisa</a> — Pesquisa e mapeamento
+                    </li>
+                    <li>
+                        <a href="#verifica%C3%A7%C3%A3o">Verificação</a> —
+                        Verificação e validação
+                    </li>
+                    <li>
+                        <a href="#depura%C3%A7%C3%A3o">Depuração</a> — Debug e
+                        troubleshooting
+                    </li>
+                    <li>
+                        <a href="#discuss%C3%A3o">Discussão</a> — Discussão e
+                        conclusão
+                    </li>
+                    <li>
+                        <a href="#utilit%C3%A1rios">Utilitários</a> —
+                        Utilitários diversos
+                    </li>
+                </ul>
+                <hr />
+                <h2>Essenciais</h2>
+                <p>Comandos essenciais para começar e executar projetos.</p>
+                <h3><code>/fase-ajuda</code></h3>
+                <p>Mostra ajuda geral e lista de comandos disponíveis.</p>
+                <p>
+                    <strong>Aliases:</strong> <code>help</code>, <code>h</code>
+                </p>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-ajuda
+/fase-ajuda novo-projeto  # Ajuda específica de um comando
+</code></pre>
+                <hr />
+                <h3><code>/fase-novo-projeto</code></h3>
+                <p>Inicia um novo projeto F.A.S.E. no diretório atual.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Cria estrutura de pastas <code>.planning/</code></li>
+                    <li>Inicializa STATE.md, ROADMAP.md, REQUIREMENTS.md</li>
+                    <li>Configura contexto do projeto</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-novo-projeto &quot;Sistema de autenticação JWT&quot;
+</code></pre>
+                <hr />
+                <h3><code>/fase-planejar-fase</code></h3>
+                <p>Cria um plano detalhado para uma fase específica.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Analisa o objetivo da fase</li>
+                    <li>Quebra em tarefas atômicas</li>
+                    <li>Define critérios de sucesso</li>
+                    <li>Estima complexidade</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-planejar-fase &quot;Implementar login com email/senha&quot;
+</code></pre>
+                <hr />
+                <h3><code>/fase-executar-fase</code></h3>
+                <p>Executa o plano de uma fase, tarefa por tarefa.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Executa tarefas na ordem</li>
+                    <li>Cria commits atômicos por tarefa</li>
+                    <li>Lida com desvios automaticamente</li>
+                    <li>Pausa em checkpoints quando necessário</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-executar-fase &quot;fase-1&quot;
+</code></pre>
+                <hr />
+                <h3><code>/fase-configuracoes</code></h3>
+                <p>Mostra e ajusta configurações do F.A.S.E.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Lista configurações atuais</li>
+                    <li>Permite alterar preferências</li>
+                    <li>Gerencia perfis de modelo</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-configuracoes
+/fase-configuracoes set modelo padrao claude-sonnet
+</code></pre>
+                <hr />
+                <h2>Planejamento</h2>
+                <p>Comandos para planejar e gerenciar milestones e fases.</p>
+                <h3><code>/fase-novo-marco</code></h3>
+                <p>Cria um novo marco (milestone) no roadmap.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Define objetivo do marco</li>
+                    <li>Estabelece critérios de conclusão</li>
+                    <li>Linka com requirements</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-novo-marco &quot;MVP funcional até sexta&quot;
+</code></pre>
+                <hr />
+                <h3><code>/fase-adicionar-fase</code></h3>
+                <p>Adiciona uma nova fase ao projeto.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Cria fase com nome e descrição</li>
+                    <li>Define posição no roadmap</li>
+                    <li>Linka com marco relevante</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-adicionar-fase &quot;Autenticação de usuários&quot;
+</code></pre>
+                <hr />
+                <h3><code>/fase-inserir-fase</code></h3>
+                <p>
+                    Insere uma fase em uma posição específica (entre outras
+                    fases).
+                </p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Insere fase em posição personalizada</li>
+                    <li>Recalcula ordem das fases existentes</li>
+                    <li>Ajusta dependências</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-inserir-fase &quot;Validação de inputs&quot; --depois &quot;fase-2&quot;
+</code></pre>
+                <hr />
+                <h3><code>/fase-remover-fase</code></h3>
+                <p>Remove uma fase do projeto.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Remove fase do roadmap</li>
+                    <li>Ajusta ordem das fases restantes</li>
+                    <li>Arquiva plano da fase removida</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-remover-fase &quot;fase-3&quot;
+</code></pre>
+                <hr />
+                <h3><code>/fase-pausar-trabalho</code></h3>
+                <p>Pausa o trabalho atual e salva o estado.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Salva estado atual da execução</li>
+                    <li>Marca ponto de retomada</li>
+                    <li>Libera contexto para outras tarefas</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-pausar-trabalho &quot;Preciso sair, continuo depois&quot;
+</code></pre>
+                <hr />
+                <h3><code>/fase-retomar-trabalho</code></h3>
+                <p>Retoma trabalho de onde parou.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Carrega estado salvo</li>
+                    <li>Restaura contexto da execução</li>
+                    <li>Continua da tarefa pendente</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-retomar-trabalho
+</code></pre>
+                <hr />
+                <h3><code>/fase-progresso</code></h3>
+                <p>Mostra o progresso atual do projeto.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Exibe status das fases</li>
+                    <li>Mostra tarefas completadas vs pendentes</li>
+                    <li>Calcula porcentagem geral</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-progresso
+</code></pre>
+                <hr />
+                <h2>Pesquisa</h2>
+                <p>Comandos para pesquisar e mapear o projeto.</p>
+                <h3><code>/fase-pesquisar-fase</code></h3>
+                <p>Realiza pesquisa para embasar uma fase.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Pesquisa tecnologias relevantes</li>
+                    <li>Identifica melhores práticas</li>
+                    <li>Lista potenciais armadilhas</li>
+                    <li>Cria documento de pesquisa</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-pesquisar-fase &quot;Implementar WebSockets para chat em tempo real&quot;
+</code></pre>
+                <hr />
+                <h3><code>/fase-mapear-codigo</code></h3>
+                <p>Mapeia um codebase existente.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Analisa estrutura de pastas</li>
+                    <li>Identifica padrões de arquitetura</li>
+                    <li>Mapeia dependências</li>
+                    <li>Documenta convenções do projeto</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-mapear-codigo
+</code></pre>
+                <p><strong>Output:</strong></p>
+                <ul>
+                    <li><code>CODEBASE/stack.md</code> — Tecnologias usadas</li>
+                    <li>
+                        <code>CODEBASE/architecture.md</code> — Padrão
+                        arquitetural
+                    </li>
+                    <li>
+                        <code>CODEBASE/conventions.md</code> — Convenções de
+                        código
+                    </li>
+                    <li>
+                        <code>CODEBASE/integrations.md</code> — Integrações
+                        externas
+                    </li>
+                </ul>
+                <hr />
+                <h3><code>/fase-listar-premissas</code></h3>
+                <p>Lista todas as premissas de uma fase.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Extrai premissas do plano</li>
+                    <li>Mostra suposições feitas</li>
+                    <li>Identifica riscos potenciais</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-listar-premissas &quot;fase-2&quot;
+</code></pre>
+                <hr />
+                <h2>Verificação</h2>
+                <p>Comandos para verificar e validar o trabalho.</p>
+                <h3><code>/fase-verificar-trabalho</code></h3>
+                <p>Verifica se o trabalho foi feito corretamente.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Revisa código implementado</li>
+                    <li>Confirma critérios de sucesso</li>
+                    <li>Identifica issues pendentes</li>
+                    <li>Gera relatório de verificação</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-verificar-trabalho &quot;fase-1&quot;
+</code></pre>
+                <hr />
+                <h3><code>/fase-validar-fase</code></h3>
+                <p>Valida que uma fase está completa e pronta.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Confirma todas as tarefas feitas</li>
+                    <li>Verifica testes passando</li>
+                    <li>Valida integração com outras fases</li>
+                    <li>Aprova para próximo passo</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-validar-fase &quot;fase-1&quot;
+</code></pre>
+                <hr />
+                <h3><code>/fase-auditar-marco</code></h3>
+                <p>Realiza auditoria de um marco.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Revisa todos os requirements do marco</li>
+                    <li>Confirma critérios de aceitação</li>
+                    <li>Gera relatório de auditoria</li>
+                    <li>Identifica gaps restantes</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-auditar-marco &quot;MVP&quot;
+</code></pre>
+                <hr />
+                <h2>Depuração</h2>
+                <p>Comandos para debug e troubleshooting.</p>
+                <h3><code>/fase-debug</code></h3>
+                <p>Inicia sessão de debug estruturado.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Coleta informações do erro</li>
+                    <li>Analisa stack traces</li>
+                    <li>Identifica causa raiz</li>
+                    <li>Sugere correções</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-debug &quot;Erro 500 ao fazer login&quot;
+</code></pre>
+                <hr />
+                <h3><code>/fase-checar-tarefas</code></h3>
+                <p>Lista todas as tarefas do projeto.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Varre código por tarefas pendentes</li>
+                    <li>Agrupa por arquivo/fase</li>
+                    <li>Mostra status de cada uma</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-checar-tarefas
+</code></pre>
+                <hr />
+                <h3><code>/fase-adicionar-tarefa</code></h3>
+                <p>Adiciona uma tarefa ao projeto.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Cria entrada na lista de tarefas</li>
+                    <li>Linka com fase relevante</li>
+                    <li>Define prioridade</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-adicionar-tarefa &quot;Adicionar rate limiting no login&quot; --prioridade alta
+</code></pre>
+                <hr />
+                <h3><code>/fase-adicionar-testes</code></h3>
+                <p>Adiciona testes para uma funcionalidade.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Identifica funcionalidade sem testes</li>
+                    <li>Gera testes unitários</li>
+                    <li>Gera testes de integração</li>
+                    <li>Adiciona ao plano de testes</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-adicionar-testes &quot;Autenticação JWT&quot;
+</code></pre>
+                <hr />
+                <h2>Discussão</h2>
+                <p>Comandos para discussão e conclusão.</p>
+                <h3><code>/fase-discutir-fase</code></h3>
+                <p>Inicia discussão sobre uma fase.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Lista pontos de decisão</li>
+                    <li>Mostra alternativas</li>
+                    <li>Coleta prós e contras</li>
+                    <li>Prepara para decisão humana</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-discutir-fase &quot;Autenticação: JWT vs Session&quot;
+</code></pre>
+                <hr />
+                <h3><code>/fase-completar-marco</code></h3>
+                <p>Marca um marco como completado.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Verifica todos os requirements</li>
+                    <li>Arquiva fases relacionadas</li>
+                    <li>Atualiza ROADMAP.md</li>
+                    <li>Celebra conquista! 🎉</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-completar-marco &quot;MVP&quot;
+</code></pre>
+                <hr />
+                <h3><code>/fase-planejar-lacunas</code></h3>
+                <p>Identifica e planeja como fechar lacunas de um marco.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Compara realizado vs planejado</li>
+                    <li>Identifica gaps</li>
+                    <li>Cria plano para fechar cada gap</li>
+                    <li>Prioriza por impacto</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-planejar-lacunas &quot;MVP&quot;
+</code></pre>
+                <hr />
+                <h2>Utilitários</h2>
+                <p>Comandos utilitários diversos.</p>
+                <h3><code>/fase-limpar</code></h3>
+                <p>Limpa arquivos temporários e cache.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Remove arquivos <code>.tmp</code></li>
+                    <li>Limpa cache de builds</li>
+                    <li>Remove logs antigos</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-limpar
+</code></pre>
+                <hr />
+                <h3><code>/fase-saude</code></h3>
+                <p>Realiza checkup de saúde do projeto.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Verifica dependências</li>
+                    <li>Checa testes passando</li>
+                    <li>Identifica code smells</li>
+                    <li>Sugere melhorias</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-saude
+</code></pre>
+                <hr />
+                <h3><code>/fase-atualizar</code></h3>
+                <p>Atualiza o F.A.S.E. para a versão mais recente.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Verifica versão instalada</li>
+                    <li>Baixa atualizações disponíveis</li>
+                    <li>Aplica patches</li>
+                    <li>Reinicia se necessário</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-atualizar
+</code></pre>
+                <hr />
+                <h3><code>/fase-rapido</code></h3>
+                <p>Modo rápido para tarefas simples.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Pula cerimônias desnecessárias</li>
+                    <li>Executa direto ao ponto</li>
+                    <li>Ideal para mudanças pequenas</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-rapido &quot;Adiciona log no endpoint de login&quot;
+</code></pre>
+                <hr />
+                <hr />
+                <h3><code>/fase-reaplicar-patches</code></h3>
+                <p>Reaplica patches que falharam anteriormente.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Lista patches pendentes</li>
+                    <li>Tenta reaplicar cada um</li>
+                    <li>Reporta conflitos</li>
+                    <li>Sugere resoluções</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-reaplicar-patches
+</code></pre>
+                <hr />
+                <h3><code>/fase-definir-perfil</code></h3>
+                <p>Define o perfil de modelo a ser usado.</p>
+                <p><strong>O que faz:</strong></p>
+                <ul>
+                    <li>Lista perfis disponíveis</li>
+                    <li>Define modelo padrão</li>
+                    <li>Ajusta configurações por tipo de tarefa</li>
+                </ul>
+                <p><strong>Exemplo:</strong></p>
+                <pre><code class="language-bash">/fase-definir-perfil claude-sonnet
+/fase-definir-perfil lista
+</code></pre>
+                <hr />
+                <h2>📞 Suporte</h2>
+                <p><strong>Problemas com algum comando?</strong></p>
+                <ul>
+                    <li>📖 <a href="USER-GUIDE.md">Guia do Usuário</a></li>
+                    <li>
+                        🐛
+                        <a href="https://github.com/isaaceliape/FASE/issues"
+                            >Reportar bug</a
+                        >
+                    </li>
+                </ul>
+                <hr />
+                <p>
+                    <strong
+                        >&quot;Chega de enrolação. Descreve o que quer e FASE
+                        acontecer.&quot;</strong
+                    >
+                    🇧🇷🚀
+                </p>
+            </main>
+        </div>
+    </body>
+</html>

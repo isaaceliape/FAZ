@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>README - FASE Docs</title>
+        <style>
+            :root {
+                --primary: #00ff88;
+                --secondary: #00bfff;
+                --warning: #ffaa00;
+                --danger: #ff3366;
+                --dark-bg: #0a0e27;
+                --grid-bg: #111827;
+                --text: #e5e7eb;
+                --dim: #9ca3af;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                background-color: var(--dark-bg);
+                color: var(--text);
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    Oxygen, Ubuntu, Cantarell, sans-serif;
+                line-height: 1.6;
+                display: flex;
+                flex-direction: column;
+                height: 100vh;
+            }
+
+            .header {
+                background-color: var(--grid-bg);
+                border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+                padding: 20px 40px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--text);
+                letter-spacing: -0.5px;
+            }
+
+            .logo span {
+                color: var(--primary);
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 20px;
+            }
+
+            .nav-links a {
+                color: var(--text);
+                text-decoration: none;
+                transition: color 0.2s ease;
+                border: none;
+            }
+
+            .nav-links a:hover {
+                color: var(--primary);
+            }
+
+            .content-wrapper {
+                display: flex;
+                flex: 1;
+                overflow: hidden;
+            }
+
+            .sidebar {
+                width: 250px;
+                background-color: var(--grid-bg);
+                border-right: 1px solid rgba(0, 255, 136, 0.1);
+                padding: 20px;
+                overflow-y: auto;
+                flex-shrink: 0;
+            }
+
+            .sidebar h3 {
+                color: var(--primary);
+                font-size: 0.875rem;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-bottom: 15px;
+                margin-top: 20px;
+            }
+
+            .sidebar h3:first-child {
+                margin-top: 0;
+            }
+
+            .sidebar-link {
+                display: block;
+                color: var(--text);
+                text-decoration: none;
+                padding: 10px 12px;
+                margin-bottom: 8px;
+                border-radius: 4px;
+                transition: all 0.2s ease;
+                border-left: 3px solid transparent;
+            }
+
+            .sidebar-link:hover {
+                color: var(--primary);
+                background-color: rgba(0, 255, 136, 0.1);
+                border-left-color: var(--primary);
+            }
+
+            .sidebar-link.active {
+                color: var(--primary);
+                background-color: rgba(0, 255, 136, 0.15);
+                border-left-color: var(--primary);
+                font-weight: 600;
+            }
+
+            .main {
+                flex: 1;
+                overflow-y: auto;
+                padding: 40px;
+            }
+
+            h1 {
+                color: var(--primary);
+                font-size: 2rem;
+                margin-bottom: 20px;
+                border-bottom: 2px solid var(--primary);
+                padding-bottom: 10px;
+            }
+
+            h2 {
+                color: var(--secondary);
+                font-size: 1.5rem;
+                margin-top: 30px;
+                margin-bottom: 15px;
+            }
+
+            h3 {
+                color: var(--primary);
+                font-size: 1.2rem;
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+
+            p {
+                margin-bottom: 15px;
+                color: var(--text);
+            }
+
+            a {
+                color: var(--primary);
+                text-decoration: none;
+                border-bottom: 1px dotted var(--primary);
+                transition: all 0.2s ease;
+            }
+
+            a:hover {
+                color: var(--secondary);
+                border-bottom-style: solid;
+            }
+
+            code {
+                background-color: var(--dark-bg);
+                color: var(--primary);
+                padding: 0.2rem 0.4rem;
+                border-radius: 2px;
+                font-family: "Courier New", monospace;
+                font-size: 0.9em;
+            }
+
+            pre {
+                background-color: var(--dark-bg);
+                border: 1px solid var(--dim);
+                border-radius: 4px;
+                padding: 15px;
+                overflow-x: auto;
+                margin: 15px 0;
+            }
+
+            pre code {
+                padding: 0;
+                background: none;
+                color: var(--primary);
+            }
+
+            ul,
+            ol {
+                margin-left: 20px;
+                margin-bottom: 15px;
+            }
+
+            li {
+                margin-bottom: 8px;
+                color: var(--text);
+            }
+
+            blockquote {
+                border-left: 4px solid var(--primary);
+                background-color: var(--dark-bg);
+                padding: 15px;
+                margin: 15px 0;
+                color: var(--dim);
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 15px 0;
+                border: 1px solid var(--dim);
+            }
+
+            th {
+                background-color: var(--dark-bg);
+                color: var(--primary);
+                padding: 12px;
+                text-align: left;
+                border-bottom: 2px solid var(--primary);
+                border-right: 1px solid var(--dim);
+                font-weight: 600;
+            }
+
+            th:last-child {
+                border-right: none;
+            }
+
+            td {
+                padding: 12px;
+                border-bottom: 1px solid var(--dim);
+                border-right: 1px solid var(--dim);
+            }
+
+            td:last-child {
+                border-right: none;
+            }
+
+            tr:hover {
+                background-color: rgba(0, 255, 136, 0.05);
+            }
+
+            strong {
+                color: var(--secondary);
+                font-weight: 600;
+            }
+
+            em {
+                color: var(--dim);
+                font-style: italic;
+            }
+
+            hr {
+                border: none;
+                border-top: 1px solid var(--dim);
+                margin: 30px 0;
+            }
+
+            /* Scrollbar */
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: var(--dark-bg);
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: var(--primary);
+                border-radius: 4px;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: var(--secondary);
+            }
+
+            /* Mobile */
+            @media (max-width: 768px) {
+                .content-wrapper {
+                    flex-direction: column;
+                }
+
+                .sidebar {
+                    width: 100%;
+                    border-right: none;
+                    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+                    max-height: 150px;
+                    overflow-x: auto;
+                    display: flex;
+                    gap: 10px;
+                }
+
+                .sidebar h3 {
+                    display: none;
+                }
+
+                .sidebar-link {
+                    white-space: nowrap;
+                    margin-bottom: 0;
+                }
+
+                .main {
+                    padding: 20px;
+                }
+
+                h1 {
+                    font-size: 1.5rem;
+                }
+
+                h2 {
+                    font-size: 1.2rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <div class="logo">fase<span>-</span>ai</div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="https://github.com/isaaceliape/FASE">GitHub</a>
+            </div>
+        </div>
+
+        <div class="content-wrapper">
+            <aside class="sidebar">
+                <h3>📚 Documentação</h3>
+                <a href="readme.html" class="sidebar-link active">📖 README</a>
+                <a href="COMANDOS.html" class="sidebar-link">📋 Comandos</a>
+                <a href="guia-do-usuario.html" class="sidebar-link"
+                    >📘 Guia do Usuário</a
+                >
+                <a href="HOOKS.html" class="sidebar-link">🔧 Git Hooks</a>
+                <a href="NPM-REGISTRY.html" class="sidebar-link"
+                    >📦 NPM Registry</a
+                >
+                <a href="context-monitor.html" class="sidebar-link"
+                    >📊 Context Monitor</a
+                >
+            </aside>
+
+            <main class="main">
+                <h1>📚 Documentação do FASE</h1>
+                <p>
+                    Bem-vindo ao centro de documentação do FASE! Aqui você
+                    encontra tudo que precisa para instalar, usar e contribuir
+                    ao projeto.
+                </p>
+                <h2>📖 Documentos Principais</h2>
+                <h3>Para Usuários</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <a href="USER-GUIDE.md"
+                                    ><strong>USER-GUIDE.md</strong></a
+                                >
+                            </td>
+                            <td>Guia completo de instalação e uso do FASE</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="COMANDOS.md"
+                                    ><strong>COMANDOS.md</strong></a
+                                >
+                            </td>
+                            <td>Lista com todos os 32 comandos disponíveis</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="FAQ.md"><strong>FAQ.md</strong></a>
+                            </td>
+                            <td>Perguntas frequentes e respostas</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="NPM-REGISTRY.md"
+                                    ><strong>NPM-REGISTRY.md</strong></a
+                                >
+                            </td>
+                            <td>Configuração do npm registry e instalação</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Para Desenvolvedores</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <a href="../CONTRIBUTING.md"
+                                    ><strong>CONTRIBUTING.md</strong></a
+                                >
+                            </td>
+                            <td>
+                                Como contribuir para o FASE (bugs, features,
+                                traduções)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="HOOKS.md"><strong>HOOKS.md</strong></a>
+                            </td>
+                            <td>Git hooks e verificações de segurança</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="../SECURITY.md"
+                                    ><strong>SECURITY.md</strong></a
+                                >
+                            </td>
+                            <td>
+                                Política de segurança e relatório de
+                                vulnerabilidades
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h2>🎯 Começar Por Aqui</h2>
+                <h3>Sou um Usuário</h3>
+                <ol>
+                    <li>
+                        Leia <a href="USER-GUIDE.md">USER-GUIDE.md</a> para
+                        instalação
+                    </li>
+                    <li>
+                        Explore <a href="COMANDOS.md">COMANDOS.md</a> para ver o
+                        que está disponível
+                    </li>
+                    <li>
+                        Verifique <a href="FAQ.md">FAQ.md</a> se tiver dúvidas
+                    </li>
+                </ol>
+                <h3>Quero Contribuir</h3>
+                <ol>
+                    <li>Abra uma issue descrevendo sua ideia</li>
+                    <li>
+                        Leia <a href="../CONTRIBUTING.md">CONTRIBUTING.md</a>
+                    </li>
+                    <li>Siga o setup local</li>
+                    <li>Abra um Pull Request</li>
+                </ol>
+                <h3>Encontrei um Bug</h3>
+                <ol>
+                    <li>
+                        Verifique <a href="FAQ.md">FAQ.md</a> - talvez já haja
+                        solução
+                    </li>
+                    <li>
+                        Procure em
+                        <a href="https://github.com/isaaceliape/FASE/issues"
+                            >GitHub Issues</a
+                        >
+                        por issue similar
+                    </li>
+                    <li>Abra uma nova issue com os detalhes</li>
+                </ol>
+                <h2>📋 Estrutura de Arquivos</h2>
+                <pre><code>docs/
+├── README.md              # Este arquivo (índice)
+├── USER-GUIDE.md          # Guia para usuários
+├── COMANDOS.md            # Lista de comandos
+├── FAQ.md                 # Perguntas frequentes
+└── HOOKS.md               # Git hooks documentation
+</code></pre>
+                <h2>🌐 Documentos em Português</h2>
+                <p>
+                    <strong
+                        >Toda documentação do FASE é em português
+                        brasileiro:</strong
+                    >
+                </p>
+                <ul>
+                    <li>✅ Guias de usuário</li>
+                    <li>✅ Documentação de development</li>
+                    <li>✅ Comentários no código</li>
+                    <li>✅ Mensagens de erro e output</li>
+                </ul>
+                <p><strong>Exceções (em inglês):</strong></p>
+                <ul>
+                    <li>
+                        ⚙️ Termos técnicos consagrados (framework, hook, commit)
+                    </li>
+                    <li>💻 Comandos e código</li>
+                    <li>📦 Nomes de pacotes npm</li>
+                </ul>
+                <h2>🆘 Precisa de Ajuda?</h2>
+                <ul>
+                    <li>
+                        <strong>Problema técnico</strong>: Abra uma
+                        <a href="https://github.com/isaaceliape/FASE/issues"
+                            >issue</a
+                        >
+                        com tag <code>[help]</code>
+                    </li>
+                    <li>
+                        <strong>Dúvida geral</strong>: Verifique
+                        <a href="FAQ.md">FAQ.md</a> primeiro
+                    </li>
+                    <li>
+                        <strong>Bug descoberto</strong>: Reporte com template
+                        <code>bug_report.md</code>
+                    </li>
+                    <li>
+                        <strong>Sugestão</strong>: Use template
+                        <code>feature_request.md</code>
+                    </li>
+                </ul>
+                <h2>📈 Melhorias Documentadas</h2>
+                <h3>v2.4.0 (Março 2026)</h3>
+                <ul>
+                    <li>
+                        ✅ Adicionado pre-commit hooks para validação de pacote
+                        npm
+                    </li>
+                    <li>✅ Criado GitHub Actions para publicação automática</li>
+                    <li>✅ Templates de issues para bug reports e features</li>
+                    <li>✅ CONTRIBUTING.md com instruções detalhadas</li>
+                    <li>✅ SECURITY.md com política de segurança</li>
+                    <li>✅ Este índice de documentação</li>
+                </ul>
+                <h2>📞 Contato</h2>
+                <ul>
+                    <li>
+                        <strong>GitHub</strong>:
+                        <a href="https://github.com/isaaceliape/FASE"
+                            >isaaceliape/FASE</a
+                        >
+                    </li>
+                    <li>
+                        <strong>Issues</strong>:
+                        <a href="https://github.com/isaaceliape/FASE/issues"
+                            >GitHub Issues</a
+                        >
+                    </li>
+                    <li>
+                        <strong>Email</strong>: Via issue (por favor, não
+                        compartilhar emails publicamente)
+                    </li>
+                </ul>
+                <hr />
+                <p>
+                    <strong>Versão</strong>: 1.0
+                    <strong>Última atualização</strong>: 2026-03-13
+                </p>
+            </main>
+        </div>
+    </body>
+</html>

@@ -99,7 +99,12 @@ Se você está na China e a instalação é lenta:
 cnpm install -g fase-ai
 ```
 
-### Opção 2: Configurar como default
+### Opção 2: Configurar npm temporariamente
+```bash
+npm install -g fase-ai --registry=https://registry.npmmirror.com
+```
+
+### Opção 3: Configurar como default
 ```bash
 npm config set registry https://registry.npmmirror.com
 # Depois restaurar

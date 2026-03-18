@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Documentação FASE</title>
+        <style>
+            :root {
+                --primary: #00ff88;
+                --secondary: #00bfff;
+                --warning: #ffaa00;
+                --danger: #ff3366;
+                --dark-bg: #0a0e27;
+                --grid-bg: #111827;
+                --text: #e5e7eb;
+                --dim: #9ca3af;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                background-color: var(--dark-bg);
+                color: var(--text);
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    Oxygen, Ubuntu, Cantarell, sans-serif;
+                line-height: 1.6;
+                overflow-x: hidden;
+            }
+
+            .container {
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 40px 20px;
+                position: relative;
+                z-index: 1;
+            }
+
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px 0;
+                margin-bottom: 50px;
+                border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+            }
+
+            .logo {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--text);
+                letter-spacing: -0.5px;
+            }
+
+            .logo span {
+                color: var(--primary);
+            }
+
+            h1 {
+                font-size: 2.5rem;
+                margin-bottom: 10px;
+                color: var(--text);
+                font-weight: 700;
+            }
+
+            .subtitle {
+                color: var(--dim);
+                margin-bottom: 40px;
+                font-size: 18px;
+            }
+
+            .hero {
+                margin-bottom: 60px;
+            }
+
+            .section {
+                background-color: var(--grid-bg);
+                padding: 30px;
+                margin-bottom: 30px;
+                border-radius: 4px;
+                border: 1px solid rgba(0, 255, 136, 0.1);
+                transition: all 0.3s ease;
+            }
+
+            .section:hover {
+                border-color: var(--primary);
+                box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+            }
+
+            .section h2 {
+                color: var(--primary);
+                font-size: 18px;
+                margin-bottom: 20px;
+                font-weight: 600;
+            }
+
+            ul {
+                list-style: none;
+            }
+
+            li {
+                margin-bottom: 12px;
+            }
+
+            a {
+                color: var(--primary);
+                text-decoration: none;
+                font-weight: 500;
+                transition: all 0.2s ease;
+                border-bottom: 1px dotted var(--primary);
+            }
+
+            a:hover {
+                color: var(--secondary);
+                border-bottom-style: solid;
+                text-decoration: none;
+            }
+
+            .readme-link {
+                display: inline-block;
+                background: var(--primary);
+                color: var(--dark-bg);
+                padding: 12px 24px;
+                border-radius: 4px;
+                text-decoration: none;
+                margin-bottom: 30px;
+                font-weight: 600;
+                border: none;
+                transition: all 0.3s ease;
+            }
+
+            .readme-link:hover {
+                background: var(--secondary);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 16px rgba(0, 255, 136, 0.2);
+                border-bottom: none;
+            }
+
+            /* Links in text */
+            p a {
+                color: var(--primary);
+            }
+
+            p a:hover {
+                color: var(--secondary);
+            }
+
+            strong {
+                color: var(--secondary);
+                font-weight: 600;
+            }
+
+            code {
+                background-color: var(--dark-bg);
+                color: var(--primary);
+                padding: 0.2rem 0.4rem;
+                border-radius: 2px;
+                font-family: "Courier New", monospace;
+            }
+
+            /* Responsive */
+            @media (max-width: 768px) {
+                h1 {
+                    font-size: 1.8rem;
+                }
+
+                .section {
+                    padding: 20px;
+                }
+
+                .readme-link {
+                    display: block;
+                    text-align: center;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <div class="logo">fase<span>-</span>ai</div>
+            </header>
+
+            <div class="hero">
+                <h1>
+                    📚 Documentação do
+                    <span style="color: var(--primary)">FASE</span>
+                </h1>
+                <p class="subtitle">Framework de Automação Sem Enrolação</p>
+            </div>
+
+            <a href="readme.html" class="readme-link"
+                >📖 Leia o guia principal</a
+            >
+
+            <div class="section">
+                <h2>📄 Documentos Disponíveis</h2>
+                <ul>
+                    <li>
+                        <a href="readme.html">README</a> — Índice principal da
+                        documentação
+                    </li>
+                    <li>
+                        <a href="COMANDOS.html">COMANDOS</a> — Lista de todos os
+                        32 comandos
+                    </li>
+                    <li>
+                        <a href="guia-do-usuario.html">Guia do Usuário</a> —
+                        Guia completo de uso
+                    </li>
+                    <li>
+                        <a href="HOOKS.html">Git Hooks</a> — Documentação de Git
+                        hooks
+                    </li>
+                    <li>
+                        <a href="NPM-REGISTRY.html">NPM Registry</a> —
+                        Configuração do npm registry
+                    </li>
+                    <li>
+                        <a href="context-monitor.html">Context Monitor</a> —
+                        Monitoramento de contexto
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>💻 Recursos Adicionais</h2>
+                <ul>
+                    <li>
+                        <a href="https://github.com/isaaceliape/FASE"
+                            >GitHub Repository</a
+                        >
+                        — Código-fonte do FASE
+                    </li>
+                    <li>
+                        <a href="https://github.com/isaaceliape/FASE/issues"
+                            >GitHub Issues</a
+                        >
+                        — Reportar bugs e sugerir features
+                    </li>
+                    <li>
+                        <a
+                            href="https://github.com/isaaceliape/FASE/discussions"
+                            >GitHub Discussions</a
+                        >
+                        — Comunidade e discussões
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>

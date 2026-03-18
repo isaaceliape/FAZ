@@ -1,0 +1,1153 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>FASE - Framework de Automação Sem Enrolação</title>
+
+        <!-- Open Graph -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="FASE - Framework de Automação Sem Enrolação para Claude" />
+        <meta property="og:description" content="Automação que realmente funciona. FASE automatiza tarefas de desenvolvimento, pesquisa, planejamento e execução com agentes de IA." />
+        <meta property="og:image" content="https://isaaceliape.github.io/FASE/images/og-image.png" />
+        <meta property="og:url" content="https://isaaceliape.github.io/FASE/" />
+        <meta property="og:locale" content="pt_BR" />
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="FASE - Framework de Automação Sem Enrolação para Claude" />
+        <meta name="twitter:description" content="Automação que realmente funciona. FASE automatiza tarefas de desenvolvimento, pesquisa, planejamento e execução com agentes de IA." />
+        <meta name="twitter:image" content="https://isaaceliape.github.io/FASE/images/og-image.png" />
+
+        <!-- Favicon and Theme -->
+        <meta name="theme-color" content="#0a0e27" />
+        <style>
+            @font-face {
+                font-family: "0xProto";
+                src: url("./fonts/0xProto-Regular.woff2") format("woff2");
+                font-weight: 400;
+                font-style: normal;
+                font-display: block;
+            }
+
+            @font-face {
+                font-family: "0xProto";
+                src: url("./fonts/0xProto-Bold.woff2") format("woff2");
+                font-weight: 700;
+                font-style: normal;
+                font-display: block;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            :root {
+                --primary: #00ff88;
+                --secondary: #00bfff;
+                --warning: #ffaa00;
+                --danger: #ff3366;
+                --dark-bg: #0a0e27;
+                --grid-bg: #111827;
+                --text: #e5e7eb;
+                --dim: #9ca3af;
+            }
+
+            body {
+                background-color: var(--dark-bg);
+                color: var(--text);
+                font-family:
+                    "0xProto", "Courier New", "Monaco", "Ubuntu Mono", monospace;
+                line-height: 1.6;
+                overflow-x: hidden;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 40px 20px;
+                position: relative;
+                z-index: 1;
+            }
+
+            /* Header/Nav */
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px 0;
+                margin-bottom: 100px;
+                border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+            }
+
+            .logo {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--text);
+                letter-spacing: -0.5px;
+            }
+
+            .logo span {
+                color: var(--primary);
+            }
+
+            /* Hero Section */
+            .hero {
+                margin-bottom: 120px;
+                max-width: 900px;
+            }
+
+            .hero-logo {
+                max-width: 100%;
+                height: auto;
+                width: 100%;
+                max-height: 200px;
+                filter: drop-shadow(0 0 20px rgba(0, 191, 255, 0.3));
+            }
+
+            .hero h1 {
+                font-size: 3.5rem;
+                font-weight: 700;
+                line-height: 1.1;
+                margin-bottom: 24px;
+                color: var(--text);
+                letter-spacing: -1px;
+            }
+
+            .hero h1 span {
+                background: linear-gradient(
+                    135deg,
+                    var(--secondary) 0%,
+                    var(--primary) 100%
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+                color: var(--dim);
+                line-height: 1.7;
+                margin-bottom: 32px;
+            }
+
+            .hero-actions {
+                display: flex;
+                gap: 16px;
+                flex-wrap: wrap;
+            }
+
+            .btn {
+                padding: 12px 28px;
+                border-radius: 6px;
+                font-size: 1rem;
+                font-weight: 500;
+                border: none;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-decoration: none;
+                display: inline-block;
+            }
+
+            .btn-primary {
+                background: var(--primary);
+                color: var(--dark-bg);
+            }
+
+            .btn-primary:hover {
+                background: #00e074;
+                transform: translateY(-2px);
+            }
+
+            .btn-secondary {
+                background: transparent;
+                border: 1px solid var(--secondary);
+                color: var(--secondary);
+            }
+
+            .btn-secondary:hover {
+                background: rgba(0, 191, 255, 0.1);
+            }
+
+            .subtitle {
+                color: var(--warning);
+                font-size: 0.875rem;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                margin-bottom: 16px;
+            }
+
+            .tagline {
+                color: var(--dim);
+                font-size: 0.95rem;
+                margin-top: 20px;
+                line-height: 1.8;
+            }
+
+            /* Nav */
+            nav {
+                display: flex;
+                gap: 40px;
+                flex-wrap: wrap;
+            }
+
+            nav#nav-menu.active {
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            }
+
+            .nav-item {
+                color: var(--dim);
+                text-decoration: none;
+                font-size: 0.95rem;
+                transition: color 0.3s ease;
+            }
+
+            .nav-item:hover {
+                color: var(--primary);
+            }
+
+            .hamburger {
+                display: none;
+                flex-direction: column;
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 8px;
+                gap: 5px;
+            }
+
+            .hamburger span {
+                width: 25px;
+                height: 3px;
+                background-color: var(--text);
+                border-radius: 2px;
+                transition: all 0.3s ease;
+            }
+
+            .hamburger.active span:nth-child(1) {
+                transform: translateY(11px) rotate(45deg);
+            }
+
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active span:nth-child(3) {
+                transform: translateY(-11px) rotate(-45deg);
+            }
+
+            /* Back to Top Button */
+            .back-to-top {
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background-color: var(--primary);
+                color: var(--dark-bg);
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0, 255, 136, 0.2);
+                z-index: 999;
+            }
+
+            .back-to-top.show {
+                display: flex;
+            }
+
+            .back-to-top:hover {
+                background-color: #00e074;
+                transform: translateY(-3px);
+                box-shadow: 0 6px 16px rgba(0, 255, 136, 0.3);
+            }
+
+            /* Grid Layout */
+            .features-section {
+                margin-bottom: 120px;
+            }
+
+            .features-section h2 {
+                font-size: 2rem;
+                margin-bottom: 60px;
+                color: var(--text);
+                font-weight: 600;
+            }
+
+            .features {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 40px;
+            }
+
+            .feature-card {
+                padding: 0;
+                background: transparent;
+                border: none;
+                transition: all 0.3s ease;
+            }
+
+            .feature-card:hover {
+                transform: translateY(-4px);
+            }
+
+            .feature-icon {
+                font-size: 2.5rem;
+                margin-bottom: 20px;
+            }
+
+            .feature-title {
+                color: var(--text);
+                font-size: 1.2rem;
+                margin-bottom: 12px;
+                font-weight: 600;
+            }
+
+            .feature-text {
+                color: var(--dim);
+                font-size: 0.95rem;
+                line-height: 1.7;
+            }
+
+            /* Install Section */
+            .install-section {
+                background: linear-gradient(
+                    135deg,
+                    rgba(0, 191, 255, 0.05) 0%,
+                    rgba(0, 255, 136, 0.05) 100%
+                );
+                border: 1px solid rgba(0, 255, 136, 0.2);
+                padding: 60px;
+                margin-bottom: 120px;
+                border-radius: 12px;
+            }
+
+            .section-title {
+                color: var(--text);
+                font-size: 2rem;
+                margin-bottom: 40px;
+                font-weight: 600;
+            }
+
+            .install-description {
+                color: var(--dim);
+                margin-bottom: 30px;
+                font-size: 1rem;
+            }
+
+            .command {
+                background-color: var(--dark-bg);
+                border: 1px solid rgba(0, 191, 255, 0.2);
+                padding: 16px 20px;
+                margin: 20px 0;
+                color: var(--primary);
+                overflow-x: auto;
+                position: relative;
+                border-radius: 6px;
+                font-family: "0xProto", "Courier New", monospace;
+            }
+
+            pre {
+                font-family: "0xProto", "Courier New", monospace;
+            }
+
+            .command::before {
+                content: "$";
+                color: var(--dim);
+                margin-right: 10px;
+            }
+
+            .copy-btn {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background-color: var(--primary);
+                color: var(--dark-bg);
+                border: none;
+                padding: 6px 12px;
+                font-family: inherit;
+                cursor: pointer;
+                font-size: 0.75rem;
+                border-radius: 4px;
+                transition: all 0.2s ease;
+                opacity: 0;
+            }
+
+            .command:hover .copy-btn {
+                opacity: 1;
+            }
+
+            /* Feature List */
+            .feature-list {
+                margin: 30px 0;
+                list-style: none;
+            }
+
+            .feature-list li {
+                padding: 12px 0;
+                padding-left: 28px;
+                position: relative;
+                color: var(--text);
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+
+            .feature-list li::before {
+                content: "✓";
+                position: absolute;
+                left: 0;
+                color: var(--primary);
+                font-weight: bold;
+            }
+
+            /* Runtimes */
+            .runtimes-section {
+                margin-bottom: 120px;
+            }
+
+            .runtimes-section h2 {
+                font-size: 2rem;
+                margin-bottom: 60px;
+                color: var(--text);
+                font-weight: 600;
+            }
+
+            .runtimes {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 30px;
+            }
+
+            .runtime {
+                padding: 24px;
+                background: rgba(0, 255, 136, 0.05);
+                border: 1px solid rgba(0, 255, 136, 0.2);
+                border-radius: 8px;
+                transition: all 0.3s ease;
+            }
+
+            .runtime:hover {
+                border-color: var(--primary);
+                background: rgba(0, 255, 136, 0.08);
+                transform: translateY(-4px);
+            }
+
+            .runtime-name {
+                color: var(--text);
+                font-weight: 600;
+                margin-bottom: 8px;
+                font-size: 1rem;
+            }
+
+            .runtime-desc {
+                color: var(--dim);
+                font-size: 0.85rem;
+                margin-bottom: 12px;
+            }
+
+            .runtime-path {
+                color: var(--primary);
+                font-size: 0.75rem;
+                font-family: "0xProto", monospace;
+            }
+
+            /* Stats */
+            .stats {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 30px;
+                margin-bottom: 80px;
+            }
+
+            .stat-box {
+                padding: 30px;
+                background: rgba(0, 191, 255, 0.05);
+                border: 1px solid rgba(0, 191, 255, 0.2);
+                border-radius: 8px;
+                text-align: center;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+                color: var(--secondary);
+                font-weight: 700;
+                margin-bottom: 8px;
+            }
+
+            .stat-label {
+                color: var(--dim);
+                font-size: 0.95rem;
+            }
+
+            /* Workflow Section */
+            .workflow-section {
+                margin-bottom: 120px;
+            }
+
+            .workflow-section h2 {
+                font-size: 2rem;
+                margin-bottom: 60px;
+                color: var(--text);
+                font-weight: 600;
+            }
+
+            .workflow-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 30px;
+            }
+
+            .workflow-item {
+                padding: 24px;
+                background: rgba(255, 170, 0, 0.05);
+                border-left: 3px solid var(--warning);
+                border-radius: 4px;
+            }
+
+            .workflow-item-number {
+                color: var(--warning);
+                font-weight: 700;
+                font-size: 1.2rem;
+                margin-bottom: 8px;
+            }
+
+            .workflow-item-name {
+                color: var(--secondary);
+                font-weight: 600;
+                margin-bottom: 8px;
+            }
+
+            .workflow-item-desc {
+                color: var(--dim);
+                font-size: 0.9rem;
+                line-height: 1.6;
+            }
+
+            /* Footer */
+            footer {
+                text-align: center;
+                padding: 60px 20px;
+                border-top: 1px solid rgba(0, 255, 136, 0.1);
+                margin-top: 120px;
+                color: var(--dim);
+            }
+
+            footer a {
+                color: var(--secondary);
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+
+            footer a:hover {
+                color: var(--primary);
+            }
+
+            /* Responsive */
+            @media (max-width: 768px) {
+                .logo {
+                    font-size: 1.2rem;
+                }
+
+                header {
+                    align-items: center;
+                    gap: 0;
+                    justify-content: space-between;
+                    position: relative;
+                }
+
+                .hamburger {
+                    display: flex;
+                }
+
+                nav {
+                    display: none;
+                    flex-direction: column;
+                    gap: 20px;
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    right: 0;
+                    background-color: var(--dark-bg);
+                    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+                    padding: 20px;
+                    margin-top: 10px;
+                    z-index: 1000;
+                }
+
+                nav.active {
+                    display: flex;
+                }
+
+                .nav-item {
+                    display: block;
+                    padding: 10px 0;
+                }
+
+                .hero h1 {
+                    font-size: 2rem;
+                }
+
+                .hero p {
+                    font-size: 1rem;
+                }
+
+                .hero-actions {
+                    flex-direction: column;
+                }
+
+                .btn {
+                    width: 100%;
+                    text-align: center;
+                }
+
+                .features {
+                    grid-template-columns: 1fr;
+                }
+
+                .stats {
+                    grid-template-columns: 1fr;
+                }
+
+                .install-section {
+                    padding: 30px;
+                }
+
+                .section-title {
+                    font-size: 1.5rem;
+                }
+
+                .workflow-list {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            /* Util */
+            .text-muted {
+                color: var(--dim);
+            }
+
+            .text-accent {
+                color: var(--secondary);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <!-- Header/Nav -->
+            <header>
+                <div class="logo">fase<span>-</span>ai</div>
+                <button class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <nav id="nav-menu">
+                    <a href="#features" class="nav-item">O que faz</a>
+                    <a href="#install" class="nav-item">Instalar</a>
+                    <a href="#runtimes" class="nav-item">Runtimes</a>
+                    <a
+                        href="https://isaaceliape.github.io/FASE/docs/"
+                        class="nav-item"
+                        target="_blank"
+                        >Documentação</a
+                    >
+                    <a
+                        href="https://github.com/isaaceliape/FASE"
+                        class="nav-item"
+                        target="_blank"
+                        >GitHub</a
+                    >
+                </nav>
+            </header>
+
+            <!-- Hero Section -->
+            <div class="hero">
+                <img
+                    src="fase-logo.png"
+                    alt="FASE Logo"
+                    class="hero-logo"
+                    style="filter: drop-shadow(0 0 20px rgba(0, 191, 255, 0.3))"
+                />
+                <div class="subtitle">Framework de Automação</div>
+                <h1>Automação que <span>realmente funciona</span></h1>
+                <p>
+                    FASE automatiza tarefas de desenvolvimento, pesquisa,
+                    planejamento e execução com agentes de IA paralelos.
+                    Construído para Claude Code, OpenCode, Gemini e Codex.
+                </p>
+                <div class="hero-actions">
+                    <button
+                        class="btn btn-primary"
+                        onclick="
+                            document
+                                .querySelector('#install')
+                                .scrollIntoView({ behavior: 'smooth' })
+                        "
+                    >
+                        Começar
+                    </button>
+                    <a
+                        href="https://github.com/isaaceliape/FASE"
+                        class="btn btn-secondary"
+                        target="_blank"
+                        >Ver no GitHub</a
+                    >
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Agentes de IA</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">28+</div>
+                    <div class="stat-label">Comandos</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Runtimes</div>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div id="features" class="features-section">
+                <h2>O que faz</h2>
+                <div class="features">
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <div class="feature-title">Agents Paralelos</div>
+                        <div class="feature-text">
+                            Spawn múltiplos agents de IA de forma autônoma para
+                            pesquisa, planejamento e execução em paralelo.
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">📋</div>
+                        <div class="feature-title">Spec-Driven</div>
+                        <div class="feature-text">
+                            Desenvolvimento guiado por especificação com
+                            critérios de sucesso verificáveis para cada fase.
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🔄</div>
+                        <div class="feature-title">Arquitetura Limpa</div>
+                        <div class="feature-text">
+                            Separação clara entre pesquisa, planejamento,
+                            execução e verificação com checkpoints persistentes.
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🌍</div>
+                        <div class="feature-title">Multi-Runtime</div>
+                        <div class="feature-text">
+                            Funciona com Claude Code, OpenCode, Gemini e Codex
+                            com o mesmo conjunto de comandos.
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">💾</div>
+                        <div class="feature-title">Context Aware</div>
+                        <div class="feature-text">
+                            Gerenciamento inteligente de contexto com
+                            persistência de estado para trabalho de longa
+                            duração.
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">✅</div>
+                        <div class="feature-title">Validação Automática</div>
+                        <div class="feature-text">
+                            Verificação de fase com goal-backward analysis
+                            garante que objetivos são alcançados.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Installation -->
+            <div id="install" class="install-section">
+                <h2 class="section-title">Instalar FASE</h2>
+                <p class="install-description">
+                    Execute o instalador interativo para escolher seu(s)
+                    runtime(s) preferido(s):
+                </p>
+
+                <div class="command">
+                    npx fase-ai
+                    <button
+                        class="copy-btn"
+                        onclick="copyToClipboard('npx fase-ai')"
+                    >
+                        copiar
+                    </button>
+                </div>
+
+                <p
+                    style="
+                        margin: 40px 0 20px;
+                        color: var(--text);
+                        font-weight: 600;
+                    "
+                >
+                    Exemplo do instalador interativo:
+                </p>
+                <pre
+                    style="
+                        background: rgba(0, 0, 0, 0.5);
+                        padding: 20px;
+                        border-radius: 6px;
+                        overflow-x: auto;
+                        font-size: 0.9rem;
+                        line-height: 1.6;
+                    "
+                >
+$ npx fase-ai
+
+╔════════════════════════════════════════════════════════════════╗
+║ F.A.S.E - Framework de Automação Sem Enrolação                 ║
+║ Instalador Interativo v2.5.0                                   ║
+╚════════════════════════════════════════════════════════════════╝
+
+? Qual runtime você deseja usar? (use ↑↓ para navegar)
+❯ Claude Code
+  OpenCode
+  Gemini
+  Codex
+  Todos
+
+? Tipo de instalação:
+  ◯ Global (npm install -g)
+❯ ◉ Local (no diretório atual)
+
+? Habilitar comandos de IA? (S/n)
+❯ Sim
+
+✓ Instalando dependências...
+✓ Configurando comandos...
+✓ Copiando agentes de IA...
+
+╔════════════════════════════════════════════════════════════════╗
+║ ✓ Instalação concluída com sucesso!                            ║
+║                                                                ║
+║ Próximos passos:                                               ║
+║ $ fase:ajuda.pt        (ver comandos disponíveis)              ║
+║ $ fase:novo-projeto.pt (iniciar novo projeto)                  ║
+╚════════════════════════════════════════════════════════════════╝
+                </pre>
+
+                <p
+                    style="
+                        margin: 40px 0 20px;
+                        color: var(--text);
+                        font-weight: 600;
+                    "
+                >
+                    Ou instale com flags (não-interativo):
+                </p>
+
+                <div class="command">
+                    npx fase-ai --claude --global
+                    <button
+                        class="copy-btn"
+                        onclick="
+                            copyToClipboard('npx fase-ai --claude --global')
+                        "
+                    >
+                        copiar
+                    </button>
+                </div>
+
+                <pre
+                    style="
+                        background: rgba(0, 0, 0, 0.5);
+                        padding: 20px;
+                        border-radius: 6px;
+                        overflow-x: auto;
+                        font-size: 0.9rem;
+                        line-height: 1.6;
+                        margin-bottom: 30px;
+                    "
+                >
+$ npx fase-ai --claude --global
+
+✓ Runtime: Claude Code
+✓ Escopo: Global
+✓ Instalando em: /usr/local/lib/node_modules/
+✓ Configurando bash profile...
+✓ Ativando comandos FASE...
+
+╔════════════════════════════════════════════════════════════════╗
+║ ✓ Pronto! Use /fase:ajuda.pt para começar                      ║
+╚════════════════════════════════════════════════════════════════╝
+                </pre>
+
+                <div class="command">
+                    npx fase-ai --opencode --local
+                    <button
+                        class="copy-btn"
+                        onclick="
+                            copyToClipboard('npx fase-ai --opencode --local')
+                        "
+                    >
+                        copiar
+                    </button>
+                </div>
+
+                <pre
+                    style="
+                        background: rgba(0, 0, 0, 0.5);
+                        padding: 20px;
+                        border-radius: 6px;
+                        overflow-x: auto;
+                        font-size: 0.9rem;
+                        line-height: 1.6;
+                        margin-bottom: 30px;
+                    "
+                >
+$ npx fase-ai --opencode --local
+
+✓ Runtime: OpenCode
+✓ Escopo: Local
+✓ Instalando em: ./.claude/
+✓ Copiando comandos...
+✓ Gerando configurações...
+
+╔════════════════════════════════════════════════════════════════╗
+║ ✓ Pronto! Use fase:ajuda.pt no terminal                        ║
+╚════════════════════════════════════════════════════════════════╝
+                </pre>
+
+                <div class="command">
+                    npx fase-ai --all --global
+                    <button
+                        class="copy-btn"
+                        onclick="copyToClipboard('npx fase-ai --all --global')"
+                    >
+                        copiar
+                    </button>
+                </div>
+
+                <pre
+                    style="
+                        background: rgba(0, 0, 0, 0.5);
+                        padding: 20px;
+                        border-radius: 6px;
+                        overflow-x: auto;
+                        font-size: 0.9rem;
+                        line-height: 1.6;
+                    "
+                >
+$ npx fase-ai --all --global
+
+✓ Instalando para todos os runtimes:
+  ✓ Claude Code
+  ✓ OpenCode
+  ✓ Gemini
+  ✓ Codex
+✓ Modo: Global
+
+╔════════════════════════════════════════════════════════════════╗
+║ ✓ Todos os runtimes configurados com sucesso!                  ║
+║                                                                ║
+║ Comece agora:                                                  ║
+║ $ /fase:novo-projeto.pt                                        ║
+║ $ /fase:novo-marco.pt                                          ║
+║ $ /fase:executar-fase.pt                                       ║
+╚════════════════════════════════════════════════════════════════╝
+                </pre>
+            </div>
+
+            <!-- Runtimes -->
+            <div id="runtimes" class="runtimes-section">
+                <h2>Runtimes Suportados</h2>
+                <div class="runtimes">
+                    <div class="runtime">
+                        <div class="runtime-name">Claude Code</div>
+                        <div class="runtime-desc">Editor IA da Anthropic</div>
+                        <div class="runtime-path">~/.claude</div>
+                    </div>
+                    <div class="runtime">
+                        <div class="runtime-name">OpenCode</div>
+                        <div class="runtime-desc">Editor moderno de código</div>
+                        <div class="runtime-path">~/.config/opencode</div>
+                    </div>
+                    <div class="runtime">
+                        <div class="runtime-name">Gemini</div>
+                        <div class="runtime-desc">Studio do Google</div>
+                        <div class="runtime-path">~/.gemini</div>
+                    </div>
+                    <div class="runtime">
+                        <div class="runtime-name">Codex</div>
+                        <div class="runtime-desc">IDE Multi-Agente</div>
+                        <div class="runtime-path">~/.codex</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workflow Section -->
+            <div class="workflow-section">
+                <h2>Workflow Típico</h2>
+                <div class="workflow-list">
+                    <div class="workflow-item">
+                        <div class="workflow-item-number">1.</div>
+                        <div class="workflow-item-name">/fase-novo-projeto</div>
+                        <div class="workflow-item-desc">
+                            Inicializar projeto com contexto profundo
+                        </div>
+                    </div>
+                    <div class="workflow-item">
+                        <div class="workflow-item-number">2.</div>
+                        <div class="workflow-item-name">
+                            /fase-planejar-fase
+                        </div>
+                        <div class="workflow-item-desc">
+                            Pesquisar e planejar primeira fase
+                        </div>
+                    </div>
+                    <div class="workflow-item">
+                        <div class="workflow-item-number">3.</div>
+                        <div class="workflow-item-name">
+                            /fase-executar-fase
+                        </div>
+                        <div class="workflow-item-desc">
+                            Executar com checkpoint automático
+                        </div>
+                    </div>
+                    <div class="workflow-item">
+                        <div class="workflow-item-number">4.</div>
+                        <div class="workflow-item-name">
+                            /fase-verificar-trabalho
+                        </div>
+                        <div class="workflow-item-desc">
+                            Validar resultados contra requisitos
+                        </div>
+                    </div>
+                    <div class="workflow-item">
+                        <div class="workflow-item-number">5.</div>
+                        <div class="workflow-item-name">/fase-progresso</div>
+                        <div class="workflow-item-desc">
+                            Ver status e próximos passos
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer>
+                <p style="margin-bottom: 16px">
+                    <a
+                        href="https://github.com/isaaceliape/FASE"
+                        target="_blank"
+                        >GitHub</a
+                    >
+                    •
+                    <a
+                        href="https://github.com/isaaceliape/FASE/blob/main/LICENSE"
+                        target="_blank"
+                        >MIT License</a
+                    >
+                </p>
+                <p style="font-size: 0.85rem">
+                    © 2026 FASE. Feito para desenvolvedores que querem construir
+                    coisas rápido.
+                </p>
+            </footer>
+
+            <!-- Back to Top Button -->
+            <button id="back-to-top" class="back-to-top" title="Voltar ao topo">
+                ↑
+            </button>
+        </div>
+
+        <script>
+            function copyToClipboard(text) {
+                navigator.clipboard.writeText(text).then(() => {
+                    // Show feedback
+                    event.target.textContent = "✓ copied";
+                    setTimeout(() => {
+                        event.target.textContent = "copy";
+                    }, 2000);
+                });
+            }
+
+            // Smooth scroll for nav links
+            document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+                anchor.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(
+                        this.getAttribute("href"),
+                    );
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                        });
+                    }
+                });
+            });
+
+            // Hamburger menu toggle
+            const hamburger = document.getElementById("hamburger");
+            const navMenu = document.getElementById("nav-menu");
+            const navItems = document.querySelectorAll(".nav-item");
+
+            hamburger.addEventListener("click", () => {
+                hamburger.classList.toggle("active");
+                navMenu.classList.toggle("active");
+            });
+
+            // Close menu when a link is clicked
+            navItems.forEach((item) => {
+                item.addEventListener("click", () => {
+                    hamburger.classList.remove("active");
+                    navMenu.classList.remove("active");
+                });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener("click", (e) => {
+                if (
+                    !hamburger.contains(e.target) &&
+                    !navMenu.contains(e.target)
+                ) {
+                    hamburger.classList.remove("active");
+                    navMenu.classList.remove("active");
+                }
+            });
+
+            // Back to Top Button
+            const backToTopBtn = document.getElementById("back-to-top");
+
+            window.addEventListener("scroll", () => {
+                if (window.pageYOffset > 300) {
+                    backToTopBtn.classList.add("show");
+                } else {
+                    backToTopBtn.classList.remove("show");
+                }
+            });
+
+            backToTopBtn.addEventListener("click", () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                });
+            });
+        </script>
+    </body>
+</html>
