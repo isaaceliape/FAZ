@@ -1,0 +1,237 @@
+/* FASE Documentation Custom Styling */
+
+:root {
+  --primary: #00ff88;
+  --secondary: #00bfff;
+  --warning: #ffaa00;
+  --danger: #ff3366;
+  --dark-bg: #0a0e27;
+  --grid-bg: #111827;
+  --text: #e5e7eb;
+  --dim: #9ca3af;
+}
+
+/* Dark mode (default) */
+:root {
+  color-scheme: dark;
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #0a0e27;
+  --sl-color-gray-2: #111827;
+  --sl-color-gray-3: #1f2937;
+  --sl-color-gray-4: #374151;
+  --sl-color-gray-5: #4b5563;
+  --sl-color-gray-6: #6b7280;
+  --sl-color-gray-7: #9ca3af;
+  --sl-color-accent: #00ff88;
+  --sl-color-accent-low: #00ff8822;
+  --sl-color-accent-high: #00ffaa;
+}
+
+/* Override Starlight colors for dark theme */
+body {
+  background-color: var(--dark-bg);
+  color: var(--text);
+  font-family:
+    "0xProto", "Courier New", "Monaco", "Ubuntu Mono", monospace;
+}
+
+/* Accent color - neon green */
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
+/* Code blocks */
+pre {
+  background-color: var(--grid-bg) !important;
+  border: 1px solid var(--dim);
+  border-radius: 4px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+code {
+  color: var(--primary);
+  background-color: var(--grid-bg);
+  padding: 0.2rem 0.4rem;
+  border-radius: 2px;
+  font-family:
+    "0xProto", "Courier New", "Monaco", "Ubuntu Mono", monospace;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text);
+  font-weight: 600;
+}
+
+h1 {
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 0.5rem;
+}
+
+/* Sidebar styling */
+.sidebar {
+  background-color: var(--grid-bg);
+  border-right: 1px solid var(--dim);
+}
+
+.sidebar a:hover {
+  background-color: var(--dark-bg);
+  color: var(--primary);
+}
+
+/* Current page indicator */
+.sidebar a[aria-current="page"] {
+  background-color: var(--dark-bg);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Blockquotes */
+blockquote {
+  border-left: 4px solid var(--primary);
+  background-color: var(--grid-bg);
+  padding: 1rem;
+  margin: 1rem 0;
+  color: var(--dim);
+}
+
+/* Buttons */
+button, [role="button"] {
+  background-color: var(--primary);
+  color: var(--dark-bg);
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+button:hover, [role="button"]:hover {
+  background-color: var(--secondary);
+  transform: translateY(-2px);
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+table th {
+  background-color: var(--grid-bg);
+  color: var(--primary);
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 2px solid var(--primary);
+}
+
+table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--dim);
+}
+
+table tr:hover {
+  background-color: var(--grid-bg);
+}
+
+/* Search bar */
+.search-container {
+  background-color: var(--grid-bg);
+  border: 1px solid var(--dim);
+  border-radius: 4px;
+}
+
+/* Navigation items */
+nav a {
+  color: var(--text);
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: var(--primary);
+}
+
+/* Monospace font for code */
+.code, .language-text {
+  font-family:
+    "0xProto", "Courier New", "Monaco", "Ubuntu Mono", monospace;
+}
+
+/* Emphasis colors */
+strong {
+  color: var(--secondary);
+  font-weight: 600;
+}
+
+em {
+  color: var(--dim);
+  font-style: italic;
+}
+
+/* Links in text */
+p a {
+  border-bottom: 1px dotted var(--primary);
+  transition: all 0.3s ease;
+}
+
+p a:hover {
+  border-bottom-style: solid;
+  background-color: var(--dark-bg);
+  padding: 0 2px;
+}
+
+/* Lists */
+ul, ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+ul li, ol li {
+  margin: 0.5rem 0;
+  color: var(--text);
+}
+
+/* Highlight text */
+mark, .highlight {
+  background-color: var(--primary);
+  color: var(--dark-bg);
+  padding: 0.2rem 0.4rem;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
+/* Page header */
+header {
+  border-bottom: 1px solid var(--dim);
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+}
+
+/* Main content */
+main {
+  max-width: 900px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  code, pre {
+    font-size: 0.85rem;
+  }
+}
