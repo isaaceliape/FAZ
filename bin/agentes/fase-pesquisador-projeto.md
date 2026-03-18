@@ -1,5 +1,5 @@
 ---
-name: fase-project-pesquisador
+name: Fase-Pesquisador-Projeto
 description: Pesquisa ecossistema de domínio antes da criação do roteiro. Produz arquivos em .planejamento/pesquisa/ consumidos durante a criação do roteiro. Spawnado pelos orchestrators /fase-novo-projeto ou /fase-new-milestone.
 tools: Read, Write, Bash, Grep, Glob, WebSearch, WebFetch, mcp__context7__*
 color: cyan

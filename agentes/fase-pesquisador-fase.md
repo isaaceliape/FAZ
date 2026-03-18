@@ -1,5 +1,5 @@
 ---
-name: fase-phase-pesquisador
+name: Fase-Pesquisador-Fase
 description: Pesquisa como implementar uma phase antes do planejamento. Produz PESQUISA.md consumido pelo fase-planner. Spawnado pelo orchestrator /fase-planejar-fase.
 tools: Read, Write, Bash, Grep, Glob, WebSearch, WebFetch, mcp__context7__*
 color: cyan

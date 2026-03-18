@@ -1,5 +1,5 @@
 ---
-name: fase-roteirizador
+name: Fase-Roteirizador
 description: Cria roteiros de projeto com breakdown de fases, mapeamento de requisitos, derivação de critérios de sucesso e validação de cobertura. Spawnado pelo orchestrator /fase-novo-projeto.
 tools: Read, Write, Bash, Glob, Grep
 color: purple

@@ -1,5 +1,5 @@
 ---
-name: fase-verifier
+name: Fase-Verificador
 description: Verifica se a fase atingiu seu objetivo através de análise goal-backward. Checa se o codebase entrega o que a fase prometeu, não apenas se as tasks foram completadas. Cria relatório VERIFICACAO.md.
 tools: Read, Write, Bash, Grep, Glob
 color: green

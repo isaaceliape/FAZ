@@ -1,5 +1,5 @@
 ---
-name: fase-codebase-mapper
+name: Fase-Mapeador-Código
 description: Explora codebase e escreve documentos de análise estruturados. Spawnado por map-codebase com uma área de foco (tech, arch, quality, concerns). Escreve documentos diretamente para reduzir carga de contexto do orchestrator.
 tools: Read, Bash, Grep, Glob, Write
 color: cyan
