@@ -1663,7 +1663,20 @@ function configureOpencodePermissions(isGlobal = true) {
   if (!config.permission.external_directory || typeof config.permission.external_directory !== 'object') {
     config.permission.external_directory = {};
   }
-  if (config.permission.external_directory[fasePath] !== 'allow') {
+
+  // For local installs, also configure permissions for the command/ directory so OpenCode can discover commands
+  if (!isGlobal) {
+    const commandPath = `${opencodeConfigDir.replace(/\\/g, '/')}/command/*`;
+    if (config.permission.read[commandPath] !== 'allow') {
+      config.permission.read[commandPath] = 'allow';
+      modified = true;
+    }
+    if (config.permission.external_directory[commandPath] !== 'allow') {
+      config.permission.external_directory[commandPath] = 'allow';
+      modified = true;
+    }
+  }
+  if (!config.permission.external_directory[fasePath]) {
     config.permission.external_directory[fasePath] = 'allow';
     modified = true;
   }
