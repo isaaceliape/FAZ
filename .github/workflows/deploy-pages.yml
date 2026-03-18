@@ -28,6 +28,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build Starlight Documentation
+        run: |
+          cd www/docs
+          npm install
+          npm run build
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
