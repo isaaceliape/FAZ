@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Landing Page (http-server)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["http-server", "www", "-p", "8080", "-c-1"],
+      "port": 8080
+    },
+    {
+      "name": "Landing Page (Python)",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8000", "--directory", "www"],
+      "port": 8000
+    }
+  ]
+}
