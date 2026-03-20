@@ -2,8 +2,9 @@ name: Publicar no npm
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   publicar:
@@ -24,6 +25,7 @@ jobs:
       - name: Verificar integridade do pacote
         run: |
           cd bin
+          npm ci
           npm pack --dry-run > /tmp/pack_output.txt
           if grep -q "total files: 0" /tmp/pack_output.txt; then
             echo "❌ Erro: nenhum arquivo encontrado no pacote"
@@ -35,13 +37,15 @@ jobs:
       - name: Publicar no npm
         run: |
           cd bin
+          npm ci
           npm config set registry https://registry.npmjs.org/
           npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
-          npm publish
+          npm publish --access public
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Criar release no GitHub
+        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG_NAME: ${{ github.ref_name }}
