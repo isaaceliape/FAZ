@@ -1,0 +1,11 @@
+{
+  "name": "fase-verificacao",
+  "version": "1.0.0",
+  "description": "Script de verificação de instalação do FASE",
+  "bin": {
+    "fase-verificar-instalacao": "./verificar-instalacao.js"
+  },
+  "scripts": {
+    "verificar": "node verificar-instalacao.js"
+  }
+}

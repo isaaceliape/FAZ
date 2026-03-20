@@ -138,6 +138,25 @@ O instalador configura:
 
 ## 🎯 Verificar Instalação
 
+### Verificação Automática
+
+Use o comando de verificação para gerar um relatório completo:
+
+```bash
+npm run verificar-instalacao
+# ou
+node bin/verificar-instalacao.js
+```
+
+O comando verifica:
+- ✅ Instalação do pacote global
+- ✅ Configuração de cada runtime (Claude Code, OpenCode, Gemini, Codex)
+- ✅ Comandos FASE instalados
+- ✅ Hooks e workflows
+- ✅ Sugere ações corretivas para problemas encontrados
+
+### Verificação Manual
+
 Após instalar, verifique no seu runtime:
 
 | Runtime | Comando de Verificação |

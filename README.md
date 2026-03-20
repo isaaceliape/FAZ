@@ -218,6 +218,7 @@ FASE oferece **32 comandos em português brasileiro**, organizados por função:
 /fase-limpar             # Remove arquivos temporários
 /fase-saude              # Checkup de saúde do projeto
 /fase-atualizar          # Atualiza FASE para versão latest
+/fase-verificar-instalacao  # Verifica instalação e sugere correções
 ```
 
 **→ Documentação completa:** [📚 COMANDOS.md](docs/COMANDOS.md)

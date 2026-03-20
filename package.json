@@ -6,6 +6,7 @@
   "scripts": {
     "prepare": "husky install || true",
     "verificar": "cd bin && npm pack --dry-run",
+    "verificar-instalacao": "cd bin && node verificar-instalacao.js",
     "test": "cd bin && npm test"
   },
   "devDependencies": {

@@ -63,6 +63,7 @@
     "agentes/",
     "comandos/",
     "install.js",
+    "verificar-instalacao.js",
     "README.md"
   ]
 }
