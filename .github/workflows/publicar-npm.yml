@@ -12,15 +12,21 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    env:
+      NODE_VERSION: '20'
 
     steps:
       - name: Clonar repositório
         uses: actions/checkout@v4
+        env:
+          ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: ${{ env.NODE_VERSION }}
+        env:
+          ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
 
       - name: Verificar integridade do pacote
         run: |
