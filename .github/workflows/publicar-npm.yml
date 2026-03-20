@@ -25,7 +25,7 @@ jobs:
       - name: Verificar integridade do pacote
         run: |
           cd bin
-          npm ci
+          npm install
           npm pack --dry-run > /tmp/pack_output.txt
           if grep -q "total files: 0" /tmp/pack_output.txt; then
             echo "❌ Erro: nenhum arquivo encontrado no pacote"
@@ -37,7 +37,7 @@ jobs:
       - name: Publicar no npm
         run: |
           cd bin
-          npm ci
+          npm install
           npm config set registry https://registry.npmjs.org/
           npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
           npm publish --access public

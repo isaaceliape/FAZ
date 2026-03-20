@@ -1,6 +1,5 @@
 # Dependencies
 node_modules/
-package-lock.json
 
 # Logs
 *.log
@@ -36,3 +35,6 @@ STATE.md
 # Husky
 .husky/_/.gitignore
 .husky/_/husky.sh
+
+# Keep bin package lock
+!.bin/package-lock.json
