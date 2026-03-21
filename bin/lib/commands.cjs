@@ -4,7 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
-const { safeReadFile, loadConfig, isGitIgnored, execGit, normalizePhaseName, comparePhaseNum, getArchivedPhaseDirs, generateSlugInternal, getMilestoneInfo, resolveModelInternal, MODEL_PROFILES, toPosixPath, output, error, findPhaseInternal } = require('./core.cjs');
+const { safeReadFile, loadConfig, isGitIgnored, execGit, normalizeEtapaNome, compareEtapaNum, getArchivedEtapasDirs, generateSlugInternal, getMilestoneInfo, resolveModelInternal, MODEL_PROFILES, toPosixPath, output, error, findEtapaInternal } = require('./core.cjs');
 const { extractFrontmatter } = require('./frontmatter.cjs');
 
 function cmdGenerateSlug(text, raw) {
@@ -97,27 +97,27 @@ function cmdVerifyPathExists(cwd, targetPath, raw) {
 }
 
 function cmdHistoryDigest(cwd, raw) {
-  const phasesDir = path.join(cwd, '.planejamento', 'phases');
+  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
   const digest = { phases: {}, decisions: [], tech_stack: new Set() };
 
   // Collect all phase directories: archived + current
   const allPhaseDirs = [];
 
   // Add archived phases first (oldest milestones first)
-  const archived = getArchivedPhaseDirs(cwd);
+  const archived = getArchivedEtapasDirs(cwd);
   for (const a of archived) {
     allPhaseDirs.push({ name: a.name, fullPath: a.fullPath, milestone: a.milestone });
   }
 
   // Add current phases
-  if (fs.existsSync(phasesDir)) {
+  if (fs.existsSync(etapasDir)) {
     try {
-      const currentDirs = fs.readdirSync(phasesDir, { withFileTypes: true })
+      const currentDirs = fs.readdirSync(etapasDir, { withFileTypes: true })
         .filter(e => e.isDirectory())
         .map(e => e.name)
         .sort();
       for (const dir of currentDirs) {
-        allPhaseDirs.push({ name: dir, fullPath: path.join(phasesDir, dir), milestone: null });
+        allPhaseDirs.push({ name: dir, fullPath: path.join(etapasDir, dir), milestone: null });
       }
     } catch {}
   }
@@ -137,10 +137,10 @@ function cmdHistoryDigest(cwd, raw) {
           const content = fs.readFileSync(path.join(dirPath, summary), 'utf-8');
           const fm = extractFrontmatter(content);
 
-          const phaseNum = fm.phase || dir.split('-')[0];
+          const etapaNum = fm.etapa || dir.split('-')[0];
 
-          if (!digest.phases[phaseNum]) {
-            digest.phases[phaseNum] = {
+          if (!digest.phases[etapaNum]) {
+            digest.phases[etapaNum] = {
               name: fm.name || dir.split('-').slice(1).join(' ') || 'Unknown',
               provides: new Set(),
               affects: new Set(),
@@ -150,25 +150,25 @@ function cmdHistoryDigest(cwd, raw) {
 
           // Merge provides
           if (fm['dependency-graph'] && fm['dependency-graph'].provides) {
-            fm['dependency-graph'].provides.forEach(p => digest.phases[phaseNum].provides.add(p));
+            fm['dependency-graph'].provides.forEach(p => digest.phases[etapaNum].provides.add(p));
           } else if (fm.provides) {
-            fm.provides.forEach(p => digest.phases[phaseNum].provides.add(p));
+            fm.provides.forEach(p => digest.phases[etapaNum].provides.add(p));
           }
 
           // Merge affects
           if (fm['dependency-graph'] && fm['dependency-graph'].affects) {
-            fm['dependency-graph'].affects.forEach(a => digest.phases[phaseNum].affects.add(a));
+            fm['dependency-graph'].affects.forEach(a => digest.phases[etapaNum].affects.add(a));
           }
 
           // Merge patterns
           if (fm['patterns-established']) {
-            fm['patterns-established'].forEach(p => digest.phases[phaseNum].patterns.add(p));
+            fm['patterns-established'].forEach(p => digest.phases[etapaNum].patterns.add(p));
           }
 
           // Merge decisions
           if (fm['key-decisions']) {
             fm['key-decisions'].forEach(d => {
-              digest.decisions.push({ phase: phaseNum, decision: d });
+              digest.decisions.push({ phase: etapaNum, decision: d });
             });
           }
 
@@ -380,7 +380,7 @@ async function cmdWebsearch(query, options, raw) {
 }
 
 function cmdProgressRender(cwd, format, raw) {
-  const phasesDir = path.join(cwd, '.planejamento', 'phases');
+  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
   const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
   const milestone = getMilestoneInfo(cwd);
 
@@ -389,14 +389,14 @@ function cmdProgressRender(cwd, format, raw) {
   let totalSummaries = 0;
 
   try {
-    const entries = fs.readdirSync(phasesDir, { withFileTypes: true });
-    const dirs = entries.filter(e => e.isDirectory()).map(e => e.name).sort((a, b) => comparePhaseNum(a, b));
+    const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
+    const dirs = entries.filter(e => e.isDirectory()).map(e => e.name).sort((a, b) => compareEtapaNum(a, b));
 
     for (const dir of dirs) {
       const dm = dir.match(/^(\d+(?:\.\d+)*)-?(.*)/);
-      const phaseNum = dm ? dm[1] : dir;
-      const phaseName = dm && dm[2] ? dm[2].replace(/-/g, ' ') : '';
-      const phaseFiles = fs.readdirSync(path.join(phasesDir, dir));
+      const etapaNum = dm ? dm[1] : dir;
+      const etapaNome = dm && dm[2] ? dm[2].replace(/-/g, ' ') : '';
+      const phaseFiles = fs.readdirSync(path.join(etapasDir, dir));
       const plans = phaseFiles.filter(f => f.endsWith('-PLAN.md') || f === 'PLAN.md').length;
       const summaries = phaseFiles.filter(f => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md').length;
 
@@ -409,7 +409,7 @@ function cmdProgressRender(cwd, format, raw) {
       else if (summaries > 0) status = 'Em Progresso';
       else status = 'Planejado';
 
-      phases.push({ number: phaseNum, name: phaseName, plans, summaries, status });
+      phases.push({ number: etapaNum, name: etapaNome, plans, summaries, status });
     }
   } catch {}
 
@@ -476,11 +476,11 @@ function cmdTodoComplete(cwd, filename, raw) {
 
 function cmdScaffold(cwd, type, options, raw) {
   const { phase, name } = options;
-  const padded = phase ? normalizePhaseName(phase) : '00';
+  const padded = phase ? normalizeEtapaNome(phase) : '00';
   const today = new Date().toISOString().split('T')[0];
 
   // Find phase directory
-  const phaseInfo = phase ? findPhaseInternal(cwd, phase) : null;
+  const phaseInfo = phase ? findEtapaInternal(cwd, phase) : null;
   const phaseDir = phaseInfo ? path.join(cwd, phaseInfo.directory) : null;
 
   if (phase && !phaseDir && type !== 'phase-dir') {
@@ -511,7 +511,7 @@ function cmdScaffold(cwd, type, options, raw) {
       }
       const slug = generateSlugInternal(name);
       const dirName = `${padded}-${slug}`;
-      const phasesParent = path.join(cwd, '.planejamento', 'phases');
+      const phasesParent = path.join(cwd, '.planejamento', 'etapas');
       fs.mkdirSync(phasesParent, { recursive: true });
       const dirPath = path.join(phasesParent, dirName);
       fs.mkdirSync(dirPath, { recursive: true });

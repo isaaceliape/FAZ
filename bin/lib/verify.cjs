@@ -4,7 +4,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { safeReadFile, normalizePhaseName, execGit, findPhaseInternal, getMilestoneInfo, output, error } = require('./core.cjs');
+const { safeReadFile, normalizeEtapaNome, execGit, findEtapaInternal, getMilestoneInfo, output, error } = require('./core.cjs');
 const { extractFrontmatter, parseMustHavesBlock } = require('./frontmatter.cjs');
 const { writeStateMd } = require('./state.cjs');
 
@@ -115,7 +115,7 @@ function cmdVerifyPlanStructure(cwd, filePath, raw) {
   const warnings = [];
 
   // Check required frontmatter fields
-  const required = ['phase', 'plan', 'type', 'etapa', 'depends_on', 'files_modified', 'autonomous', 'must_haves'];
+  const required = ['etapa', 'plan', 'type', 'etapa', 'depends_on', 'files_modified', 'autonomous', 'must_haves'];
   for (const field of required) {
     if (fm[field] === undefined) errors.push(`Campo de frontmatter obrigatório ausente: ${field}`);
   }
@@ -167,7 +167,7 @@ function cmdVerifyPlanStructure(cwd, filePath, raw) {
 
 function cmdVerifyPhaseCompleteness(cwd, phase, raw) {
   if (!phase) { error('fase obrigatória'); }
-  const phaseInfo = findPhaseInternal(cwd, phase);
+  const phaseInfo = findEtapaInternal(cwd, phase);
   if (!phaseInfo || !phaseInfo.found) {
     output({ error: 'Fase não encontrada', phase }, raw);
     return;
@@ -396,7 +396,7 @@ function cmdVerifyKeyLinks(cwd, planFilePath, raw) {
 
 function cmdValidateConsistency(cwd, raw) {
   const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
-  const phasesDir = path.join(cwd, '.planejamento', 'phases');
+  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
   const errors = [];
   const warnings = [];
 
@@ -420,7 +420,7 @@ function cmdValidateConsistency(cwd, raw) {
   // Get phases on disk
   const diskPhases = new Set();
   try {
-    const entries = fs.readdirSync(phasesDir, { withFileTypes: true });
+    const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
     const dirs = entries.filter(e => e.isDirectory()).map(e => e.name);
     for (const dir of dirs) {
       const dm = dir.match(/^(\d+[A-Z]?(?:\.\d+)*)/i);
@@ -430,7 +430,7 @@ function cmdValidateConsistency(cwd, raw) {
 
   // Check: phases in ROADMAP but not on disk
   for (const p of roadmapPhases) {
-    if (!diskPhases.has(p) && !diskPhases.has(normalizePhaseName(p))) {
+    if (!diskPhases.has(p) && !diskPhases.has(normalizeEtapaNome(p))) {
       warnings.push(`Fase ${p} em ROADMAP.md mas nenhum diretório no disco`);
     }
   }
@@ -457,11 +457,11 @@ function cmdValidateConsistency(cwd, raw) {
 
   // Check: plan numbering within phases
   try {
-    const entries = fs.readdirSync(phasesDir, { withFileTypes: true });
+    const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
     const dirs = entries.filter(e => e.isDirectory()).map(e => e.name).sort();
 
     for (const dir of dirs) {
-      const phaseFiles = fs.readdirSync(path.join(phasesDir, dir));
+      const phaseFiles = fs.readdirSync(path.join(etapasDir, dir));
       const plans = phaseFiles.filter(f => f.endsWith('-PLAN.md')).sort();
 
       // Extract plan numbers
@@ -492,15 +492,15 @@ function cmdValidateConsistency(cwd, raw) {
 
   // Check: frontmatter in plans has required fields
   try {
-    const entries = fs.readdirSync(phasesDir, { withFileTypes: true });
+    const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
     const dirs = entries.filter(e => e.isDirectory()).map(e => e.name);
 
     for (const dir of dirs) {
-      const phaseFiles = fs.readdirSync(path.join(phasesDir, dir));
+      const phaseFiles = fs.readdirSync(path.join(etapasDir, dir));
       const plans = phaseFiles.filter(f => f.endsWith('-PLAN.md'));
 
       for (const plan of plans) {
-        const content = fs.readFileSync(path.join(phasesDir, dir, plan), 'utf-8');
+        const content = fs.readFileSync(path.join(etapasDir, dir, plan), 'utf-8');
         const fm = extractFrontmatter(content);
 
         if (!fm.etapa) {
@@ -520,7 +520,7 @@ function cmdValidateHealth(cwd, options, raw) {
   const roadmapPath = path.join(planejamentoDir, 'ROADMAP.md');
   const statePath = path.join(planejamentoDir, 'STATE.md');
   const configPath = path.join(planejamentoDir, 'config.json');
-  const phasesDir = path.join(planejamentoDir, 'phases');
+  const etapasDir = path.join(planejamentoDir, 'etapas');
 
   const errors = [];
   const warnings = [];
@@ -577,7 +577,7 @@ function cmdValidateHealth(cwd, options, raw) {
     // Get disk phases
     const diskPhases = new Set();
     try {
-      const entries = fs.readdirSync(phasesDir, { withFileTypes: true });
+      const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
       for (const e of entries) {
         if (e.isDirectory()) {
           const m = e.name.match(/^(\d+(?:\.\d+)*)/);
@@ -629,9 +629,9 @@ function cmdValidateHealth(cwd, options, raw) {
     } catch {}
   }
 
-  // ─── Check 6: Phase directory naming (NN-name format) ─────────────────────
+  // ─── Check 6: Etapa directory naming (NN-name format) ─────────────────────
   try {
-    const entries = fs.readdirSync(phasesDir, { withFileTypes: true });
+    const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
     for (const e of entries) {
       if (e.isDirectory() && !e.name.match(/^\d{2}(?:\.\d+)*-[\w-]+$/)) {
         addIssue('warning', 'W005', `Diretório de fase "${e.name}" não segue formato NN-nome`, 'Renomeie para corresponder ao padrão (ex: 01-setup)');
@@ -641,10 +641,10 @@ function cmdValidateHealth(cwd, options, raw) {
 
   // ─── Check 7: Orphaned plans (PLAN without SUMMARY) ───────────────────────
   try {
-    const entries = fs.readdirSync(phasesDir, { withFileTypes: true });
+    const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
     for (const e of entries) {
       if (!e.isDirectory()) continue;
-      const phaseFiles = fs.readdirSync(path.join(phasesDir, e.name));
+      const phaseFiles = fs.readdirSync(path.join(etapasDir, e.name));
       const plans = phaseFiles.filter(f => f.endsWith('-PLAN.md') || f === 'PLAN.md');
       const summaries = phaseFiles.filter(f => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md');
       const summaryBases = new Set(summaries.map(s => s.replace('-SUMMARY.md', '').replace('SUMMARY.md', '')));
@@ -660,15 +660,15 @@ function cmdValidateHealth(cwd, options, raw) {
 
   // ─── Check 7b: Nyquist VALIDATION.md consistency ────────────────────────
   try {
-    const phaseEntries = fs.readdirSync(phasesDir, { withFileTypes: true });
+    const phaseEntries = fs.readdirSync(etapasDir, { withFileTypes: true });
     for (const e of phaseEntries) {
       if (!e.isDirectory()) continue;
-      const phaseFiles = fs.readdirSync(path.join(phasesDir, e.name));
+      const phaseFiles = fs.readdirSync(path.join(etapasDir, e.name));
       const hasResearch = phaseFiles.some(f => f.endsWith('-RESEARCH.md'));
       const hasValidation = phaseFiles.some(f => f.endsWith('-VALIDATION.md'));
       if (hasResearch && !hasValidation) {
         const researchFile = phaseFiles.find(f => f.endsWith('-RESEARCH.md'));
-        const researchContent = fs.readFileSync(path.join(phasesDir, e.name, researchFile), 'utf-8');
+        const researchContent = fs.readFileSync(path.join(etapasDir, e.name, researchFile), 'utf-8');
         if (researchContent.includes('## Validation Architecture')) {
           addIssue('warning', 'W009', `Fase ${e.name}: tem Validation Architecture em RESEARCH.md mas nenhum VALIDATION.md`, 'Execute novamente /gsd:planejar-fase com --research para regenerar');
         }
@@ -689,7 +689,7 @@ function cmdValidateHealth(cwd, options, raw) {
 
     const diskPhases = new Set();
     try {
-      const entries = fs.readdirSync(phasesDir, { withFileTypes: true });
+      const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
       for (const e of entries) {
         if (e.isDirectory()) {
           const dm = e.name.match(/^(\d+[A-Z]?(?:\.\d+)*)/i);

@@ -91,7 +91,7 @@ describe('frontmatter set', () => {
     const content = fs.readFileSync(file, 'utf-8');
     const { extractFrontmatter } = require('../bin/lib/frontmatter.cjs');
     const fm = extractFrontmatter(content);
-    assert.strictEqual(fm.phase, '02');
+    assert.strictEqual(fm.etapa, '02');
   });
 
   test('adds new field', () => {
@@ -146,7 +146,7 @@ describe('frontmatter merge', () => {
     const content = fs.readFileSync(file, 'utf-8');
     const { extractFrontmatter } = require('../bin/lib/frontmatter.cjs');
     const fm = extractFrontmatter(content);
-    assert.strictEqual(fm.phase, '01', 'original field should be preserved');
+    assert.strictEqual(fm.etapa, '01', 'original field should be preserved');
     assert.strictEqual(fm.plan, '02', 'merged field should be present');
     assert.strictEqual(fm.type, 'tdd', 'merged field should be present');
   });
@@ -159,7 +159,7 @@ describe('frontmatter merge', () => {
     const content = fs.readFileSync(file, 'utf-8');
     const { extractFrontmatter } = require('../bin/lib/frontmatter.cjs');
     const fm = extractFrontmatter(content);
-    assert.strictEqual(fm.phase, '02', 'conflicting field should be overwritten');
+    assert.strictEqual(fm.etapa, '02', 'conflicting field should be overwritten');
     assert.strictEqual(fm.type, 'execute', 'non-conflicting field should be preserved');
   });
 

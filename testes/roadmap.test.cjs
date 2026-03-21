@@ -26,13 +26,13 @@ describe('roadmap get-phase command', () => {
 
 ## Phases
 
-### Phase 1: Foundation
+### Etapa 1: Foundation
 **Goal:** Set up project infrastructure
 **Plans:** 2 plans
 
 Some description here.
 
-### Phase 2: API
+### Etapa 2: API
 **Goal:** Build REST API
 **Plans:** 3 plans
 `
@@ -53,7 +53,7 @@ Some description here.
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap v1.0
 
-### Phase 1: Foundation
+### Etapa 1: Foundation
 **Goal:** Set up project
 `
     );
@@ -70,10 +70,10 @@ Some description here.
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap
 
-### Phase 2: Main
+### Etapa 2: Main
 **Goal:** Main work
 
-### Phase 2.1: Hotfix
+### Etapa 2.1: Hotfix
 **Goal:** Emergency fix
 `
     );
@@ -92,7 +92,7 @@ Some description here.
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap
 
-### Phase 1: Setup
+### Etapa 1: Setup
 **Goal:** Initialize everything
 
 This phase covers:
@@ -100,7 +100,7 @@ This phase covers:
 - Auth configuration
 - CI/CD pipeline
 
-### Phase 2: Build
+### Etapa 2: Build
 **Goal:** Build features
 `
     );
@@ -111,7 +111,7 @@ This phase covers:
     const output = JSON.parse(result.output);
     assert.ok(output.section.includes('Database setup'), 'section includes description');
     assert.ok(output.section.includes('CI/CD pipeline'), 'section includes all bullets');
-    assert.ok(!output.section.includes('Phase 2'), 'section does not include next phase');
+    assert.ok(!output.section.includes('Etapa 2'), 'section does not include next phase');
   });
 
   test('handles missing ROADMAP.md gracefully', () => {
@@ -128,11 +128,11 @@ This phase covers:
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap v1.0
 
-## Phase 1: Foundation
+## Etapa 1: Foundation
 **Goal:** Set up project infrastructure
 **Plans:** 2 plans
 
-## Phase 2: API
+## Etapa 2: API
 **Goal:** Build REST API
 `
     );
@@ -153,8 +153,8 @@ This phase covers:
 
 ## Phases
 
-- [ ] **Phase 1: Foundation** - Set up project
-- [ ] **Phase 2: API** - Build REST API
+- [ ] **Etapa 1: Foundation** - Set up project
+- [ ] **Etapa 2: API** - Build REST API
 `
     );
 
@@ -197,24 +197,24 @@ describe('roadmap analyze command', () => {
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap v1.0
 
-### Phase 1: Foundation
+### Etapa 1: Foundation
 **Goal:** Set up infrastructure
 
-### Phase 2: Authentication
+### Etapa 2: Authentication
 **Goal:** Add user auth
 
-### Phase 3: Features
+### Etapa 3: Features
 **Goal:** Build core features
 `
     );
 
     // Create phase dirs with varying completion
-    const p1 = path.join(tmpDir, '.planejamento', 'phases', '01-foundation');
+    const p1 = path.join(tmpDir, '.planejamento', 'etapas', '01-foundation');
     fs.mkdirSync(p1, { recursive: true });
     fs.writeFileSync(path.join(p1, '01-01-PLAN.md'), '# Plan');
     fs.writeFileSync(path.join(p1, '01-01-SUMMARY.md'), '# Summary');
 
-    const p2 = path.join(tmpDir, '.planejamento', 'phases', '02-authentication');
+    const p2 = path.join(tmpDir, '.planejamento', 'etapas', '02-authentication');
     fs.mkdirSync(p2, { recursive: true });
     fs.writeFileSync(path.join(p2, '02-01-PLAN.md'), '# Plan');
 
@@ -238,13 +238,13 @@ describe('roadmap analyze command', () => {
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap
 
-### Phase 1: Setup
+### Etapa 1: Setup
 **Goal:** Initialize project
 **Depends on:** Nothing
 
-### Phase 2: Build
+### Etapa 2: Build
 **Goal:** Build features
-**Depends on:** Phase 1
+**Depends on:** Etapa 1
 `
     );
 
@@ -255,7 +255,7 @@ describe('roadmap analyze command', () => {
     assert.strictEqual(output.phases[0].goal, 'Initialize project');
     assert.strictEqual(output.phases[0].depends_on, 'Nothing');
     assert.strictEqual(output.phases[1].goal, 'Build features');
-    assert.strictEqual(output.phases[1].depends_on, 'Phase 1');
+    assert.strictEqual(output.phases[1].depends_on, 'Etapa 1');
   });
 });
 
@@ -279,12 +279,12 @@ describe('roadmap analyze disk status variants', () => {
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap
 
-### Phase 1: Exploration
+### Etapa 1: Exploration
 **Goal:** Research the domain
 `
     );
 
-    const p1 = path.join(tmpDir, '.planejamento', 'phases', '01-exploration');
+    const p1 = path.join(tmpDir, '.planejamento', 'etapas', '01-exploration');
     fs.mkdirSync(p1, { recursive: true });
     fs.writeFileSync(path.join(p1, '01-RESEARCH.md'), '# Research notes');
 
@@ -301,12 +301,12 @@ describe('roadmap analyze disk status variants', () => {
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap
 
-### Phase 1: Discussion
+### Etapa 1: Discussion
 **Goal:** Gather context
 `
     );
 
-    const p1 = path.join(tmpDir, '.planejamento', 'phases', '01-discussion');
+    const p1 = path.join(tmpDir, '.planejamento', 'etapas', '01-discussion');
     fs.mkdirSync(p1, { recursive: true });
     fs.writeFileSync(path.join(p1, '01-CONTEXT.md'), '# Context notes');
 
@@ -323,12 +323,12 @@ describe('roadmap analyze disk status variants', () => {
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap
 
-### Phase 1: Empty
+### Etapa 1: Empty
 **Goal:** Nothing yet
 `
     );
 
-    const p1 = path.join(tmpDir, '.planejamento', 'phases', '01-empty');
+    const p1 = path.join(tmpDir, '.planejamento', 'etapas', '01-empty');
     fs.mkdirSync(p1, { recursive: true });
 
     const result = runGsdTools('roadmap analyze', tmpDir);
@@ -361,12 +361,12 @@ describe('roadmap analyze milestone extraction', () => {
 
 ## v1.0 Test Infrastructure
 
-### Phase 1: Foundation
+### Etapa 1: Foundation
 **Goal:** Set up base
 
 ## v1.1 Coverage Hardening
 
-### Phase 2: Coverage
+### Etapa 2: Coverage
 **Goal:** Add coverage
 `
     );
@@ -404,10 +404,10 @@ describe('roadmap analyze missing phase details', () => {
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap
 
-- [ ] **Phase 1: Foundation** - Set up project
-- [ ] **Phase 2: API** - Build REST API
+- [ ] **Etapa 1: Foundation** - Set up project
+- [ ] **Etapa 2: API** - Build REST API
 
-### Phase 2: API
+### Etapa 2: API
 **Goal:** Build REST API
 `
     );
@@ -426,13 +426,13 @@ describe('roadmap analyze missing phase details', () => {
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap
 
-- [ ] **Phase 1: Foundation** - Set up project
-- [ ] **Phase 2: API** - Build REST API
+- [ ] **Etapa 1: Foundation** - Set up project
+- [ ] **Etapa 2: API** - Build REST API
 
-### Phase 1: Foundation
+### Etapa 1: Foundation
 **Goal:** Set up project
 
-### Phase 2: API
+### Etapa 2: API
 **Goal:** Build REST API
 `
     );
@@ -465,14 +465,14 @@ describe('roadmap get-phase success criteria', () => {
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap
 
-### Phase 1: Test
+### Etapa 1: Test
 **Goal:** Test goal
 **Success Criteria** (what must be TRUE):
   1. First criterion
   2. Second criterion
   3. Third criterion
 
-### Phase 2: Other
+### Etapa 2: Other
 **Goal:** Other goal
 `
     );
@@ -494,7 +494,7 @@ describe('roadmap get-phase success criteria', () => {
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap
 
-### Phase 1: Simple
+### Etapa 1: Simple
 **Goal:** No criteria here
 `
     );
@@ -535,7 +535,7 @@ describe('roadmap update-plan-progress command', () => {
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap
 
-### Phase 1: Test
+### Etapa 1: Test
 **Goal:** Test goal
 `
     );
@@ -550,13 +550,13 @@ describe('roadmap update-plan-progress command', () => {
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap
 
-### Phase 1: Test
+### Etapa 1: Test
 **Goal:** Test goal
 `
     );
 
     // Create phase dir with only a context file (no plans)
-    const p1 = path.join(tmpDir, '.planejamento', 'phases', '01-test');
+    const p1 = path.join(tmpDir, '.planejamento', 'etapas', '01-test');
     fs.mkdirSync(p1, { recursive: true });
     fs.writeFileSync(path.join(p1, '01-CONTEXT.md'), '# Context');
 
@@ -574,20 +574,20 @@ describe('roadmap update-plan-progress command', () => {
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap
 
-### Phase 1: Test
+### Etapa 1: Test
 **Goal:** Test goal
 **Plans:** TBD
 
 ## Progress
 
-| Phase | Milestone | Plans Complete | Status | Completed |
+| Etapa | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 1. Test | v1.0 | 0/2 | Planned | - |
 `
     );
 
     // Create phase dir with 2 plans, 1 summary
-    const p1 = path.join(tmpDir, '.planejamento', 'phases', '01-test');
+    const p1 = path.join(tmpDir, '.planejamento', 'etapas', '01-test');
     fs.mkdirSync(p1, { recursive: true });
     fs.writeFileSync(path.join(p1, '01-01-PLAN.md'), '# Plan 1');
     fs.writeFileSync(path.join(p1, '01-02-PLAN.md'), '# Plan 2');
@@ -613,22 +613,22 @@ describe('roadmap update-plan-progress command', () => {
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
       `# Roadmap
 
-- [ ] **Phase 1: Test** - description
+- [ ] **Etapa 1: Test** - description
 
-### Phase 1: Test
+### Etapa 1: Test
 **Goal:** Test goal
 **Plans:** TBD
 
 ## Progress
 
-| Phase | Milestone | Plans Complete | Status | Completed |
+| Etapa | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 1. Test | v1.0 | 0/1 | Planned | - |
 `
     );
 
     // Create phase dir with 1 plan, 1 summary (complete)
-    const p1 = path.join(tmpDir, '.planejamento', 'phases', '01-test');
+    const p1 = path.join(tmpDir, '.planejamento', 'etapas', '01-test');
     fs.mkdirSync(p1, { recursive: true });
     fs.writeFileSync(path.join(p1, '01-01-PLAN.md'), '# Plan 1');
     fs.writeFileSync(path.join(p1, '01-01-SUMMARY.md'), '# Summary 1');
@@ -650,7 +650,7 @@ describe('roadmap update-plan-progress command', () => {
 
   test('missing ROADMAP.md returns updated false', () => {
     // Create phase dir with plans and summaries but NO ROADMAP.md
-    const p1 = path.join(tmpDir, '.planejamento', 'phases', '01-test');
+    const p1 = path.join(tmpDir, '.planejamento', 'etapas', '01-test');
     fs.mkdirSync(p1, { recursive: true });
     fs.writeFileSync(path.join(p1, '01-01-PLAN.md'), '# Plan 1');
     fs.writeFileSync(path.join(p1, '01-01-SUMMARY.md'), '# Summary 1');

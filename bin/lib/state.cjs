@@ -4,7 +4,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { escapeRegex, loadConfig, getMilestoneInfo, getMilestonePhaseFilter, output, error, ensureInsidePlanejamento } = require('./core.cjs');
+const { escapeRegex, loadConfig, getMilestoneInfo, getMilestoneEtapaFilter, output, error, ensureInsidePlanejamento } = require('./core.cjs');
 const { extractFrontmatter, reconstructFrontmatter } = require('./frontmatter.cjs');
 
 // Shared helper: extract a field value from STATE.md content.
@@ -47,7 +47,7 @@ function cmdStateLoad(cwd, raw) {
       `model_profile=${c.model_profile}`,
       `commit_docs=${c.commit_docs}`,
       `branching_strategy=${c.branching_strategy}`,
-      `phase_branch_template=${c.phase_branch_template}`,
+      `etapa_branch_template=${c.etapa_branch_template}`,
       `milestone_branch_template=${c.milestone_branch_template}`,
       `parallelization=${c.parallelization}`,
       `research=${c.research}`,
@@ -254,7 +254,7 @@ function cmdStateRecordMetric(cwd, options, raw) {
 
   if (metricsMatch) {
     let tableBody = metricsMatch[2].trimEnd();
-    const newRow = `| Phase ${phase} P${plan} | ${duration} | ${tasks || '-'} tasks | ${files || '-'} files |`;
+    const newRow = `| Etapa ${phase} P${plan} | ${duration} | ${tasks || '-'} tasks | ${files || '-'} files |`;
 
     if (tableBody.trim() === '' || tableBody.includes('None yet')) {
       tableBody = newRow;
@@ -277,15 +277,15 @@ function cmdStateUpdateProgress(cwd, raw) {
   let content = fs.readFileSync(statePath, 'utf-8');
 
   // Count summaries across all phases
-  const phasesDir = path.join(cwd, '.planejamento', 'phases');
+  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
   let totalPlans = 0;
   let totalSummaries = 0;
 
-  if (fs.existsSync(phasesDir)) {
-    const phaseDirs = fs.readdirSync(phasesDir, { withFileTypes: true })
+  if (fs.existsSync(etapasDir)) {
+    const etapasDirs = fs.readdirSync(etapasDir, { withFileTypes: true })
       .filter(e => e.isDirectory()).map(e => e.name);
-    for (const dir of phaseDirs) {
-      const files = fs.readdirSync(path.join(phasesDir, dir));
+    for (const dir of etapasDirs) {
+      const files = fs.readdirSync(path.join(etapasDir, dir));
       totalPlans += files.filter(f => f.match(/-PLAN\.md$/i)).length;
       totalSummaries += files.filter(f => f.match(/-SUMMARY\.md$/i)).length;
     }
@@ -332,7 +332,7 @@ function cmdStateAddDecision(cwd, options, raw) {
   if (!summaryText) { output({ error: 'resumo obrigatório' }, raw); return; }
 
   let content = fs.readFileSync(statePath, 'utf-8');
-  const entry = `- [Phase ${phase || '?'}]: ${summaryText}${rationaleText ? ` — ${rationaleText}` : ''}`;
+  const entry = `- [Etapa ${phase || '?'}]: ${summaryText}${rationaleText ? ` — ${rationaleText}` : ''}`;
 
   // Find Decisions section (various heading patterns)
   const sectionPattern = /(###?\s*(?:Decisões|Decisões Tomadas|Decisões Acumuladas)\s*\n)([\s\S]*?)(?=\n###?|\n##[^#]|$)/i;
@@ -462,9 +462,9 @@ function cmdStateSnapshot(cwd, raw) {
   const content = fs.readFileSync(statePath, 'utf-8');
 
   // Extract basic fields
-  const currentPhase = stateExtractField(content, 'Current Phase');
-  const currentPhaseName = stateExtractField(content, 'Current Phase Name');
-  const totalPhasesRaw = stateExtractField(content, 'Total Phases');
+  const etapaAtual = stateExtractField(content, 'Current Phase');
+  const etapaAtualName = stateExtractField(content, 'Current Etapa Name');
+  const totalEtapasRaw = stateExtractField(content, 'Total Phases');
   const currentPlan = stateExtractField(content, 'Current Plan');
   const totalPlansRaw = stateExtractField(content, 'Total Plans in Phase');
   const status = stateExtractField(content, 'Status');
@@ -474,8 +474,8 @@ function cmdStateSnapshot(cwd, raw) {
   const pausedAt = stateExtractField(content, 'Paused At');
 
   // Parse numeric fields
-  const totalPhases = totalPhasesRaw ? parseInt(totalPhasesRaw, 10) : null;
-  const totalPlansInPhase = totalPlansRaw ? parseInt(totalPlansRaw, 10) : null;
+  const totalEtapas = totalEtapasRaw ? parseInt(totalEtapasRaw, 10) : null;
+  const totalPlansEmEtapa = totalPlansRaw ? parseInt(totalPlansRaw, 10) : null;
   const progressPercent = progressRaw ? parseInt(progressRaw.replace('%', ''), 10) : null;
 
   // Extract decisions table
@@ -530,11 +530,11 @@ function cmdStateSnapshot(cwd, raw) {
   }
 
   const result = {
-    current_phase: currentPhase,
-    current_phase_name: currentPhaseName,
-    total_phases: totalPhases,
+    current_phase: etapaAtual,
+    current_phase_name: etapaAtualName,
+    total_phases: totalEtapas,
     current_plan: currentPlan,
-    total_plans_in_phase: totalPlansInPhase,
+    total_plans_in_phase: totalPlansEmEtapa,
     status,
     progress_percent: progressPercent,
     last_activity: lastActivity,
@@ -556,10 +556,10 @@ function cmdStateSnapshot(cwd, raw) {
  * reliably via `state json` instead of fragile regex parsing.
  */
 function buildStateFrontmatter(bodyContent, cwd) {
-  const currentPhase = stateExtractField(bodyContent, 'Fase Atual');
-  const currentPhaseName = stateExtractField(bodyContent, 'Nome da Fase Atual');
+  const etapaAtual = stateExtractField(bodyContent, 'Fase Atual');
+  const etapaAtualName = stateExtractField(bodyContent, 'Nome da Fase Atual');
   const currentPlan = stateExtractField(bodyContent, 'Plano Atual');
-  const totalPhasesRaw = stateExtractField(bodyContent, 'Total de Fases');
+  const totalEtapasRaw = stateExtractField(bodyContent, 'Total de Fases');
   const totalPlansRaw = stateExtractField(bodyContent, 'Total de Planos na Fase');
   const status = stateExtractField(bodyContent, 'Status');
   const progressRaw = stateExtractField(bodyContent, 'Progresso');
@@ -577,34 +577,34 @@ function buildStateFrontmatter(bodyContent, cwd) {
     } catch {}
   }
 
-  let totalPhases = totalPhasesRaw ? parseInt(totalPhasesRaw, 10) : null;
+  let totalEtapas = totalEtapasRaw ? parseInt(totalEtapasRaw, 10) : null;
   let completedPhases = null;
   let totalPlans = totalPlansRaw ? parseInt(totalPlansRaw, 10) : null;
   let completedPlans = null;
 
   if (cwd) {
     try {
-      const phasesDir = path.join(cwd, '.planejamento', 'phases');
-      if (fs.existsSync(phasesDir)) {
-        const isDirInMilestone = getMilestonePhaseFilter(cwd);
-        const phaseDirs = fs.readdirSync(phasesDir, { withFileTypes: true })
+      const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+      if (fs.existsSync(etapasDir)) {
+        const isDirInMilestone = getMilestoneEtapaFilter(cwd);
+        const etapasDirs = fs.readdirSync(etapasDir, { withFileTypes: true })
           .filter(e => e.isDirectory()).map(e => e.name)
           .filter(isDirInMilestone);
         let diskTotalPlans = 0;
         let diskTotalSummaries = 0;
         let diskCompletedPhases = 0;
 
-        for (const dir of phaseDirs) {
-          const files = fs.readdirSync(path.join(phasesDir, dir));
+        for (const dir of etapasDirs) {
+          const files = fs.readdirSync(path.join(etapasDir, dir));
           const plans = files.filter(f => f.match(/-PLAN\.md$/i)).length;
           const summaries = files.filter(f => f.match(/-SUMMARY\.md$/i)).length;
           diskTotalPlans += plans;
           diskTotalSummaries += summaries;
           if (plans > 0 && summaries >= plans) diskCompletedPhases++;
         }
-        totalPhases = isDirInMilestone.phaseCount > 0
-          ? Math.max(phaseDirs.length, isDirInMilestone.phaseCount)
-          : phaseDirs.length;
+        totalEtapas = isDirInMilestone.phaseCount > 0
+          ? Math.max(etapasDirs.length, isDirInMilestone.phaseCount)
+          : etapasDirs.length;
         completedPhases = diskCompletedPhases;
         totalPlans = diskTotalPlans;
         completedPlans = diskTotalSummaries;
@@ -641,8 +641,8 @@ function buildStateFrontmatter(bodyContent, cwd) {
 
   if (milestone) fm.milestone = milestone;
   if (milestoneName) fm.milestone_name = milestoneName;
-  if (currentPhase) fm.current_phase = currentPhase;
-  if (currentPhaseName) fm.current_phase_name = currentPhaseName;
+  if (etapaAtual) fm.current_phase = etapaAtual;
+  if (etapaAtualName) fm.current_phase_name = etapaAtualName;
   if (currentPlan) fm.current_plan = currentPlan;
   fm.status = normalizedStatus;
   if (stoppedAt) fm.stopped_at = stoppedAt;
@@ -651,7 +651,7 @@ function buildStateFrontmatter(bodyContent, cwd) {
   if (lastActivity) fm.last_activity = lastActivity;
 
   const progress = {};
-  if (totalPhases !== null) progress.total_phases = totalPhases;
+  if (totalEtapas !== null) progress.total_phases = totalEtapas;
   if (completedPhases !== null) progress.completed_phases = completedPhases;
   if (totalPlans !== null) progress.total_plans = totalPlans;
   if (completedPlans !== null) progress.completed_plans = completedPlans;

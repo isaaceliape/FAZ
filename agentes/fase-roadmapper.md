@@ -37,7 +37,7 @@ Se o prompt contém um bloco `<files_to_read>`, você DEVE usar a ferramenta `Re
 <downstream_consumer>
 Seu ROTEIRO.md é consumido pelo `/fase-planejar-fase` que usa para:
 
-| Output | Como o Plan-Phase Usa |
+| Output | Como o Plan-Etapa Usa |
 |--------|------------------------|
 | Goals da phase | Decompostos em planos executáveis |
 | Critérios de sucesso | Informam derivação de must_haves |
@@ -137,7 +137,7 @@ Requisito que não suporta nenhum critério:
 ## Exemplo de Resolução de Gap
 
 ```
-Phase 2: Autenticação
+Etapa 2: Autenticação
 Goal: Usuários podem acessar suas contas com segurança
 
 Critérios de Sucesso:
@@ -216,26 +216,26 @@ Leia granularidade do config.json. A granularidade controla a tolerância de com
 
 **Fundação → Features → Enhancement**
 ```
-Phase 1: Setup (scaffolding do projeto, CI/CD)
-Phase 2: Auth (contas de usuário)
-Phase 3: Core Content (features principais)
-Phase 4: Social (compartilhamento, seguir)
-Phase 5: Polish (performance, edge cases)
+Etapa 1: Setup (scaffolding do projeto, CI/CD)
+Etapa 2: Auth (contas de usuário)
+Etapa 3: Core Content (features principais)
+Etapa 4: Social (compartilhamento, seguir)
+Etapa 5: Polish (performance, edge cases)
 ```
 
 **Fatias Verticais (Features Independentes)**
 ```
-Phase 1: Setup
-Phase 2: Perfis de Usuário (feature completa)
-Phase 3: Criação de Conteúdo (feature completa)
-Phase 4: Discovery (feature completa)
+Etapa 1: Setup
+Etapa 2: Perfis de Usuário (feature completa)
+Etapa 3: Criação de Conteúdo (feature completa)
+Etapa 4: Discovery (feature completa)
 ```
 
 **Anti-Padrão: Camadas Horizontais**
 ```
-Phase 1: Todos os modelos de banco ← Muito acoplado
-Phase 2: Todos os endpoints de API ← Não pode verificar independentemente
-Phase 3: Todos os componentes de UI ← Nada funciona até o final
+Etapa 1: Todos os modelos de banco ← Muito acoplado
+Etapa 2: Todos os endpoints de API ← Não pode verificar independentemente
+Etapa 3: Todos os componentes de UI ← Nada funciona até o final
 ```
 
 </phase_identification>
@@ -249,13 +249,13 @@ Após identificação de fases, verifique se cada requisito v1 está mapeado.
 **Construa mapa de cobertura:**
 
 ```
-AUTH-01 → Phase 2
-AUTH-02 → Phase 2
-AUTH-03 → Phase 2
-PROF-01 → Phase 3
-PROF-02 → Phase 3
-CONT-01 → Phase 4
-CONT-02 → Phase 4
+AUTH-01 → Etapa 2
+AUTH-02 → Etapa 2
+AUTH-03 → Etapa 2
+PROF-01 → Etapa 3
+PROF-02 → Etapa 3
+CONT-01 → Etapa 4
+CONT-02 → Etapa 4
 ...
 
 Mapeados: 12/12 ✓
@@ -269,8 +269,8 @@ Mapeados: 12/12 ✓
 - NOTF-02: Usuário recebe email de followers
 
 Opções:
-1. Criar Phase 6: Notificações
-2. Adicionar à Phase 5 existente
+1. Criar Etapa 6: Notificações
+2. Adicionar à Etapa 5 existente
 3. Adiar para v2 (atualizar REQUISITOS.md)
 ```
 
@@ -283,11 +283,11 @@ Após criação do roteiro, REQUISITOS.md é atualizado com mapeamentos de fases
 ```markdown
 ## Traceability
 
-| Requisito | Phase | Status |
+| Requisito | Etapa | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 2 | Pending |
-| AUTH-02 | Phase 2 | Pending |
-| PROF-01 | Phase 3 | Pending |
+| AUTH-01 | Etapa 2 | Pending |
+| AUTH-02 | Etapa 2 | Pending |
+| PROF-01 | Etapa 3 | Pending |
 ...
 ```
 
@@ -302,15 +302,15 @@ Após criação do roteiro, REQUISITOS.md é atualizado com mapeamentos de fases
 ### 1. Checklist de Resumo (sob `## Phases`)
 
 ```markdown
-- [ ] **Phase 1: Nome** - Descrição em uma linha
-- [ ] **Phase 2: Nome** - Descrição em uma linha
-- [ ] **Phase 3: Nome** - Descrição em uma linha
+- [ ] **Etapa 1: Nome** - Descrição em uma linha
+- [ ] **Etapa 2: Nome** - Descrição em uma linha
+- [ ] **Etapa 3: Nome** - Descrição em uma linha
 ```
 
-### 2. Seções de Detalhe (sob `## Phase Details`)
+### 2. Seções de Detalhe (sob `## Etapa Details`)
 
 ```markdown
-### Phase 1: Nome
+### Etapa 1: Nome
 **Goal**: O que esta phase entrega
 **Depende de**: Nada (primeira phase)
 **Requisitos**: REQ-01, REQ-02
@@ -319,18 +319,18 @@ Após criação do roteiro, REQUISITOS.md é atualizado com mapeamentos de fases
   2. Comportamento observável da perspectiva do usuário
 **Plans**: TBD
 
-### Phase 2: Nome
+### Etapa 2: Nome
 **Goal**: O que esta phase entrega
-**Depende de**: Phase 1
+**Depende de**: Etapa 1
 ...
 ```
 
-**Os headers `### Phase X:` são parseados por ferramentas downstream.** Se você escrever apenas o checklist de resumo, lookups de phase falharão.
+**Os headers `### Etapa X:` são parseados por ferramentas downstream.** Se você escrever apenas o checklist de resumo, lookups de phase falharão.
 
 ### 3. Tabela de Progresso
 
 ```markdown
-| Phase | Plans Complete | Status | Completed |
+| Etapa | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Nome | 0/3 | Not started | - |
 | 2. Nome | 0/2 | Not started | - |
@@ -362,7 +362,7 @@ Ao apresentar para aprovação do usuário:
 
 ### Estrutura de Phase
 
-| Phase | Goal | Requisitos | Critérios de Sucesso |
+| Etapa | Goal | Requisitos | Critérios de Sucesso |
 |-------|------|--------------|------------------|
 | 1 - Setup | [goal] | SETUP-01, SETUP-02 | 3 critérios |
 | 2 - Auth | [goal] | AUTH-01, AUTH-02, AUTH-03 | 4 critérios |
@@ -370,11 +370,11 @@ Ao apresentar para aprovação do usuário:
 
 ### Preview de Critérios de Sucesso
 
-**Phase 1: Setup**
+**Etapa 1: Setup**
 1. [critério]
 2. [critério]
 
-**Phase 2: Auth**
+**Etapa 2: Auth**
 1. [critério]
 2. [critério]
 3. [critério]
@@ -505,18 +505,18 @@ Quando arquivos são escritos e retornando para orchestrator:
 **Granularidade:** {do config}
 **Cobertura:** {X}/{X} requisitos mapeados ✓
 
-| Phase | Goal | Requisitos |
+| Etapa | Goal | Requisitos |
 |-------|------|--------------|
 | 1 - {nome} | {goal} | {req-ids} |
 | 2 - {nome} | {goal} | {req-ids} |
 
 ### Preview de Critérios de Sucesso
 
-**Phase 1: {nome}**
+**Etapa 1: {nome}**
 1. {critério}
 2. {critério}
 
-**Phase 2: {nome}**
+**Etapa 2: {nome}**
 1. {critério}
 2. {critério}
 
@@ -553,7 +553,7 @@ Após incorporar feedback do usuário e atualizar arquivos:
 
 ### Resumo Atualizado
 
-| Phase | Goal | Requisitos |
+| Etapa | Goal | Requisitos |
 |-------|------|--------------|
 | 1 - {nome} | {goal} | {count} |
 | 2 - {nome} | {goal} | {count} |
@@ -599,8 +599,8 @@ Quando incapaz de prosseguir:
 - Bom: Derive fases dos requisitos
 
 **Não use camadas horizontais:**
-- Ruim: Phase 1: Models, Phase 2: APIs, Phase 3: UI
-- Bom: Phase 1: Feature Auth completa, Phase 2: Feature Content completa
+- Ruim: Etapa 1: Models, Etapa 2: APIs, Etapa 3: UI
+- Bom: Etapa 1: Feature Auth completa, Etapa 2: Feature Content completa
 
 **Não pule validação de cobertura:**
 - Ruim: "Parece que cobrimos tudo"
@@ -615,8 +615,8 @@ Quando incapaz de prosseguir:
 - Bom: Phases, goals, requisitos, critérios de sucesso
 
 **Não duplique requisitos entre fases:**
-- Ruim: AUTH-01 na Phase 2 E Phase 3
-- Bom: AUTH-01 apenas na Phase 2
+- Ruim: AUTH-01 na Etapa 2 E Etapa 3
+- Bom: AUTH-01 apenas na Etapa 2
 
 </anti_patterns>
 

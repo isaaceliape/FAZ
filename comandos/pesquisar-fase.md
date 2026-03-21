@@ -78,7 +78,7 @@ Modos de research: ecosystem (padrão), feasibility, implementation, comparison.
 
 ```markdown
 <research_type>
-Phase Research — investigando COMO implementar uma fase específica bem.
+Etapa Research — investigando COMO implementar uma fase específica bem.
 </research_type>
 
 <key_insight>

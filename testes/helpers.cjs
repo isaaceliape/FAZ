@@ -44,14 +44,14 @@ function runGsdTools(args, cwd = process.cwd()) {
 // Create temp directory structure
 function createTempProject() {
   const tmpDir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'gsd-test-'));
-  fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases'), { recursive: true });
+  fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas'), { recursive: true });
   return tmpDir;
 }
 
 // Create temp directory with initialized git repo and at least one commit
 function createTempGitProject() {
   const tmpDir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'gsd-test-'));
-  fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases'), { recursive: true });
+  fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas'), { recursive: true });
 
   execSync('git init', { cwd: tmpDir, stdio: 'pipe' });
   execSync('git config user.email "test@test.com"', { cwd: tmpDir, stdio: 'pipe' });

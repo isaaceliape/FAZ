@@ -324,18 +324,18 @@ Estruture findings para o milestone auditor.
 wiring:
   connected:
     - export: "getCurrentUser"
-      from: "Phase 1 (Auth)"
-      used_by: ["Phase 3 (Dashboard)", "Phase 4 (Settings)"]
+      from: "Etapa 1 (Auth)"
+      used_by: ["Etapa 3 (Dashboard)", "Etapa 4 (Settings)"]
 
   orphaned:
     - export: "formatUserData"
-      from: "Phase 2 (Utils)"
+      from: "Etapa 2 (Utils)"
       reason: "Exported but never imported"
 
   missing:
     - expected: "Auth check in Dashboard"
-      from: "Phase 1"
-      to: "Phase 3"
+      from: "Etapa 1"
+      to: "Etapa 3"
       reason: "Dashboard doesn't call useAuth or check session"
 ```
 
@@ -407,7 +407,7 @@ Retorne relatório estruturado para o milestone auditor:
 
 | Requisito | Integration Path | Status | Issue |
 |-------------|-----------------|--------|-------|
-| {REQ-ID} | {Phase X export → Phase Y import → consumer} | WIRED / PARTIAL / UNWIRED | {specific issue or "—"} |
+| {REQ-ID} | {Etapa X export → Etapa Y import → consumer} | WIRED / PARTIAL / UNWIRED | {specific issue or "—"} |
 
 **Requisitos sem wiring cross-phase:**
 {List REQ-IDs que existem em uma única fase sem touchpoints de integração — estes podem ser self-contained ou podem indicar conexões faltando}

@@ -4,9 +4,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const { escapeRegex, normalizePhaseName, output, error, findPhaseInternal } = require('./core.cjs');
+const { escapeRegex, normalizeEtapaNome, output, error, findEtapaInternal } = require('./core.cjs');
 
-function cmdRoadmapGetPhase(cwd, phaseNum, raw) {
+function cmdRoadmapGetPhase(cwd, etapaNum, raw) {
   const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
 
   if (!fs.existsSync(roadmapPath)) {
@@ -18,9 +18,9 @@ function cmdRoadmapGetPhase(cwd, phaseNum, raw) {
     const content = fs.readFileSync(roadmapPath, 'utf-8');
 
     // Escape special regex chars in phase number, handle decimal
-    const escapedPhase = escapeRegex(phaseNum);
+    const escapedEtapa = escapeRegex(etapaNum);
 
-    // Match "## Phase X:", "### Phase X:", or "#### Phase X:" with optional name
+    // Match "## Etapa X:", "### Etapa X:", or "#### Etapa X:" with optional name
     const phasePattern = new RegExp(
       `#{2,4}\\s*Phase\\s+${escapedPhase}:\\s*([^\\n]+)`,
       'i'
@@ -36,22 +36,22 @@ function cmdRoadmapGetPhase(cwd, phaseNum, raw) {
       const checklistMatch = content.match(checklistPattern);
 
       if (checklistMatch) {
-        // Phase exists in summary but missing detail section - malformed ROADMAP
+        // Etapa exists in summary but missing detail section - malformed ROADMAP
         output({
           found: false,
-          phase_number: phaseNum,
+          phase_number: etapaNum,
           phase_name: checklistMatch[1].trim(),
           error: 'malformed_roadmap',
-          message: `Phase ${phaseNum} exists in summary list but missing "### Phase ${phaseNum}:" detail section. ROADMAP.md needs both formats.`
+          message: `Etapa ${etapaNum} exists in summary list but missing "### Etapa ${etapaNum}:" detail section. ROADMAP.md needs both formats.`
         }, raw, '');
         return;
       }
 
-      output({ found: false, phase_number: phaseNum }, raw, '');
+      output({ found: false, phase_number: etapaNum }, raw, '');
       return;
     }
 
-    const phaseName = headerMatch[1].trim();
+    const etapaNome = headerMatch[1].trim();
     const headerIndex = headerMatch.index;
 
     // Find the end of this section (next ## or ### phase header, or end of file)
@@ -76,8 +76,8 @@ function cmdRoadmapGetPhase(cwd, phaseNum, raw) {
     output(
       {
         found: true,
-        phase_number: phaseNum,
-        phase_name: phaseName,
+        phase_number: etapaNum,
+        phase_name: etapaNome,
         goal,
         success_criteria,
         section,
@@ -99,16 +99,16 @@ function cmdRoadmapAnalyze(cwd, raw) {
   }
 
   const content = fs.readFileSync(roadmapPath, 'utf-8');
-  const phasesDir = path.join(cwd, '.planejamento', 'phases');
+  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
 
-  // Extract all phase headings: ## Phase N: Name or ### Phase N: Name
+  // Extract all phase headings: ## Etapa N: Name or ### Etapa N: Name
   const phasePattern = /#{2,4}\s*Phase\s+(\d+[A-Z]?(?:\.\d+)*)\s*:\s*([^\n]+)/gi;
   const phases = [];
   let match;
 
   while ((match = phasePattern.exec(content)) !== null) {
-    const phaseNum = match[1];
-    const phaseName = match[2].replace(/\(INSERTED\)/i, '').trim();
+    const etapaNum = match[1];
+    const etapaNome = match[2].replace(/\(INSERTED\)/i, '').trim();
 
     // Extract goal from the section
     const sectionStart = match.index;
@@ -124,7 +124,7 @@ function cmdRoadmapAnalyze(cwd, raw) {
     const depends_on = dependsMatch ? dependsMatch[1].trim() : null;
 
     // Check completion on disk
-    const normalized = normalizePhaseName(phaseNum);
+    const normalized = normalizeEtapaNome(etapaNum);
     let diskStatus = 'no_directory';
     let planCount = 0;
     let summaryCount = 0;
@@ -132,12 +132,12 @@ function cmdRoadmapAnalyze(cwd, raw) {
     let hasResearch = false;
 
     try {
-      const entries = fs.readdirSync(phasesDir, { withFileTypes: true });
+      const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
       const dirs = entries.filter(e => e.isDirectory()).map(e => e.name);
       const dirMatch = dirs.find(d => d.startsWith(normalized + '-') || d === normalized);
 
       if (dirMatch) {
-        const phaseFiles = fs.readdirSync(path.join(phasesDir, dirMatch));
+        const phaseFiles = fs.readdirSync(path.join(etapasDir, dirMatch));
         planCount = phaseFiles.filter(f => f.endsWith('-PLAN.md') || f === 'PLAN.md').length;
         summaryCount = phaseFiles.filter(f => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md').length;
         hasContext = phaseFiles.some(f => f.endsWith('-CONTEXT.md') || f === 'CONTEXT.md');
@@ -153,13 +153,13 @@ function cmdRoadmapAnalyze(cwd, raw) {
     } catch {}
 
     // Check ROADMAP checkbox status
-    const checkboxPattern = new RegExp(`-\\s*\\[(x| )\\]\\s*.*Phase\\s+${escapeRegex(phaseNum)}`, 'i');
+    const checkboxPattern = new RegExp(`-\\s*\\[(x| )\\]\\s*.*Phase\\s+${escapeRegex(etapaNum)}`, 'i');
     const checkboxMatch = content.match(checkboxPattern);
     const roadmapComplete = checkboxMatch ? checkboxMatch[1] === 'x' : false;
 
     phases.push({
-      number: phaseNum,
-      name: phaseName,
+      number: etapaNum,
+      name: etapaNome,
       goal,
       depends_on,
       plan_count: planCount,
@@ -183,8 +183,8 @@ function cmdRoadmapAnalyze(cwd, raw) {
   }
 
   // Find current and next phase
-  const currentPhase = phases.find(p => p.disk_status === 'planned' || p.disk_status === 'partial') || null;
-  const nextPhase = phases.find(p => p.disk_status === 'empty' || p.disk_status === 'no_directory' || p.disk_status === 'discussed' || p.disk_status === 'researched') || null;
+  const etapaAtual = phases.find(p => p.disk_status === 'planned' || p.disk_status === 'partial') || null;
+  const nextEtapa = phases.find(p => p.disk_status === 'empty' || p.disk_status === 'no_directory' || p.disk_status === 'discussed' || p.disk_status === 'researched') || null;
 
   // Aggregated stats
   const totalPlans = phases.reduce((sum, p) => sum + p.plan_count, 0);
@@ -209,24 +209,24 @@ function cmdRoadmapAnalyze(cwd, raw) {
     total_plans: totalPlans,
     total_summaries: totalSummaries,
     progress_percent: totalPlans > 0 ? Math.min(100, Math.round((totalSummaries / totalPlans) * 100)) : 0,
-    current_phase: currentPhase ? currentPhase.number : null,
-    next_phase: nextPhase ? nextPhase.number : null,
+    current_phase: etapaAtual ? etapaAtual.number : null,
+    next_phase: nextEtapa ? nextPhase.number : null,
     missing_phase_details: missingDetails.length > 0 ? missingDetails : null,
   };
 
   output(result, raw);
 }
 
-function cmdRoadmapUpdatePlanProgress(cwd, phaseNum, raw) {
-  if (!phaseNum) {
+function cmdRoadmapUpdatePlanProgress(cwd, etapaNum, raw) {
+  if (!etapaNum) {
     error('phase number required for roadmap update-plan-progress');
   }
 
   const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
 
-  const phaseInfo = findPhaseInternal(cwd, phaseNum);
+  const phaseInfo = findEtapaInternal(cwd, etapaNum);
   if (!phaseInfo) {
-    error(`Phase ${phaseNum} not found`);
+    error(`Etapa ${etapaNum} not found`);
   }
 
   const planCount = phaseInfo.plans.length;
@@ -247,7 +247,7 @@ function cmdRoadmapUpdatePlanProgress(cwd, phaseNum, raw) {
   }
 
   let roadmapContent = fs.readFileSync(roadmapPath, 'utf-8');
-  const phaseEscaped = escapeRegex(phaseNum);
+  const phaseEscaped = escapeRegex(etapaNum);
 
   // Progress table row: update Plans column (summaries/plans) and Status column
   const tablePattern = new RegExp(
@@ -283,7 +283,7 @@ function cmdRoadmapUpdatePlanProgress(cwd, phaseNum, raw) {
 
   output({
     updated: true,
-    phase: phaseNum,
+    phase: etapaNum,
     plan_count: planCount,
     summary_count: summaryCount,
     status,

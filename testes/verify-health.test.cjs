@@ -14,7 +14,7 @@ const { runGsdTools, createTempProject, cleanup } = require('./helpers.cjs');
 // ─── Helpers for setting up minimal valid projects ────────────────────────────
 
 function writeMinimalRoadmap(tmpDir, phases = ['1']) {
-  const lines = phases.map(n => `### Phase ${n}: Phase ${n} Description`).join('\n');
+  const lines = phases.map(n => `### Etapa ${n}: Etapa ${n} Description`).join('\n');
   fs.writeFileSync(
     path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
     `# Roadmap\n\n${lines}\n`
@@ -84,7 +84,7 @@ describe('validate health command', () => {
     writeMinimalStateMd(tmpDir);
     writeValidConfigJson(tmpDir);
     // Create valid phase dir so no W007
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -105,7 +105,7 @@ describe('validate health command', () => {
     writeMinimalRoadmap(tmpDir, ['1']);
     writeMinimalStateMd(tmpDir);
     writeValidConfigJson(tmpDir);
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -124,7 +124,7 @@ describe('validate health command', () => {
     writeMinimalRoadmap(tmpDir, ['1']);
     writeMinimalStateMd(tmpDir);
     writeValidConfigJson(tmpDir);
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -164,7 +164,7 @@ describe('validate health command', () => {
     writeMinimalProjectMd(tmpDir);
     writeMinimalRoadmap(tmpDir, ['1']);
     writeValidConfigJson(tmpDir);
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
     // No STATE.md
 
     const result = runGsdTools('validate health', tmpDir);
@@ -180,12 +180,12 @@ describe('validate health command', () => {
     writeMinimalProjectMd(tmpDir);
     writeMinimalRoadmap(tmpDir, ['1']);
     writeValidConfigJson(tmpDir);
-    // STATE.md mentions Phase 99 but only 01-a dir exists
+    // STATE.md mentions Etapa 99 but only 01-a dir exists
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'STATE.md'),
-      '# Session State\n\nPhase 99 is the current phase.\n'
+      '# Session State\n\nEtapa 99 is the current phase.\n'
     );
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -203,7 +203,7 @@ describe('validate health command', () => {
     writeMinimalProjectMd(tmpDir);
     writeMinimalRoadmap(tmpDir, ['1']);
     writeMinimalStateMd(tmpDir);
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
     // No config.json
 
     const result = runGsdTools('validate health', tmpDir);
@@ -223,7 +223,7 @@ describe('validate health command', () => {
       path.join(tmpDir, '.planejamento', 'config.json'),
       '{broken json'
     );
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -243,7 +243,7 @@ describe('validate health command', () => {
       path.join(tmpDir, '.planejamento', 'config.json'),
       JSON.stringify({ model_profile: 'invalid' })
     );
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -255,7 +255,7 @@ describe('validate health command', () => {
     );
   });
 
-  // ─── Check 6: Phase directory naming (NN-name format) ─────────────────────
+  // ─── Check 6: Etapa directory naming (NN-name format) ─────────────────────
 
   test('warns about incorrectly named phase directories', () => {
     writeMinimalProjectMd(tmpDir);
@@ -267,7 +267,7 @@ describe('validate health command', () => {
     writeMinimalStateMd(tmpDir, '# Session State\n\nNo phase references.\n');
     writeValidConfigJson(tmpDir);
     // Create a badly named dir
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', 'bad_name'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', 'bad_name'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -287,7 +287,7 @@ describe('validate health command', () => {
     writeMinimalStateMd(tmpDir);
     writeValidConfigJson(tmpDir);
     // Create 01-test phase dir with a PLAN but no matching SUMMARY
-    const phaseDir = path.join(tmpDir, '.planejamento', 'phases', '01-test');
+    const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', '01-test');
     fs.mkdirSync(phaseDir, { recursive: true });
     fs.writeFileSync(path.join(phaseDir, '01-01-PLAN.md'), '# Plan\n');
     // No 01-01-SUMMARY.md
@@ -306,10 +306,10 @@ describe('validate health command', () => {
 
   test('warns about phase in ROADMAP but not on disk', () => {
     writeMinimalProjectMd(tmpDir);
-    // ROADMAP mentions Phase 5 but no 05-xxx dir
+    // ROADMAP mentions Etapa 5 but no 05-xxx dir
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
-      '# Roadmap\n\n### Phase 5: Future Phase\n'
+      '# Roadmap\n\n### Etapa 5: Future Phase\n'
     );
     writeMinimalStateMd(tmpDir, '# Session State\n\nNo phase refs.\n');
     writeValidConfigJson(tmpDir);
@@ -335,7 +335,7 @@ describe('validate health command', () => {
     writeMinimalStateMd(tmpDir, '# Session State\n\nNo phase refs.\n');
     writeValidConfigJson(tmpDir);
     // Orphan phase dir not in ROADMAP
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '99-orphan'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '99-orphan'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -352,13 +352,13 @@ describe('validate health command', () => {
   test('detects W008 when workflow.nyquist_validation absent from config', () => {
     writeMinimalProjectMd(tmpDir);
     writeMinimalRoadmap(tmpDir, ['1']);
-    writeMinimalStateMd(tmpDir, '# Session State\n\nPhase 1 in progress.\n');
+    writeMinimalStateMd(tmpDir, '# Session State\n\nEtapa 1 in progress.\n');
     // Config with workflow section but WITHOUT nyquist_validation key
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'config.json'),
       JSON.stringify({ model_profile: 'balanced', workflow: { research: true } }, null, 2)
     );
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -373,13 +373,13 @@ describe('validate health command', () => {
   test('does not emit W008 when nyquist_validation is explicitly set', () => {
     writeMinimalProjectMd(tmpDir);
     writeMinimalRoadmap(tmpDir, ['1']);
-    writeMinimalStateMd(tmpDir, '# Session State\n\nPhase 1 in progress.\n');
+    writeMinimalStateMd(tmpDir, '# Session State\n\nEtapa 1 in progress.\n');
     // Config with workflow.nyquist_validation explicitly set
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'config.json'),
       JSON.stringify({ model_profile: 'balanced', workflow: { research: true, nyquist_validation: true } }, null, 2)
     );
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -396,10 +396,10 @@ describe('validate health command', () => {
   test('detects W009 when RESEARCH.md has Validation Architecture but no VALIDATION.md', () => {
     writeMinimalProjectMd(tmpDir);
     writeMinimalRoadmap(tmpDir, ['1']);
-    writeMinimalStateMd(tmpDir, '# Session State\n\nPhase 1 in progress.\n');
+    writeMinimalStateMd(tmpDir, '# Session State\n\nEtapa 1 in progress.\n');
     writeValidConfigJson(tmpDir);
     // Create phase dir with RESEARCH.md containing Validation Architecture
-    const phaseDir = path.join(tmpDir, '.planejamento', 'phases', '01-setup');
+    const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', '01-setup');
     fs.mkdirSync(phaseDir, { recursive: true });
     fs.writeFileSync(
       path.join(phaseDir, '01-RESEARCH.md'),
@@ -420,10 +420,10 @@ describe('validate health command', () => {
   test('does not emit W009 when VALIDATION.md exists alongside RESEARCH.md', () => {
     writeMinimalProjectMd(tmpDir);
     writeMinimalRoadmap(tmpDir, ['1']);
-    writeMinimalStateMd(tmpDir, '# Session State\n\nPhase 1 in progress.\n');
+    writeMinimalStateMd(tmpDir, '# Session State\n\nEtapa 1 in progress.\n');
     writeValidConfigJson(tmpDir);
     // Create phase dir with both RESEARCH.md and VALIDATION.md
-    const phaseDir = path.join(tmpDir, '.planejamento', 'phases', '01-setup');
+    const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', '01-setup');
     fs.mkdirSync(phaseDir, { recursive: true });
     fs.writeFileSync(
       path.join(phaseDir, '01-RESEARCH.md'),
@@ -449,10 +449,10 @@ describe('validate health command', () => {
   test("returns 'healthy' when all checks pass", () => {
     writeMinimalProjectMd(tmpDir);
     writeMinimalRoadmap(tmpDir, ['1']);
-    writeMinimalStateMd(tmpDir, '# Session State\n\nPhase 1 in progress.\n');
+    writeMinimalStateMd(tmpDir, '# Session State\n\nEtapa 1 in progress.\n');
     writeValidConfigJson(tmpDir);
     // Create valid phase dir matching ROADMAP
-    const phaseDir = path.join(tmpDir, '.planejamento', 'phases', '01-a');
+    const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', '01-a');
     fs.mkdirSync(phaseDir, { recursive: true });
     // Add PLAN+SUMMARY so no I001
     fs.writeFileSync(path.join(phaseDir, '01-01-PLAN.md'), '# Plan\n');
@@ -472,7 +472,7 @@ describe('validate health command', () => {
     writeMinimalRoadmap(tmpDir, ['1']);
     writeMinimalStateMd(tmpDir);
     // No config.json → W003 (warning, not error)
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -497,7 +497,7 @@ describe('validate health --repair command', () => {
     // (E001, E003 are not repairable so we always need .planejamento/ and ROADMAP.md)
     writeMinimalProjectMd(tmpDir);
     writeMinimalRoadmap(tmpDir, ['1']);
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
   });
 
   afterEach(() => {
@@ -506,7 +506,7 @@ describe('validate health --repair command', () => {
 
   test('creates config.json with defaults when missing', () => {
     // STATE.md present so no STATE repair; no config.json
-    writeMinimalStateMd(tmpDir, '# Session State\n\nPhase 1 in progress.\n');
+    writeMinimalStateMd(tmpDir, '# Session State\n\nEtapa 1 in progress.\n');
     // Ensure no config.json
     const configPath = path.join(tmpDir, '.planejamento', 'config.json');
     if (fs.existsSync(configPath)) fs.unlinkSync(configPath);
@@ -530,7 +530,7 @@ describe('validate health --repair command', () => {
   });
 
   test('resets config.json when JSON is invalid', () => {
-    writeMinimalStateMd(tmpDir, '# Session State\n\nPhase 1 in progress.\n');
+    writeMinimalStateMd(tmpDir, '# Session State\n\nEtapa 1 in progress.\n');
     const configPath = path.join(tmpDir, '.planejamento', 'config.json');
     fs.writeFileSync(configPath, '{broken json');
 
@@ -583,7 +583,7 @@ describe('validate health --repair command', () => {
     // Make STATE.md reference a nonexistent phase so repair is triggered
     fs.writeFileSync(
       statePath,
-      '# Session State\n\nPhase 99 is current.\n'
+      '# Session State\n\nEtapa 99 is current.\n'
     );
 
     const result = runGsdTools('validate health --repair', tmpDir);
@@ -603,11 +603,11 @@ describe('validate health --repair command', () => {
 
     // Verify backup contains the original content
     const backupContent = fs.readFileSync(path.join(planningDir, backupFile), 'utf-8');
-    assert.ok(backupContent.includes('Phase 99'), 'backup should contain the original STATE.md content');
+    assert.ok(backupContent.includes('Etapa 99'), 'backup should contain the original STATE.md content');
   });
 
   test('adds nyquist_validation key to config.json via addNyquistKey repair', () => {
-    writeMinimalStateMd(tmpDir, '# Session State\n\nPhase 1 in progress.\n');
+    writeMinimalStateMd(tmpDir, '# Session State\n\nEtapa 1 in progress.\n');
     // Config with workflow section but missing nyquist_validation
     const configPath = path.join(tmpDir, '.planejamento', 'config.json');
     fs.writeFileSync(

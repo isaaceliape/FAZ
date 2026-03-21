@@ -206,7 +206,7 @@ Prioridade: Context7 > Official Docs > Official GitHub > Verified WebSearch > Un
 **Location:** `comandos/fases/XX-name/{phase_num}-PESQUISA.md`
 
 ```markdown
-# Phase [X]: [Nome] - Pesquisa
+# Etapa [X]: [Nome] - Pesquisa
 
 **Pesquisado:** [data]
 **Domínio:** [primary technology/problem domain]
@@ -316,7 +316,7 @@ Padrões verificados de fontes oficiais:
 | Quick run command | `{command}` |
 | Full suite command | `{command}` |
 
-### Phase Requirements → Test Map
+### Etapa Requirements → Test Map
 | Req ID | Behavior | Test Type | Automated Command | File Exists? |
 |--------|----------|-----------|-------------------|-------------|
 | REQ-XX | {behavior} | unit | `pytest tests/test_{module}.py::test_{name} -x` | ✅ / ❌ Etapa 0 |
@@ -324,7 +324,7 @@ Padrões verificados de fontes oficiais:
 ### Sampling Rate
 - **Por task commit:** `{quick run command}`
 - **Por etapa merge:** `{full suite command}`
-- **Phase gate:** Full suite green antes de `/fase-verify-work`
+- **Etapa gate:** Full suite green antes de `/fase-verify-work`
 
 ### Etapa 0 Gaps
 - [ ] `{tests/test_file.py}` — covers REQ-{XX}
@@ -453,7 +453,7 @@ Liste arquivos de teste faltantes, config de framework, ou fixtures compartilhad
 
 ```markdown
 <phase_requisitos>
-## Phase Requirements
+## Etapa Requirements
 
 | ID | Description | Research Support |
 |----|-------------|-----------------|

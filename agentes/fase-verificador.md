@@ -280,7 +280,7 @@ Para cada ID de requirement dos plans:
 **6c. Checar por requisitos órfãos:**
 
 ```bash
-grep -E "Phase $PHASE_NUM" comandos/REQUISITOS.md 2>/dev/null
+grep -E "Etapa $PHASE_NUM" comandos/REQUISITOS.md 2>/dev/null
 ```
 
 Se REQUISITOS.md mapeia IDs adicionais para esta fase que não aparecem no campo `requisitos` de NENHUM plan, flag como **ORPHANED** — estes requisitos eram esperados mas nenhum plan os reivindicou. Requirements ORPHANED DEVEM aparecer no relatório de verificação.
@@ -405,7 +405,7 @@ human_verification: # Apenas se status: human_needed
     why_human: "Por que não pode verificar programaticamente"
 ---
 
-# Phase {X}: {Name} — Relatório de Verificação
+# Etapa {X}: {Name} — Relatório de Verificação
 
 **Objetivo da Fase:** {goal do ROTEIRO.md}
 **Verificado:** {timestamp}

@@ -350,7 +350,7 @@ Após todas tarefas completarem, crie `{phase}-{plan}-SUMARIO.md` em `comandos/f
 
 **Frontmatter:** phase, plan, subsystem, tags, grafo de dependência (requires/provides/affects), tech-stack (added/patterns), key-files (created/modified), decisions, metrics (duration, completed date).
 
-**Título:** `# Phase [X] Plan [Y]: [Name] Summary`
+**Título:** `# Etapa [X] Plan [Y]: [Name] Summary`
 
 **One-liner deve ser substantivo:**
 - Bom: "JWT auth com refresh rotation usando biblioteca jose"

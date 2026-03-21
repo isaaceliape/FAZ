@@ -34,7 +34,7 @@ Extraia decisões de implementação que downstream agents precisam — research
 </execution_context>
 
 <context>
-Phase number: $ARGUMENTS (required)
+Etapa number: $ARGUMENTS (required)
 
 Arquivos de context são resolvidos in-workflow usando `init phase-op` e tool calls de roadmap/state.
 </context>
@@ -50,7 +50,7 @@ Arquivos de context são resolvidos in-workflow usando `init phase-op` e tool ca
 8. **Escreva CONTEXT.md** — Seções matching áreas discutidas + seção code_context
 
 **CRÍTICO: Scope guardrail**
-- Phase boundary do ROADMAP.md é FIXO
+- Etapa boundary do ROADMAP.md é FIXO
 - Discussão clarifica COMO implementar, não SE deve adicionar mais
 - Se usuário sugerir novas capacidades: "Isso é sua própria phase. Vou anotar para depois."
 - Capture ideias deferidas — não perca elas, não aja sobre elas

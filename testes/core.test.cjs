@@ -17,15 +17,15 @@ const {
   MODEL_PROFILES,
   escapeRegex,
   generateSlugInternal,
-  normalizePhaseName,
-  comparePhaseNum,
+  normalizeEtapaNome,
+  compareEtapaNum,
   safeReadFile,
   pathExistsInternal,
   getMilestoneInfo,
-  getMilestonePhaseFilter,
+  getMilestoneEtapaFilter,
   getRoadmapPhaseInternal,
   searchPhaseInDir,
-  findPhaseInternal,
+  findEtapaInternal,
   ensureInsidePlanejamento,
   isInsidePlanejamento,
 } = require('../bin/lib/core.cjs');
@@ -265,60 +265,60 @@ describe('generateSlugInternal', () => {
   });
 });
 
-// ─── normalizePhaseName ────────────────────────────────────────────────────────
+// ─── normalizeEtapaNome ────────────────────────────────────────────────────────
 
-describe('normalizePhaseName', () => {
+describe('normalizeEtapaNome', () => {
   test('pads single digit', () => {
-    assert.strictEqual(normalizePhaseName('1'), '01');
+    assert.strictEqual(normalizeEtapaNome('1'), '01');
   });
 
   test('preserves double digit', () => {
-    assert.strictEqual(normalizePhaseName('12'), '12');
+    assert.strictEqual(normalizeEtapaNome('12'), '12');
   });
 
   test('handles letter suffix', () => {
-    assert.strictEqual(normalizePhaseName('1A'), '01A');
+    assert.strictEqual(normalizeEtapaNome('1A'), '01A');
   });
 
   test('handles decimal phases', () => {
-    assert.strictEqual(normalizePhaseName('2.1'), '02.1');
+    assert.strictEqual(normalizeEtapaNome('2.1'), '02.1');
   });
 
   test('handles multi-level decimals', () => {
-    assert.strictEqual(normalizePhaseName('1.2.3'), '01.2.3');
+    assert.strictEqual(normalizeEtapaNome('1.2.3'), '01.2.3');
   });
 
   test('returns non-matching input unchanged', () => {
-    assert.strictEqual(normalizePhaseName('abc'), 'abc');
+    assert.strictEqual(normalizeEtapaNome('abc'), 'abc');
   });
 });
 
-// ─── comparePhaseNum ───────────────────────────────────────────────────────────
+// ─── compareEtapaNum ───────────────────────────────────────────────────────────
 
-describe('comparePhaseNum', () => {
+describe('compareEtapaNum', () => {
   test('sorts integer phases numerically', () => {
-    assert.ok(comparePhaseNum('1', '2') < 0);
-    assert.ok(comparePhaseNum('10', '2') > 0);
+    assert.ok(compareEtapaNum('1', '2') < 0);
+    assert.ok(compareEtapaNum('10', '2') > 0);
   });
 
   test('sorts letter suffixes', () => {
-    assert.ok(comparePhaseNum('12', '12A') < 0);
-    assert.ok(comparePhaseNum('12A', '12B') < 0);
+    assert.ok(compareEtapaNum('12', '12A') < 0);
+    assert.ok(compareEtapaNum('12A', '12B') < 0);
   });
 
   test('sorts decimal phases', () => {
-    assert.ok(comparePhaseNum('2', '2.1') < 0);
-    assert.ok(comparePhaseNum('2.1', '2.2') < 0);
+    assert.ok(compareEtapaNum('2', '2.1') < 0);
+    assert.ok(compareEtapaNum('2.1', '2.2') < 0);
   });
 
   test('handles multi-level decimals', () => {
-    assert.ok(comparePhaseNum('1.1', '1.1.2') < 0);
-    assert.ok(comparePhaseNum('1.1.2', '1.2') < 0);
+    assert.ok(compareEtapaNum('1.1', '1.1.2') < 0);
+    assert.ok(compareEtapaNum('1.1.2', '1.2') < 0);
   });
 
   test('returns 0 for equal phases', () => {
-    assert.strictEqual(comparePhaseNum('1', '1'), 0);
-    assert.strictEqual(comparePhaseNum('2.1', '2.1'), 0);
+    assert.strictEqual(compareEtapaNum('1', '1'), 0);
+    assert.strictEqual(compareEtapaNum('2.1', '2.1'), 0);
   });
 });
 
@@ -417,14 +417,14 @@ describe('getMilestoneInfo', () => {
       '',
       '## Roadmap v0.1: Legacy Feature Parity',
       '',
-      '### Phase 1: Core Setup',
+      '### Etapa 1: Core Setup',
       'Some content about phase 1',
       '',
       '</details>',
       '',
       '## Roadmap v0.2: Dashboard Overhaul',
       '',
-      '### Phase 8: New Dashboard Layout',
+      '### Etapa 8: New Dashboard Layout',
       'Some content about phase 8',
     ].join('\n');
     fs.writeFileSync(path.join(tmpDir, '.planejamento', 'ROADMAP.md'), roadmap);
@@ -459,7 +459,7 @@ describe('getMilestoneInfo', () => {
       '',
       '## Roadmap v0.3: Performance Tuning',
       '',
-      '### Phase 12: Optimize Queries',
+      '### Etapa 12: Optimize Queries',
     ].join('\n');
     fs.writeFileSync(path.join(tmpDir, '.planejamento', 'ROADMAP.md'), roadmap);
     const info = getMilestoneInfo(tmpDir);
@@ -482,12 +482,12 @@ describe('getMilestoneInfo', () => {
 
 describe('searchPhaseInDir', () => {
   let tmpDir;
-  let phasesDir;
+  let etapasDir;
 
   beforeEach(() => {
     tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'gsd-core-test-'));
-    phasesDir = path.join(tmpDir, 'phases');
-    fs.mkdirSync(phasesDir, { recursive: true });
+    etapasDir = path.join(tmpDir, 'etapas');
+    fs.mkdirSync(etapasDir, { recursive: true });
   });
 
   afterEach(() => {
@@ -495,66 +495,66 @@ describe('searchPhaseInDir', () => {
   });
 
   test('finds phase directory by normalized prefix', () => {
-    fs.mkdirSync(path.join(phasesDir, '01-foundation'));
-    const result = searchPhaseInDir(phasesDir, '.planejamento/phases', '01');
+    fs.mkdirSync(path.join(etapasDir, '01-foundation'));
+    const result = searchPhaseInDir(etapasDir, '.planejamento/phases', '01');
     assert.strictEqual(result.found, true);
     assert.strictEqual(result.phase_number, '01');
     assert.strictEqual(result.phase_name, 'foundation');
   });
 
   test('returns plans and summaries', () => {
-    const phaseDir = path.join(phasesDir, '01-foundation');
+    const phaseDir = path.join(etapasDir, '01-foundation');
     fs.mkdirSync(phaseDir);
     fs.writeFileSync(path.join(phaseDir, '01-01-PLAN.md'), '# Plan');
     fs.writeFileSync(path.join(phaseDir, '01-01-SUMMARY.md'), '# Summary');
-    const result = searchPhaseInDir(phasesDir, '.planejamento/phases', '01');
+    const result = searchPhaseInDir(etapasDir, '.planejamento/phases', '01');
     assert.ok(result.plans.includes('01-01-PLAN.md'));
     assert.ok(result.summaries.includes('01-01-SUMMARY.md'));
     assert.strictEqual(result.incomplete_plans.length, 0);
   });
 
   test('identifies incomplete plans', () => {
-    const phaseDir = path.join(phasesDir, '01-foundation');
+    const phaseDir = path.join(etapasDir, '01-foundation');
     fs.mkdirSync(phaseDir);
     fs.writeFileSync(path.join(phaseDir, '01-01-PLAN.md'), '# Plan 1');
     fs.writeFileSync(path.join(phaseDir, '01-02-PLAN.md'), '# Plan 2');
     fs.writeFileSync(path.join(phaseDir, '01-01-SUMMARY.md'), '# Summary 1');
-    const result = searchPhaseInDir(phasesDir, '.planejamento/phases', '01');
+    const result = searchPhaseInDir(etapasDir, '.planejamento/phases', '01');
     assert.strictEqual(result.incomplete_plans.length, 1);
     assert.ok(result.incomplete_plans.includes('01-02-PLAN.md'));
   });
 
   test('detects research and context files', () => {
-    const phaseDir = path.join(phasesDir, '01-foundation');
+    const phaseDir = path.join(etapasDir, '01-foundation');
     fs.mkdirSync(phaseDir);
     fs.writeFileSync(path.join(phaseDir, '01-RESEARCH.md'), '# Research');
     fs.writeFileSync(path.join(phaseDir, '01-CONTEXT.md'), '# Context');
-    const result = searchPhaseInDir(phasesDir, '.planejamento/phases', '01');
+    const result = searchPhaseInDir(etapasDir, '.planejamento/phases', '01');
     assert.strictEqual(result.has_research, true);
     assert.strictEqual(result.has_context, true);
   });
 
   test('returns null when phase not found', () => {
-    fs.mkdirSync(path.join(phasesDir, '01-foundation'));
-    const result = searchPhaseInDir(phasesDir, '.planejamento/phases', '99');
+    fs.mkdirSync(path.join(etapasDir, '01-foundation'));
+    const result = searchPhaseInDir(etapasDir, '.planejamento/phases', '99');
     assert.strictEqual(result, null);
   });
 
   test('generates phase_slug from directory name', () => {
-    fs.mkdirSync(path.join(phasesDir, '01-core-cjs-tests'));
-    const result = searchPhaseInDir(phasesDir, '.planejamento/phases', '01');
+    fs.mkdirSync(path.join(etapasDir, '01-core-cjs-tests'));
+    const result = searchPhaseInDir(etapasDir, '.planejamento/phases', '01');
     assert.strictEqual(result.phase_slug, 'core-cjs-tests');
   });
 });
 
-// ─── findPhaseInternal ─────────────────────────────────────────────────────────
+// ─── findEtapaInternal ─────────────────────────────────────────────────────────
 
-describe('findPhaseInternal', () => {
+describe('findEtapaInternal', () => {
   let tmpDir;
 
   beforeEach(() => {
     tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'gsd-core-test-'));
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas'), { recursive: true });
   });
 
   afterEach(() => {
@@ -562,19 +562,19 @@ describe('findPhaseInternal', () => {
   });
 
   test('finds phase in current phases directory', () => {
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-foundation'));
-    const result = findPhaseInternal(tmpDir, '1');
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-foundation'));
+    const result = findEtapaInternal(tmpDir, '1');
     assert.strictEqual(result.found, true);
     assert.strictEqual(result.phase_number, '01');
   });
 
   test('returns null for non-existent phase', () => {
-    const result = findPhaseInternal(tmpDir, '99');
+    const result = findEtapaInternal(tmpDir, '99');
     assert.strictEqual(result, null);
   });
 
   test('returns null for null phase', () => {
-    const result = findPhaseInternal(tmpDir, null);
+    const result = findEtapaInternal(tmpDir, null);
     assert.strictEqual(result, null);
   });
 
@@ -582,7 +582,7 @@ describe('findPhaseInternal', () => {
     // Create archived milestone structure (no current phase match)
     const archiveDir = path.join(tmpDir, '.planejamento', 'milestones', 'v1.0-phases', '01-foundation');
     fs.mkdirSync(archiveDir, { recursive: true });
-    const result = findPhaseInternal(tmpDir, '1');
+    const result = findEtapaInternal(tmpDir, '1');
     assert.strictEqual(result.found, true);
     assert.strictEqual(result.archived, 'v1.0');
   });
@@ -608,7 +608,7 @@ describe('getRoadmapPhaseInternal', () => {
     // Also verify it works with a real roadmap (note: goal regex expects **Goal:** with colon inside bold)
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
-      '### Phase 1: Foundation\n**Goal:** Build the base\n'
+      '### Etapa 1: Foundation\n**Goal:** Build the base\n'
     );
     const result = getRoadmapPhaseInternal(tmpDir, '1');
     assert.strictEqual(result.found, true);
@@ -619,7 +619,7 @@ describe('getRoadmapPhaseInternal', () => {
   test('extracts phase name and goal from roadmap', () => {
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
-      '### Phase 2: API Layer\n**Goal:** Create REST endpoints\n**Depends on**: Phase 1\n'
+      '### Etapa 2: API Layer\n**Goal:** Create REST endpoints\n**Depends on**: Etapa 1\n'
     );
     const result = getRoadmapPhaseInternal(tmpDir, '2');
     assert.strictEqual(result.phase_name, 'API Layer');
@@ -630,7 +630,7 @@ describe('getRoadmapPhaseInternal', () => {
     // Actual ROADMAP.md uses **Goal**: (colon outside bold) which the regex does not match
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
-      '### Phase 1: Foundation\n**Goal**: Build the base\n'
+      '### Etapa 1: Foundation\n**Goal**: Build the base\n'
     );
     const result = getRoadmapPhaseInternal(tmpDir, '1');
     assert.strictEqual(result.found, true);
@@ -646,7 +646,7 @@ describe('getRoadmapPhaseInternal', () => {
   test('returns null when phase not in roadmap', () => {
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
-      '### Phase 1: Foundation\n**Goal**: Build the base\n'
+      '### Etapa 1: Foundation\n**Goal**: Build the base\n'
     );
     const result = getRoadmapPhaseInternal(tmpDir, '99');
     assert.strictEqual(result, null);
@@ -660,24 +660,24 @@ describe('getRoadmapPhaseInternal', () => {
   test('extracts full section text', () => {
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
-      '### Phase 1: Foundation\n**Goal**: Build the base\n**Requirements**: TEST-01\nSome details here\n\n### Phase 2: API\n**Goal**: REST\n'
+      '### Etapa 1: Foundation\n**Goal**: Build the base\n**Requirements**: TEST-01\nSome details here\n\n### Etapa 2: API\n**Goal**: REST\n'
     );
     const result = getRoadmapPhaseInternal(tmpDir, '1');
-    assert.ok(result.section.includes('Phase 1: Foundation'));
+    assert.ok(result.section.includes('Etapa 1: Foundation'));
     assert.ok(result.section.includes('Some details here'));
-    // Should not include Phase 2 content
-    assert.ok(!result.section.includes('Phase 2: API'));
+    // Should not include Etapa 2 content
+    assert.ok(!result.section.includes('Etapa 2: API'));
   });
 });
 
-// ─── getMilestonePhaseFilter ────────────────────────────────────────────────────
+// ─── getMilestoneEtapaFilter ────────────────────────────────────────────────────
 
-describe('getMilestonePhaseFilter', () => {
+describe('getMilestoneEtapaFilter', () => {
   let tmpDir;
 
   beforeEach(() => {
     tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'gsd-core-test-'));
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas'), { recursive: true });
   });
 
   afterEach(() => {
@@ -691,13 +691,13 @@ describe('getMilestonePhaseFilter', () => {
       [
         '## Roadmap v2.0: Next Release',
         '',
-        '### Phase 5: Auth',
+        '### Etapa 5: Auth',
         '**Goal:** Add authentication',
         '',
-        '### Phase 6: Dashboard',
+        '### Etapa 6: Dashboard',
         '**Goal:** Build dashboard',
         '',
-        '### Phase 7: Polish',
+        '### Etapa 7: Polish',
         '**Goal:** Final polish',
       ].join('\n')
     );
@@ -705,10 +705,10 @@ describe('getMilestonePhaseFilter', () => {
     // Create phase dirs 1-7 on disk (leftover from previous milestones)
     for (let i = 1; i <= 7; i++) {
       const padded = String(i).padStart(2, '0');
-      fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', `${padded}-phase-${i}`));
+      fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', `${padded}-phase-${i}`));
     }
 
-    const filter = getMilestonePhaseFilter(tmpDir);
+    const filter = getMilestoneEtapaFilter(tmpDir);
 
     // Only phases 5, 6, 7 should match
     assert.strictEqual(filter('05-auth'), true);
@@ -723,7 +723,7 @@ describe('getMilestonePhaseFilter', () => {
   });
 
   test('returns pass-all filter when ROADMAP.md is missing', () => {
-    const filter = getMilestonePhaseFilter(tmpDir);
+    const filter = getMilestoneEtapaFilter(tmpDir);
 
     assert.strictEqual(filter('01-foundation'), true);
     assert.strictEqual(filter('99-anything'), true);
@@ -735,7 +735,7 @@ describe('getMilestonePhaseFilter', () => {
       '# Roadmap\n\nSome content without phases.\n'
     );
 
-    const filter = getMilestonePhaseFilter(tmpDir);
+    const filter = getMilestoneEtapaFilter(tmpDir);
 
     assert.strictEqual(filter('01-foundation'), true);
     assert.strictEqual(filter('05-api'), true);
@@ -744,10 +744,10 @@ describe('getMilestonePhaseFilter', () => {
   test('handles letter-suffix phases (e.g. 3A)', () => {
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
-      '### Phase 3A: Sub-feature\n**Goal:** Sub work\n'
+      '### Etapa 3A: Sub-feature\n**Goal:** Sub work\n'
     );
 
-    const filter = getMilestonePhaseFilter(tmpDir);
+    const filter = getMilestoneEtapaFilter(tmpDir);
 
     assert.strictEqual(filter('03A-sub-feature'), true);
     assert.strictEqual(filter('03-main'), false);
@@ -757,10 +757,10 @@ describe('getMilestonePhaseFilter', () => {
   test('handles decimal phases (e.g. 5.1)', () => {
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
-      '### Phase 5: Main\n**Goal:** Main work\n\n### Phase 5.1: Patch\n**Goal:** Patch work\n'
+      '### Etapa 5: Main\n**Goal:** Main work\n\n### Etapa 5.1: Patch\n**Goal:** Patch work\n'
     );
 
-    const filter = getMilestonePhaseFilter(tmpDir);
+    const filter = getMilestoneEtapaFilter(tmpDir);
 
     assert.strictEqual(filter('05-main'), true);
     assert.strictEqual(filter('05.1-patch'), true);
@@ -770,10 +770,10 @@ describe('getMilestonePhaseFilter', () => {
   test('returns false for non-phase directory names', () => {
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
-      '### Phase 1: Init\n**Goal:** Start\n'
+      '### Etapa 1: Init\n**Goal:** Start\n'
     );
 
-    const filter = getMilestonePhaseFilter(tmpDir);
+    const filter = getMilestoneEtapaFilter(tmpDir);
 
     assert.strictEqual(filter('not-a-phase'), false);
     assert.strictEqual(filter('.gitkeep'), false);
@@ -782,15 +782,15 @@ describe('getMilestonePhaseFilter', () => {
   test('phaseCount reflects ROADMAP phase count', () => {
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
-      '### Phase 5: Auth\n### Phase 6: Dashboard\n### Phase 7: Polish\n'
+      '### Etapa 5: Auth\n### Etapa 6: Dashboard\n### Etapa 7: Polish\n'
     );
 
-    const filter = getMilestonePhaseFilter(tmpDir);
+    const filter = getMilestoneEtapaFilter(tmpDir);
     assert.strictEqual(filter.phaseCount, 3);
   });
 
   test('phaseCount is 0 when ROADMAP is missing', () => {
-    const filter = getMilestonePhaseFilter(tmpDir);
+    const filter = getMilestoneEtapaFilter(tmpDir);
     assert.strictEqual(filter.phaseCount, 0);
   });
 
@@ -800,7 +800,7 @@ describe('getMilestonePhaseFilter', () => {
       '# Roadmap\n\nSome content.\n'
     );
 
-    const filter = getMilestonePhaseFilter(tmpDir);
+    const filter = getMilestoneEtapaFilter(tmpDir);
     assert.strictEqual(filter.phaseCount, 0);
   });
 });
@@ -820,7 +820,7 @@ describe('ensureInsidePlanejamento and isInsidePlanejamento', () => {
     test('returns true for paths inside .planejamento', () => {
       const planejDir = path.join(tmpDir, '.planejamento');
       fs.mkdirSync(planejDir, { recursive: true });
-      fs.mkdirSync(path.join(planejDir, 'phases'), { recursive: true });
+      fs.mkdirSync(path.join(planejDir, 'etapas'), { recursive: true });
 
       assert.strictEqual(isInsidePlanejamento(tmpDir, '.planejamento/STATE.md'), true);
       assert.strictEqual(isInsidePlanejamento(tmpDir, '.planejamento/phases/01-test/PLAN.md'), true);

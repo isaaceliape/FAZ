@@ -4,7 +4,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { normalizePhaseName, findPhaseInternal, generateSlugInternal, toPosixPath, output, error } = require('./core.cjs');
+const { normalizeEtapaNome, findEtapaInternal, generateSlugInternal, toPosixPath, output, error } = require('./core.cjs');
 const { reconstructFrontmatter } = require('./frontmatter.cjs');
 
 function cmdTemplateSelect(cwd, planPath, raw) {
@@ -57,13 +57,13 @@ function cmdTemplateFill(cwd, templateType, options, raw) {
   if (!templateType) { error('tipo de modelo obrigatório: summary, plan ou verification'); }
   if (!options.phase) { error('--phase obrigatório'); }
 
-  const phaseInfo = findPhaseInternal(cwd, options.phase);
+  const phaseInfo = findEtapaInternal(cwd, options.phase);
   if (!phaseInfo || !phaseInfo.found) { output({ error: 'Fase não encontrada', phase: options.phase }, raw); return; }
 
-  const padded = normalizePhaseName(options.phase);
+  const padded = normalizeEtapaNome(options.phase);
   const today = new Date().toISOString().split('T')[0];
-  const phaseName = options.name || phaseInfo.phase_name || 'Unnamed';
-  const phaseSlug = phaseInfo.phase_slug || generateSlugInternal(phaseName);
+  const etapaNome = options.name || phaseInfo.phase_name || 'Unnamed';
+  const phaseSlug = phaseInfo.phase_slug || generateSlugInternal(etapaNome);
   const phaseId = `${padded}-${phaseSlug}`;
   const planNum = (options.plan || '01').padStart(2, '0');
   const fields = options.fields || {};
@@ -88,7 +88,7 @@ function cmdTemplateFill(cwd, templateType, options, raw) {
         ...fields,
       };
       body = [
-        `# Fase ${options.phase}: ${phaseName} — Resumo`,
+        `# Fase ${options.phase}: ${etapaNome} — Resumo`,
         '',
         '**[Resumo substantivo descrevendo o resultado]**',
         '',
@@ -173,7 +173,7 @@ function cmdTemplateFill(cwd, templateType, options, raw) {
         ...fields,
       };
       body = [
-        `# Fase ${options.phase}: ${phaseName} — Verificação`,
+        `# Fase ${options.phase}: ${etapaNome} — Verificação`,
         '',
         '## Verdades Observáveis',
         '| # | Verdade | Status | Evidência |',

@@ -94,7 +94,7 @@ function loadConfig(cwd) {
     commit_docs: true,
     search_gitignored: false,
     branching_strategy: 'none',
-    phase_branch_template: 'gsd/phase-{phase}-{slug}',
+    etapa_branch_template: 'gsd/phase-{phase}-{slug}',
     milestone_branch_template: 'gsd/{milestone}-{slug}',
     research: true,
     plan_checker: true,
@@ -136,7 +136,7 @@ function loadConfig(cwd) {
       commit_docs: get('commit_docs', { section: 'planning', field: 'commit_docs' }) ?? defaults.commit_docs,
       search_gitignored: get('search_gitignored', { section: 'planning', field: 'search_gitignored' }) ?? defaults.search_gitignored,
       branching_strategy: get('branching_strategy', { section: 'git', field: 'branching_strategy' }) ?? defaults.branching_strategy,
-      phase_branch_template: get('phase_branch_template', { section: 'git', field: 'phase_branch_template' }) ?? defaults.phase_branch_template,
+      etapa_branch_template: get('etapa_branch_template', { section: 'git', field: 'etapa_branch_template' }) ?? defaults.etapa_branch_template,
       milestone_branch_template: get('milestone_branch_template', { section: 'git', field: 'milestone_branch_template' }) ?? defaults.milestone_branch_template,
       research: get('research', { section: 'workflow', field: 'research' }) ?? defaults.research,
       plan_checker: get('plan_checker', { section: 'workflow', field: 'plan_check' }) ?? defaults.plan_checker,
@@ -190,13 +190,13 @@ function execGit(cwd, args) {
   }
 }
 
-// ─── Phase utilities ──────────────────────────────────────────────────────────
+// ─── Etapa utilities ──────────────────────────────────────────────────────────
 
 function escapeRegex(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function normalizePhaseName(phase) {
+function normalizeEtapaNome(phase) {
   const match = String(phase).match(/^(\d+)([A-Z])?((?:\.\d+)*)/i);
   if (!match) return phase;
   const padded = match[1].padStart(2, '0');
@@ -205,7 +205,7 @@ function normalizePhaseName(phase) {
   return padded + letter + decimal;
 }
 
-function comparePhaseNum(a, b) {
+function compareEtapaNum(a, b) {
   const pa = String(a).match(/^(\d+)([A-Z])?((?:\.\d+)*)/i);
   const pb = String(b).match(/^(\d+)([A-Z])?((?:\.\d+)*)/i);
   if (!pa || !pb) return String(a).localeCompare(String(b));
@@ -236,13 +236,13 @@ function comparePhaseNum(a, b) {
 function searchPhaseInDir(baseDir, relBase, normalized) {
   try {
     const entries = fs.readdirSync(baseDir, { withFileTypes: true });
-    const dirs = entries.filter(e => e.isDirectory()).map(e => e.name).sort((a, b) => comparePhaseNum(a, b));
+    const dirs = entries.filter(e => e.isDirectory()).map(e => e.name).sort((a, b) => compareEtapaNum(a, b));
     const match = dirs.find(d => d.startsWith(normalized));
     if (!match) return null;
 
     const dirMatch = match.match(/^(\d+[A-Z]?(?:\.\d+)*)-?(.*)/i);
-    const phaseNumber = dirMatch ? dirMatch[1] : normalized;
-    const phaseName = dirMatch && dirMatch[2] ? dirMatch[2] : null;
+    const etapaNumber = dirMatch ? dirMatch[1] : normalized;
+    const etapaNome = dirMatch && dirMatch[2] ? dirMatch[2] : null;
     const phaseDir = path.join(baseDir, match);
     const phaseFiles = fs.readdirSync(phaseDir);
 
@@ -263,9 +263,9 @@ function searchPhaseInDir(baseDir, relBase, normalized) {
     return {
       found: true,
       directory: toPosixPath(path.join(relBase, match)),
-      phase_number: phaseNumber,
-      phase_name: phaseName,
-      phase_slug: phaseName ? phaseName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') : null,
+      phase_number: etapaNumber,
+      phase_name: etapaNome,
+      phase_slug: etapaNome ? etapaNome.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') : null,
       plans,
       summaries,
       incomplete_plans: incompletePlans,
@@ -278,14 +278,14 @@ function searchPhaseInDir(baseDir, relBase, normalized) {
   }
 }
 
-function findPhaseInternal(cwd, phase) {
+function findEtapaInternal(cwd, phase) {
   if (!phase) return null;
 
-  const phasesDir = path.join(cwd, '.planejamento', 'phases');
-  const normalized = normalizePhaseName(phase);
+  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+  const normalized = normalizeEtapaNome(phase);
 
   // Search current phases first
-  const current = searchPhaseInDir(phasesDir, '.planejamento/phases', normalized);
+  const current = searchPhaseInDir(etapasDir, '.planejamento/phases', normalized);
   if (current) return current;
 
   // Search archived milestone phases (newest first)
@@ -315,7 +315,7 @@ function findPhaseInternal(cwd, phase) {
   return null;
 }
 
-function getArchivedPhaseDirs(cwd) {
+function getArchivedEtapasDirs(cwd) {
   const milestonesDir = path.join(cwd, '.planejamento', 'milestones');
   const results = [];
 
@@ -324,17 +324,17 @@ function getArchivedPhaseDirs(cwd) {
   try {
     const milestoneEntries = fs.readdirSync(milestonesDir, { withFileTypes: true });
     // Find v*-phases directories, sort newest first
-    const phaseDirs = milestoneEntries
+    const etapasDirs = milestoneEntries
       .filter(e => e.isDirectory() && /^v[\d.]+-phases$/.test(e.name))
       .map(e => e.name)
       .sort()
       .reverse();
 
-    for (const archiveName of phaseDirs) {
+    for (const archiveName of etapasDirs) {
       const version = archiveName.match(/^(v[\d.]+)-phases$/)[1];
       const archivePath = path.join(milestonesDir, archiveName);
       const entries = fs.readdirSync(archivePath, { withFileTypes: true });
-      const dirs = entries.filter(e => e.isDirectory()).map(e => e.name).sort((a, b) => comparePhaseNum(a, b));
+      const dirs = entries.filter(e => e.isDirectory()).map(e => e.name).sort((a, b) => compareEtapaNum(a, b));
 
       for (const dir of dirs) {
         results.push({
@@ -352,19 +352,19 @@ function getArchivedPhaseDirs(cwd) {
 
 // ─── Roadmap & model utilities ────────────────────────────────────────────────
 
-function getRoadmapPhaseInternal(cwd, phaseNum) {
-  if (!phaseNum) return null;
+function getRoadmapPhaseInternal(cwd, etapaNum) {
+  if (!etapaNum) return null;
   const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
   if (!fs.existsSync(roadmapPath)) return null;
 
   try {
     const content = fs.readFileSync(roadmapPath, 'utf-8');
-    const escapedPhase = escapeRegex(phaseNum.toString());
+    const escapedEtapa = escapeRegex(etapaNum.toString());
     const phasePattern = new RegExp(`#{2,4}\\s*Phase\\s+${escapedPhase}:\\s*([^\\n]+)`, 'i');
     const headerMatch = content.match(phasePattern);
     if (!headerMatch) return null;
 
-    const phaseName = headerMatch[1].trim();
+    const etapaNome = headerMatch[1].trim();
     const headerIndex = headerMatch.index;
     const restOfContent = content.slice(headerIndex);
     const nextHeaderMatch = restOfContent.match(/\n#{2,4}\s+Phase\s+\d/i);
@@ -376,8 +376,8 @@ function getRoadmapPhaseInternal(cwd, phaseNum) {
 
     return {
       found: true,
-      phase_number: phaseNum.toString(),
-      phase_name: phaseName,
+      phase_number: etapaNum.toString(),
+      phase_name: etapaNome,
       goal,
       section,
     };
@@ -460,7 +460,7 @@ function getMilestoneInfo(cwd) {
  * to the current milestone based on ROADMAP.md phase headings.
  * If no ROADMAP exists or no phases are listed, returns a pass-all filter.
  */
-function getMilestonePhaseFilter(cwd) {
+function getMilestoneEtapaFilter(cwd) {
   const milestonePhaseNums = new Set();
   try {
     const roadmap = fs.readFileSync(path.join(cwd, '.planejamento', 'ROADMAP.md'), 'utf-8');
@@ -499,17 +499,17 @@ module.exports = {
   isGitIgnored,
   execGit,
   escapeRegex,
-  normalizePhaseName,
-  comparePhaseNum,
+  normalizeEtapaNome,
+  compareEtapaNum,
   searchPhaseInDir,
-  findPhaseInternal,
-  getArchivedPhaseDirs,
+  findEtapaInternal,
+  getArchivedEtapasDirs,
   getRoadmapPhaseInternal,
   resolveModelInternal,
   pathExistsInternal,
   generateSlugInternal,
   getMilestoneInfo,
-  getMilestonePhaseFilter,
+  getMilestoneEtapaFilter,
   toPosixPath,
   ensureInsidePlanejamento,
   isInsidePlanejamento,

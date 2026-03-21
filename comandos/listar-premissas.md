@@ -21,7 +21,7 @@ Output: Apenas output conversacional (sem criação de arquivo) — termina com 
 </execution_context>
 
 <context>
-Phase number: $ARGUMENTS (required)
+Etapa number: $ARGUMENTS (required)
 
 Estado do projeto e roadmap são carregados in-workflow usando reads direcionados.
 </context>
@@ -39,7 +39,7 @@ Estado do projeto e roadmap são carregados in-workflow usando reads direcionado
 
 <success_criteria>
 
-- Phase validada contra roadmap
+- Etapa validada contra roadmap
 - Suposições expostas em cinco áreas
 - Usuário prompted para feedback
 - Usuário sabe próximos passos (discutir context, planejar phase, ou corrigir suposições)

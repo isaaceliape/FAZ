@@ -1181,7 +1181,7 @@ Retorna JSON: `{ valid, errors, warnings, task_count, tasks }`
 Atualize ROTEIRO.md para finalizar placeholders da fase:
 
 1. Leia `comandos/ROTEIRO.md`
-2. Encontre entrada da fase (`### Phase {N}:`)
+2. Encontre entrada da fase (`### Etapa {N}:`)
 3. Atualize placeholders:
 
 **Goal** (apenas se placeholder):

@@ -56,11 +56,11 @@ describe('validate consistency command', () => {
   test('passes for consistent project', () => {
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
-      `# Roadmap\n### Phase 1: A\n### Phase 2: B\n### Phase 3: C\n`
+      `# Roadmap\n### Etapa 1: A\n### Etapa 2: B\n### Etapa 3: C\n`
     );
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-a'), { recursive: true });
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '02-b'), { recursive: true });
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '03-c'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '02-b'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '03-c'), { recursive: true });
 
     const result = runGsdTools('validate consistency', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -73,10 +73,10 @@ describe('validate consistency command', () => {
   test('warns about phase on disk but not in roadmap', () => {
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
-      `# Roadmap\n### Phase 1: A\n`
+      `# Roadmap\n### Etapa 1: A\n`
     );
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-a'), { recursive: true });
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '02-orphan'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '02-orphan'), { recursive: true });
 
     const result = runGsdTools('validate consistency', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -92,10 +92,10 @@ describe('validate consistency command', () => {
   test('warns about gaps in phase numbering', () => {
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
-      `# Roadmap\n### Phase 1: A\n### Phase 3: C\n`
+      `# Roadmap\n### Etapa 1: A\n### Etapa 3: C\n`
     );
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-a'), { recursive: true });
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '03-c'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '03-c'), { recursive: true });
 
     const result = runGsdTools('validate consistency', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -117,7 +117,7 @@ describe('verify plan-structure command', () => {
 
   beforeEach(() => {
     tmpDir = createTempProject();
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-test'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-test'), { recursive: true });
   });
 
   afterEach(() => {
@@ -125,7 +125,7 @@ describe('verify plan-structure command', () => {
   });
 
   test('reports missing required frontmatter fields', () => {
-    const planPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-PLAN.md');
+    const planPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-PLAN.md');
     fs.writeFileSync(planPath, '# No frontmatter here\n\nJust a plan without YAML.\n');
 
     const result = runGsdTools('verify plan-structure .planejamento/phases/01-test/01-01-PLAN.md', tmpDir);
@@ -140,7 +140,7 @@ describe('verify plan-structure command', () => {
   });
 
   test('validates complete plan with all required fields and tasks', () => {
-    const planPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-PLAN.md');
+    const planPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-PLAN.md');
     fs.writeFileSync(planPath, validPlanContent());
 
     const result = runGsdTools('verify plan-structure .planejamento/phases/01-test/01-01-PLAN.md', tmpDir);
@@ -176,7 +176,7 @@ describe('verify plan-structure command', () => {
       '</tasks>',
     ].join('\n');
 
-    const planPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-PLAN.md');
+    const planPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-PLAN.md');
     fs.writeFileSync(planPath, content);
 
     const result = runGsdTools('verify plan-structure .planejamento/phases/01-test/01-01-PLAN.md', tmpDir);
@@ -213,7 +213,7 @@ describe('verify plan-structure command', () => {
       '</tasks>',
     ].join('\n');
 
-    const planPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-PLAN.md');
+    const planPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-PLAN.md');
     fs.writeFileSync(planPath, content);
 
     const result = runGsdTools('verify plan-structure .planejamento/phases/01-test/01-01-PLAN.md', tmpDir);
@@ -227,7 +227,7 @@ describe('verify plan-structure command', () => {
   });
 
   test('warns about etapa > 1 with empty depends_on', () => {
-    const planPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-PLAN.md');
+    const planPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-PLAN.md');
     fs.writeFileSync(planPath, validPlanContent({ etapa: 2, dependsOn: '[]' }));
 
     const result = runGsdTools('verify plan-structure .planejamento/phases/01-test/01-01-PLAN.md', tmpDir);
@@ -273,7 +273,7 @@ describe('verify plan-structure command', () => {
       '</tasks>',
     ].join('\n');
 
-    const planPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-PLAN.md');
+    const planPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-PLAN.md');
     fs.writeFileSync(planPath, content);
 
     const result = runGsdTools('verify plan-structure .planejamento/phases/01-test/01-01-PLAN.md', tmpDir);
@@ -308,12 +308,12 @@ describe('verify phase-completeness command', () => {
 
   beforeEach(() => {
     tmpDir = createTempProject();
-    // Create ROADMAP.md referencing phase 01 so findPhaseInternal can locate it
+    // Create ROADMAP.md referencing phase 01 so findEtapaInternal can locate it
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
-      '# Roadmap\n\n### Phase 1: Test\n**Goal**: Test phase\n'
+      '# Roadmap\n\n### Etapa 1: Test\n**Goal**: Test phase\n'
     );
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-test'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-test'), { recursive: true });
   });
 
   afterEach(() => {
@@ -321,7 +321,7 @@ describe('verify phase-completeness command', () => {
   });
 
   test('reports complete phase with matching plans and summaries', () => {
-    const phaseDir = path.join(tmpDir, '.planejamento', 'phases', '01-test');
+    const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', '01-test');
     fs.writeFileSync(path.join(phaseDir, '01-01-PLAN.md'), '# Plan\n');
     fs.writeFileSync(path.join(phaseDir, '01-01-SUMMARY.md'), '# Summary\n');
 
@@ -336,7 +336,7 @@ describe('verify phase-completeness command', () => {
   });
 
   test('reports incomplete phase with plan missing summary', () => {
-    const phaseDir = path.join(tmpDir, '.planejamento', 'phases', '01-test');
+    const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', '01-test');
     fs.writeFileSync(path.join(phaseDir, '01-01-PLAN.md'), '# Plan\n');
 
     const result = runGsdTools('verify phase-completeness 01', tmpDir);
@@ -355,7 +355,7 @@ describe('verify phase-completeness command', () => {
   });
 
   test('warns about orphan summaries', () => {
-    const phaseDir = path.join(tmpDir, '.planejamento', 'phases', '01-test');
+    const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', '01-test');
     fs.writeFileSync(path.join(phaseDir, '01-01-SUMMARY.md'), '# Summary\n');
 
     const result = runGsdTools('verify phase-completeness 01', tmpDir);
@@ -386,7 +386,7 @@ describe('verify summary command', () => {
 
   beforeEach(() => {
     tmpDir = createTempGitProject();
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-test'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-test'), { recursive: true });
   });
 
   afterEach(() => {
@@ -416,7 +416,7 @@ describe('verify summary command', () => {
     const hash = execSync('git rev-parse --short HEAD', { cwd: tmpDir, encoding: 'utf-8' }).trim();
 
     // Write SUMMARY.md referencing the file and commit hash
-    const summaryPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-SUMMARY.md');
+    const summaryPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-SUMMARY.md');
     fs.writeFileSync(summaryPath, [
       '# Summary',
       '',
@@ -435,7 +435,7 @@ describe('verify summary command', () => {
   });
 
   test('reports missing files mentioned in summary', () => {
-    const summaryPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-SUMMARY.md');
+    const summaryPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-SUMMARY.md');
     fs.writeFileSync(summaryPath, [
       '# Summary',
       '',
@@ -453,7 +453,7 @@ describe('verify summary command', () => {
   });
 
   test('detects self-check section with pass indicators', () => {
-    const summaryPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-SUMMARY.md');
+    const summaryPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-SUMMARY.md');
     fs.writeFileSync(summaryPath, [
       '# Summary',
       '',
@@ -470,7 +470,7 @@ describe('verify summary command', () => {
   });
 
   test('detects self-check section with fail indicators', () => {
-    const summaryPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-SUMMARY.md');
+    const summaryPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-SUMMARY.md');
     fs.writeFileSync(summaryPath, [
       '# Summary',
       '',
@@ -487,7 +487,7 @@ describe('verify summary command', () => {
   });
 
   test('REG-03: returns self_check "not_found" when no self-check section exists', () => {
-    const summaryPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-SUMMARY.md');
+    const summaryPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-SUMMARY.md');
     fs.writeFileSync(summaryPath, [
       '# Summary',
       '',
@@ -507,7 +507,7 @@ describe('verify summary command', () => {
   test('search(-1) regression: self-check guard prevents entry when no heading', () => {
     // No Self-Check/Verification/Quality Check heading — guard on line 79 prevents
     // content.search(selfCheckPattern) from ever being called, so -1 is impossible
-    const summaryPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-SUMMARY.md');
+    const summaryPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-SUMMARY.md');
     fs.writeFileSync(summaryPath, [
       '# Summary',
       '',
@@ -526,7 +526,7 @@ describe('verify summary command', () => {
 
   test('respects checkFileCount parameter', () => {
     // Write summary referencing 5 files (none exist)
-    const summaryPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-SUMMARY.md');
+    const summaryPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-SUMMARY.md');
     fs.writeFileSync(summaryPath, [
       '# Summary',
       '',
@@ -555,7 +555,7 @@ describe('verify references command', () => {
   beforeEach(() => {
     tmpDir = createTempProject();
     fs.mkdirSync(path.join(tmpDir, 'src', 'utils'), { recursive: true });
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-test'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-test'), { recursive: true });
   });
 
   afterEach(() => {
@@ -564,7 +564,7 @@ describe('verify references command', () => {
 
   test('reports valid when all referenced files exist', () => {
     fs.writeFileSync(path.join(tmpDir, 'src', 'app.js'), 'console.log("app");\n');
-    const filePath = path.join(tmpDir, '.planejamento', 'phases', '01-test', 'doc.md');
+    const filePath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', 'doc.md');
     fs.writeFileSync(filePath, '@src/app.js\n');
 
     const result = runGsdTools('verify references .planejamento/phases/01-test/doc.md', tmpDir);
@@ -576,7 +576,7 @@ describe('verify references command', () => {
   });
 
   test('reports missing for nonexistent referenced files', () => {
-    const filePath = path.join(tmpDir, '.planejamento', 'phases', '01-test', 'doc.md');
+    const filePath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', 'doc.md');
     fs.writeFileSync(filePath, '@src/missing.js\n');
 
     const result = runGsdTools('verify references .planejamento/phases/01-test/doc.md', tmpDir);
@@ -592,7 +592,7 @@ describe('verify references command', () => {
 
   test('detects backtick file paths', () => {
     fs.writeFileSync(path.join(tmpDir, 'src', 'utils', 'helper.js'), 'module.exports = {};\n');
-    const filePath = path.join(tmpDir, '.planejamento', 'phases', '01-test', 'doc.md');
+    const filePath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', 'doc.md');
     fs.writeFileSync(filePath, 'See `src/utils/helper.js` for details.\n');
 
     const result = runGsdTools('verify references .planejamento/phases/01-test/doc.md', tmpDir);
@@ -605,7 +605,7 @@ describe('verify references command', () => {
   test('skips backtick template expressions', () => {
     // Template expressions like ${variable} in backtick paths are skipped
     // @-refs with http are processed but not found on disk
-    const filePath = path.join(tmpDir, '.planejamento', 'phases', '01-test', 'doc.md');
+    const filePath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', 'doc.md');
     fs.writeFileSync(filePath, '`${variable}/path/file.js`\n');
 
     const result = runGsdTools('verify references .planejamento/phases/01-test/doc.md', tmpDir);
@@ -685,7 +685,7 @@ describe('verify artifacts command', () => {
 
   beforeEach(() => {
     tmpDir = createTempProject();
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-test'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-test'), { recursive: true });
     fs.mkdirSync(path.join(tmpDir, 'src'), { recursive: true });
   });
 
@@ -719,7 +719,7 @@ describe('verify artifacts command', () => {
       '</task>',
       '</tasks>',
     ].join('\n');
-    const planPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-PLAN.md');
+    const planPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-PLAN.md');
     fs.writeFileSync(planPath, content);
   }
 
@@ -826,7 +826,7 @@ describe('verify artifacts command', () => {
       '',
       '<tasks></tasks>',
     ].join('\n');
-    const planPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-PLAN.md');
+    const planPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-PLAN.md');
     fs.writeFileSync(planPath, content);
 
     const result = runGsdTools('verify artifacts .planejamento/phases/01-test/01-01-PLAN.md', tmpDir);
@@ -850,7 +850,7 @@ describe('verify key-links command', () => {
 
   beforeEach(() => {
     tmpDir = createTempProject();
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'phases', '01-test'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-test'), { recursive: true });
     fs.mkdirSync(path.join(tmpDir, 'src'), { recursive: true });
   });
 
@@ -884,7 +884,7 @@ describe('verify key-links command', () => {
       '</task>',
       '</tasks>',
     ].join('\n');
-    const planPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-PLAN.md');
+    const planPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-PLAN.md');
     fs.writeFileSync(planPath, content);
   }
 
@@ -997,7 +997,7 @@ describe('verify key-links command', () => {
       '',
       '<tasks></tasks>',
     ].join('\n');
-    const planPath = path.join(tmpDir, '.planejamento', 'phases', '01-test', '01-01-PLAN.md');
+    const planPath = path.join(tmpDir, '.planejamento', 'etapas', '01-test', '01-01-PLAN.md');
     fs.writeFileSync(planPath, content);
 
     const result = runGsdTools('verify key-links .planejamento/phases/01-test/01-01-PLAN.md', tmpDir);

@@ -14,7 +14,7 @@ skills:
 ---
 
 <role>
-You are a FASE. project pesquisador spawnado por `/fase-novo-projeto` ou `/fase-new-milestone` (Phase 6: Research).
+You are a FASE. project pesquisador spawnado por `/fase-novo-projeto` ou `/fase-new-milestone` (Etapa 6: Research).
 
 Responda "Como é o ecossistema deste domínio?" Escreva arquivos de pesquisa em `comandos/pesquisa/` que informam a criação do roteiro.
 
@@ -214,8 +214,8 @@ Baseado na pesquisa, estrutura de phase sugerida:
 - [Por que esta ordem baseada em dependências]
 
 **Flags de pesquisa para fases:**
-- Phase [X]: Provavelmente precisa de pesquisa mais profunda (razão)
-- Phase [Y]: Padrões padrão, improvável que precise de pesquisa
+- Etapa [X]: Provavelmente precisa de pesquisa mais profunda (razão)
+- Etapa [Y]: Padrões padrão, improvável que precise de pesquisa
 
 ## Confidence Assessment
 
@@ -418,7 +418,7 @@ Erros que causam rewrites ou issues maiores.
 
 ## Phase-Specific Warnings
 
-| Phase Topic | Pitfall Provável | Mitigação |
+| Etapa Topic | Pitfall Provável | Mitigação |
 |-------------|---------------|------------|
 | [topic] | [pitfall] | [approach] |
 

@@ -4,7 +4,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { escapeRegex, getMilestonePhaseFilter, output, error } = require('./core.cjs');
+const { escapeRegex, getMilestoneEtapaFilter, output, error } = require('./core.cjs');
 const { extractFrontmatter } = require('./frontmatter.cjs');
 const { writeStateMd } = require('./state.cjs');
 
@@ -46,7 +46,7 @@ function cmdRequirementsMarkComplete(cwd, reqIdsRaw, raw) {
       found = true;
     }
 
-    // Update traceability table: | REQ-ID | Phase N | Pending | → | REQ-ID | Phase N | Complete |
+    // Update traceability table: | REQ-ID | Etapa N | Pending | → | REQ-ID | Etapa N | Complete |
     const tablePattern = new RegExp(`(\\|\\s*${reqEscaped}\\s*\\|[^|]+\\|)\\s*Pending\\s*(\\|)`, 'gi');
     if (tablePattern.test(reqContent)) {
       // Re-read since test() advances lastIndex for global regex
@@ -86,7 +86,7 @@ function cmdMilestoneComplete(cwd, version, options, raw) {
   const statePath = path.join(cwd, '.planejamento', 'STATE.md');
   const milestonesPath = path.join(cwd, '.planejamento', 'MILESTONES.md');
   const archiveDir = path.join(cwd, '.planejamento', 'milestones');
-  const phasesDir = path.join(cwd, '.planejamento', 'phases');
+  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
   const today = new Date().toISOString().split('T')[0];
   const milestoneName = options.name || version;
 
@@ -96,7 +96,7 @@ function cmdMilestoneComplete(cwd, version, options, raw) {
   // Scope stats and accomplishments to only the phases belonging to the
   // current milestone's ROADMAP.  Uses the shared filter from core.cjs
   // (same logic used by cmdPhasesList and other callers).
-  const isDirInMilestone = getMilestonePhaseFilter(cwd);
+  const isDirInMilestone = getMilestoneEtapaFilter(cwd);
 
   // Gather stats from phases (scoped to current milestone only)
   let phaseCount = 0;
@@ -105,14 +105,14 @@ function cmdMilestoneComplete(cwd, version, options, raw) {
   const accomplishments = [];
 
   try {
-    const entries = fs.readdirSync(phasesDir, { withFileTypes: true });
+    const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
     const dirs = entries.filter(e => e.isDirectory()).map(e => e.name).sort();
 
     for (const dir of dirs) {
       if (!isDirInMilestone(dir)) continue;
 
       phaseCount++;
-      const phaseFiles = fs.readdirSync(path.join(phasesDir, dir));
+      const phaseFiles = fs.readdirSync(path.join(etapasDir, dir));
       const plans = phaseFiles.filter(f => f.endsWith('-PLAN.md') || f === 'PLAN.md');
       const summaries = phaseFiles.filter(f => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md');
       totalPlans += plans.length;
@@ -120,7 +120,7 @@ function cmdMilestoneComplete(cwd, version, options, raw) {
       // Extract one-liners from summaries
       for (const s of summaries) {
         try {
-          const content = fs.readFileSync(path.join(phasesDir, dir, s), 'utf-8');
+          const content = fs.readFileSync(path.join(etapasDir, dir, s), 'utf-8');
           const fm = extractFrontmatter(content);
           if (fm['one-liner']) {
             accomplishments.push(fm['one-liner']);
@@ -202,12 +202,12 @@ function cmdMilestoneComplete(cwd, version, options, raw) {
       const phaseArchiveDir = path.join(archiveDir, `${version}-phases`);
       fs.mkdirSync(phaseArchiveDir, { recursive: true });
 
-      const phaseEntries = fs.readdirSync(phasesDir, { withFileTypes: true });
+      const phaseEntries = fs.readdirSync(etapasDir, { withFileTypes: true });
       const phaseDirNames = phaseEntries.filter(e => e.isDirectory()).map(e => e.name);
       let archivedCount = 0;
       for (const dir of phaseDirNames) {
         if (!isDirInMilestone(dir)) continue;
-        fs.renameSync(path.join(phasesDir, dir), path.join(phaseArchiveDir, dir));
+        fs.renameSync(path.join(etapasDir, dir), path.join(phaseArchiveDir, dir));
         archivedCount++;
       }
       phasesArchived = archivedCount > 0;

@@ -5,7 +5,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
-const { loadConfig, resolveModelInternal, findPhaseInternal, getRoadmapPhaseInternal, pathExistsInternal, generateSlugInternal, getMilestoneInfo, normalizePhaseName, toPosixPath, output, error } = require('./core.cjs');
+const { loadConfig, resolveModelInternal, findEtapaInternal, getRoadmapPhaseInternal, pathExistsInternal, generateSlugInternal, getMilestoneInfo, normalizeEtapaNome, toPosixPath, output, error } = require('./core.cjs');
 
 function cmdInitExecutePhase(cwd, phase, raw) {
   if (!phase) {
@@ -13,10 +13,10 @@ function cmdInitExecutePhase(cwd, phase, raw) {
   }
 
   const config = loadConfig(cwd);
-  const phaseInfo = findPhaseInternal(cwd, phase);
+  const phaseInfo = findEtapaInternal(cwd, phase);
   const milestone = getMilestoneInfo(cwd);
 
-  const roadmapPhase = getRoadmapPhaseInternal(cwd, phase);
+  const roadmapEtapa = getRoadmapPhaseInternal(cwd, phase);
   const reqMatch = roadmapPhase?.section?.match(/^\*\*Requirements\*\*:[^\S\n]*([^\n]*)$/m);
   const reqExtracted = reqMatch
     ? reqMatch[1].replace(/[\[\]]/g, '').split(',').map(s => s.trim()).filter(Boolean).join(', ')
@@ -32,11 +32,11 @@ function cmdInitExecutePhase(cwd, phase, raw) {
     commit_docs: config.commit_docs,
     parallelization: config.parallelization,
     branching_strategy: config.branching_strategy,
-    phase_branch_template: config.phase_branch_template,
+    etapa_branch_template: config.etapa_branch_template,
     milestone_branch_template: config.milestone_branch_template,
     verifier_enabled: config.verifier,
 
-    // Phase info
+    // Etapa info
     phase_found: !!phaseInfo,
     phase_dir: phaseInfo?.directory || null,
     phase_number: phaseInfo?.phase_number || null,
@@ -53,7 +53,7 @@ function cmdInitExecutePhase(cwd, phase, raw) {
 
     // Branch name (pre-computed)
     branch_name: config.branching_strategy === 'phase' && phaseInfo
-      ? config.phase_branch_template
+      ? config.etapa_branch_template
           .replace('{phase}', phaseInfo.phase_number)
           .replace('{slug}', phaseInfo.phase_slug || 'phase')
       : config.branching_strategy === 'milestone'
@@ -86,9 +86,9 @@ function cmdInitPlanPhase(cwd, phase, raw) {
   }
 
   const config = loadConfig(cwd);
-  const phaseInfo = findPhaseInternal(cwd, phase);
+  const phaseInfo = findEtapaInternal(cwd, phase);
 
-  const roadmapPhase = getRoadmapPhaseInternal(cwd, phase);
+  const roadmapEtapa = getRoadmapPhaseInternal(cwd, phase);
   const reqMatch = roadmapPhase?.section?.match(/^\*\*Requirements\*\*:[^\S\n]*([^\n]*)$/m);
   const reqExtracted = reqMatch
     ? reqMatch[1].replace(/[\[\]]/g, '').split(',').map(s => s.trim()).filter(Boolean).join(', ')
@@ -107,7 +107,7 @@ function cmdInitPlanPhase(cwd, phase, raw) {
     nyquist_validation_enabled: config.nyquist_validation,
     commit_docs: config.commit_docs,
 
-    // Phase info
+    // Etapa info
     phase_found: !!phaseInfo,
     phase_dir: phaseInfo?.directory || null,
     phase_number: phaseInfo?.phase_number || null,
@@ -338,7 +338,7 @@ function cmdInitVerifyWork(cwd, phase, raw) {
   }
 
   const config = loadConfig(cwd);
-  const phaseInfo = findPhaseInternal(cwd, phase);
+  const phaseInfo = findEtapaInternal(cwd, phase);
 
   const result = {
     // Models
@@ -348,7 +348,7 @@ function cmdInitVerifyWork(cwd, phase, raw) {
     // Config
     commit_docs: config.commit_docs,
 
-    // Phase info
+    // Etapa info
     phase_found: !!phaseInfo,
     phase_dir: phaseInfo?.directory || null,
     phase_number: phaseInfo?.phase_number || null,
@@ -363,19 +363,19 @@ function cmdInitVerifyWork(cwd, phase, raw) {
 
 function cmdInitPhaseOp(cwd, phase, raw) {
   const config = loadConfig(cwd);
-  let phaseInfo = findPhaseInternal(cwd, phase);
+  let phaseInfo = findEtapaInternal(cwd, phase);
 
   // Fallback to ROADMAP.md if no directory exists (e.g., Plans: TBD)
   if (!phaseInfo) {
-    const roadmapPhase = getRoadmapPhaseInternal(cwd, phase);
+    const roadmapEtapa = getRoadmapPhaseInternal(cwd, phase);
     if (roadmapPhase?.found) {
-      const phaseName = roadmapPhase.phase_name;
+      const etapaNome = roadmapPhase.phase_name;
       phaseInfo = {
         found: true,
         directory: null,
         phase_number: roadmapPhase.phase_number,
-        phase_name: phaseName,
-        phase_slug: phaseName ? phaseName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') : null,
+        phase_name: etapaNome,
+        phase_slug: etapaNome ? etapaNome.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') : null,
         plans: [],
         summaries: [],
         incomplete_plans: [],
@@ -391,7 +391,7 @@ function cmdInitPhaseOp(cwd, phase, raw) {
     commit_docs: config.commit_docs,
     brave_search: config.brave_search,
 
-    // Phase info
+    // Etapa info
     phase_found: !!phaseInfo,
     phase_dir: phaseInfo?.directory || null,
     phase_number: phaseInfo?.phase_number || null,
@@ -508,16 +508,16 @@ function cmdInitMilestoneOp(cwd, raw) {
   // Count phases
   let phaseCount = 0;
   let completedPhases = 0;
-  const phasesDir = path.join(cwd, '.planejamento', 'phases');
+  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
   try {
-    const entries = fs.readdirSync(phasesDir, { withFileTypes: true });
+    const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
     const dirs = entries.filter(e => e.isDirectory()).map(e => e.name);
     phaseCount = dirs.length;
 
     // Count phases with summaries (completed)
     for (const dir of dirs) {
       try {
-        const phaseFiles = fs.readdirSync(path.join(phasesDir, dir));
+        const phaseFiles = fs.readdirSync(path.join(etapasDir, dir));
         const hasSummary = phaseFiles.some(f => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md');
         if (hasSummary) completedPhases++;
       } catch {}
@@ -542,7 +542,7 @@ function cmdInitMilestoneOp(cwd, raw) {
     milestone_name: milestone.name,
     milestone_slug: generateSlugInternal(milestone.name),
 
-    // Phase counts
+    // Etapa counts
     phase_count: phaseCount,
     completed_phases: completedPhases,
     all_phases_complete: phaseCount > 0 && phaseCount === completedPhases,
@@ -601,21 +601,21 @@ function cmdInitProgress(cwd, raw) {
   const milestone = getMilestoneInfo(cwd);
 
   // Analyze phases
-  const phasesDir = path.join(cwd, '.planejamento', 'phases');
+  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
   const phases = [];
-  let currentPhase = null;
-  let nextPhase = null;
+  let etapaAtual = null;
+  let nextEtapa = null;
 
   try {
-    const entries = fs.readdirSync(phasesDir, { withFileTypes: true });
+    const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
     const dirs = entries.filter(e => e.isDirectory()).map(e => e.name).sort();
 
     for (const dir of dirs) {
       const match = dir.match(/^(\d+(?:\.\d+)*)-?(.*)/);
-      const phaseNumber = match ? match[1] : dir;
-      const phaseName = match && match[2] ? match[2] : null;
+      const etapaNumber = match ? match[1] : dir;
+      const etapaNome = match && match[2] ? match[2] : null;
 
-      const phasePath = path.join(phasesDir, dir);
+      const phasePath = path.join(etapasDir, dir);
       const phaseFiles = fs.readdirSync(phasePath);
 
       const plans = phaseFiles.filter(f => f.endsWith('-PLAN.md') || f === 'PLAN.md');
@@ -627,8 +627,8 @@ function cmdInitProgress(cwd, raw) {
                      hasResearch ? 'researched' : 'pending';
 
       const phaseInfo = {
-        number: phaseNumber,
-        name: phaseName,
+        number: etapaNumber,
+        name: etapaNome,
         directory: '.planejamento/phases/' + dir,
         status,
         plan_count: plans.length,
@@ -639,11 +639,11 @@ function cmdInitProgress(cwd, raw) {
       phases.push(phaseInfo);
 
       // Find current (first incomplete with plans) and next (first pending)
-      if (!currentPhase && (status === 'in_progress' || status === 'researched')) {
-        currentPhase = phaseInfo;
+      if (!etapaAtual && (status === 'in_progress' || status === 'researched')) {
+        etapaAtual = phaseInfo;
       }
-      if (!nextPhase && status === 'pending') {
-        nextPhase = phaseInfo;
+      if (!nextEtapa && status === 'pending') {
+        nextEtapa = phaseInfo;
       }
     }
   } catch {}
@@ -668,17 +668,17 @@ function cmdInitProgress(cwd, raw) {
     milestone_version: milestone.version,
     milestone_name: milestone.name,
 
-    // Phase overview
+    // Etapa overview
     phases,
     phase_count: phases.length,
     completed_count: phases.filter(p => p.status === 'complete').length,
     in_progress_count: phases.filter(p => p.status === 'in_progress').length,
 
     // Current state
-    current_phase: currentPhase,
+    current_phase: etapaAtual,
     next_phase: nextPhase,
     paused_at: pausedAt,
-    has_work_in_progress: !!currentPhase,
+    has_work_in_progress: !!etapaAtual,
 
     // File existence
     project_exists: pathExistsInternal(cwd, '.planejamento/PROJECT.md'),

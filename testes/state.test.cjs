@@ -33,7 +33,7 @@ describe('state-snapshot command', () => {
       `# Project State
 
 **Current Phase:** 03
-**Current Phase Name:** API Layer
+**Current Etapa Name:** API Layer
 **Total Phases:** 6
 **Current Plan:** 03-02
 **Total Plans in Phase:** 3
@@ -67,7 +67,7 @@ describe('state-snapshot command', () => {
 
 ## Decisions Made
 
-| Phase | Decision | Rationale |
+| Etapa | Decision | Rationale |
 |-------|----------|-----------|
 | 01 | Use Prisma | Better DX than raw SQL |
 | 02 | JWT auth | Stateless authentication |
@@ -118,7 +118,7 @@ describe('state-snapshot command', () => {
 ## Session
 
 **Last Date:** 2024-01-15
-**Stopped At:** Phase 3, Plan 2, Task 1
+**Stopped At:** Etapa 3, Plan 2, Task 1
 **Resume File:** .planejamento/phases/03-api/03-02-PLAN.md
 `
     );
@@ -128,7 +128,7 @@ describe('state-snapshot command', () => {
 
     const output = JSON.parse(result.output);
     assert.strictEqual(output.session.last_date, '2024-01-15', 'session date extracted');
-    assert.strictEqual(output.session.stopped_at, 'Phase 3, Plan 2, Task 1', 'stopped at extracted');
+    assert.strictEqual(output.session.stopped_at, 'Etapa 3, Plan 2, Task 1', 'stopped at extracted');
     assert.strictEqual(output.session.resume_file, '.planejamento/phases/03-api/03-02-PLAN.md', 'resume file extracted');
   });
 
@@ -138,7 +138,7 @@ describe('state-snapshot command', () => {
       `# Project State
 
 **Current Phase:** 03
-**Paused At:** Phase 3, Plan 1, Task 2 - mid-implementation
+**Paused At:** Etapa 3, Plan 1, Task 2 - mid-implementation
 `
     );
 
@@ -146,7 +146,7 @@ describe('state-snapshot command', () => {
     assert.ok(result.success, `Command failed: ${result.error}`);
 
     const output = JSON.parse(result.output);
-    assert.strictEqual(output.paused_at, 'Phase 3, Plan 1, Task 2 - mid-implementation', 'paused_at extracted');
+    assert.strictEqual(output.paused_at, 'Etapa 3, Plan 1, Task 2 - mid-implementation', 'paused_at extracted');
   });
 
   test('supports --cwd override when command runs outside project root', () => {
@@ -213,7 +213,7 @@ None
     const state = fs.readFileSync(path.join(tmpDir, '.planejamento', 'STATE.md'), 'utf-8');
     assert.match(
       state,
-      /- \[Phase 11-01\]: Benchmark prices moved from \$0\.50 to \$2\.00 to \$5\.00 — track cost growth/,
+      /- \[Etapa 11-01\]: Benchmark prices moved from \$0\.50 to \$2\.00 to \$5\.00 — track cost growth/,
       'decision entry should preserve literal dollar values'
     );
     assert.strictEqual((state.match(/^## Decisions$/gm) || []).length, 1, 'Decisions heading should not be duplicated');
@@ -268,7 +268,7 @@ None
     const state = fs.readFileSync(path.join(tmpDir, '.planejamento', 'STATE.md'), 'utf-8');
     assert.match(
       state,
-      /- \[Phase 11-02\]: Price tiers: \$0\.50, \$2\.00, else \$5\.00 — Keep exact currency literals for budgeting/,
+      /- \[Etapa 11-02\]: Price tiers: \$0\.50, \$2\.00, else \$5\.00 — Keep exact currency literals for budgeting/,
       'file-based decision input should preserve literal dollar values'
     );
   });
@@ -326,7 +326,7 @@ describe('state json command', () => {
       `# Project State
 
 **Current Phase:** 05
-**Current Phase Name:** Deployment
+**Current Etapa Name:** Deployment
 **Total Phases:** 8
 **Current Plan:** 05-03
 **Total Plans in Phase:** 4
@@ -358,7 +358,7 @@ describe('state json command', () => {
 gsd_state_version: 1.0
 current_phase: 03
 status: paused
-stopped_at: Plan 2 of Phase 3
+stopped_at: Plan 2 of Etapa 3
 ---
 
 # Project State
@@ -375,7 +375,7 @@ stopped_at: Plan 2 of Phase 3
     assert.strictEqual(output.gsd_state_version, '1.0', 'version from frontmatter');
     assert.strictEqual(output.current_phase, '03', 'phase from frontmatter');
     assert.strictEqual(output.status, 'paused', 'status from frontmatter');
-    assert.strictEqual(output.stopped_at, 'Plan 2 of Phase 3', 'stopped_at from frontmatter');
+    assert.strictEqual(output.stopped_at, 'Plan 2 of Etapa 3', 'stopped_at from frontmatter');
   });
 
   test('normalizes various status values', () => {
@@ -384,7 +384,7 @@ stopped_at: Plan 2 of Phase 3
       { input: 'Ready to execute', expected: 'executing' },
       { input: 'Paused at Plan 3', expected: 'paused' },
       { input: 'Ready to plan', expected: 'planning' },
-      { input: 'Phase complete — ready for verification', expected: 'verifying' },
+      { input: 'Etapa complete — ready for verification', expected: 'verifying' },
       { input: 'Milestone complete', expected: 'completed' },
     ];
 
@@ -481,7 +481,7 @@ describe('STATE.md frontmatter sync', () => {
       `# Project State
 
 **Current Phase:** 07
-**Current Phase Name:** Production
+**Current Etapa Name:** Production
 **Total Phases:** 10
 **Status:** In progress
 **Current Plan:** 07-05
@@ -565,7 +565,7 @@ describe('stateExtractField and stateReplaceField helpers', () => {
 
     const result = stateReplaceField(content, 'Status', 'New');
     assert.ok(result !== null, 'should return updated content');
-    assert.ok(result.includes('**Phase:** 03'), 'Phase line should be unchanged');
+    assert.ok(result.includes('**Phase:** 03'), 'Etapa line should be unchanged');
     assert.ok(result.includes('**Status:** New'), 'Status should be updated');
     assert.ok(result.includes('**Last Activity:** 2024-01-15'), 'Last Activity line should be unchanged');
     assert.ok(result.includes('## Notes'), 'Notes heading should be unchanged');
@@ -771,15 +771,15 @@ describe('cmdStatePatch and cmdStateUpdate (state patch, state update)', () => {
   test('state update changes a single field', () => {
     fs.writeFileSync(path.join(tmpDir, '.planejamento', 'STATE.md'), stateMd);
 
-    const result = runGsdTools('state update Status "Phase complete"', tmpDir);
+    const result = runGsdTools('state update Status "Etapa complete"', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
 
     const output = JSON.parse(result.output);
     assert.strictEqual(output.updated, true, 'updated should be true');
 
     const updated = fs.readFileSync(path.join(tmpDir, '.planejamento', 'STATE.md'), 'utf-8');
-    assert.ok(updated.includes('**Status:** Phase complete'), 'Status should be updated');
-    assert.ok(updated.includes('**Current Phase:** 03'), 'Current Phase should be unchanged');
+    assert.ok(updated.includes('**Status:** Etapa complete'), 'Status should be updated');
+    assert.ok(updated.includes('**Current Phase:** 03'), 'Current Etapa should be unchanged');
     assert.ok(updated.includes('**Last Activity:** 2024-01-15'), 'Last Activity should be unchanged');
   });
 
@@ -867,7 +867,7 @@ describe('cmdStateAdvancePlan (state advance-plan)', () => {
     assert.strictEqual(output.status, 'ready_for_verification', 'status should be ready_for_verification');
 
     const updated = fs.readFileSync(path.join(tmpDir, '.planejamento', 'STATE.md'), 'utf-8');
-    assert.ok(updated.includes('Phase complete'), 'Status should contain Phase complete');
+    assert.ok(updated.includes('Etapa complete'), 'Status should contain Etapa complete');
   });
 
   test('returns error when STATE.md missing', () => {
@@ -904,7 +904,7 @@ describe('cmdStateRecordMetric (state record-metric)', () => {
     '',
     '| Plan | Duration | Tasks | Files |',
     '|------|----------|-------|-------|',
-    '| Phase 1 P1 | 3min | 2 tasks | 3 files |',
+    '| Etapa 1 P1 | 3min | 2 tasks | 3 files |',
     '',
     '## Session Continuity',
   ].join('\n') + '\n';
@@ -927,8 +927,8 @@ describe('cmdStateRecordMetric (state record-metric)', () => {
     assert.strictEqual(output.recorded, true, 'recorded should be true');
 
     const updated = fs.readFileSync(path.join(tmpDir, '.planejamento', 'STATE.md'), 'utf-8');
-    assert.ok(updated.includes('| Phase 2 P1 | 5min | 3 tasks | 4 files |'), 'new row should be present');
-    assert.ok(updated.includes('| Phase 1 P1 | 3min | 2 tasks | 3 files |'), 'existing row should still be present');
+    assert.ok(updated.includes('| Etapa 2 P1 | 5min | 3 tasks | 4 files |'), 'new row should be present');
+    assert.ok(updated.includes('| Etapa 1 P1 | 3min | 2 tasks | 3 files |'), 'existing row should still be present');
   });
 
   test('replaces None yet placeholder with first metric', () => {
@@ -950,7 +950,7 @@ describe('cmdStateRecordMetric (state record-metric)', () => {
 
     const updated = fs.readFileSync(path.join(tmpDir, '.planejamento', 'STATE.md'), 'utf-8');
     assert.ok(!updated.includes('None yet'), 'None yet placeholder should be removed');
-    assert.ok(updated.includes('| Phase 1 P1 | 2min | 1 tasks | 2 files |'), 'new row should be present');
+    assert.ok(updated.includes('| Etapa 1 P1 | 2min | 1 tasks | 2 files |'), 'new row should be present');
   });
 
   test('returns error when required fields missing', () => {
@@ -994,14 +994,14 @@ describe('cmdStateUpdateProgress (state update-progress)', () => {
       '# Project State\n\n**Progress:** [░░░░░░░░░░] 0%\n'
     );
 
-    // Phase 01: 1 PLAN + 1 SUMMARY = completed
-    const phase01Dir = path.join(tmpDir, '.planejamento', 'phases', '01');
+    // Etapa 01: 1 PLAN + 1 SUMMARY = completed
+    const phase01Dir = path.join(tmpDir, '.planejamento', 'etapas', '01');
     fs.mkdirSync(phase01Dir, { recursive: true });
     fs.writeFileSync(path.join(phase01Dir, '01-01-PLAN.md'), '# Plan\n');
     fs.writeFileSync(path.join(phase01Dir, '01-01-SUMMARY.md'), '# Summary\n');
 
-    // Phase 02: 1 PLAN only = not completed
-    const phase02Dir = path.join(tmpDir, '.planejamento', 'phases', '02');
+    // Etapa 02: 1 PLAN only = not completed
+    const phase02Dir = path.join(tmpDir, '.planejamento', 'etapas', '02');
     fs.mkdirSync(phase02Dir, { recursive: true });
     fs.writeFileSync(path.join(phase02Dir, '02-01-PLAN.md'), '# Plan\n');
 
@@ -1164,7 +1164,7 @@ describe('cmdStateRecordSession (state record-session)', () => {
     '## Session Continuity',
     '',
     '**Last session:** 2024-01-10',
-    '**Stopped at:** Phase 2, Plan 1',
+    '**Stopped at:** Etapa 2, Plan 1',
     '**Resume file:** None',
   ].join('\n') + '\n';
 
@@ -1180,7 +1180,7 @@ describe('cmdStateRecordSession (state record-session)', () => {
     fs.writeFileSync(path.join(tmpDir, '.planejamento', 'STATE.md'), sessionFixture);
 
     const result = runGsdTools(
-      'state record-session --stopped-at "Phase 3, Plan 2" --resume-file ".planejamento/phases/03/03-02-PLAN.md"',
+      'state record-session --stopped-at "Etapa 3, Plan 2" --resume-file ".planejamento/phases/03/03-02-PLAN.md"',
       tmpDir
     );
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -1190,7 +1190,7 @@ describe('cmdStateRecordSession (state record-session)', () => {
     assert.ok(Array.isArray(output.updated), 'updated should be an array');
 
     const updated = fs.readFileSync(path.join(tmpDir, '.planejamento', 'STATE.md'), 'utf-8');
-    assert.ok(updated.includes('Phase 3, Plan 2'), 'Stopped at should be updated');
+    assert.ok(updated.includes('Etapa 3, Plan 2'), 'Stopped at should be updated');
     assert.ok(updated.includes('.planejamento/phases/03/03-02-PLAN.md'), 'Resume file should be updated');
 
     const today = new Date().toISOString().split('T')[0];
@@ -1214,11 +1214,11 @@ describe('cmdStateRecordSession (state record-session)', () => {
   test('sets Resume file to None when not specified', () => {
     fs.writeFileSync(path.join(tmpDir, '.planejamento', 'STATE.md'), sessionFixture);
 
-    const result = runGsdTools('state record-session --stopped-at "Phase 1 complete"', tmpDir);
+    const result = runGsdTools('state record-session --stopped-at "Etapa 1 complete"', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
 
     const updated = fs.readFileSync(path.join(tmpDir, '.planejamento', 'STATE.md'), 'utf-8');
-    assert.ok(updated.includes('Phase 1 complete'), 'Stopped at should be updated');
+    assert.ok(updated.includes('Etapa 1 complete'), 'Stopped at should be updated');
     // Resume file should be set to None (default)
     const resumeMatch = updated.match(/\*\*Resume file:\*\*\s*(.*)/i);
     assert.ok(resumeMatch, 'Resume file field should exist');
@@ -1271,10 +1271,10 @@ describe('milestone-scoped phase counting in frontmatter', () => {
       [
         '## Roadmap v2.0: Next Release',
         '',
-        '### Phase 5: Auth',
+        '### Etapa 5: Auth',
         '**Goal:** Add authentication',
         '',
-        '### Phase 6: Dashboard',
+        '### Etapa 6: Dashboard',
         '**Goal:** Build dashboard',
       ].join('\n')
     );
@@ -1282,7 +1282,7 @@ describe('milestone-scoped phase counting in frontmatter', () => {
     // Disk has dirs 01-06 (01-04 are leftover from previous milestone)
     for (let i = 1; i <= 6; i++) {
       const padded = String(i).padStart(2, '0');
-      const phaseDir = path.join(tmpDir, '.planejamento', 'phases', `${padded}-phase-${i}`);
+      const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', `${padded}-phase-${i}`);
       fs.mkdirSync(phaseDir, { recursive: true });
       // Add a plan to each
       fs.writeFileSync(path.join(phaseDir, `${padded}-01-PLAN.md`), '# Plan');
@@ -1314,19 +1314,19 @@ describe('milestone-scoped phase counting in frontmatter', () => {
       [
         '## Roadmap v3.0',
         '',
-        '### Phase 5: Auth',
-        '### Phase 6: Dashboard',
-        '### Phase 7: API',
-        '### Phase 8: Notifications',
-        '### Phase 9: Analytics',
-        '### Phase 10: Polish',
+        '### Etapa 5: Auth',
+        '### Etapa 6: Dashboard',
+        '### Etapa 7: API',
+        '### Etapa 8: Notifications',
+        '### Etapa 9: Analytics',
+        '### Etapa 10: Polish',
       ].join('\n')
     );
 
     // Only phases 5-8 have directories (9 and 10 not yet planned)
     for (let i = 5; i <= 8; i++) {
       const padded = String(i).padStart(2, '0');
-      const phaseDir = path.join(tmpDir, '.planejamento', 'phases', `${padded}-phase-${i}`);
+      const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', `${padded}-phase-${i}`);
       fs.mkdirSync(phaseDir, { recursive: true });
       fs.writeFileSync(path.join(phaseDir, `${padded}-01-PLAN.md`), '# Plan');
       fs.writeFileSync(path.join(phaseDir, `${padded}-01-SUMMARY.md`), '# Summary');
@@ -1352,7 +1352,7 @@ describe('milestone-scoped phase counting in frontmatter', () => {
     // No ROADMAP.md — all phases should be counted
     for (let i = 1; i <= 4; i++) {
       const padded = String(i).padStart(2, '0');
-      const phaseDir = path.join(tmpDir, '.planejamento', 'phases', `${padded}-phase-${i}`);
+      const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', `${padded}-phase-${i}`);
       fs.mkdirSync(phaseDir, { recursive: true });
       fs.writeFileSync(path.join(phaseDir, `${padded}-01-PLAN.md`), '# Plan');
     }

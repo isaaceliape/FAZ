@@ -159,7 +159,7 @@ describe('dispatcher routing branches', () => {
 
   // find-phase
   test('find-phase locates phase directory by number', () => {
-    const phaseDir = path.join(tmpDir, '.planejamento', 'phases', '01-test-phase');
+    const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', '01-test-phase');
     fs.mkdirSync(phaseDir, { recursive: true });
 
     const result = runGsdTools('find-phase 01', tmpDir);
@@ -191,11 +191,11 @@ describe('dispatcher routing branches', () => {
     // Create ROADMAP.md with phase section
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
-      '# Roadmap\n\n## Milestone: v1.0 Test\n\n### Phase 1: Test Phase\n**Goal**: Test goal\n**Depends on**: None\n**Requirements**: TEST-01\n**Success Criteria**:\n  1. Tests pass\n**Plans**: 1 plan\nPlans:\n- [x] 01-01-PLAN.md\n\n## Progress\n\n| Phase | Plans | Status | Date |\n|-------|-------|--------|------|\n| 1 | 1/1 | Complete | 2026-01-01 |\n'
+      '# Roadmap\n\n## Milestone: v1.0 Test\n\n### Etapa 1: Test Phase\n**Goal**: Test goal\n**Depends on**: None\n**Requirements**: TEST-01\n**Success Criteria**:\n  1. Tests pass\n**Plans**: 1 plan\nPlans:\n- [x] 01-01-PLAN.md\n\n## Progress\n\n| Etapa | Plans | Status | Date |\n|-------|-------|--------|------|\n| 1 | 1/1 | Complete | 2026-01-01 |\n'
     );
 
     // Create phase dir
-    const phaseDir = path.join(tmpDir, '.planejamento', 'phases', '01-test');
+    const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', '01-test');
     fs.mkdirSync(phaseDir, { recursive: true });
 
     const result = runGsdTools('init verify-work 01', tmpDir);
@@ -209,11 +209,11 @@ describe('dispatcher routing branches', () => {
     // Create ROADMAP.md with progress table
     fs.writeFileSync(
       path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
-      '# Roadmap\n\n## Milestone: v1.0 Test\n\n### Phase 1: Test Phase\n**Goal**: Test goal\n**Depends on**: None\n**Requirements**: TEST-01\n**Success Criteria**:\n  1. Tests pass\n**Plans**: 1 plan\nPlans:\n- [ ] 01-01-PLAN.md\n\n## Progress\n\n| Phase | Plans | Status | Date |\n|-------|-------|--------|------|\n| 1 | 0/1 | Not Started | - |\n'
+      '# Roadmap\n\n## Milestone: v1.0 Test\n\n### Etapa 1: Test Phase\n**Goal**: Test goal\n**Depends on**: None\n**Requirements**: TEST-01\n**Success Criteria**:\n  1. Tests pass\n**Plans**: 1 plan\nPlans:\n- [ ] 01-01-PLAN.md\n\n## Progress\n\n| Etapa | Plans | Status | Date |\n|-------|-------|--------|------|\n| 1 | 0/1 | Not Started | - |\n'
     );
 
     // Create phase dir with PLAN and SUMMARY
-    const phaseDir = path.join(tmpDir, '.planejamento', 'phases', '01-test-phase');
+    const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', '01-test-phase');
     fs.mkdirSync(phaseDir, { recursive: true });
     fs.writeFileSync(
       path.join(phaseDir, '01-01-PLAN.md'),
@@ -243,7 +243,7 @@ describe('dispatcher routing branches', () => {
 
   // summary-extract
   test('summary-extract parses SUMMARY.md frontmatter', () => {
-    const phaseDir = path.join(tmpDir, '.planejamento', 'phases', '01-test');
+    const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', '01-test');
     fs.mkdirSync(phaseDir, { recursive: true });
 
     const summaryContent = `---
@@ -258,7 +258,7 @@ key-decisions:
 requirements-completed: [TEST-01]
 ---
 
-# Phase 1 Plan 01: Test Summary
+# Etapa 1 Plan 01: Test Summary
 
 **Tests added for core module**
 `;
