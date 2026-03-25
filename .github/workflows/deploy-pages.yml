@@ -54,6 +54,11 @@ jobs:
           mkdir -p deploy/docs
           cp -r docs/*.html deploy/docs/
           cp -r docs/*.md deploy/docs/ 2>/dev/null || true
+          # Copy .nojekyll file for cache busting
+          cp docs/.nojekyll deploy/docs/ 2>/dev/null || true
+          # Copy subdirectory files
+          cp -r docs/technical/*.html deploy/docs/technical/ 2>/dev/null || true
+          cp -r docs/maintainers/*.html deploy/docs/maintainers/ 2>/dev/null || true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
