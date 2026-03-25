@@ -258,6 +258,18 @@
       margin: 30px 0;
     }
 
+    .version-badge {
+      display: inline-block;
+      background-color: rgba(0, 255, 136, 0.15);
+      color: var(--primary);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: 1px solid var(--primary);
+      margin-bottom: 20px;
+    }
+
     /* Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
@@ -333,13 +345,17 @@
 <a href="CONTRIBUINDO.html" class="sidebar-link ">🤝 Guia de Contribuição</a>
 <a href="HOOKS.html" class="sidebar-link ">🔧 Git Hooks</a>
 <a href="NPM-REGISTRY.html" class="sidebar-link active">📦 NPM Registry</a>
-<a href="technical/COMMAND_PATHS.html" class="sidebar-link ">🛣️ Path Standardization</a>
+<a href="technical/COMMAND_PATHS.html" class="sidebar-link ">🛣️ Padronização de Caminhos</a>
 <a href="maintainers/MAINTAINERS.html" class="sidebar-link ">👨‍💼 Guia Maintainers</a>
 <a href="context-monitor.html" class="sidebar-link ">📊 Context Monitor</a>
     </aside>
 
     <main class="main">
+      <div class="version-badge">📦 Versão 3.2.0</div>
       <h1>📦 Configuração do npm Registry</h1>
+<blockquote>
+<p><strong>Versão</strong>: 3.2.0 | Última atualização: 2026-03-25</p>
+</blockquote>
 <p>O FASE está configurado para usar o <strong>npm registry oficial</strong> como fonte única de verdade para publicação e instalação.</p>
 <h2>🔧 Configuração Atual</h2>
 <h3>Arquivo: <code>.npmrc</code> (raiz)</h3>

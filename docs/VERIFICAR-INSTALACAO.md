@@ -1,5 +1,7 @@
 # Verificar Instalação - Documentação
 
+> **Versão**: 3.2.0 | Última atualização: 2026-03-25
+
 ## Visão Geral
 
 O comando `verificar-instalacao` é uma ferramenta de diagnóstico que verifica o status da instalação do F.A.S.E. no sistema e gera um relatório detalhado com problemas encontrados e ações corretivas sugeridas.

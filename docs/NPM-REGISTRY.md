@@ -1,5 +1,7 @@
 # 📦 Configuração do npm Registry
 
+> **Versão**: 3.2.0 | Última atualização: 2026-03-25
+
 O FASE está configurado para usar o **npm registry oficial** como fonte única de verdade para publicação e instalação.
 
 ## 🔧 Configuração Atual

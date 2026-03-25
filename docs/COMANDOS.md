@@ -1,5 +1,7 @@
 # 🔧 Comandos do F.A.S.E.
 
+> **Versão**: 3.2.0 | Última atualização: 2026-03-25
+
 **32 comandos em português brasileiro para Claude Code.**
 
 ---

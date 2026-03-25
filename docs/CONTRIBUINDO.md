@@ -1,5 +1,7 @@
 # 🤝 Guia de Contribuição
 
+> **Versão**: 3.2.0 | Última atualização: 2026-03-25
+
 Obrigado por considerar contribuir ao FASE! Este documento oferece diretrizes e instruções para participar do projeto.
 
 ## 📋 Código de Conduta
