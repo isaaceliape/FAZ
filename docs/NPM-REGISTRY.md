@@ -79,35 +79,6 @@ O arquivo `.npmrc` garante que todos os contribuidores usem o mesmo registry.
 
 ---
 
-## 🔐 Publicação
-
-Quando publicamos no npm:
-
-1. ✅ GitHub Actions valida o pacote
-2. ✅ Autentica com `NPM_TOKEN` secret
-3. ✅ Publica em `https://registry.npmjs.org/`
-4. ✅ Fica disponível globalmente em minutos
-
----
-
-## 🌍 Para Usuários Chineses
-
-Se você está na China e a instalação é lenta:
-
-### Opção 1: Usar cnpm
-```bash
-cnpm install -g fase-ai
-```
-
-### Opção 2: Configurar como default
-```bash
-npm config set registry https://registry.npmmirror.com
-# Depois restaurar
-npm config set registry https://registry.npmjs.org/
-```
-
----
-
 ## 📊 Informações do Pacote
 
 - **Pacote**: fase-ai
