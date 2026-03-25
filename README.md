@@ -278,7 +278,6 @@ FASE oferece **32 comandos em português brasileiro**, organizados por função:
 ### Guias Essenciais
 - [📖 Guia do Usuário](docs/guia-do-usuario.md) — Como usar FASE passo-a-passo
 - [🔧 Todos os Comandos](docs/COMANDOS.md) — Referência completa com exemplos
-- [🤔 FAQ](docs/FAQ.md) — Perguntas frequentes
 - [🔌 System Hooks](docs/HOOKS.md) — Como adicionar automações
 
 ### Para Contribuidores
