@@ -201,11 +201,12 @@ node bin/install.js --uninstall
 
 ```
 docs/
-├── USER-GUIDE.md       # Guia para usuários
-├── COMANDOS.md         # Lista de comandos
-├── FAQ.md              # Perguntas frequentes
-├── HOOKS.md            # Git hooks setup
-└── CONTRIBUTING.md     # Este arquivo
+├── guia-do-usuario.md       # Guia para usuários
+├── COMANDOS.md              # Lista de comandos
+├── HOOKS.md                 # Git hooks setup
+├── CONTRIBUINDO.md          # Este arquivo
+└── technical/
+    └── COMMAND_PATHS.md     # Path standardization
 ```
 
 ## ✅ Checklist para PRs
@@ -234,7 +235,7 @@ Antes de submeter um PR, verifique:
 
 ## 📜 Licença
 
-Ao contribuir, você concorda que suas contribuições serão licenciadas sob a [MIT License](LICENSE).
+Ao contribuir, você concorda que suas contribuições serão licenciadas sob a [MIT License](https://github.com/isaaceliape/FASE/blob/main/LICENSE).
 
 ---
 

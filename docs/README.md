@@ -16,7 +16,7 @@ Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que prec
 
 | Documento | Descrição |
 |-----------|-----------|
-| [**CONTRIBUTING.md**](https://github.com/isaaceliape/FASE/blob/main/CONTRIBUTING.md) | Como contribuir para o FASE (bugs, features, traduções) |
+| [**Guia de Contribuição**](CONTRIBUINDO.html) | Como contribuir para o FASE (bugs, features, traduções) |
 | [**Git Hooks**](HOOKS.html) | Git hooks e verificações de segurança |
 | [**Path Standardization**](technical/COMMAND_PATHS.md) | Mecanismo de path standardization |
 
@@ -30,7 +30,7 @@ Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que prec
 ### Quero Contribuir
 
 1. Abra uma issue descrevendo sua ideia
-2. Leia [CONTRIBUTING.md](https://github.com/isaaceliape/FASE/blob/main/CONTRIBUTING.md)
+2. Leia [Guia de Contribuição](CONTRIBUINDO.html)
 3. Siga o setup local
 4. Abra um Pull Request
 
