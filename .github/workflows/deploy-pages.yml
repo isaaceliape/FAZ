@@ -52,6 +52,8 @@ jobs:
           cp -r www/fonts deploy/ 2>/dev/null || true
           # Copy generated HTML docs to /docs subdirectory
           mkdir -p deploy/docs
+          mkdir -p deploy/docs/technical
+          mkdir -p deploy/docs/maintainers
           cp -r docs/*.html deploy/docs/
           cp -r docs/*.md deploy/docs/ 2>/dev/null || true
           # Copy .nojekyll file for cache busting
