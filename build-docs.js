@@ -16,7 +16,7 @@ const docs = [
   { file: "HOOKS.html", label: "Git Hooks", icon: "🔧" },
   { file: "NPM-REGISTRY.html", label: "NPM Registry", icon: "📦" },
   { file: "technical/COMMAND_PATHS.html", label: "Padronização de Caminhos", icon: "🛣️" },
-  { file: "maintainers/MAINTAINERS.html", label: "Guia Maintainers", icon: "👨‍💼" },
+  { file: "maintainers/MAINTAINERS.html", label: "Guia de Maintainers", icon: "👨‍💼" },
   { file: "context-monitor.html", label: "Monitor de Contexto", icon: "📊" },
 ];
 
