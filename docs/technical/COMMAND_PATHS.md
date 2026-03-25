@@ -1,112 +1,112 @@
-# Command Path Standardization
+# Padronização de Caminhos de Comandos
 
-> **Version**: 3.2.0 | Last Updated: 2026-03-25
+> **Versão**: 3.2.0 | Última atualização: 2026-03-25
 
-## Overview
+## Visão Geral
 
-FASE commands use environment-agnostic path references that are converted to runtime-specific paths during installation. This allows the same command definitions to work across multiple environments (Claude Code, OpenCode, Gemini, Codex).
+Os comandos do FASE usam referências de caminho agnósticas ao ambiente que são convertidas para caminhos específicos do runtime durante a instalação. Isso permite que as mesmas definições de comando funcionem em múltiplos ambientes (Claude Code, OpenCode, Gemini, Codex).
 
-## Path Convention
+## Convenção de Caminhos
 
-### Source Files (`comandos/*.md`)
+### Arquivos Fonte (`comandos/*.md`)
 
-Source command files use universal path references:
+Os arquivos de comando fonte usam referências de caminho universal:
 - **Workflows**: `@~/.fase/workflows/workflow-name.md`
 - **Templates**: `@~/.fase/templates/template-name.md`
-- **References**: `@~/.fase/references/reference-name.md`
-- **Runtime tools**: `$HOME/.fase/bin/fase-tools.cjs`
+- **Referências**: `@~/.fase/references/reference-name.md`
+- **Ferramentas do runtime**: `$HOME/.fase/bin/fase-tools.cjs`
 
-These paths are **environment-agnostic** and used in:
-1. `<execution_context>` blocks (for Claude Code context loading)
-2. Inline references within `<process>` sections
-3. Bash code blocks for script execution
+Esses caminhos são **agnósticos ao ambiente** e usados em:
+1. Blocos `<execution_context>` (para carregamento de contexto do Claude Code)
+2. Referências inline nas seções `<process>`
+3. Blocos de código bash para execução de scripts
 
-### Path Conversion During Installation
+### Conversão de Caminhos Durante Instalação
 
-When FASE is installed via `npx fase-ai [--runtime]`, the installer (`bin/install.js`) converts these universal paths to runtime-specific locations:
+Quando FASE é instalado via `npx fase-ai [--runtime]`, o instalador (`bin/install.js`) converte esses caminhos universais para localizações específicas do runtime:
 
-| Runtime | Converted Path |
+| Runtime | Caminho Convertido |
 |---------|---|
 | **Claude Code** | `~/.claude/fase/` |
 | **Gemini** | `~/.gemini/fase/` |
 | **OpenCode** | `~/.config/opencode/fase/` |
 | **Codex** | `~/.codex/fase/` |
 
-#### Example Conversions
+#### Exemplos de Conversão
 
-**For Gemini Installation:**
+**Para Instalação no Gemini:**
 ```
-Source:     @~/.fase/workflows/plan-phase.md
-Installed:  @~/.gemini/fase/workflows/plan-phase.md
-```
-
-**For OpenCode Installation:**
-```
-Source:     $HOME/.fase/bin/fase-tools.cjs
-Installed:  $HOME/.config/opencode/fase/bin/fase-tools.cjs
+Fonte:       @~/.fase/workflows/plan-phase.md
+Instalado:   @~/.gemini/fase/workflows/plan-phase.md
 ```
 
-**For Claude Code Installation:**
+**Para Instalação no OpenCode:**
 ```
-Source:     ~/.fase/workflows/add-phase.md
-Installed:  ~/.claude/fase/workflows/add-phase.md
+Fonte:       $HOME/.fase/bin/fase-tools.cjs
+Instalado:   $HOME/.config/opencode/fase/bin/fase-tools.cjs
 ```
 
-## Implementation Details
+**Para Instalação no Claude Code:**
+```
+Fonte:       ~/.fase/workflows/add-phase.md
+Instalado:   ~/.claude/fase/workflows/add-phase.md
+```
 
-### Installer Path Replacement Rules
+## Detalhes de Implementação
 
-The installer applies path replacements in three functions:
+### Regras de Substituição de Caminhos do Instalador
 
-1. **`copyFlattenedCommands`** - for OpenCode (flat command structure)
-2. **`copyCommandsAsCodexSkills`** - for Codex (skill structure)
-3. **`copyWithPathReplacement`** - for Claude Code and Gemini
+O instalador aplica substituições de caminho em três funções:
 
-Replacement patterns:
-- `~/\.fase/` → `<pathPrefix>fase/` (e.g., `~/.claude/fase/`)
-- `$HOME/.fase/` → `<homePrefix>fase/` (e.g., `$HOME/.claude/fase/`)
+1. **`copyFlattenedCommands`** - para OpenCode (estrutura de comando simples)
+2. **`copyCommandsAsCodexSkills`** - para Codex (estrutura de skill)
+3. **`copyWithPathReplacement`** - para Claude Code e Gemini
 
-For OpenCode specifically:
+Padrões de substituição:
+- `~/\.fase/` → `<pathPrefix>fase/` (por exemplo, `~/.claude/fase/`)
+- `$HOME/.fase/` → `<homePrefix>fase/` (por exemplo, `$HOME/.claude/fase/`)
+
+Para OpenCode especificamente:
 - `~/.fase` → `~/.config/opencode/fase`
 - `$HOME/.fase` → `$HOME/.config/opencode/fase`
 
-### Distributed Files (`bin/comandos/*.md`)
+### Arquivos Distribuídos (`bin/comandos/*.md`)
 
-The `bin/` directory contains pre-built command files distributed via NPM. These files:
-- Have `<execution_context>` blocks **removed** (not needed after installation)
-- Have inline `~/.fase/` references **preserved** for installer to replace
-- Contain fully translated Portuguese text
-- Are installed to runtime-specific locations by the installer
+O diretório `bin/` contém arquivos de comando pré-construídos distribuídos via NPM. Esses arquivos:
+- Têm blocos `<execution_context>` **removidos** (não necessários após instalação)
+- Têm referências inline `~/.fase/` **preservadas** para o instalador substituir
+- Contêm texto completamente traduzido para português
+- São instalados em localizações específicas do runtime pelo instalador
 
-## Workflow/Template Files
+## Arquivos de Workflow/Template
 
-The actual workflow, template, and reference files are provided by:
-1. **GSD (upstream project)** - provides the core workflow files
-2. **FASE** - provides Portuguese-localized versions
+Os arquivos reais de workflow, template e referência são fornecidos por:
+1. **GSD (projeto upstream)** - fornece os arquivos de workflow principal
+2. **FASE** - fornece versões localizadas em português
 
-These files are installed to the converted path location (e.g., `~/.claude/fase/workflows/`, `~/.gemini/fase/workflows/`).
+Esses arquivos são instalados na localização de caminho convertido (por exemplo, `~/.claude/fase/workflows/`, `~/.gemini/fase/workflows/`).
 
-## Development Usage
+## Uso em Desenvolvimento
 
-When developing locally with FASE command source files (`comandos/*.md`), you need workflow files available at `~/.fase/` for Claude Code to load via `<execution_context>` blocks. Options:
+Ao desenvolver localmente com arquivos de comando fonte do FASE (`comandos/*.md`), você precisa ter arquivos de workflow disponíveis em `~/.fase/` para que o Claude Code carregue via blocos `<execution_context>`. Opções:
 
-1. **Symlink to GSD installation:**
+1. **Symlink para instalação do GSD:**
    ```bash
    ln -s ~/.claude/fase ~/.fase
    ```
 
-2. **Point to development workflows:**
-   If working on GSD workflows locally, adjust the symlink to point to your local GSD `workflows/` directory
+2. **Apontar para workflows de desenvolvimento:**
+   Se estiver trabalhando em workflows do GSD localmente, ajuste o symlink para apontar para seu diretório local `workflows/` do GSD
 
-3. **Install GSD first:**
-   Ensure GSD is installed in your runtime environment before developing FASE commands
+3. **Instalar GSD primeiro:**
+   Certifique-se de que o GSD está instalado em seu ambiente de runtime antes de desenvolver comandos do FASE
 
-## Consistency Across Environments
+## Consistência em Múltiplos Ambientes
 
-All 32 FASE commands now follow the same path convention:
-- ✅ 13 commands with workflow references use `@~/.fase/`
-- ✅ 19 commands with no external references (self-contained)
-- ✅ Installer properly converts paths for each runtime
-- ✅ OpenCode receives correctly formatted `~/.config/opencode/fase/` paths
+Todos os 32 comandos do FASE agora seguem a mesma convenção de caminho:
+- ✅ 13 comandos com referências de workflow usam `@~/.fase/`
+- ✅ 19 comandos sem referências externas (auto-contidos)
+- ✅ Instalador converte corretamente caminhos para cada runtime
+- ✅ OpenCode recebe caminhos corretamente formatados `~/.config/opencode/fase/`
 
-This ensures command compatibility across Claude Code, OpenCode, Gemini, and Codex without environment-specific branching in command logic.
+Isso garante compatibilidade de comando em Claude Code, OpenCode, Gemini e Codex sem ramificação específica do ambiente na lógica do comando.
