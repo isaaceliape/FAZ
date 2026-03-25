@@ -104,10 +104,22 @@ const htmlTemplate = (title, currentFile, content) => {
       font-weight: 700;
       color: var(--text);
       letter-spacing: -0.5px;
+      text-decoration: none;
+      transition: color 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .logo:hover {
+      color: var(--primary);
     }
 
     .logo span {
       color: var(--primary);
+    }
+
+    .logo:hover span {
+      color: var(--secondary);
     }
 
     .nav-links {
@@ -387,7 +399,7 @@ const htmlTemplate = (title, currentFile, content) => {
 </head>
 <body>
   <div class="header">
-    <div class="logo">fase<span>-</span>ai</div>
+    <a href="${currentDir === '' ? 'index.html' : '../index.html'}" class="logo">fase<span>-</span>ai</a>
     <div class="nav-links">
       <a href="${currentDir === '' ? 'index.html' : '../index.html'}">Home</a>
       <a href="https://github.com/isaaceliape/FASE">GitHub</a>
