@@ -4,6 +4,10 @@ const fs = require("fs");
 const path = require("path");
 const { marked } = require("marked");
 
+// Read version from package.json
+const packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, "package.json"), "utf-8"));
+const version = packageJson.version;
+
 const docs = [
   { file: "readme.html", label: "README", icon: "📖" },
   { file: "COMANDOS.html", label: "Comandos", icon: "📋" },
@@ -284,6 +288,18 @@ const htmlTemplate = (title, currentFile, content) => {
       margin: 30px 0;
     }
 
+    .version-badge {
+      display: inline-block;
+      background-color: rgba(0, 255, 136, 0.15);
+      color: var(--primary);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: 1px solid var(--primary);
+      margin-bottom: 20px;
+    }
+
     /* Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
@@ -357,6 +373,7 @@ const htmlTemplate = (title, currentFile, content) => {
     </aside>
 
     <main class="main">
+      <div class="version-badge">📦 Versão ${version}</div>
       ${content}
     </main>
   </div>

@@ -1,5 +1,7 @@
 # Command Path Standardization
 
+> **Version**: 3.2.0 | Last Updated: 2026-03-25
+
 ## Overview
 
 FASE commands use environment-agnostic path references that are converted to runtime-specific paths during installation. This allows the same command definitions to work across multiple environments (Claude Code, OpenCode, Gemini, Codex).
