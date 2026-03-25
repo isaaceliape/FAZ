@@ -15,9 +15,9 @@ const docs = [
   { file: "CONTRIBUINDO.html", label: "Guia de Contribuição", icon: "🤝" },
   { file: "HOOKS.html", label: "Git Hooks", icon: "🔧" },
   { file: "NPM-REGISTRY.html", label: "NPM Registry", icon: "📦" },
-  { file: "technical/COMMAND_PATHS.html", label: "Padronização de Caminhos", icon: "🛣️" },
-  { file: "maintainers/MAINTAINERS.html", label: "Guia de Maintainers", icon: "👨‍💼" },
-  { file: "context-monitor.html", label: "Monitor de Contexto", icon: "📊" },
+  { file: "technical/padronizacao-caminhos.html", label: "Padronização de Caminhos", icon: "🛣️" },
+  { file: "maintainers/MANTENEDORES.html", label: "Guia de Maintainers", icon: "👨‍💼" },
+  { file: "monitor-contexto.html", label: "Monitor de Contexto", icon: "📊" },
 ];
 
 const htmlTemplate = (title, currentFile, content) => {

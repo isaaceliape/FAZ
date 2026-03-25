@@ -208,7 +208,7 @@ docs/
 ├── HOOKS.md                 # Git hooks setup
 ├── CONTRIBUINDO.md          # Este arquivo
 └── technical/
-    └── COMMAND_PATHS.md     # Path standardization
+    └── padronizacao-caminhos.md     # Path standardization
 ```
 
 ## ✅ Checklist para PRs

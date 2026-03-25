@@ -20,7 +20,7 @@ Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que prec
 |-----------|-----------|
 | [**Guia de Contribuição**](CONTRIBUINDO.html) | Como contribuir para o FASE (bugs, features, traduções) |
 | [**Git Hooks**](HOOKS.html) | Git hooks e verificações de segurança |
-| [**Padronização de Caminhos**](technical/COMMAND_PATHS.html) | Mecanismo de padronização de caminhos |
+| [**Padronização de Caminhos**](technical/padronizacao-caminhos.html) | Mecanismo de padronização de caminhos |
 
 ## 🎯 Começar Por Aqui
 
@@ -52,9 +52,9 @@ docs/
 ├── HOOKS.md               # Git hooks documentation
 ├── NPM-REGISTRY.md        # Configuração npm
 ├── technical/
-│   └── COMMAND_PATHS.md   # Path standardization
+│   └── padronizacao-caminhos.md   # Path standardization
 └── maintainers/
-    └── MAINTAINERS.md     # Informações para maintainers
+    └── MANTENEDORES.md     # Informações para maintainers
 ```
 
 ## 🌐 Documentos em Português
@@ -88,7 +88,7 @@ docs/
 - ✅ Renomeação de arquivos: `.pt.md` → `.md` para consistência
 
 **Novos Documentos:**
-- 📚 [Padronização de Caminhos](technical/COMMAND_PATHS.html) - Explicação do mecanismo de padronização de caminhos
+- 📚 [Padronização de Caminhos](technical/padronizacao-caminhos.html) - Explicação do mecanismo de padronização de caminhos
 - 📚 Seções expandidas em [bin/test/README.md](https://github.com/isaaceliape/FASE/blob/main/bin/test/README.md) e [bin/test/TESTING.md](https://github.com/isaaceliape/FASE/blob/main/bin/test/TESTING.md)
 
 **Ver também:** [CHANGELOG.md](https://github.com/isaaceliape/FASE/blob/main/CHANGELOG.md) para histórico completo de versões
