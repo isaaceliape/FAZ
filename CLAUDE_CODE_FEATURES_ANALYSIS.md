@@ -102,7 +102,7 @@ This document analyzes recent Claude Code features (March 2026 and beyond) and i
         "hooks": [
           {
             "type": "command",
-            "command": "cat .planejamento/phases/current-phase.txt && echo '\\n---\\nPhase context loaded.'"
+            "command": "cat .fase-ai-local/phases/current-phase.txt && echo '\\n---\\nPhase context loaded.'"
           }
         ]
       }
@@ -221,16 +221,16 @@ Claude Code now supports 1M token context window (vs previous limits), available
 **Implementation:**
 ```markdown
 <files_to_read>
-@.planejamento/phases/1-*/PLAN*.md
-@.planejamento/phases/2-*/PLAN*.md
-@.planejamento/phases/3-*/PLAN*.md
-@.planejamento/phases/4-*/PLAN*.md
-@.planejamento/phases/5-*/PLAN*.md
-@.planejamento/phases/1-*/SUMMARY.md
-@.planejamento/phases/2-*/SUMMARY.md
-@.planejamento/phases/3-*/SUMMARY.md
-@.planejamento/phases/4-*/SUMMARY.md
-@.planejamento/phases/5-*/SUMMARY.md
+@.fase-ai-local/phases/1-*/PLAN*.md
+@.fase-ai-local/phases/2-*/PLAN*.md
+@.fase-ai-local/phases/3-*/PLAN*.md
+@.fase-ai-local/phases/4-*/PLAN*.md
+@.fase-ai-local/phases/5-*/PLAN*.md
+@.fase-ai-local/phases/1-*/SUMMARY.md
+@.fase-ai-local/phases/2-*/SUMMARY.md
+@.fase-ai-local/phases/3-*/SUMMARY.md
+@.fase-ai-local/phases/4-*/SUMMARY.md
+@.fase-ai-local/phases/5-*/SUMMARY.md
 </files_to_read>
 ```
 

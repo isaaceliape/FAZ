@@ -9,7 +9,7 @@ const { extractFrontmatter } = require('./frontmatter.cjs');
 const { writeStateMd } = require('./state.cjs');
 
 function cmdPhasesList(cwd, options, raw) {
-  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+  const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
   const { type, phase, includeArchived } = options;
 
   // If no phases directory, return empty
@@ -85,7 +85,7 @@ function cmdPhasesList(cwd, options, raw) {
 }
 
 function cmdPhaseNextDecimal(cwd, basePhase, raw) {
-  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+  const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
   const normalized = normalizeEtapaNome(basePhase);
 
   // Check if phases directory exists
@@ -154,7 +154,7 @@ function cmdFindPhase(cwd, phase, raw) {
     error('identificador de fase obrigatório');
   }
 
-  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+  const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
   const normalized = normalizeEtapaNome(phase);
 
   const notFound = { found: false, directory: null, phase_number: null, phase_name: null, plans: [], summaries: [] };
@@ -180,7 +180,7 @@ function cmdFindPhase(cwd, phase, raw) {
 
     const result = {
       found: true,
-      directory: toPosixPath(path.join('.planejamento', 'etapas', match)),
+      directory: toPosixPath(path.join('.fase-ai-local', 'etapas', match)),
       phase_number: etapaNumber,
       phase_name: etapaNome,
       plans,
@@ -203,7 +203,7 @@ function cmdPhasePlanIndex(cwd, phase, raw) {
     error('fase obrigatória para phase-plan-index');
   }
 
-  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+  const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
   const normalized = normalizeEtapaNome(phase);
 
   // Find phase directory
@@ -313,7 +313,7 @@ function cmdPhaseAdd(cwd, description, raw) {
     error('descrição obrigatória para adicionar fase');
   }
 
-  const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
+  const roadmapPath = path.join(cwd, '.fase-ai-local', 'ROADMAP.md');
   if (!fs.existsSync(roadmapPath)) {
     error('ROADMAP.md não encontrado');
   }
@@ -333,7 +333,7 @@ function cmdPhaseAdd(cwd, description, raw) {
   const newPhaseNum = maxEtapa + 1;
   const paddedNum = String(newPhaseNum).padStart(2, '0');
   const dirName = `${paddedNum}-${slug}`;
-  const dirPath = path.join(cwd, '.planejamento', 'etapas', dirName);
+  const dirPath = path.join(cwd, '.fase-ai-local', 'etapas', dirName);
 
   // Create directory with .gitkeep so git tracks empty folders
   fs.mkdirSync(dirPath, { recursive: true });
@@ -358,7 +358,7 @@ function cmdPhaseAdd(cwd, description, raw) {
     padded: paddedNum,
     name: description,
     slug,
-    directory: `.planejamento/phases/${dirName}`,
+    directory: `.fase-ai-local/phases/${dirName}`,
   };
 
   output(result, raw, paddedNum);
@@ -369,7 +369,7 @@ function cmdPhaseInsert(cwd, afterPhase, description, raw) {
     error('fase-anterior e descrição obrigatórias para inserir fase');
   }
 
-  const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
+  const roadmapPath = path.join(cwd, '.fase-ai-local', 'ROADMAP.md');
   if (!fs.existsSync(roadmapPath)) {
     error('ROADMAP.md não encontrado');
   }
@@ -387,7 +387,7 @@ function cmdPhaseInsert(cwd, afterPhase, description, raw) {
   }
 
   // Calculate next decimal using existing logic
-  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+  const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
   const normalizedBase = normalizeEtapaNome(afterPhase);
   let existingDecimals = [];
 
@@ -404,7 +404,7 @@ function cmdPhaseInsert(cwd, afterPhase, description, raw) {
   const nextDecimal = existingDecimals.length === 0 ? 1 : Math.max(...existingDecimals) + 1;
   const decimalEtapa = `${normalizedBase}.${nextDecimal}`;
   const dirName = `${decimalPhase}-${slug}`;
-  const dirPath = path.join(cwd, '.planejamento', 'etapas', dirName);
+  const dirPath = path.join(cwd, '.fase-ai-local', 'etapas', dirName);
 
   // Create directory with .gitkeep so git tracks empty folders
   fs.mkdirSync(dirPath, { recursive: true });
@@ -439,7 +439,7 @@ function cmdPhaseInsert(cwd, afterPhase, description, raw) {
     after_phase: afterPhase,
     name: description,
     slug,
-    directory: `.planejamento/phases/${dirName}`,
+    directory: `.fase-ai-local/phases/${dirName}`,
   };
 
   output(result, raw, decimalPhase);
@@ -450,8 +450,8 @@ function cmdPhaseRemove(cwd, targetPhase, options, raw) {
     error('número da fase obrigatório para remover fase');
   }
 
-  const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
-  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+  const roadmapPath = path.join(cwd, '.fase-ai-local', 'ROADMAP.md');
+  const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
   const force = options.force || false;
 
   if (!fs.existsSync(roadmapPath)) {
@@ -666,7 +666,7 @@ function cmdPhaseRemove(cwd, targetPhase, options, raw) {
   fs.writeFileSync(roadmapPath, roadmapContent, 'utf-8');
 
   // Update STATE.md phase count
-  const statePath = path.join(cwd, '.planejamento', 'STATE.md');
+  const statePath = path.join(cwd, '.fase-ai-local', 'STATE.md');
   if (fs.existsSync(statePath)) {
     let stateContent = fs.readFileSync(statePath, 'utf-8');
     // Update "Total Phases" field
@@ -703,9 +703,9 @@ function cmdPhaseComplete(cwd, etapaNum, raw) {
     error('número da fase obrigatório para completar fase');
   }
 
-  const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
-  const statePath = path.join(cwd, '.planejamento', 'STATE.md');
-  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+  const roadmapPath = path.join(cwd, '.fase-ai-local', 'ROADMAP.md');
+  const statePath = path.join(cwd, '.fase-ai-local', 'STATE.md');
+  const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
   const normalized = normalizeEtapaNome(etapaNum);
   const today = new Date().toISOString().split('T')[0];
 
@@ -753,7 +753,7 @@ function cmdPhaseComplete(cwd, etapaNum, raw) {
     fs.writeFileSync(roadmapPath, roadmapContent, 'utf-8');
 
     // Update REQUIREMENTS.md traceability for this phase's requirements
-    const reqPath = path.join(cwd, '.planejamento', 'REQUIREMENTS.md');
+    const reqPath = path.join(cwd, '.fase-ai-local', 'REQUIREMENTS.md');
     if (fs.existsSync(reqPath)) {
       // Extract Requirements line from roadmap for this phase
       const reqMatch = roadmapContent.match(

@@ -159,8 +159,8 @@ Complex phases need **multiple research angles** simultaneously.
 
 ### Current Behavior
 - Orchestrator **reads all phase summary files sequentially**:
-  - Glob: `.planejamento/phases/*/*-SUMMARY.md`
-  - Glob: `.planejamento/phases/*/*-VERIFICATION.md`
+  - Glob: `.fase-ai-local/phases/*/*-SUMMARY.md`
+  - Glob: `.fase-ai-local/phases/*/*-VERIFICATION.md`
   - Load all into orchestrator context to aggregate tech debt, gaps, deferred items
 - For large milestones (12+ phases), this consumes significant orchestrator context
 

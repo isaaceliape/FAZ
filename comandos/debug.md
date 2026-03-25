@@ -22,7 +22,7 @@ Issue do usuário: $ARGUMENTS
 
 Verifique por sessões ativas:
 ```bash
-ls .planejamento/debug/*.md 2>/dev/null | grep -v resolved | head -5
+ls .fase-ai-local/debug/*.md 2>/dev/null | grep -v resolved | head -5
 ```
 </context>
 
@@ -86,7 +86,7 @@ goal: find_and_fix
 </mode>
 
 <debug_file>
-Criar: .planejamento/debug/{slug}.md
+Criar: .fase-ai-local/debug/{slug}.md
 </debug_file>
 ```
 
@@ -125,7 +125,7 @@ O debugger retorna quando:
 Quando usuário executa `/fase-debug` sem argumentos:
 
 ```bash
-ls .planejamento/debug/*.md 2>/dev/null | grep -v resolved | head -10
+ls .fase-ai-local/debug/*.md 2>/dev/null | grep -v resolved | head -10
 ```
 
 Liste cada sessão:
@@ -146,7 +146,7 @@ Continuar investigação: {slug}
 </objective>
 
 <debug_file>
-@.planejamento/debug/{slug}.md
+@.fase-ai-local/debug/{slug}.md
 </debug_file>
 
 <mode>
@@ -174,7 +174,7 @@ Quando debugging completa:
 ### Fix Recomendado
 {fix_description}
 
-**Arquivo de debug:** .planejamento/debug/{slug}.md
+**Arquivo de debug:** .fase-ai-local/debug/{slug}.md
 ```
 
 **Se precisar de ação humana:**

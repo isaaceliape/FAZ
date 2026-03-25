@@ -7,4 +7,4 @@ description: Como FASE gerencia estado do projeto
 
 *Conteúdo será adicionado*
 
-Veja .planejamento/ para entender a estrutura de estado.
+Veja .fase-ai-local/ para entender a estrutura de estado.

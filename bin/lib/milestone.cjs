@@ -25,7 +25,7 @@ function cmdRequirementsMarkComplete(cwd, reqIdsRaw, raw) {
     error('nenhum ID de requisito válido encontrado');
   }
 
-  const reqPath = path.join(cwd, '.planejamento', 'REQUIREMENTS.md');
+  const reqPath = path.join(cwd, '.fase-ai-local', 'REQUIREMENTS.md');
   if (!fs.existsSync(reqPath)) {
     output({ updated: false, reason: 'REQUIREMENTS.md não encontrado', ids: reqIds }, raw, 'no requirements file');
     return;
@@ -81,12 +81,12 @@ function cmdMilestoneComplete(cwd, version, options, raw) {
     error('versão obrigatória para completar marco (ex: v1.0)');
   }
 
-  const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
-  const reqPath = path.join(cwd, '.planejamento', 'REQUIREMENTS.md');
-  const statePath = path.join(cwd, '.planejamento', 'STATE.md');
-  const milestonesPath = path.join(cwd, '.planejamento', 'MILESTONES.md');
-  const archiveDir = path.join(cwd, '.planejamento', 'milestones');
-  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+  const roadmapPath = path.join(cwd, '.fase-ai-local', 'ROADMAP.md');
+  const reqPath = path.join(cwd, '.fase-ai-local', 'REQUIREMENTS.md');
+  const statePath = path.join(cwd, '.fase-ai-local', 'STATE.md');
+  const milestonesPath = path.join(cwd, '.fase-ai-local', 'MILESTONES.md');
+  const archiveDir = path.join(cwd, '.fase-ai-local', 'milestones');
+  const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
   const today = new Date().toISOString().split('T')[0];
   const milestoneName = options.name || version;
 
@@ -142,12 +142,12 @@ function cmdMilestoneComplete(cwd, version, options, raw) {
   // Archive REQUIREMENTS.md
   if (fs.existsSync(reqPath)) {
     const reqContent = fs.readFileSync(reqPath, 'utf-8');
-    const archiveHeader = `# Arquivo de Requisitos: ${version} ${milestoneName}\n\n**Arquivado:** ${today}\n**Status:** ENTREGUE\n\nPara requisitos atuais, veja \`.planejamento/REQUIREMENTS.md\`.\n\n---\n\n`;
+    const archiveHeader = `# Arquivo de Requisitos: ${version} ${milestoneName}\n\n**Arquivado:** ${today}\n**Status:** ENTREGUE\n\nPara requisitos atuais, veja \`.fase-ai-local/REQUIREMENTS.md\`.\n\n---\n\n`;
     fs.writeFileSync(path.join(archiveDir, `${version}-REQUIREMENTS.md`), archiveHeader + reqContent, 'utf-8');
   }
 
   // Archive audit file if exists
-  const auditFile = path.join(cwd, '.planejamento', `${version}-MILESTONE-AUDIT.md`);
+  const auditFile = path.join(cwd, '.fase-ai-local', `${version}-MILESTONE-AUDIT.md`);
   if (fs.existsSync(auditFile)) {
     fs.renameSync(auditFile, path.join(archiveDir, `${version}-MILESTONE-AUDIT.md`));
   }

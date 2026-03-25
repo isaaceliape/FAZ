@@ -36,7 +36,7 @@ FASE usa **spec-driven development** — descreva claramente o que você quer, e
 FASE gerencia **contexto** através de:
 
 - **Context Window** — O contexto compartilhado entre agents
-- **State Files** — Arquivos persistentes (.planejamento/) que rastreiam projeto
+- **State Files** — Arquivos persistentes (.fase-ai-local/) que rastreiam projeto
 - **Checkpoints** — Marcos no progresso que podem ser retomados
 
 ## Agents Paralelos
@@ -56,11 +56,11 @@ Um **roadmap** é a lista ordenada de milestones e fases que definem o caminho p
 
 FASE mantém **estado** em arquivos estruturados:
 
-- `.planejamento/PROJECT.md` — Definição do projeto
-- `.planejamento/ROADMAP.md` — Roadmap de fases
-- `.planejamento/phase_*/*.md` — Arquivos de cada fase
-- `.planejamento/ESTADO.md` — Estado atual
-- `.planejamento/CONTEXTO.md` — Contexto persistente
+- `.fase-ai-local/PROJECT.md` — Definição do projeto
+- `.fase-ai-local/ROADMAP.md` — Roadmap de fases
+- `.fase-ai-local/phase_*/*.md` — Arquivos de cada fase
+- `.fase-ai-local/ESTADO.md` — Estado atual
+- `.fase-ai-local/CONTEXTO.md` — Contexto persistente
 
 ## Goal-Backward Verification
 

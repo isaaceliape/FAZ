@@ -17,12 +17,12 @@ const { runGsdTools, createTempProject, cleanup } = require('./helpers.cjs');
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
 function readConfig(tmpDir) {
-  const configPath = path.join(tmpDir, '.planejamento', 'config.json');
+  const configPath = path.join(tmpDir, '.fase-ai-local', 'config.json');
   return JSON.parse(fs.readFileSync(configPath, 'utf-8'));
 }
 
 function writeConfig(tmpDir, obj) {
-  const configPath = path.join(tmpDir, '.planejamento', 'config.json');
+  const configPath = path.join(tmpDir, '.fase-ai-local', 'config.json');
   fs.writeFileSync(configPath, JSON.stringify(obj, null, 2), 'utf-8');
 }
 

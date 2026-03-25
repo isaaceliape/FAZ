@@ -7,7 +7,7 @@ const path = require('path');
 const { escapeRegex, normalizeEtapaNome, output, error, findEtapaInternal } = require('./core.cjs');
 
 function cmdRoadmapGetPhase(cwd, etapaNum, raw) {
-  const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
+  const roadmapPath = path.join(cwd, '.fase-ai-local', 'ROADMAP.md');
 
   if (!fs.existsSync(roadmapPath)) {
     output({ found: false, error: 'ROADMAP.md não encontrado' }, raw, '');
@@ -91,7 +91,7 @@ function cmdRoadmapGetPhase(cwd, etapaNum, raw) {
 }
 
 function cmdRoadmapAnalyze(cwd, raw) {
-  const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
+  const roadmapPath = path.join(cwd, '.fase-ai-local', 'ROADMAP.md');
 
   if (!fs.existsSync(roadmapPath)) {
     output({ error: 'ROADMAP.md não encontrado', milestones: [], phases: [], current_phase: null }, raw);
@@ -99,7 +99,7 @@ function cmdRoadmapAnalyze(cwd, raw) {
   }
 
   const content = fs.readFileSync(roadmapPath, 'utf-8');
-  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+  const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
 
   // Extract all phase headings: ## Etapa N: Name or ### Etapa N: Name
   const phasePattern = /#{2,4}\s*Phase\s+(\d+[A-Z]?(?:\.\d+)*)\s*:\s*([^\n]+)/gi;
@@ -222,7 +222,7 @@ function cmdRoadmapUpdatePlanProgress(cwd, etapaNum, raw) {
     error('phase number required for roadmap update-plan-progress');
   }
 
-  const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
+  const roadmapPath = path.join(cwd, '.fase-ai-local', 'ROADMAP.md');
 
   const phaseInfo = findEtapaInternal(cwd, etapaNum);
   if (!phaseInfo) {

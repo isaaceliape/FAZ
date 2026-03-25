@@ -18,12 +18,12 @@ allowed-tools:
 Inicializar um novo projeto através de fluxo unificado: questionamento → pesquisa (opcional) → requisitos → roteiro.
 
 **Cria:**
-- `.planejamento/PROJETO.md` — contexto do projeto
-- `.planejamento/config.json` — preferências de workflow
-- `.planejamento/pesquisa/` — pesquisa de domínio (opcional)
-- `.planejamento/REQUISITOS.md` — requisitos definidos
-- `.planejamento/ROTEIRO.md` — estrutura de fases
-- `.planejamento/ESTADO.md` — memória do projeto
+- `.fase-ai-local/PROJETO.md` — contexto do projeto
+- `.fase-ai-local/config.json` — preferências de workflow
+- `.fase-ai-local/pesquisa/` — pesquisa de domínio (opcional)
+- `.fase-ai-local/REQUISITOS.md` — requisitos definidos
+- `.fase-ai-local/ROTEIRO.md` — estrutura de fases
+- `.fase-ai-local/ESTADO.md` — memória do projeto
 
 **Após este comando:** Execute `/fase-planejar-fase 1` para iniciar a execução.
 </objective>

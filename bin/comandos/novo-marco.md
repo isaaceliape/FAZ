@@ -15,11 +15,11 @@ Iniciar um novo milestone: questionamento → pesquisa (opcional) → requisitos
 Equivalente brownfield de new-project. Projeto existe, PROJETO.md tem histórico. Coleta "o que vem depois", atualiza PROJETO.md, então executa ciclo requisitos → roteiro.
 
 **Cria/Atualiza:**
-- `.planejamento/PROJETO.md` — atualizado com novos objetivos do milestone
-- `.planejamento/pesquisa/` — pesquisa de domínio (opcional, apenas features NOVAS)
-- `.planejamento/REQUISITOS.md` — requisitos definidos para este milestone
-- `.planejamento/ROTEIRO.md` — estrutura de fases (continua numeração)
-- `.planejamento/ESTADO.md` — resetado para novo milestone
+- `.fase-ai-local/PROJETO.md` — atualizado com novos objetivos do milestone
+- `.fase-ai-local/pesquisa/` — pesquisa de domínio (opcional, apenas features NOVAS)
+- `.fase-ai-local/REQUISITOS.md` — requisitos definidos para este milestone
+- `.fase-ai-local/ROTEIRO.md` — estrutura de fases (continua numeração)
+- `.fase-ai-local/ESTADO.md` — resetado para novo milestone
 
 **Depois:** `/fase-planejar-fase [N]` para iniciar execução.
 </objective>

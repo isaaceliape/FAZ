@@ -23,7 +23,7 @@ Um comando cria todas fix phases — sem `/fase-adicionar-fase` manual por gap.
 
 <context>
 **Resultados do audit:**
-Glob: .planejamento/v*-MILESTONE-AUDIT.md (use mais recente)
+Glob: .fase-ai-local/v*-MILESTONE-AUDIT.md (use mais recente)
 
 Intent original e estado atual do planning são carregados on demand dentro do workflow.
 </context>

@@ -16,7 +16,7 @@ const { runGsdTools, createTempProject, cleanup } = require('./helpers.cjs');
 function writeMinimalRoadmap(tmpDir, phases = ['1']) {
   const lines = phases.map(n => `### Etapa ${n}: Etapa ${n} Description`).join('\n');
   fs.writeFileSync(
-    path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+    path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
     `# Roadmap\n\n${lines}\n`
   );
 }
@@ -24,7 +24,7 @@ function writeMinimalRoadmap(tmpDir, phases = ['1']) {
 function writeMinimalProjectMd(tmpDir, sections = ['## What This Is', '## Core Value', '## Requirements']) {
   const content = sections.map(s => `${s}\n\nContent here.\n`).join('\n');
   fs.writeFileSync(
-    path.join(tmpDir, '.planejamento', 'PROJECT.md'),
+    path.join(tmpDir, '.fase-ai-local', 'PROJECT.md'),
     `# Project\n\n${content}`
   );
 }
@@ -32,14 +32,14 @@ function writeMinimalProjectMd(tmpDir, sections = ['## What This Is', '## Core V
 function writeMinimalStateMd(tmpDir, content) {
   const defaultContent = content || `# Session State\n\n## Current Position\n\nPhase: 1\n`;
   fs.writeFileSync(
-    path.join(tmpDir, '.planejamento', 'STATE.md'),
+    path.join(tmpDir, '.fase-ai-local', 'STATE.md'),
     defaultContent
   );
 }
 
 function writeValidConfigJson(tmpDir) {
   fs.writeFileSync(
-    path.join(tmpDir, '.planejamento', 'config.json'),
+    path.join(tmpDir, '.fase-ai-local', 'config.json'),
     JSON.stringify({ model_profile: 'balanced', commit_docs: true }, null, 2)
   );
 }
@@ -59,11 +59,11 @@ describe('validate health command', () => {
     cleanup(tmpDir);
   });
 
-  // ─── Check 1: .planejamento/ exists ───────────────────────────────────────────
+  // ─── Check 1: .fase-ai-local/ exists ───────────────────────────────────────────
 
-  test("returns 'broken' when .planejamento directory is missing", () => {
-    // createTempProject creates .planejamento/phases — remove it entirely
-    fs.rmSync(path.join(tmpDir, '.planejamento'), { recursive: true, force: true });
+  test("returns 'broken' when .fase-ai-local directory is missing", () => {
+    // createTempProject creates .fase-ai-local/phases — remove it entirely
+    fs.rmSync(path.join(tmpDir, '.fase-ai-local'), { recursive: true, force: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -79,12 +79,12 @@ describe('validate health command', () => {
   // ─── Check 2: PROJECT.md exists and has required sections ─────────────────
 
   test('warns when PROJECT.md is missing', () => {
-    // No PROJECT.md in .planejamento
+    // No PROJECT.md in .fase-ai-local
     writeMinimalRoadmap(tmpDir, ['1']);
     writeMinimalStateMd(tmpDir);
     writeValidConfigJson(tmpDir);
     // Create valid phase dir so no W007
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.fase-ai-local', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -99,13 +99,13 @@ describe('validate health command', () => {
   test('warns when PROJECT.md missing required sections', () => {
     // PROJECT.md missing "## Core Value" section
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'PROJECT.md'),
+      path.join(tmpDir, '.fase-ai-local', 'PROJECT.md'),
       '# Project\n\n## What This Is\n\nFoo\n\n## Requirements\n\nBar\n'
     );
     writeMinimalRoadmap(tmpDir, ['1']);
     writeMinimalStateMd(tmpDir);
     writeValidConfigJson(tmpDir);
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.fase-ai-local', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -124,7 +124,7 @@ describe('validate health command', () => {
     writeMinimalRoadmap(tmpDir, ['1']);
     writeMinimalStateMd(tmpDir);
     writeValidConfigJson(tmpDir);
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.fase-ai-local', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -164,7 +164,7 @@ describe('validate health command', () => {
     writeMinimalProjectMd(tmpDir);
     writeMinimalRoadmap(tmpDir, ['1']);
     writeValidConfigJson(tmpDir);
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.fase-ai-local', 'etapas', '01-a'), { recursive: true });
     // No STATE.md
 
     const result = runGsdTools('validate health', tmpDir);
@@ -182,10 +182,10 @@ describe('validate health command', () => {
     writeValidConfigJson(tmpDir);
     // STATE.md mentions Etapa 99 but only 01-a dir exists
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'STATE.md'),
+      path.join(tmpDir, '.fase-ai-local', 'STATE.md'),
       '# Session State\n\nEtapa 99 is the current phase.\n'
     );
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.fase-ai-local', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -203,7 +203,7 @@ describe('validate health command', () => {
     writeMinimalProjectMd(tmpDir);
     writeMinimalRoadmap(tmpDir, ['1']);
     writeMinimalStateMd(tmpDir);
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.fase-ai-local', 'etapas', '01-a'), { recursive: true });
     // No config.json
 
     const result = runGsdTools('validate health', tmpDir);
@@ -220,10 +220,10 @@ describe('validate health command', () => {
     writeMinimalRoadmap(tmpDir, ['1']);
     writeMinimalStateMd(tmpDir);
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'config.json'),
+      path.join(tmpDir, '.fase-ai-local', 'config.json'),
       '{broken json'
     );
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.fase-ai-local', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -240,10 +240,10 @@ describe('validate health command', () => {
     writeMinimalRoadmap(tmpDir, ['1']);
     writeMinimalStateMd(tmpDir);
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'config.json'),
+      path.join(tmpDir, '.fase-ai-local', 'config.json'),
       JSON.stringify({ model_profile: 'invalid' })
     );
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.fase-ai-local', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -261,13 +261,13 @@ describe('validate health command', () => {
     writeMinimalProjectMd(tmpDir);
     // Roadmap with no phases to avoid W006
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       '# Roadmap\n\nNo phases yet.\n'
     );
     writeMinimalStateMd(tmpDir, '# Session State\n\nNo phase references.\n');
     writeValidConfigJson(tmpDir);
     // Create a badly named dir
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', 'bad_name'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.fase-ai-local', 'etapas', 'bad_name'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -287,7 +287,7 @@ describe('validate health command', () => {
     writeMinimalStateMd(tmpDir);
     writeValidConfigJson(tmpDir);
     // Create 01-test phase dir with a PLAN but no matching SUMMARY
-    const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', '01-test');
+    const phaseDir = path.join(tmpDir, '.fase-ai-local', 'etapas', '01-test');
     fs.mkdirSync(phaseDir, { recursive: true });
     fs.writeFileSync(path.join(phaseDir, '01-01-PLAN.md'), '# Plan\n');
     // No 01-01-SUMMARY.md
@@ -308,7 +308,7 @@ describe('validate health command', () => {
     writeMinimalProjectMd(tmpDir);
     // ROADMAP mentions Etapa 5 but no 05-xxx dir
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       '# Roadmap\n\n### Etapa 5: Future Phase\n'
     );
     writeMinimalStateMd(tmpDir, '# Session State\n\nNo phase refs.\n');
@@ -329,13 +329,13 @@ describe('validate health command', () => {
     writeMinimalProjectMd(tmpDir);
     // ROADMAP has no phases
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       '# Roadmap\n\nNo phases listed.\n'
     );
     writeMinimalStateMd(tmpDir, '# Session State\n\nNo phase refs.\n');
     writeValidConfigJson(tmpDir);
     // Orphan phase dir not in ROADMAP
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '99-orphan'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.fase-ai-local', 'etapas', '99-orphan'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -355,10 +355,10 @@ describe('validate health command', () => {
     writeMinimalStateMd(tmpDir, '# Session State\n\nEtapa 1 in progress.\n');
     // Config with workflow section but WITHOUT nyquist_validation key
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'config.json'),
+      path.join(tmpDir, '.fase-ai-local', 'config.json'),
       JSON.stringify({ model_profile: 'balanced', workflow: { research: true } }, null, 2)
     );
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.fase-ai-local', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -376,10 +376,10 @@ describe('validate health command', () => {
     writeMinimalStateMd(tmpDir, '# Session State\n\nEtapa 1 in progress.\n');
     // Config with workflow.nyquist_validation explicitly set
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'config.json'),
+      path.join(tmpDir, '.fase-ai-local', 'config.json'),
       JSON.stringify({ model_profile: 'balanced', workflow: { research: true, nyquist_validation: true } }, null, 2)
     );
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.fase-ai-local', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -399,7 +399,7 @@ describe('validate health command', () => {
     writeMinimalStateMd(tmpDir, '# Session State\n\nEtapa 1 in progress.\n');
     writeValidConfigJson(tmpDir);
     // Create phase dir with RESEARCH.md containing Validation Architecture
-    const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', '01-setup');
+    const phaseDir = path.join(tmpDir, '.fase-ai-local', 'etapas', '01-setup');
     fs.mkdirSync(phaseDir, { recursive: true });
     fs.writeFileSync(
       path.join(phaseDir, '01-RESEARCH.md'),
@@ -423,7 +423,7 @@ describe('validate health command', () => {
     writeMinimalStateMd(tmpDir, '# Session State\n\nEtapa 1 in progress.\n');
     writeValidConfigJson(tmpDir);
     // Create phase dir with both RESEARCH.md and VALIDATION.md
-    const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', '01-setup');
+    const phaseDir = path.join(tmpDir, '.fase-ai-local', 'etapas', '01-setup');
     fs.mkdirSync(phaseDir, { recursive: true });
     fs.writeFileSync(
       path.join(phaseDir, '01-RESEARCH.md'),
@@ -452,7 +452,7 @@ describe('validate health command', () => {
     writeMinimalStateMd(tmpDir, '# Session State\n\nEtapa 1 in progress.\n');
     writeValidConfigJson(tmpDir);
     // Create valid phase dir matching ROADMAP
-    const phaseDir = path.join(tmpDir, '.planejamento', 'etapas', '01-a');
+    const phaseDir = path.join(tmpDir, '.fase-ai-local', 'etapas', '01-a');
     fs.mkdirSync(phaseDir, { recursive: true });
     // Add PLAN+SUMMARY so no I001
     fs.writeFileSync(path.join(phaseDir, '01-01-PLAN.md'), '# Plan\n');
@@ -472,7 +472,7 @@ describe('validate health command', () => {
     writeMinimalRoadmap(tmpDir, ['1']);
     writeMinimalStateMd(tmpDir);
     // No config.json → W003 (warning, not error)
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.fase-ai-local', 'etapas', '01-a'), { recursive: true });
 
     const result = runGsdTools('validate health', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
@@ -494,10 +494,10 @@ describe('validate health --repair command', () => {
   beforeEach(() => {
     tmpDir = createTempProject();
     // Set up base project with ROADMAP and PROJECT.md so repairs are triggered
-    // (E001, E003 are not repairable so we always need .planejamento/ and ROADMAP.md)
+    // (E001, E003 are not repairable so we always need .fase-ai-local/ and ROADMAP.md)
     writeMinimalProjectMd(tmpDir);
     writeMinimalRoadmap(tmpDir, ['1']);
-    fs.mkdirSync(path.join(tmpDir, '.planejamento', 'etapas', '01-a'), { recursive: true });
+    fs.mkdirSync(path.join(tmpDir, '.fase-ai-local', 'etapas', '01-a'), { recursive: true });
   });
 
   afterEach(() => {
@@ -508,7 +508,7 @@ describe('validate health --repair command', () => {
     // STATE.md present so no STATE repair; no config.json
     writeMinimalStateMd(tmpDir, '# Session State\n\nEtapa 1 in progress.\n');
     // Ensure no config.json
-    const configPath = path.join(tmpDir, '.planejamento', 'config.json');
+    const configPath = path.join(tmpDir, '.fase-ai-local', 'config.json');
     if (fs.existsSync(configPath)) fs.unlinkSync(configPath);
 
     const result = runGsdTools('validate health --repair', tmpDir);
@@ -531,7 +531,7 @@ describe('validate health --repair command', () => {
 
   test('resets config.json when JSON is invalid', () => {
     writeMinimalStateMd(tmpDir, '# Session State\n\nEtapa 1 in progress.\n');
-    const configPath = path.join(tmpDir, '.planejamento', 'config.json');
+    const configPath = path.join(tmpDir, '.fase-ai-local', 'config.json');
     fs.writeFileSync(configPath, '{broken json');
 
     const result = runGsdTools('validate health --repair', tmpDir);
@@ -553,7 +553,7 @@ describe('validate health --repair command', () => {
   test('regenerates STATE.md when missing', () => {
     writeValidConfigJson(tmpDir);
     // No STATE.md
-    const statePath = path.join(tmpDir, '.planejamento', 'STATE.md');
+    const statePath = path.join(tmpDir, '.fase-ai-local', 'STATE.md');
     if (fs.existsSync(statePath)) fs.unlinkSync(statePath);
 
     const result = runGsdTools('validate health --repair', tmpDir);
@@ -576,7 +576,7 @@ describe('validate health --repair command', () => {
 
   test('backs up existing STATE.md before regenerating', () => {
     writeValidConfigJson(tmpDir);
-    const statePath = path.join(tmpDir, '.planejamento', 'STATE.md');
+    const statePath = path.join(tmpDir, '.fase-ai-local', 'STATE.md');
     const originalContent = '# Session State\n\nOriginal content here.\n';
     fs.writeFileSync(statePath, originalContent);
 
@@ -596,7 +596,7 @@ describe('validate health --repair command', () => {
     );
 
     // Verify a .bak- file exists alongside STATE.md
-    const planningDir = path.join(tmpDir, '.planejamento');
+    const planningDir = path.join(tmpDir, '.fase-ai-local');
     const planningFiles = fs.readdirSync(planningDir);
     const backupFile = planningFiles.find(f => f.startsWith('STATE.md.bak-'));
     assert.ok(backupFile, `Expected a STATE.md.bak- file. Found files: ${planningFiles.join(', ')}`);
@@ -609,7 +609,7 @@ describe('validate health --repair command', () => {
   test('adds nyquist_validation key to config.json via addNyquistKey repair', () => {
     writeMinimalStateMd(tmpDir, '# Session State\n\nEtapa 1 in progress.\n');
     // Config with workflow section but missing nyquist_validation
-    const configPath = path.join(tmpDir, '.planejamento', 'config.json');
+    const configPath = path.join(tmpDir, '.fase-ai-local', 'config.json');
     fs.writeFileSync(
       configPath,
       JSON.stringify({ model_profile: 'balanced', workflow: { research: true } }, null, 2)
@@ -634,9 +634,9 @@ describe('validate health --repair command', () => {
 
   test('reports repairable_count correctly', () => {
     // No config.json (W003, repairable=true) and no STATE.md (E004, repairable=true)
-    const configPath = path.join(tmpDir, '.planejamento', 'config.json');
+    const configPath = path.join(tmpDir, '.fase-ai-local', 'config.json');
     if (fs.existsSync(configPath)) fs.unlinkSync(configPath);
-    const statePath = path.join(tmpDir, '.planejamento', 'STATE.md');
+    const statePath = path.join(tmpDir, '.fase-ai-local', 'STATE.md');
     if (fs.existsSync(statePath)) fs.unlinkSync(statePath);
 
     // Run WITHOUT --repair to just check repairable_count

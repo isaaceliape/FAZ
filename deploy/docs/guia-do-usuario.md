@@ -227,7 +227,7 @@ O auditor nunca modifica o código de implementação — apenas arquivos de tes
 
 ## Referência de Configuração
 
-O FASE armazena configurações do projeto em `.planejamento/config.json`. Configure durante `/fase-novo-projeto` ou atualize depois com `/fase-configuracoes`.
+O FASE armazena configurações do projeto em `.fase-ai-local/config.json`. Configure durante `/fase-novo-projeto` ou atualize depois com `/fase-configuracoes`.
 
 ### Esquema Completo do config.json
 
@@ -266,10 +266,10 @@ O FASE armazena configurações do projeto em `.planejamento/config.json`. Confi
 
 | Configuração | Opções | Padrão | O que Controla |
 |-------------|--------|--------|----------------|
-| `planning.commit_docs` | `true`, `false` | `true` | Se os arquivos de `.planejamento/` são commitados no git |
-| `planning.search_gitignored` | `true`, `false` | `false` | Adiciona `--no-ignore` a buscas amplas para incluir `.planejamento/` |
+| `planning.commit_docs` | `true`, `false` | `true` | Se os arquivos de `.fase-ai-local/` são commitados no git |
+| `planning.search_gitignored` | `true`, `false` | `false` | Adiciona `--no-ignore` a buscas amplas para incluir `.fase-ai-local/` |
 
-> **Nota:** Se `.planejamento/` está no `.gitignore`, `commit_docs` é automaticamente `false` independente do valor da configuração.
+> **Nota:** Se `.fase-ai-local/` está no `.gitignore`, `commit_docs` é automaticamente `false` independente do valor da configuração.
 
 ### Opções de Fluxo de Trabalho
 
@@ -405,7 +405,7 @@ claude --dangerously-skip-permissions
 
 ### "Projeto já inicializado"
 
-Você executou `/fase-novo-projeto` mas `.planejamento/PROJETO.md` já existe. Esse é um mecanismo de segurança. Se quiser recomeçar, delete o diretório `.planejamento/` primeiro.
+Você executou `/fase-novo-projeto` mas `.fase-ai-local/PROJETO.md` já existe. Esse é um mecanismo de segurança. Se quiser recomeçar, delete o diretório `.fase-ai-local/` primeiro.
 
 ### Degradação de Contexto em Sessões Longas
 
@@ -433,7 +433,7 @@ Mude para o perfil budget: `/fase-definir-perfil budget`. Desabilite os agentes 
 
 ### Trabalhando em Projeto Sensível/Privado
 
-Defina `commit_docs: false` durante `/fase-novo-projeto` ou via `/fase-configuracoes`. Adicione `.planejamento/` ao seu `.gitignore`. Os artefatos de planejamento ficam locais e nunca tocam o git.
+Defina `commit_docs: false` durante `/fase-novo-projeto` ou via `/fase-configuracoes`. Adicione `.fase-ai-local/` ao seu `.gitignore`. Os artefatos de planejamento ficam locais e nunca tocam o git.
 
 ### Atualização do FASE Sobrescreveu Minhas Mudanças Locais
 
@@ -466,7 +466,7 @@ Existe uma solução conhecida para um bug de classificação do Claude Code. Os
 Para referência, aqui está o que o FASE cria no seu projeto:
 
 ```
-.planejamento/
+.fase-ai-local/
   PROJETO.md              # Visão e contexto do projeto (sempre carregado)
   REQUISITOS.md           # Requisitos v1/v2 com escopo e IDs
   PLANO-ENTREGAS.md       # Divisão de fases com rastreamento de status

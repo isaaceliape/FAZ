@@ -395,8 +395,8 @@ function cmdVerifyKeyLinks(cwd, planFilePath, raw) {
 }
 
 function cmdValidateConsistency(cwd, raw) {
-  const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
-  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+  const roadmapPath = path.join(cwd, '.fase-ai-local', 'ROADMAP.md');
+  const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
   const errors = [];
   const warnings = [];
 
@@ -515,7 +515,7 @@ function cmdValidateConsistency(cwd, raw) {
 }
 
 function cmdValidateHealth(cwd, options, raw) {
-  const planejamentoDir = path.join(cwd, '.planejamento');
+  const planejamentoDir = path.join(cwd, '.fase-ai-local');
   const projectPath = path.join(planejamentoDir, 'PROJECT.md');
   const roadmapPath = path.join(planejamentoDir, 'ROADMAP.md');
   const statePath = path.join(planejamentoDir, 'STATE.md');
@@ -535,9 +535,9 @@ function cmdValidateHealth(cwd, options, raw) {
     else info.push(issue);
   };
 
-  // ─── Check 1: .planejamento/ exists ───────────────────────────────────────────
+  // ─── Check 1: .fase-ai-local/ exists ───────────────────────────────────────────
   if (!fs.existsSync(planejamentoDir)) {
-    addIssue('error', 'E001', 'diretório .planejamento/ não encontrado', 'Execute /gsd:novo-projeto para inicializar');
+    addIssue('error', 'E001', 'diretório .fase-ai-local/ não encontrado', 'Execute /gsd:novo-projeto para inicializar');
     output({
       status: 'quebrado',
       errors,
@@ -749,7 +749,7 @@ function cmdValidateHealth(cwd, options, raw) {
             const milestone = getMilestoneInfo(cwd);
             let stateContent = `# Estado da Sessão\n\n`;
             stateContent += `## Referência do Projeto\n\n`;
-            stateContent += `Veja: .planejamento/PROJECT.md\n\n`;
+            stateContent += `Veja: .fase-ai-local/PROJECT.md\n\n`;
             stateContent += `## Posição\n\n`;
             stateContent += `**Marco:** ${milestone.version} ${milestone.name}\n`;
             stateContent += `**Fase atual:** (determinando...)\n`;

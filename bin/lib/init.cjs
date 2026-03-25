@@ -68,13 +68,13 @@ function cmdInitExecutePhase(cwd, phase, raw) {
     milestone_slug: generateSlugInternal(milestone.name),
 
     // File existence
-    state_exists: pathExistsInternal(cwd, '.planejamento/STATE.md'),
-    roadmap_exists: pathExistsInternal(cwd, '.planejamento/ROADMAP.md'),
-    config_exists: pathExistsInternal(cwd, '.planejamento/config.json'),
+    state_exists: pathExistsInternal(cwd, '.fase-ai-local/STATE.md'),
+    roadmap_exists: pathExistsInternal(cwd, '.fase-ai-local/ROADMAP.md'),
+    config_exists: pathExistsInternal(cwd, '.fase-ai-local/config.json'),
     // File paths
-    state_path: '.planejamento/STATE.md',
-    roadmap_path: '.planejamento/ROADMAP.md',
-    config_path: '.planejamento/config.json',
+    state_path: '.fase-ai-local/STATE.md',
+    roadmap_path: '.fase-ai-local/ROADMAP.md',
+    config_path: '.fase-ai-local/config.json',
   };
 
   output(result, raw);
@@ -123,13 +123,13 @@ function cmdInitPlanPhase(cwd, phase, raw) {
     plan_count: phaseInfo?.plans?.length || 0,
 
     // Environment
-    planning_exists: pathExistsInternal(cwd, '.planejamento'),
-    roadmap_exists: pathExistsInternal(cwd, '.planejamento/ROADMAP.md'),
+    planning_exists: pathExistsInternal(cwd, '.fase-ai-local'),
+    roadmap_exists: pathExistsInternal(cwd, '.fase-ai-local/ROADMAP.md'),
 
     // File paths
-    state_path: '.planejamento/STATE.md',
-    roadmap_path: '.planejamento/ROADMAP.md',
-    requirements_path: '.planejamento/REQUIREMENTS.md',
+    state_path: '.fase-ai-local/STATE.md',
+    roadmap_path: '.fase-ai-local/ROADMAP.md',
+    requirements_path: '.fase-ai-local/REQUIREMENTS.md',
   };
 
   if (phaseInfo?.directory) {
@@ -195,15 +195,15 @@ function cmdInitNewProject(cwd, raw) {
     commit_docs: config.commit_docs,
 
     // Existing state
-    project_exists: pathExistsInternal(cwd, '.planejamento/PROJECT.md'),
-    has_codebase_map: pathExistsInternal(cwd, '.planejamento/codebase'),
-    planning_exists: pathExistsInternal(cwd, '.planejamento'),
+    project_exists: pathExistsInternal(cwd, '.fase-ai-local/PROJECT.md'),
+    has_codebase_map: pathExistsInternal(cwd, '.fase-ai-local/codebase'),
+    planning_exists: pathExistsInternal(cwd, '.fase-ai-local'),
 
     // Brownfield detection
     has_existing_code: hasCode,
     has_package_file: hasPackageFile,
     is_brownfield: hasCode || hasPackageFile,
-    needs_codebase_map: (hasCode || hasPackageFile) && !pathExistsInternal(cwd, '.planejamento/codebase'),
+    needs_codebase_map: (hasCode || hasPackageFile) && !pathExistsInternal(cwd, '.fase-ai-local/codebase'),
 
     // Git state
     has_git: pathExistsInternal(cwd, '.git'),
@@ -212,7 +212,7 @@ function cmdInitNewProject(cwd, raw) {
     brave_search_available: hasBraveSearch,
 
     // File paths
-    project_path: '.planejamento/PROJECT.md',
+    project_path: '.fase-ai-local/PROJECT.md',
   };
 
   output(result, raw);
@@ -237,14 +237,14 @@ function cmdInitNewMilestone(cwd, raw) {
     current_milestone_name: milestone.name,
 
     // File existence
-    project_exists: pathExistsInternal(cwd, '.planejamento/PROJECT.md'),
-    roadmap_exists: pathExistsInternal(cwd, '.planejamento/ROADMAP.md'),
-    state_exists: pathExistsInternal(cwd, '.planejamento/STATE.md'),
+    project_exists: pathExistsInternal(cwd, '.fase-ai-local/PROJECT.md'),
+    roadmap_exists: pathExistsInternal(cwd, '.fase-ai-local/ROADMAP.md'),
+    state_exists: pathExistsInternal(cwd, '.fase-ai-local/STATE.md'),
 
     // File paths
-    project_path: '.planejamento/PROJECT.md',
-    roadmap_path: '.planejamento/ROADMAP.md',
-    state_path: '.planejamento/STATE.md',
+    project_path: '.fase-ai-local/PROJECT.md',
+    roadmap_path: '.fase-ai-local/ROADMAP.md',
+    state_path: '.fase-ai-local/STATE.md',
   };
 
   output(result, raw);
@@ -256,7 +256,7 @@ function cmdInitQuick(cwd, description, raw) {
   const slug = description ? generateSlugInternal(description)?.substring(0, 40) : null;
 
   // Find next quick task number
-  const quickDir = path.join(cwd, '.planejamento', 'quick');
+  const quickDir = path.join(cwd, '.fase-ai-local', 'quick');
   let nextNum = 1;
   try {
     const existing = fs.readdirSync(quickDir)
@@ -288,12 +288,12 @@ function cmdInitQuick(cwd, description, raw) {
     timestamp: now.toISOString(),
 
     // Paths
-    quick_dir: '.planejamento/quick',
-    task_dir: slug ? `.planejamento/quick/${nextNum}-${slug}` : null,
+    quick_dir: '.fase-ai-local/quick',
+    task_dir: slug ? `.fase-ai-local/quick/${nextNum}-${slug}` : null,
 
     // File existence
-    roadmap_exists: pathExistsInternal(cwd, '.planejamento/ROADMAP.md'),
-    planning_exists: pathExistsInternal(cwd, '.planejamento'),
+    roadmap_exists: pathExistsInternal(cwd, '.fase-ai-local/ROADMAP.md'),
+    planning_exists: pathExistsInternal(cwd, '.fase-ai-local'),
 
   };
 
@@ -306,20 +306,20 @@ function cmdInitResume(cwd, raw) {
   // Check for interrupted agent
   let interruptedAgentId = null;
   try {
-    interruptedAgentId = fs.readFileSync(path.join(cwd, '.planejamento', 'current-agent-id.txt'), 'utf-8').trim();
+    interruptedAgentId = fs.readFileSync(path.join(cwd, '.fase-ai-local', 'current-agent-id.txt'), 'utf-8').trim();
   } catch {}
 
   const result = {
     // File existence
-    state_exists: pathExistsInternal(cwd, '.planejamento/STATE.md'),
-    roadmap_exists: pathExistsInternal(cwd, '.planejamento/ROADMAP.md'),
-    project_exists: pathExistsInternal(cwd, '.planejamento/PROJECT.md'),
-    planning_exists: pathExistsInternal(cwd, '.planejamento'),
+    state_exists: pathExistsInternal(cwd, '.fase-ai-local/STATE.md'),
+    roadmap_exists: pathExistsInternal(cwd, '.fase-ai-local/ROADMAP.md'),
+    project_exists: pathExistsInternal(cwd, '.fase-ai-local/PROJECT.md'),
+    planning_exists: pathExistsInternal(cwd, '.fase-ai-local'),
 
     // File paths
-    state_path: '.planejamento/STATE.md',
-    roadmap_path: '.planejamento/ROADMAP.md',
-    project_path: '.planejamento/PROJECT.md',
+    state_path: '.fase-ai-local/STATE.md',
+    roadmap_path: '.fase-ai-local/ROADMAP.md',
+    project_path: '.fase-ai-local/PROJECT.md',
 
     // Agent state
     has_interrupted_agent: !!interruptedAgentId,
@@ -407,13 +407,13 @@ function cmdInitPhaseOp(cwd, phase, raw) {
     plan_count: phaseInfo?.plans?.length || 0,
 
     // File existence
-    roadmap_exists: pathExistsInternal(cwd, '.planejamento/ROADMAP.md'),
-    planning_exists: pathExistsInternal(cwd, '.planejamento'),
+    roadmap_exists: pathExistsInternal(cwd, '.fase-ai-local/ROADMAP.md'),
+    planning_exists: pathExistsInternal(cwd, '.fase-ai-local'),
 
     // File paths
-    state_path: '.planejamento/STATE.md',
-    roadmap_path: '.planejamento/ROADMAP.md',
-    requirements_path: '.planejamento/REQUIREMENTS.md',
+    state_path: '.fase-ai-local/STATE.md',
+    roadmap_path: '.fase-ai-local/ROADMAP.md',
+    requirements_path: '.fase-ai-local/REQUIREMENTS.md',
   };
 
   if (phaseInfo?.directory) {
@@ -447,7 +447,7 @@ function cmdInitTodos(cwd, area, raw) {
   const now = new Date();
 
   // List todos (reuse existing logic)
-  const pendingDir = path.join(cwd, '.planejamento', 'todos', 'pending');
+  const pendingDir = path.join(cwd, '.fase-ai-local', 'todos', 'pending');
   let count = 0;
   const todos = [];
 
@@ -469,7 +469,7 @@ function cmdInitTodos(cwd, area, raw) {
           created: createdMatch ? createdMatch[1].trim() : 'unknown',
           title: titleMatch ? titleMatch[1].trim() : 'Sem título',
           area: todoArea,
-          path: '.planejamento/todos/pending/' + file,
+          path: '.fase-ai-local/todos/pending/' + file,
         });
       } catch {}
     }
@@ -489,13 +489,13 @@ function cmdInitTodos(cwd, area, raw) {
     area_filter: area || null,
 
     // Paths
-    pending_dir: '.planejamento/todos/pending',
-    completed_dir: '.planejamento/todos/completed',
+    pending_dir: '.fase-ai-local/todos/pending',
+    completed_dir: '.fase-ai-local/todos/completed',
 
     // File existence
-    planning_exists: pathExistsInternal(cwd, '.planejamento'),
-    todos_dir_exists: pathExistsInternal(cwd, '.planejamento/todos'),
-    pending_dir_exists: pathExistsInternal(cwd, '.planejamento/todos/pending'),
+    planning_exists: pathExistsInternal(cwd, '.fase-ai-local'),
+    todos_dir_exists: pathExistsInternal(cwd, '.fase-ai-local/todos'),
+    pending_dir_exists: pathExistsInternal(cwd, '.fase-ai-local/todos/pending'),
   };
 
   output(result, raw);
@@ -508,7 +508,7 @@ function cmdInitMilestoneOp(cwd, raw) {
   // Count phases
   let phaseCount = 0;
   let completedPhases = 0;
-  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+  const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
   try {
     const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
     const dirs = entries.filter(e => e.isDirectory()).map(e => e.name);
@@ -525,7 +525,7 @@ function cmdInitMilestoneOp(cwd, raw) {
   } catch {}
 
   // Check archive
-  const archiveDir = path.join(cwd, '.planejamento', 'archive');
+  const archiveDir = path.join(cwd, '.fase-ai-local', 'archive');
   let archivedMilestones = [];
   try {
     archivedMilestones = fs.readdirSync(archiveDir, { withFileTypes: true })
@@ -552,11 +552,11 @@ function cmdInitMilestoneOp(cwd, raw) {
     archive_count: archivedMilestones.length,
 
     // File existence
-    project_exists: pathExistsInternal(cwd, '.planejamento/PROJECT.md'),
-    roadmap_exists: pathExistsInternal(cwd, '.planejamento/ROADMAP.md'),
-    state_exists: pathExistsInternal(cwd, '.planejamento/STATE.md'),
-    archive_exists: pathExistsInternal(cwd, '.planejamento/archive'),
-    phases_dir_exists: pathExistsInternal(cwd, '.planejamento/phases'),
+    project_exists: pathExistsInternal(cwd, '.fase-ai-local/PROJECT.md'),
+    roadmap_exists: pathExistsInternal(cwd, '.fase-ai-local/ROADMAP.md'),
+    state_exists: pathExistsInternal(cwd, '.fase-ai-local/STATE.md'),
+    archive_exists: pathExistsInternal(cwd, '.fase-ai-local/archive'),
+    phases_dir_exists: pathExistsInternal(cwd, '.fase-ai-local/phases'),
   };
 
   output(result, raw);
@@ -566,7 +566,7 @@ function cmdInitMapCodebase(cwd, raw) {
   const config = loadConfig(cwd);
 
   // Check for existing codebase maps
-  const codebaseDir = path.join(cwd, '.planejamento', 'codebase');
+  const codebaseDir = path.join(cwd, '.fase-ai-local', 'codebase');
   let existingMaps = [];
   try {
     existingMaps = fs.readdirSync(codebaseDir).filter(f => f.endsWith('.md'));
@@ -582,15 +582,15 @@ function cmdInitMapCodebase(cwd, raw) {
     parallelization: config.parallelization,
 
     // Paths
-    codebase_dir: '.planejamento/codebase',
+    codebase_dir: '.fase-ai-local/codebase',
 
     // Existing maps
     existing_maps: existingMaps,
     has_maps: existingMaps.length > 0,
 
     // File existence
-    planning_exists: pathExistsInternal(cwd, '.planejamento'),
-    codebase_dir_exists: pathExistsInternal(cwd, '.planejamento/codebase'),
+    planning_exists: pathExistsInternal(cwd, '.fase-ai-local'),
+    codebase_dir_exists: pathExistsInternal(cwd, '.fase-ai-local/codebase'),
   };
 
   output(result, raw);
@@ -601,7 +601,7 @@ function cmdInitProgress(cwd, raw) {
   const milestone = getMilestoneInfo(cwd);
 
   // Analyze phases
-  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+  const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
   const phases = [];
   let etapaAtual = null;
   let nextEtapa = null;
@@ -629,7 +629,7 @@ function cmdInitProgress(cwd, raw) {
       const phaseInfo = {
         number: etapaNumber,
         name: etapaNome,
-        directory: '.planejamento/phases/' + dir,
+        directory: '.fase-ai-local/phases/' + dir,
         status,
         plan_count: plans.length,
         summary_count: summaries.length,
@@ -651,7 +651,7 @@ function cmdInitProgress(cwd, raw) {
   // Check for paused work
   let pausedAt = null;
   try {
-    const state = fs.readFileSync(path.join(cwd, '.planejamento', 'STATE.md'), 'utf-8');
+    const state = fs.readFileSync(path.join(cwd, '.fase-ai-local', 'STATE.md'), 'utf-8');
     const pauseMatch = state.match(/\*\*Paused At:\*\*\s*(.+)/);
     if (pauseMatch) pausedAt = pauseMatch[1].trim();
   } catch {}
@@ -681,14 +681,14 @@ function cmdInitProgress(cwd, raw) {
     has_work_in_progress: !!etapaAtual,
 
     // File existence
-    project_exists: pathExistsInternal(cwd, '.planejamento/PROJECT.md'),
-    roadmap_exists: pathExistsInternal(cwd, '.planejamento/ROADMAP.md'),
-    state_exists: pathExistsInternal(cwd, '.planejamento/STATE.md'),
+    project_exists: pathExistsInternal(cwd, '.fase-ai-local/PROJECT.md'),
+    roadmap_exists: pathExistsInternal(cwd, '.fase-ai-local/ROADMAP.md'),
+    state_exists: pathExistsInternal(cwd, '.fase-ai-local/STATE.md'),
     // File paths
-    state_path: '.planejamento/STATE.md',
-    roadmap_path: '.planejamento/ROADMAP.md',
-    project_path: '.planejamento/PROJECT.md',
-    config_path: '.planejamento/config.json',
+    state_path: '.fase-ai-local/STATE.md',
+    roadmap_path: '.fase-ai-local/ROADMAP.md',
+    project_path: '.fase-ai-local/PROJECT.md',
+    config_path: '.fase-ai-local/config.json',
   };
 
   output(result, raw);

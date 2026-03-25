@@ -17,7 +17,7 @@ Executar tarefas pequenas e ad-hoc com garantias FASE (commits atômicos, rastre
 
 Modo rápido é o mesmo sistema com caminho mais curto:
 - Spawn fase-planner (modo rápido) + fase-executor(s)
-- Tarefas rápidas vivem em `.planejamento/quick/` separado de fases planejadas
+- Tarefas rápidas vivem em `.fase-ai-local/quick/` separado de fases planejadas
 - Atualiza tabela "Tarefas Rápidas Completas" do STATE.md (NÃO ROADMAP.md)
 
 **Padrão:** Pula pesquisa, discussão, plan-checker, verifier. Use quando souber exatamente o que fazer.

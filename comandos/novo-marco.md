@@ -15,11 +15,11 @@ Iniciar um novo milestone: questionamento → research (opcional) → requiremen
 Equivalente brownfield de new-project. Projeto existe, PROJECT.md tem histórico. Coleta "o que vem depois", atualiza PROJECT.md, então executa ciclo requirements → roadmap.
 
 **Cria/Atualiza:**
-- `.planejamento/PROJECT.md` — atualizado com novos objetivos do milestone
-- `.planejamento/research/` — pesquisa de domínio (opcional, apenas features NOVAS)
-- `.planejamento/REQUIREMENTS.md` — requisitos definidos para este milestone
-- `.planejamento/ROADMAP.md` — estrutura de fases (continua numeração)
-- `.planejamento/STATE.md` — resetado para novo milestone
+- `.fase-ai-local/PROJECT.md` — atualizado com novos objetivos do milestone
+- `.fase-ai-local/research/` — pesquisa de domínio (opcional, apenas features NOVAS)
+- `.fase-ai-local/REQUIREMENTS.md` — requisitos definidos para este milestone
+- `.fase-ai-local/ROADMAP.md` — estrutura de fases (continua numeração)
+- `.fase-ai-local/STATE.md` — resetado para novo milestone
 
 **Depois:** `/fase-planejar-fase [N]` para iniciar execução.
 </objective>

@@ -39,7 +39,7 @@ Mostra ajuda geral e lista de comandos disponíveis.
 Inicia um novo projeto F.A.S.E. no diretório atual.
 
 **O que faz:**
-- Cria estrutura de pastas `.planejamento/`
+- Cria estrutura de pastas `.fase-ai-local/`
 - Inicializa STATE.md, ROADMAP.md, REQUIREMENTS.md
 - Configura contexto do projeto
 

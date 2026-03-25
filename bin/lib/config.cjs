@@ -7,16 +7,16 @@ const path = require('path');
 const { output, error } = require('./core.cjs');
 
 function cmdConfigEnsureSection(cwd, raw) {
-  const configPath = path.join(cwd, '.planejamento', 'config.json');
-  const planejamentoDir = path.join(cwd, '.planejamento');
+  const configPath = path.join(cwd, '.fase-ai-local', 'config.json');
+  const planejamentoDir = path.join(cwd, '.fase-ai-local');
 
-  // Ensure .planejamento directory exists
+  // Ensure .fase-ai-local directory exists
   try {
     if (!fs.existsSync(planejamentoDir)) {
       fs.mkdirSync(planejamentoDir, { recursive: true });
     }
   } catch (err) {
-    error('Falha ao criar diretório .planejamento: ' + err.message);
+    error('Falha ao criar diretório .fase-ai-local: ' + err.message);
   }
 
   // Check if config already exists
@@ -74,7 +74,7 @@ function cmdConfigEnsureSection(cwd, raw) {
 
   try {
     fs.writeFileSync(configPath, JSON.stringify(defaults, null, 2), 'utf-8');
-    const result = { created: true, path: '.planejamento/config.json' };
+    const result = { created: true, path: '.fase-ai-local/config.json' };
     output(result, raw, 'created');
   } catch (err) {
     error('Falha ao criar config.json: ' + err.message);
@@ -82,7 +82,7 @@ function cmdConfigEnsureSection(cwd, raw) {
 }
 
 function cmdConfigSet(cwd, keyPath, value, raw) {
-  const configPath = path.join(cwd, '.planejamento', 'config.json');
+  const configPath = path.join(cwd, '.fase-ai-local', 'config.json');
 
   if (!keyPath) {
     error('Uso: config-set <chave.caminho> <valor>');
@@ -127,7 +127,7 @@ function cmdConfigSet(cwd, keyPath, value, raw) {
 }
 
 function cmdConfigGet(cwd, keyPath, raw) {
-  const configPath = path.join(cwd, '.planejamento', 'config.json');
+  const configPath = path.join(cwd, '.fase-ai-local', 'config.json');
 
   if (!keyPath) {
     error('Uso: config-get <chave.caminho>');

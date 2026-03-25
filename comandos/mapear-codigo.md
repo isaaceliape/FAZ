@@ -1,6 +1,6 @@
 ---
 name: fase:mapear-codigo
-description: Analisa codebase com agents mapper paralelos para produzir documentos .planejamento/codebase/
+description: Analisa codebase com agents mapper paralelos para produzir documentos .fase-ai-local/codebase/
 argument-hint: "[opcional: área específica para mapear, ex: 'api' ou 'auth']"
 allowed-tools:
   - Read
@@ -14,9 +14,9 @@ allowed-tools:
 <objective>
 Analisar codebase existente usando agents faz-codebase-mapper paralelos para produzir documentos de codebase estruturados.
 
-Cada agent mapper explora uma área de foco e **escreve documentos diretamente** em `.planejamento/codebase/`. O orquestrador apenas recebe confirmações, mantendo uso de contexto mínimo.
+Cada agent mapper explora uma área de foco e **escreve documentos diretamente** em `.fase-ai-local/codebase/`. O orquestrador apenas recebe confirmações, mantendo uso de contexto mínimo.
 
-Output: pasta `.planejamento/codebase/` com 7 documentos estruturados sobre o estado do codebase.
+Output: pasta `.fase-ai-local/codebase/` com 7 documentos estruturados sobre o estado do codebase.
 </objective>
 
 <execution_context>
@@ -27,7 +27,7 @@ Output: pasta `.planejamento/codebase/` com 7 documentos estruturados sobre o es
 Área de foco: $ARGUMENTS (opcional - se fornecido, diz aos agents para focarem em subsystem específico)
 
 **Carregar estado do projeto se existir:**
-Verifique por .planejamento/STATE.md - carrega contexto se projeto já inicializado
+Verifique por .fase-ai-local/STATE.md - carrega contexto se projeto já inicializado
 
 **Este comando pode rodar:**
 - Antes de /fase-novo-projeto (codebases brownfield) - cria mapa do codebase primeiro
@@ -49,8 +49,8 @@ Verifique por .planejamento/STATE.md - carrega contexto se projeto já inicializ
 </when_to_use>
 
 <process>
-1. Verificar se .planejamento/codebase/ já existe (oferecer refrescar ou pular)
-2. Criar estrutura de diretório .planejamento/codebase/
+1. Verificar se .fase-ai-local/codebase/ já existe (oferecer refrescar ou pular)
+2. Criar estrutura de diretório .fase-ai-local/codebase/
 3. Spawnar 4 agents faz-codebase-mapper paralelos:
    - Agent 1: foco tech → escreve STACK.md, INTEGRATIONS.md
    - Agent 2: foco arch → escreve ARCHITECTURE.md, STRUCTURE.md
@@ -63,7 +63,7 @@ Verifique por .planejamento/STATE.md - carrega contexto se projeto já inicializ
 </process>
 
 <success_criteria>
-- [ ] Diretório .planejamento/codebase/ criado
+- [ ] Diretório .fase-ai-local/codebase/ criado
 - [ ] Todos os 7 documentos de codebase escritos por mapper agents
 - [ ] Documentos seguem estrutura do template
 - [ ] Agents paralelos completaram sem erros

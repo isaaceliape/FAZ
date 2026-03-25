@@ -13,23 +13,23 @@ function toPosixPath(p) {
   return p.split(path.sep).join('/');
 }
 
-/** Guardrail: validates that a file path is inside .planejamento directory */
+/** Guardrail: validates that a file path is inside .fase-ai-local directory */
 function ensureInsidePlanejamento(cwd, filePath, operation = 'file operation') {
   const fullPath = path.isAbsolute(filePath) ? filePath : path.join(cwd, filePath);
-  const planejPath = path.join(cwd, '.planejamento');
+  const planejPath = path.join(cwd, '.fase-ai-local');
   const normalizedFull = path.normalize(fullPath);
   const normalizedPlanej = path.normalize(planejPath);
   
   if (!normalizedFull.startsWith(normalizedPlanej + path.sep) && normalizedFull !== normalizedPlanej) {
-    throw new Error(`${operation} must be inside .planejamento/: ${filePath}`);
+    throw new Error(`${operation} must be inside .fase-ai-local/: ${filePath}`);
   }
   return fullPath;
 }
 
-/** Check if a path is inside .planejamento without throwing */
+/** Check if a path is inside .fase-ai-local without throwing */
 function isInsidePlanejamento(cwd, filePath) {
   const fullPath = path.isAbsolute(filePath) ? filePath : path.join(cwd, filePath);
-  const planejPath = path.join(cwd, '.planejamento');
+  const planejPath = path.join(cwd, '.fase-ai-local');
   const normalizedFull = path.normalize(fullPath);
   const normalizedPlanej = path.normalize(planejPath);
   return normalizedFull.startsWith(normalizedPlanej + path.sep) || normalizedFull === normalizedPlanej;
@@ -88,7 +88,7 @@ function safeReadFile(filePath) {
 }
 
 function loadConfig(cwd) {
-  const configPath = path.join(cwd, '.planejamento', 'config.json');
+  const configPath = path.join(cwd, '.fase-ai-local', 'config.json');
   const defaults = {
     model_profile: 'balanced',
     commit_docs: true,
@@ -157,7 +157,7 @@ function isGitIgnored(cwd, targetPath) {
   try {
     // --no-index checks .gitignore rules regardless of whether the file is tracked.
     // Without it, git check-ignore returns "not ignored" for tracked files even when
-    // .gitignore explicitly lists them — a common source of confusion when .planejamento/
+    // .gitignore explicitly lists them — a common source of confusion when .fase-ai-local/
     // was committed before being added to .gitignore.
     execSync('git check-ignore -q --no-index -- ' + targetPath.replace(/[^a-zA-Z0-9._\-/]/g, ''), {
       cwd,
@@ -281,15 +281,15 @@ function searchPhaseInDir(baseDir, relBase, normalized) {
 function findEtapaInternal(cwd, phase) {
   if (!phase) return null;
 
-  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+  const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
   const normalized = normalizeEtapaNome(phase);
 
   // Search current phases first
-  const current = searchPhaseInDir(etapasDir, '.planejamento/phases', normalized);
+  const current = searchPhaseInDir(etapasDir, '.fase-ai-local/phases', normalized);
   if (current) return current;
 
   // Search archived milestone phases (newest first)
-  const milestonesDir = path.join(cwd, '.planejamento', 'milestones');
+  const milestonesDir = path.join(cwd, '.fase-ai-local', 'milestones');
   if (!fs.existsSync(milestonesDir)) return null;
 
   try {
@@ -303,7 +303,7 @@ function findEtapaInternal(cwd, phase) {
     for (const archiveName of archiveDirs) {
       const version = archiveName.match(/^(v[\d.]+)-phases$/)[1];
       const archivePath = path.join(milestonesDir, archiveName);
-      const relBase = '.planejamento/milestones/' + archiveName;
+      const relBase = '.fase-ai-local/milestones/' + archiveName;
       const result = searchPhaseInDir(archivePath, relBase, normalized);
       if (result) {
         result.archived = version;
@@ -316,7 +316,7 @@ function findEtapaInternal(cwd, phase) {
 }
 
 function getArchivedEtapasDirs(cwd) {
-  const milestonesDir = path.join(cwd, '.planejamento', 'milestones');
+  const milestonesDir = path.join(cwd, '.fase-ai-local', 'milestones');
   const results = [];
 
   if (!fs.existsSync(milestonesDir)) return results;
@@ -340,7 +340,7 @@ function getArchivedEtapasDirs(cwd) {
         results.push({
           name: dir,
           milestone: version,
-          basePath: path.join('.planejamento', 'milestones', archiveName),
+          basePath: path.join('.fase-ai-local', 'milestones', archiveName),
           fullPath: path.join(archivePath, dir),
         });
       }
@@ -354,7 +354,7 @@ function getArchivedEtapasDirs(cwd) {
 
 function getRoadmapPhaseInternal(cwd, etapaNum) {
   if (!etapaNum) return null;
-  const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
+  const roadmapPath = path.join(cwd, '.fase-ai-local', 'ROADMAP.md');
   if (!fs.existsSync(roadmapPath)) return null;
 
   try {
@@ -422,7 +422,7 @@ function generateSlugInternal(text) {
 
 function getMilestoneInfo(cwd) {
   try {
-    const roadmap = fs.readFileSync(path.join(cwd, '.planejamento', 'ROADMAP.md'), 'utf-8');
+    const roadmap = fs.readFileSync(path.join(cwd, '.fase-ai-local', 'ROADMAP.md'), 'utf-8');
 
     // First: check for list-format roadmaps using 🚧 (in-progress) marker
     // e.g. "- 🚧 **v2.1 Belgium** — Phases 24-28 (in progress)"
@@ -463,7 +463,7 @@ function getMilestoneInfo(cwd) {
 function getMilestoneEtapaFilter(cwd) {
   const milestonePhaseNums = new Set();
   try {
-    const roadmap = fs.readFileSync(path.join(cwd, '.planejamento', 'ROADMAP.md'), 'utf-8');
+    const roadmap = fs.readFileSync(path.join(cwd, '.fase-ai-local', 'ROADMAP.md'), 'utf-8');
     const phasePattern = /#{2,4}\s*Phase\s+(\d+[A-Z]?(?:\.\d+)*)\s*:/gi;
     let m;
     while ((m = phasePattern.exec(roadmap)) !== null) {

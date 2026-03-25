@@ -19,10 +19,10 @@ Output: Milestone arquivado (roteiro + requisitos), PROJETO.md evoluído, git ta
 
 <context>
 **Arquivos do projeto:**
-- `.planejamento/ROTEIRO.md`
-- `.planejamento/REQUISITOS.md`
-- `.planejamento/ESTADO.md`
-- `.planejamento/PROJETO.md`
+- `.fase-ai-local/ROTEIRO.md`
+- `.fase-ai-local/REQUISITOS.md`
+- `.fase-ai-local/ESTADO.md`
+- `.fase-ai-local/PROJETO.md`
 
 **Input do usuário:**
 
@@ -35,7 +35,7 @@ Output: Milestone arquivado (roteiro + requisitos), PROJETO.md evoluído, git ta
 
 0. **Cheque por audit:**
 
-   - Procure por `.planejamento/v{{version}}-MARCO-AUDITORIA.md`
+   - Procure por `.fase-ai-local/v{{version}}-MARCO-AUDITORIA.md`
    - Se ausente ou stale: recomenda `/fase-audit-milestone` primeiro
    - Se audit status é `gaps_found`: recomenda `/fase-plan-milestone-gaps` primeiro
    - Se audit status é `passed`: prossegue para passo 1
@@ -76,17 +76,17 @@ Output: Milestone arquivado (roteiro + requisitos), PROJETO.md evoluído, git ta
 
 4. **Arquive milestone:**
 
-   - Crie `.planejamento/marcos/v{{version}}-ROTEIRO.md`
+   - Crie `.fase-ai-local/marcos/v{{version}}-ROTEIRO.md`
    - Extraia detalhes completos das fases do ROTEIRO.md
    - Preencha template milestone-archive.md
    - Atualize ROTEIRO.md para resumo one-line com link
 
 5. **Arquive requisitos:**
 
-   - Crie `.planejamento/marcos/v{{version}}-REQUISITOS.md`
+   - Crie `.fase-ai-local/marcos/v{{version}}-REQUISITOS.md`
    - Marque todos requisitos v1 como completos (checkboxes marcados)
    - Note outcomes dos requisitos (validated, adjusted, dropped)
-   - Delete `.planejamento/REQUISITOS.md` (fresh one criado para próximo milestone)
+   - Delete `.fase-ai-local/REQUISITOS.md` (fresh one criado para próximo milestone)
 
 6. **Atualize PROJETO.md:**
 
@@ -108,9 +108,9 @@ Output: Milestone arquivado (roteiro + requisitos), PROJETO.md evoluído, git ta
 
 <success_criteria>
 
-- Milestone arquivado em `.planejamento/marcos/v{{version}}-ROTEIRO.md`
-- Requirements arquivados em `.planejamento/marcos/v{{version}}-REQUISITOS.md`
-- `.planejamento/REQUISITOS.md` deletado (fresh para próximo milestone)
+- Milestone arquivado em `.fase-ai-local/marcos/v{{version}}-ROTEIRO.md`
+- Requirements arquivados em `.fase-ai-local/marcos/v{{version}}-REQUISITOS.md`
+- `.fase-ai-local/REQUISITOS.md` deletado (fresh para próximo milestone)
 - ROTEIRO.md colapsado para entrada one-line
 - PROJETO.md atualizado com current state
 - Git tag v{{version}} criada

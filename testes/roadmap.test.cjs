@@ -21,7 +21,7 @@ describe('roadmap get-phase command', () => {
 
   test('extracts phase section from ROADMAP.md', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap v1.0
 
 ## Phases
@@ -50,7 +50,7 @@ Some description here.
 
   test('returns not found for missing phase', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap v1.0
 
 ### Etapa 1: Foundation
@@ -67,7 +67,7 @@ Some description here.
 
   test('handles decimal phase numbers', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap
 
 ### Etapa 2: Main
@@ -89,7 +89,7 @@ Some description here.
 
   test('extracts full section content', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap
 
 ### Etapa 1: Setup
@@ -125,7 +125,7 @@ This phase covers:
 
   test('accepts ## phase headers (two hashes)', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap v1.0
 
 ## Etapa 1: Foundation
@@ -148,7 +148,7 @@ This phase covers:
 
   test('detects malformed ROADMAP with summary list but no detail sections', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap v1.0
 
 ## Phases
@@ -194,7 +194,7 @@ describe('roadmap analyze command', () => {
 
   test('parses phases with goals and disk status', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap v1.0
 
 ### Etapa 1: Foundation
@@ -209,12 +209,12 @@ describe('roadmap analyze command', () => {
     );
 
     // Create phase dirs with varying completion
-    const p1 = path.join(tmpDir, '.planejamento', 'etapas', '01-foundation');
+    const p1 = path.join(tmpDir, '.fase-ai-local', 'etapas', '01-foundation');
     fs.mkdirSync(p1, { recursive: true });
     fs.writeFileSync(path.join(p1, '01-01-PLAN.md'), '# Plan');
     fs.writeFileSync(path.join(p1, '01-01-SUMMARY.md'), '# Summary');
 
-    const p2 = path.join(tmpDir, '.planejamento', 'etapas', '02-authentication');
+    const p2 = path.join(tmpDir, '.fase-ai-local', 'etapas', '02-authentication');
     fs.mkdirSync(p2, { recursive: true });
     fs.writeFileSync(path.join(p2, '02-01-PLAN.md'), '# Plan');
 
@@ -235,7 +235,7 @@ describe('roadmap analyze command', () => {
 
   test('extracts goals and dependencies', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap
 
 ### Etapa 1: Setup
@@ -276,7 +276,7 @@ describe('roadmap analyze disk status variants', () => {
 
   test('returns researched status for phase dir with only RESEARCH.md', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap
 
 ### Etapa 1: Exploration
@@ -284,7 +284,7 @@ describe('roadmap analyze disk status variants', () => {
 `
     );
 
-    const p1 = path.join(tmpDir, '.planejamento', 'etapas', '01-exploration');
+    const p1 = path.join(tmpDir, '.fase-ai-local', 'etapas', '01-exploration');
     fs.mkdirSync(p1, { recursive: true });
     fs.writeFileSync(path.join(p1, '01-RESEARCH.md'), '# Research notes');
 
@@ -298,7 +298,7 @@ describe('roadmap analyze disk status variants', () => {
 
   test('returns discussed status for phase dir with only CONTEXT.md', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap
 
 ### Etapa 1: Discussion
@@ -306,7 +306,7 @@ describe('roadmap analyze disk status variants', () => {
 `
     );
 
-    const p1 = path.join(tmpDir, '.planejamento', 'etapas', '01-discussion');
+    const p1 = path.join(tmpDir, '.fase-ai-local', 'etapas', '01-discussion');
     fs.mkdirSync(p1, { recursive: true });
     fs.writeFileSync(path.join(p1, '01-CONTEXT.md'), '# Context notes');
 
@@ -320,7 +320,7 @@ describe('roadmap analyze disk status variants', () => {
 
   test('returns empty status for phase dir with no recognized files', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap
 
 ### Etapa 1: Empty
@@ -328,7 +328,7 @@ describe('roadmap analyze disk status variants', () => {
 `
     );
 
-    const p1 = path.join(tmpDir, '.planejamento', 'etapas', '01-empty');
+    const p1 = path.join(tmpDir, '.fase-ai-local', 'etapas', '01-empty');
     fs.mkdirSync(p1, { recursive: true });
 
     const result = runGsdTools('roadmap analyze', tmpDir);
@@ -356,7 +356,7 @@ describe('roadmap analyze milestone extraction', () => {
 
   test('extracts milestone headings and version numbers', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap
 
 ## v1.0 Test Infrastructure
@@ -401,7 +401,7 @@ describe('roadmap analyze missing phase details', () => {
 
   test('detects checklist-only phases missing detail sections', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap
 
 - [ ] **Etapa 1: Foundation** - Set up project
@@ -423,7 +423,7 @@ describe('roadmap analyze missing phase details', () => {
 
   test('returns null when all checklist phases have detail sections', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap
 
 - [ ] **Etapa 1: Foundation** - Set up project
@@ -462,7 +462,7 @@ describe('roadmap get-phase success criteria', () => {
 
   test('extracts success_criteria array from phase section', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap
 
 ### Etapa 1: Test
@@ -491,7 +491,7 @@ describe('roadmap get-phase success criteria', () => {
 
   test('returns empty array when no success criteria present', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap
 
 ### Etapa 1: Simple
@@ -532,7 +532,7 @@ describe('roadmap update-plan-progress command', () => {
 
   test('nonexistent phase returns error', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap
 
 ### Etapa 1: Test
@@ -547,7 +547,7 @@ describe('roadmap update-plan-progress command', () => {
 
   test('no plans found returns updated false', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap
 
 ### Etapa 1: Test
@@ -556,7 +556,7 @@ describe('roadmap update-plan-progress command', () => {
     );
 
     // Create phase dir with only a context file (no plans)
-    const p1 = path.join(tmpDir, '.planejamento', 'etapas', '01-test');
+    const p1 = path.join(tmpDir, '.fase-ai-local', 'etapas', '01-test');
     fs.mkdirSync(p1, { recursive: true });
     fs.writeFileSync(path.join(p1, '01-CONTEXT.md'), '# Context');
 
@@ -571,7 +571,7 @@ describe('roadmap update-plan-progress command', () => {
 
   test('updates progress for partial completion', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap
 
 ### Etapa 1: Test
@@ -587,7 +587,7 @@ describe('roadmap update-plan-progress command', () => {
     );
 
     // Create phase dir with 2 plans, 1 summary
-    const p1 = path.join(tmpDir, '.planejamento', 'etapas', '01-test');
+    const p1 = path.join(tmpDir, '.fase-ai-local', 'etapas', '01-test');
     fs.mkdirSync(p1, { recursive: true });
     fs.writeFileSync(path.join(p1, '01-01-PLAN.md'), '# Plan 1');
     fs.writeFileSync(path.join(p1, '01-02-PLAN.md'), '# Plan 2');
@@ -604,13 +604,13 @@ describe('roadmap update-plan-progress command', () => {
     assert.strictEqual(output.complete, false, 'should not be complete');
 
     // Verify file was actually modified
-    const roadmapContent = fs.readFileSync(path.join(tmpDir, '.planejamento', 'ROADMAP.md'), 'utf-8');
+    const roadmapContent = fs.readFileSync(path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'), 'utf-8');
     assert.ok(roadmapContent.includes('1/2'), 'roadmap should contain updated plan count');
   });
 
   test('updates progress and checks checkbox on completion', () => {
     fs.writeFileSync(
-      path.join(tmpDir, '.planejamento', 'ROADMAP.md'),
+      path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'),
       `# Roadmap
 
 - [ ] **Etapa 1: Test** - description
@@ -628,7 +628,7 @@ describe('roadmap update-plan-progress command', () => {
     );
 
     // Create phase dir with 1 plan, 1 summary (complete)
-    const p1 = path.join(tmpDir, '.planejamento', 'etapas', '01-test');
+    const p1 = path.join(tmpDir, '.fase-ai-local', 'etapas', '01-test');
     fs.mkdirSync(p1, { recursive: true });
     fs.writeFileSync(path.join(p1, '01-01-PLAN.md'), '# Plan 1');
     fs.writeFileSync(path.join(p1, '01-01-SUMMARY.md'), '# Summary 1');
@@ -642,7 +642,7 @@ describe('roadmap update-plan-progress command', () => {
     assert.strictEqual(output.status, 'Complete', 'status should be Complete');
 
     // Verify file was actually modified
-    const roadmapContent = fs.readFileSync(path.join(tmpDir, '.planejamento', 'ROADMAP.md'), 'utf-8');
+    const roadmapContent = fs.readFileSync(path.join(tmpDir, '.fase-ai-local', 'ROADMAP.md'), 'utf-8');
     assert.ok(roadmapContent.includes('[x]'), 'checkbox should be checked');
     assert.ok(roadmapContent.includes('completed'), 'should contain completion date text');
     assert.ok(roadmapContent.includes('1/1'), 'roadmap should contain updated plan count');
@@ -650,7 +650,7 @@ describe('roadmap update-plan-progress command', () => {
 
   test('missing ROADMAP.md returns updated false', () => {
     // Create phase dir with plans and summaries but NO ROADMAP.md
-    const p1 = path.join(tmpDir, '.planejamento', 'etapas', '01-test');
+    const p1 = path.join(tmpDir, '.fase-ai-local', 'etapas', '01-test');
     fs.mkdirSync(p1, { recursive: true });
     fs.writeFileSync(path.join(p1, '01-01-PLAN.md'), '# Plan 1');
     fs.writeFileSync(path.join(p1, '01-01-SUMMARY.md'), '# Summary 1');

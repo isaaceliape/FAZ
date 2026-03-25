@@ -28,8 +28,8 @@ Output: Arquivos de teste commitados com mensagem `test(fase-{N}): add unit and 
 <context>
 Fase: $ARGUMENTS
 
-@.planejamento/ESTADO.md
-@.planejamento/ROTEIRO.md
+@.fase-ai-local/ESTADO.md
+@.fase-ai-local/ROTEIRO.md
 </context>
 
 <process>

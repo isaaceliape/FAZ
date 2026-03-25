@@ -100,9 +100,9 @@ process.stdin.on('end', () => {
     warnData.lastLevel = currentLevel;
     fs.writeFileSync(warnPath, JSON.stringify(warnData));
 
-    // Detecta se o FASE está ativo (possui .planejamento/STATE.md no diretório de trabalho)
+    // Detecta se o FASE está ativo (possui .fase-ai-local/STATE.md no diretório de trabalho)
     const cwd = data.cwd || process.cwd();
-    const isGsdActive = fs.existsSync(path.join(cwd, '.planejamento', 'STATE.md'));
+    const isGsdActive = fs.existsSync(path.join(cwd, '.fase-ai-local', 'STATE.md'));
 
     // Constrói mensagem de aviso consultiva (nunca use comandos imperativos que
     // sobrescrevam as preferências do usuário — ver #884)

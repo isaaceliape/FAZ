@@ -56,7 +56,7 @@ PHASE_INFO=$(node "$HOME/.fase/bin/fase-tools.cjs" roteiro get-fase "${phase_num
 ## 2. Checar Research Existente
 
 ```bash
-ls .planejamento/fases/${FASE}-*/PESQUISA.md 2>/dev/null
+ls .fase-ai-local/fases/${FASE}-*/PESQUISA.md 2>/dev/null
 ```
 
 **Se existe:** Ofereça: 1) Atualizar pesquisa, 2) Ver existente, 3) Pular. Aguarde resposta.
@@ -100,9 +100,9 @@ Modo: ecosystem
 </objective>
 
 <files_to_read>
-@.planejamento/ROTEIRO.md
-@.planejamento/REQUISITOS.md
-@.planejamento/ESTADO.md
+@.fase-ai-local/ROTEIRO.md
+@.fase-ai-local/REQUISITOS.md
+@.fase-ai-local/ESTADO.md
 </files_to_read>
 ```
 
@@ -135,7 +135,7 @@ O pesquisador retorna:
 ```markdown
 ## Research Completo para Fase {phase_number}
 
-**Arquivo:** `.planejamento/fases/{phase_dir}/PESQUISA.md`
+**Arquivo:** `.fase-ai-local/fases/{phase_dir}/PESQUISA.md`
 **Modo:** {pesquisa_mode}
 
 ### Resumo
@@ -146,7 +146,7 @@ O pesquisador retorna:
 
 ### Próximos Passos
 - Para planejamento: `/fase-planejar-fase {phase_number}`
-- Para ver pesquisa completo: @.planejamento/fases/{phase_dir}/PESQUISA.md
+- Para ver pesquisa completo: @.fase-ai-local/fases/{phase_dir}/PESQUISA.md
 ```
 
 ## 7. Roteamento

@@ -21,7 +21,7 @@ function stateExtractField(content, fieldName) {
 
 function cmdStateLoad(cwd, raw) {
   const config = loadConfig(cwd);
-  const planejamentoDir = path.join(cwd, '.planejamento');
+  const planejamentoDir = path.join(cwd, '.fase-ai-local');
 
   let stateRaw = '';
   try {
@@ -65,7 +65,7 @@ function cmdStateLoad(cwd, raw) {
 }
 
 function cmdStateGet(cwd, section, raw) {
-  const statePath = path.join(cwd, '.planejamento', 'STATE.md');
+  const statePath = path.join(cwd, '.fase-ai-local', 'STATE.md');
   try {
     const content = fs.readFileSync(statePath, 'utf-8');
 
@@ -119,7 +119,7 @@ function readTextArgOrFile(cwd, value, filePath, label) {
 }
 
 function cmdStatePatch(cwd, patches, raw) {
-  const statePath = path.join(cwd, '.planejamento', 'STATE.md');
+  const statePath = path.join(cwd, '.fase-ai-local', 'STATE.md');
   try {
     let content = fs.readFileSync(statePath, 'utf-8');
     const results = { updated: [], failed: [] };
@@ -156,7 +156,7 @@ function cmdStateUpdate(cwd, field, value) {
     error('campo e valor obrigatórios para atualização de estado');
   }
 
-  const statePath = path.join(cwd, '.planejamento', 'STATE.md');
+  const statePath = path.join(cwd, '.fase-ai-local', 'STATE.md');
   try {
     let content = fs.readFileSync(statePath, 'utf-8');
     const fieldEscaped = field.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -208,7 +208,7 @@ function stateReplaceField(content, fieldName, newValue) {
 }
 
 function cmdStateAdvancePlan(cwd, raw) {
-  const statePath = path.join(cwd, '.planejamento', 'STATE.md');
+  const statePath = path.join(cwd, '.fase-ai-local', 'STATE.md');
   if (!fs.existsSync(statePath)) { output({ error: 'STATE.md not found' }, raw); return; }
 
   let content = fs.readFileSync(statePath, 'utf-8');
@@ -237,7 +237,7 @@ function cmdStateAdvancePlan(cwd, raw) {
 }
 
 function cmdStateRecordMetric(cwd, options, raw) {
-  const statePath = path.join(cwd, '.planejamento', 'STATE.md');
+  const statePath = path.join(cwd, '.fase-ai-local', 'STATE.md');
   if (!fs.existsSync(statePath)) { output({ error: 'STATE.md not found' }, raw); return; }
 
   let content = fs.readFileSync(statePath, 'utf-8');
@@ -271,13 +271,13 @@ function cmdStateRecordMetric(cwd, options, raw) {
 }
 
 function cmdStateUpdateProgress(cwd, raw) {
-  const statePath = path.join(cwd, '.planejamento', 'STATE.md');
+  const statePath = path.join(cwd, '.fase-ai-local', 'STATE.md');
   if (!fs.existsSync(statePath)) { output({ error: 'STATE.md not found' }, raw); return; }
 
   let content = fs.readFileSync(statePath, 'utf-8');
 
   // Count summaries across all phases
-  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+  const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
   let totalPlans = 0;
   let totalSummaries = 0;
 
@@ -314,7 +314,7 @@ function cmdStateUpdateProgress(cwd, raw) {
 }
 
 function cmdStateAddDecision(cwd, options, raw) {
-  const statePath = path.join(cwd, '.planejamento', 'STATE.md');
+  const statePath = path.join(cwd, '.fase-ai-local', 'STATE.md');
   if (!fs.existsSync(statePath)) { output({ error: 'STATE.md not found' }, raw); return; }
 
   const { phase, summary, summary_file, rationale, rationale_file } = options;
@@ -352,7 +352,7 @@ function cmdStateAddDecision(cwd, options, raw) {
 }
 
 function cmdStateAddBlocker(cwd, text, raw) {
-  const statePath = path.join(cwd, '.planejamento', 'STATE.md');
+  const statePath = path.join(cwd, '.fase-ai-local', 'STATE.md');
   if (!fs.existsSync(statePath)) { output({ error: 'STATE.md not found' }, raw); return; }
   const blockerOptions = typeof text === 'object' && text !== null ? text : { text };
   let blockerText = null;
@@ -385,7 +385,7 @@ function cmdStateAddBlocker(cwd, text, raw) {
 }
 
 function cmdStateResolveBlocker(cwd, text, raw) {
-  const statePath = path.join(cwd, '.planejamento', 'STATE.md');
+  const statePath = path.join(cwd, '.fase-ai-local', 'STATE.md');
   if (!fs.existsSync(statePath)) { output({ error: 'STATE.md não encontrado' }, raw); return; }
   if (!text) { output({ error: 'texto obrigatório' }, raw); return; }
 
@@ -417,7 +417,7 @@ function cmdStateResolveBlocker(cwd, text, raw) {
 }
 
 function cmdStateRecordSession(cwd, options, raw) {
-  const statePath = path.join(cwd, '.planejamento', 'STATE.md');
+  const statePath = path.join(cwd, '.fase-ai-local', 'STATE.md');
   if (!fs.existsSync(statePath)) { output({ error: 'STATE.md not found' }, raw); return; }
 
   let content = fs.readFileSync(statePath, 'utf-8');
@@ -452,7 +452,7 @@ function cmdStateRecordSession(cwd, options, raw) {
 }
 
 function cmdStateSnapshot(cwd, raw) {
-  const statePath = path.join(cwd, '.planejamento', 'STATE.md');
+  const statePath = path.join(cwd, '.fase-ai-local', 'STATE.md');
 
   if (!fs.existsSync(statePath)) {
     output({ error: 'STATE.md not found' }, raw);
@@ -584,7 +584,7 @@ function buildStateFrontmatter(bodyContent, cwd) {
 
   if (cwd) {
     try {
-      const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+      const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
       if (fs.existsSync(etapasDir)) {
         const isDirInMilestone = getMilestoneEtapaFilter(cwd);
         const etapasDirs = fs.readdirSync(etapasDir, { withFileTypes: true })
@@ -683,7 +683,7 @@ function writeStateMd(statePath, content, cwd) {
 }
 
 function cmdStateJson(cwd, raw) {
-  const statePath = path.join(cwd, '.planejamento', 'STATE.md');
+  const statePath = path.join(cwd, '.fase-ai-local', 'STATE.md');
   if (!fs.existsSync(statePath)) {
     output({ error: 'STATE.md not found' }, raw, 'STATE.md not found');
     return;

@@ -25,10 +25,10 @@ Output: Milestone arquivado (roadmap + requirements), PROJECT.md evoluído, git 
 
 <context>
 **Arquivos do projeto:**
-- `.planejamento/ROADMAP.md`
-- `.planejamento/REQUIREMENTS.md`
-- `.planejamento/STATE.md`
-- `.planejamento/PROJECT.md`
+- `.fase-ai-local/ROADMAP.md`
+- `.fase-ai-local/REQUIREMENTS.md`
+- `.fase-ai-local/STATE.md`
+- `.fase-ai-local/PROJECT.md`
 
 **Input do usuário:**
 
@@ -41,7 +41,7 @@ Output: Milestone arquivado (roadmap + requirements), PROJECT.md evoluído, git 
 
 0. **Cheque por audit:**
 
-   - Procure por `.planejamento/v{{version}}-MILESTONE-AUDIT.md`
+   - Procure por `.fase-ai-local/v{{version}}-MILESTONE-AUDIT.md`
    - Se ausente ou stale: recomenda `/fase-audit-milestone` primeiro
    - Se audit status é `gaps_found`: recomenda `/fase-plan-milestone-gaps` primeiro
    - Se audit status é `passed`: prossegue para passo 1
@@ -82,17 +82,17 @@ Output: Milestone arquivado (roadmap + requirements), PROJECT.md evoluído, git 
 
 4. **Arquive milestone:**
 
-   - Crie `.planejamento/milestones/v{{version}}-ROADMAP.md`
+   - Crie `.fase-ai-local/milestones/v{{version}}-ROADMAP.md`
    - Extraia detalhes completos das phases do ROADMAP.md
    - Preencha template milestone-archive.md
    - Atualize ROADMAP.md para resumo one-line com link
 
 5. **Arquive requirements:**
 
-   - Crie `.planejamento/milestones/v{{version}}-REQUIREMENTS.md`
+   - Crie `.fase-ai-local/milestones/v{{version}}-REQUIREMENTS.md`
    - Marque todos requirements v1 como completos (checkboxes marcados)
    - Note outcomes dos requirements (validated, adjusted, dropped)
-   - Delete `.planejamento/REQUIREMENTS.md` (fresh one criado para próximo milestone)
+   - Delete `.fase-ai-local/REQUIREMENTS.md` (fresh one criado para próximo milestone)
 
 6. **Atualize PROJECT.md:**
 
@@ -114,9 +114,9 @@ Output: Milestone arquivado (roadmap + requirements), PROJECT.md evoluído, git 
 
 <success_criteria>
 
-- Milestone arquivado em `.planejamento/milestones/v{{version}}-ROADMAP.md`
-- Requirements arquivados em `.planejamento/milestones/v{{version}}-REQUIREMENTS.md`
-- `.planejamento/REQUIREMENTS.md` deletado (fresh para próximo milestone)
+- Milestone arquivado em `.fase-ai-local/milestones/v{{version}}-ROADMAP.md`
+- Requirements arquivados em `.fase-ai-local/milestones/v{{version}}-REQUIREMENTS.md`
+- `.fase-ai-local/REQUIREMENTS.md` deletado (fresh para próximo milestone)
 - ROADMAP.md colapsado para entrada one-line
 - PROJECT.md atualizado com current state
 - Git tag v{{version}} criada

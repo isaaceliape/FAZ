@@ -42,7 +42,7 @@ function cmdCurrentTimestamp(format, raw) {
 }
 
 function cmdListTodos(cwd, area, raw) {
-  const pendingDir = path.join(cwd, '.planejamento', 'todos', 'pending');
+  const pendingDir = path.join(cwd, '.fase-ai-local', 'todos', 'pending');
 
   let count = 0;
   const todos = [];
@@ -68,7 +68,7 @@ function cmdListTodos(cwd, area, raw) {
           created: createdMatch ? createdMatch[1].trim() : 'unknown',
           title: titleMatch ? titleMatch[1].trim() : 'Sem título',
           area: todoArea,
-          path: toPosixPath(path.join('.planejamento', 'todos', 'pending', file)),
+          path: toPosixPath(path.join('.fase-ai-local', 'todos', 'pending', file)),
         });
       } catch {}
     }
@@ -97,7 +97,7 @@ function cmdVerifyPathExists(cwd, targetPath, raw) {
 }
 
 function cmdHistoryDigest(cwd, raw) {
-  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
+  const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
   const digest = { phases: {}, decisions: [], tech_stack: new Set() };
 
   // Collect all phase directories: archived + current
@@ -227,15 +227,15 @@ function cmdCommit(cwd, message, files, raw, amend) {
     return;
   }
 
-  // Check if .planejamento is gitignored
-  if (isGitIgnored(cwd, '.planejamento')) {
+  // Check if .fase-ai-local is gitignored
+  if (isGitIgnored(cwd, '.fase-ai-local')) {
     const result = { committed: false, hash: null, reason: 'skipped_gitignored' };
     output(result, raw, 'skipped');
     return;
   }
 
   // Stage files
-  const filesToStage = files && files.length > 0 ? files : ['.planejamento/'];
+  const filesToStage = files && files.length > 0 ? files : ['.fase-ai-local/'];
   for (const file of filesToStage) {
     execGit(cwd, ['add', file]);
   }
@@ -380,8 +380,8 @@ async function cmdWebsearch(query, options, raw) {
 }
 
 function cmdProgressRender(cwd, format, raw) {
-  const etapasDir = path.join(cwd, '.planejamento', 'etapas');
-  const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
+  const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
+  const roadmapPath = path.join(cwd, '.fase-ai-local', 'ROADMAP.md');
   const milestone = getMilestoneInfo(cwd);
 
   const phases = [];
@@ -452,8 +452,8 @@ function cmdTodoComplete(cwd, filename, raw) {
     error('nome de arquivo obrigatório');
   }
 
-  const pendingDir = path.join(cwd, '.planejamento', 'todos', 'pending');
-  const completedDir = path.join(cwd, '.planejamento', 'todos', 'completed');
+  const pendingDir = path.join(cwd, '.fase-ai-local', 'todos', 'pending');
+  const completedDir = path.join(cwd, '.fase-ai-local', 'todos', 'completed');
   const sourcePath = path.join(pendingDir, filename);
 
   if (!fs.existsSync(sourcePath)) {
@@ -511,11 +511,11 @@ function cmdScaffold(cwd, type, options, raw) {
       }
       const slug = generateSlugInternal(name);
       const dirName = `${padded}-${slug}`;
-      const phasesParent = path.join(cwd, '.planejamento', 'etapas');
+      const phasesParent = path.join(cwd, '.fase-ai-local', 'etapas');
       fs.mkdirSync(phasesParent, { recursive: true });
       const dirPath = path.join(phasesParent, dirName);
       fs.mkdirSync(dirPath, { recursive: true });
-      output({ created: true, directory: `.planejamento/phases/${dirName}`, path: dirPath }, raw, dirPath);
+      output({ created: true, directory: `.fase-ai-local/phases/${dirName}`, path: dirPath }, raw, dirPath);
       return;
     }
     default:

@@ -61,7 +61,7 @@ PHASE_INFO=$(node "$HOME/.fase/bin/fase-tools.cjs" roadmap get-phase "${phase_nu
 ## 2. Checar Research Existente
 
 ```bash
-ls .planejamento/phases/${PHASE}-*/RESEARCH.md 2>/dev/null
+ls .fase-ai-local/phases/${PHASE}-*/RESEARCH.md 2>/dev/null
 ```
 
 **Se existe:** Ofereça: 1) Atualizar research, 2) Ver existente, 3) Pular. Aguarde resposta.
@@ -105,9 +105,9 @@ Modo: ecosystem
 </objective>
 
 <files_to_read>
-@.planejamento/ROADMAP.md
-@.planejamento/REQUIREMENTS.md
-@.planejamento/STATE.md
+@.fase-ai-local/ROADMAP.md
+@.fase-ai-local/REQUIREMENTS.md
+@.fase-ai-local/STATE.md
 </files_to_read>
 ```
 
@@ -157,7 +157,7 @@ Após todos completos: Spawn **fase-sintetizador-pesquisa** que lê os 4 RESEARC
 ```markdown
 ## Research Completo para Fase {phase_number}
 
-**Arquivo:** `.planejamento/phases/{phase_dir}/RESEARCH.md`
+**Arquivo:** `.fase-ai-local/phases/{phase_dir}/RESEARCH.md`
 **Modo:** {research_mode}
 
 ### Resumo
@@ -168,7 +168,7 @@ Após todos completos: Spawn **fase-sintetizador-pesquisa** que lê os 4 RESEARC
 
 ### Próximos Passos
 - Para planejamento: `/fase-planejar-fase {phase_number}`
-- Para ver research completo: @.planejamento/phases/{phase_dir}/RESEARCH.md
+- Para ver research completo: @.fase-ai-local/phases/{phase_dir}/RESEARCH.md
 ```
 
 ## 7. Roteamento

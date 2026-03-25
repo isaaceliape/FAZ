@@ -3,9 +3,9 @@ name: fase:limpar
 description: Arquiva diretórios de fases acumulados de marcos completados
 ---
 <objective>
-Arquive diretórios de fases de marcos completados em `.planejamento/marcos/v{X.Y}-fases/`.
+Arquive diretórios de fases de marcos completados em `.fase-ai-local/marcos/v{X.Y}-fases/`.
 
-Use quando `.planejamento/fases/` acumulou diretórios de marcos passados.
+Use quando `.fase-ai-local/fases/` acumulou diretórios de marcos passados.
 </objective>
 
 
