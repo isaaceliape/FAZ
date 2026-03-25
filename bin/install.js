@@ -47,6 +47,7 @@ const hasBoth = args.includes('--both'); // Legacy flag, keeps working
 const hasAll = args.includes('--all');
 const hasUninstall = args.includes('--uninstall') || args.includes('-u');
 const hasVerificar = args.includes('--verificar-instalacao') || args.includes('--verificar') || args.includes('-v');
+const hasAtualizar = args.includes('--atualizar') || args.includes('--update');
 
 // Runtime selection - can be set by flags or interactive prompt
 let selectedRuntimes = [];
@@ -236,7 +237,7 @@ if (hasVerificar) {
 
 // Show help if requested
 if (hasHelp) {
-  console.log(`  ${yellow}Uso:${reset} npx fase-ai [opções]\n\n  ${yellow}Opções:${reset}\n    ${cyan}--claude${reset}                  Instalar apenas para Claude Code\n    ${cyan}--opencode${reset}                Instalar apenas para OpenCode\n    ${cyan}--gemini${reset}                  Instalar apenas para Gemini\n    ${cyan}--codex${reset}                   Instalar apenas para Codex\n    ${cyan}--all${reset}                     Instalar para todos os runtimes\n    ${cyan}-u, --uninstall${reset}           Desinstalar o FASE (remover todos os arquivos)\n    ${cyan}-v, --verificar${reset}           Verificar instalação e gerar relatório\n    ${cyan}-c, --config-dir <caminho>${reset} Especificar diretório de configuração customizado\n    ${cyan}-h, --help${reset}                Exibir esta mensagem de ajuda\n    ${cyan}--force-statusline${reset}        Substituir configuração de statusline existente\n\n  ${yellow}Exemplos:${reset}\n    ${dim}# Instalação interativa (solicita runtime)${reset}\n    npx fase-ai\n\n    ${dim}# Instalar para Claude Code${reset}\n    npx fase-ai --claude\n\n    ${dim}# Instalar para OpenCode${reset}\n    npx fase-ai --opencode\n\n    ${dim}# Instalar para Gemini${reset}\n    npx fase-ai --gemini\n\n    ${dim}# Instalar para Codex${reset}\n    npx fase-ai --codex\n\n    ${dim}# Instalar para todos os runtimes${reset}\n    npx fase-ai --all\n\n    ${dim}# Verificar instalação${reset}\n    npx fase-ai --verificar\n\n    ${dim}# Desinstalação interativa (solicita confirma)${reset}\n    npx fase-ai --uninstall\n\n    ${dim}# Desinstalar do Codex${reset}\n    npx fase-ai --codex --uninstall\n\n    ${dim}# Desinstalar do OpenCode${reset}\n    npx fase-ai --opencode --uninstall\n\n  ${yellow}Notas:${reset}\n    A opção --config-dir é útil quando você tem múltiplas configurações.\n    Tem prioridade sobre as variáveis de ambiente CLAUDE_CONFIG_DIR / GEMINI_CONFIG_DIR / CODEX_HOME.\n    Use ${cyan}--uninstall${reset} sem localização para um processo interativo seguro.\n`);
+  console.log(`  ${yellow}Uso:${reset} npx fase-ai [opções]\n\n  ${yellow}Opções:${reset}\n    ${cyan}--claude${reset}                  Instalar apenas para Claude Code\n    ${cyan}--opencode${reset}                Instalar apenas para OpenCode\n    ${cyan}--gemini${reset}                  Instalar apenas para Gemini\n    ${cyan}--codex${reset}                   Instalar apenas para Codex\n    ${cyan}--all${reset}                     Instalar para todos os runtimes\n    ${cyan}-u, --uninstall${reset}           Desinstalar o FASE (remover todos os arquivos)\n    ${cyan}--atualizar${reset}               Atualizar FASE: detecta runtimes instalados e reinstala\n    ${cyan}-v, --verificar${reset}           Verificar instalação e gerar relatório\n    ${cyan}-c, --config-dir <caminho>${reset} Especificar diretório de configuração customizado\n    ${cyan}-h, --help${reset}                Exibir esta mensagem de ajuda\n    ${cyan}--force-statusline${reset}        Substituir configuração de statusline existente\n\n  ${yellow}Exemplos:${reset}\n    ${dim}# Instalação interativa (solicita runtime)${reset}\n    npx fase-ai\n\n    ${dim}# Instalar para Claude Code${reset}\n    npx fase-ai --claude\n\n    ${dim}# Instalar para OpenCode${reset}\n    npx fase-ai --opencode\n\n    ${dim}# Instalar para Gemini${reset}\n    npx fase-ai --gemini\n\n    ${dim}# Instalar para Codex${reset}\n    npx fase-ai --codex\n\n    ${dim}# Instalar para todos os runtimes${reset}\n    npx fase-ai --all\n\n    ${dim}# Atualizar todos os runtimes instalados${reset}\n    npx fase-ai --atualizar\n\n    ${dim}# Atualizar apenas Claude Code${reset}\n    npx fase-ai --claude --atualizar\n\n    ${dim}# Verificar instalação${reset}\n    npx fase-ai --verificar\n\n    ${dim}# Desinstalação interativa (solicita confirma)${reset}\n    npx fase-ai --uninstall\n\n    ${dim}# Desinstalar do Codex${reset}\n    npx fase-ai --codex --uninstall\n\n    ${dim}# Desinstalar do OpenCode${reset}\n    npx fase-ai --opencode --uninstall\n\n  ${yellow}Notas:${reset}\n    A opção --config-dir é útil quando você tem múltiplas configurações.\n    Tem prioridade sobre as variáveis de ambiente CLAUDE_CONFIG_DIR / GEMINI_CONFIG_DIR / CODEX_HOME.\n    Use ${cyan}--uninstall${reset} sem localização para um processo interativo seguro.\n    Use ${cyan}--atualizar${reset} para re-instalar mantendo configurações existentes.\n`);
   process.exit(0);
 }
 
@@ -2590,6 +2591,112 @@ function promptUninstallConfirmation(runtimes, isGlobal) {
 }
 
 /**
+ * Detect which runtimes have FASE installed in the current directory.
+ * Looks for fase-* agent files in each runtime's agents/ directory.
+ */
+function detectInstalledRuntimes() {
+  const runtimes = ['claude', 'opencode', 'gemini', 'codex'];
+  const detected = [];
+
+  for (const runtime of runtimes) {
+    const dirName = getDirName(runtime);
+    const dir = path.join(process.cwd(), dirName);
+
+    // Primary: check for FASE agent files
+    const agentsDir = path.join(dir, 'agents');
+    if (fs.existsSync(agentsDir)) {
+      const hasFaseAgent = fs.readdirSync(agentsDir).some(
+        f => f.startsWith('fase-') && (f.endsWith('.md') || f.endsWith('.toml'))
+      );
+      if (hasFaseAgent) {
+        detected.push(runtime);
+        continue;
+      }
+    }
+
+    // Fallback: check for Codex skills/fase-* directory
+    if (runtime === 'codex') {
+      const skillsDir = path.join(dir, 'skills');
+      if (fs.existsSync(skillsDir)) {
+        const hasFaseSkill = fs.readdirSync(skillsDir).some(f => f.startsWith('fase-'));
+        if (hasFaseSkill) { detected.push(runtime); continue; }
+      }
+    }
+
+    // Fallback: check for OpenCode flat commands
+    if (runtime === 'opencode') {
+      const commandDir = path.join(dir, 'command');
+      if (fs.existsSync(commandDir)) {
+        const hasFaseCmd = fs.readdirSync(commandDir).some(f => f.startsWith('fase-') && f.endsWith('.md'));
+        if (hasFaseCmd) { detected.push(runtime); continue; }
+      }
+    }
+  }
+
+  return detected;
+}
+
+/**
+ * Update FASE for the given (or auto-detected) runtimes.
+ * Checks npm for the latest version, shows a diff summary, then reinstalls.
+ * @param {string[]} runtimesArg - runtimes to update (empty = auto-detect)
+ */
+function atualizar(runtimesArg) {
+  const { execSync } = require('child_process');
+
+  // --- 1. Version check ---
+  let latestVersion = null;
+  try {
+    latestVersion = execSync('npm view fase-ai version', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+  } catch (_) {
+    // offline or npm unavailable — continue anyway
+  }
+
+  const currentVersion = pkg.version;
+
+  if (latestVersion && latestVersion !== currentVersion) {
+    console.log(`  ${yellow}Atualização disponível!${reset}`);
+    console.log(`  Versão atual:      ${dim}v${currentVersion}${reset}`);
+    console.log(`  Versão disponível: ${cyan}v${latestVersion}${reset}\n`);
+    console.log(`  ${dim}Execute ${cyan}npm install -g fase-ai@latest${reset}${dim} ou ${cyan}npx fase-ai@latest${reset}${dim} para obter a nova versão.${reset}`);
+    console.log(`  Continuando com reinstalação da versão atual (v${currentVersion})...\n`);
+  } else if (latestVersion) {
+    console.log(`  ${green}✓${reset} Versão atual ${cyan}v${currentVersion}${reset} é a mais recente.\n`);
+    console.log(`  Reinstalando para garantir integridade dos arquivos...\n`);
+  } else {
+    console.log(`  ${yellow}⚠${reset} Não foi possível verificar versão no npm (sem conectividade?).\n`);
+    console.log(`  Reinstalando versão ${cyan}v${currentVersion}${reset}...\n`);
+  }
+
+  // --- 2. Detect runtimes ---
+  const runtimes = runtimesArg.length > 0 ? runtimesArg : detectInstalledRuntimes();
+
+  if (runtimes.length === 0) {
+    console.log(`  ${yellow}⚠${reset} Nenhuma instalação do FASE detectada neste diretório.\n`);
+    console.log(`  Execute ${cyan}npx fase-ai${reset} para instalar.\n`);
+    process.exit(0);
+  }
+
+  const runtimeLabels = { claude: 'Claude Code', opencode: 'OpenCode', gemini: 'Gemini', codex: 'Codex' };
+  const labels = runtimes.map(r => runtimeLabels[r] || r).join(', ');
+  console.log(`  Atualizando: ${cyan}${labels}${reset}\n`);
+
+  // --- 3. Reinstall ---
+  installAllRuntimes(runtimes, false, false);
+
+  // --- 4. Post-update verification ---
+  console.log(`\n  ${cyan}Verificando instalação pós-atualização...${reset}\n`);
+  try {
+    const scriptPath = path.join(__dirname, 'verificar-instalacao.js');
+    execSync(`node "${scriptPath}"`, { stdio: 'inherit' });
+  } catch (_) {
+    // verificar-instalacao already printed its own errors
+  }
+
+  console.log(`\n  ${yellow}Lembrete:${reset} Reinicie o runtime (${labels}) para carregar os novos comandos e agentes.\n`);
+}
+
+/**
  * Install FASE for all selected runtimes
  */
 function installAllRuntimes(runtimes, isGlobal, isInteractive) {
@@ -2644,6 +2751,8 @@ if (process.env.FASE_TEST_MODE) {
 if (explicitConfigDir) {
   console.error(`  ${yellow}Não é possível usar --config-dir. Instalação agora é sempre local.${reset}`);
   process.exit(1);
+} else if (hasAtualizar) {
+  atualizar(selectedRuntimes);
 } else if (hasUninstall) {
   if (selectedRuntimes.length > 0) {
     const runtimes = selectedRuntimes;
