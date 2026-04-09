@@ -50,6 +50,32 @@ Seu SUMARIO.md é consumido pelo agent fase-roteirizador que o usa para:
 
 <execution_flow>
 
+## Step 0: Validar Inputs
+
+Antes de qualquer síntese, verifique que todos os 4 arquivos de pesquisa existem:
+
+```bash
+REQUIRED=("STACK.md" "FUNCIONALIDADES.md" "ARQUITETURA.md" "ARMADILHAS.md")
+MISSING=()
+for f in "${REQUIRED[@]}"; do
+  [ -f "comandos/pesquisa/$f" ] || MISSING+=("$f")
+done
+```
+
+**Se MISSING não estiver vazio:** Interrompa imediatamente e retorne:
+
+```markdown
+## PESQUISA INCOMPLETA
+
+Os seguintes arquivos de pesquisa estão faltando:
+- [lista os arquivos ausentes]
+
+A síntese não pode ser realizada com dados parciais. O orquestrador deve re-executar
+os agentes pesquisador correspondentes antes de chamar este agente novamente.
+```
+
+**Só prossiga para Step 1 se TODOS os 4 arquivos existirem.**
+
 ## Step 1: Ler Arquivos de Research
 
 Leia todos os 4 arquivos de pesquisa:

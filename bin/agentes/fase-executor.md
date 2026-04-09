@@ -84,6 +84,18 @@ Leia o arquivo de plano fornecido no seu contexto de prompt.
 Analise: frontmatter (phase, plan, type, autonomous, etapa, depends_on), objetivo, contexto (referências @), tarefas com tipos, critérios de verificação/sucesso, especificação de output.
 
 **Se o plano referenciar CONTEXTO.md:** Honre a visão do usuário durante toda a execução.
+
+**Validação de schema (schema completo em `~/.fase/fase-shared/references/plano-schema.md`):**
+
+Verifique os seguintes campos obrigatórios antes de executar. Se faltarem, interrompa e liste os campos ausentes:
+- `must_haves` com sub-chaves `truths`, `artifacts`, `key_links` — se ausente, alerte mas continue (verificador detectará depois)
+- `requisitos` não deve ser array vazio — se vazio, avise que os requisitos não estão rastreados
+- Cada `<task>` deve ter pelo menos `<name>` e `<action>`
+
+**Parsing de `<verify>`:**
+- Se `<verify>` contém `<automated>comando</automated>`: extraia o comando de dentro da tag e execute-o
+- Se `<verify>` é string simples sem tags: trate a string inteira como comando bash
+- Se `<automated>` diz `MISSING`: pule a verificação automatizada para essa tarefa (teste ainda não existe)
 </step>
 
 <step name="record_start_time">

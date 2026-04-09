@@ -74,14 +74,15 @@ cat "$PHASE_DIR"/*-VERIFICACAO.md 2>/dev/null
 1. Parse do frontmatter do VERIFICACAO.md anterior
 2. Extrair `must_haves` (truths, artifacts, key_links)
 3. Extrair `gaps` (itens que falharam)
-4. Setar `is_re_verification = true`
-5. **Pule para Step 3** com otimização:
+4. Extrair `re_verification.closure_attempts` (ou 0 se ausente) → chamar de `PREV_ATTEMPTS`
+5. Setar `is_re_verification = true`, `closure_attempts = PREV_ATTEMPTS + 1`
+6. **Pule para Step 3** com otimização:
    - **Itens falhos:** Verificação completa de 3 níveis (exists, substantive, wired)
    - **Itens passados:** Quick regression check (existência + sanity básica apenas)
 
 **Se não existe verificação anterior OU não tem seção `gaps:` → MODO INICIAL:**
 
-Setar `is_re_verification = false`, prosseguir com Step 1.
+Setar `is_re_verification = false`, `closure_attempts = 0`, prosseguir com Step 1.
 
 ## Step 1: Carregar Contexto (Apenas Modo Inicial)
 
@@ -391,13 +392,16 @@ phase: XX-name
 verified: YYYY-MM-DDTHH:MM:SSZ
 status: passed | gaps_found | human_needed
 score: N/M must-haves verified
-re_verification: # Apenas se existia VERIFICACAO.md anterior
-  previous_status: gaps_found
-  previous_score: 2/5
-  gaps_closed:
+re_verification: # Apenas se existia VERIFICACAO.md anterior (is_re_verification = true)
+  previous_status: gaps_found          # status do VERIFICACAO.md anterior
+  previous_score: 2/5                  # score do VERIFICACAO.md anterior
+  closure_attempts: 1                  # incrementar do anterior (PREV_ATTEMPTS + 1)
+  gaps_closed:                         # truths que eram gaps antes e passaram agora
     - "Truth que foi corrigida"
-  gaps_remaining: []
-  regressions: []
+  gaps_remaining:                      # truths que continuam falhando (mesmas do anterior)
+    - "Truth que ainda falha"
+  regressions:                         # truths que passavam antes e falham agora
+    - "Truth que regrediu"
 gaps: # Apenas se status: gaps_found
   - truth: "Verdade observável que falhou"
     status: failed
@@ -500,6 +504,41 @@ Checks automatizados passaram. Aguardando verificação humana.
 ```
 
 </output>
+
+<escalation_protocol>
+
+## Escalação Humana (closure_attempts ≥ 3)
+
+Se `closure_attempts >= 3` E ainda existem `gaps_remaining` no frontmatter:
+
+1. Adicione esta seção ao final do relatório VERIFICACAO.md (após os gaps normais):
+
+```markdown
+## ⚠️ Escalação Humana Necessária
+
+Esta fase tentou fechar os gaps abaixo **{closure_attempts} vezes** sem sucesso.
+As tentativas automáticas foram esgotadas. Intervenção manual é necessária.
+
+### Gaps Persistentes
+
+{Para cada gap em gaps_remaining:}
+**"{truth}"**
+- Razão do falha: {reason do gap}
+- Artefatos afetados: {lista de paths}
+- O que foi tentado: {resumo das últimas closure_attempts tentativas}
+- Investigação sugerida: {o que o humano deve verificar manualmente}
+
+### Próximos Passos para o Usuário
+
+1. Revise os arquivos listados acima manualmente
+2. Se o problema for arquitetural, use `/fase-arquitetar` para tomar uma decisão
+3. Se o problema for um requisito impossível, atualize REQUISITOS.md e ROTEIRO.md
+4. Após resolver, execute `/fase-verificar-fase {N}` para reiniciar o ciclo com contador zerado
+```
+
+2. Retorne com `status: human_escalation` em vez de `gaps_found` no frontmatter.
+
+</escalation_protocol>
 
 <critical_rules>
 

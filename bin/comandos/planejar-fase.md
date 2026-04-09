@@ -38,4 +38,18 @@ Normalizar input da fase no passo 2 antes de qualquer lookup de diretório.
 <process>
 Execute o workflow plan-fase ponta a ponta.
 Preservar todos os gates do workflow (validação, pesquisa, planejamento, loop de verificação, roteamento).
+
+**Gate de escalação (apenas no modo `--gaps`):**
+Antes de gerar planos de gap closure, leia VERIFICACAO.md e verifique o campo `re_verification.closure_attempts`:
+
+```bash
+grep "closure_attempts:" comandos/fases/${PHASE_DIR}/*-VERIFICACAO.md 2>/dev/null
+```
+
+Se `closure_attempts >= 3` E existe seção `## ⚠️ Escalação Humana Necessária` no VERIFICACAO.md:
+- **NÃO gere novos planos de gap closure**
+- Exiba a seção de escalação do VERIFICACAO.md para o usuário
+- Oriente o usuário a resolver manualmente antes de retentar
+
+Se `closure_attempts < 3` ou VERIFICACAO.md não existe: prossiga normalmente.
 </process>

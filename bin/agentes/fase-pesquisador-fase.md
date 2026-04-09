@@ -467,6 +467,26 @@ Escreva para: `$PHASE_DIR/$PADDED_PHASE-PESQUISA.md`
 
 ⚠️ `commit_docs` controla git apenas, NÃO escrita de arquivo. Sempre escreva primeiro.
 
+## Passo 6b: Validar Cópia das Decisões (se CONTEXTO.md existia)
+
+Se CONTEXTO.md existia e foi lido, execute esta validação após escrever PESQUISA.md:
+
+```bash
+# Contar bullets em ## Decisões no CONTEXTO.md
+CONTEXTO_DECISIONS=$(grep -c "^-" <(sed -n '/^## Decisões/,/^##/p' "$PHASE_DIR"/*-CONTEXTO.md 2>/dev/null) 2>/dev/null || echo 0)
+
+# Contar bullets em ### Locked Decisions no PESQUISA.md gerado
+PESQUISA_DECISIONS=$(grep -c "^-" <(sed -n '/### Locked Decisions/,/###/p' "$PHASE_DIR/$PADDED_PHASE-PESQUISA.md") 2>/dev/null || echo 0)
+```
+
+**Se os contadores divergirem (CONTEXTO_DECISIONS ≠ PESQUISA_DECISIONS):**
+- **Não prossiga para o passo 7**
+- Identifique quais decisões estão faltando fazendo diff do conteúdo
+- Reescreva a seção `### Locked Decisions` de PESQUISA.md com todas as decisões
+- Repita a validação até os contadores coincidirem
+
+**Só prossiga para o passo 7 quando a validação passar.**
+
 ## Passo 7: Commitar Pesquisa (opcional)
 
 ```bash

@@ -673,13 +673,50 @@ function syncStateFrontmatter(content, cwd) {
 }
 
 /**
+ * Acquire a lockfile for exclusive STATE.md access.
+ * Uses exclusive file creation (O_EXCL) to prevent races between parallel executor subagents.
+ * Cleans up stale locks older than 30 seconds.
+ */
+function acquireStateLock(lockPath, maxAttempts = 10, delayMs = 150) {
+  // Clean up stale lock (older than 30s)
+  try {
+    const stat = fs.statSync(lockPath);
+    if (Date.now() - stat.mtimeMs > 30000) fs.unlinkSync(lockPath);
+  } catch (_) {}
+
+  for (let i = 0; i < maxAttempts; i++) {
+    try {
+      fs.writeFileSync(lockPath, String(process.pid), { flag: 'wx' });
+      return true;
+    } catch (e) {
+      if (e.code !== 'EEXIST') throw e;
+      // Lock held — busy-wait with a simple spin delay
+      const deadline = Date.now() + delayMs;
+      while (Date.now() < deadline) { /* spin */ }
+    }
+  }
+  throw new Error(`state.cjs: não foi possível adquirir lock após ${maxAttempts} tentativas`);
+}
+
+function releaseStateLock(lockPath) {
+  try { fs.unlinkSync(lockPath); } catch (_) {}
+}
+
+/**
  * Write STATE.md with synchronized YAML frontmatter.
+ * Uses a lockfile to prevent concurrent writes from parallel executor subagents.
  * All STATE.md writes should use this instead of raw writeFileSync.
  */
 function writeStateMd(statePath, content, cwd) {
   ensureInsidePlanejamento(cwd, statePath, 'STATE.md write');
-  const synced = syncStateFrontmatter(content, cwd);
-  fs.writeFileSync(statePath, synced, 'utf-8');
+  const lockPath = path.join(path.dirname(statePath), '.state-lock');
+  acquireStateLock(lockPath);
+  try {
+    const synced = syncStateFrontmatter(content, cwd);
+    fs.writeFileSync(statePath, synced, 'utf-8');
+  } finally {
+    releaseStateLock(lockPath);
+  }
 }
 
 function cmdStateJson(cwd, raw) {

@@ -419,6 +419,9 @@ Derive planos do trabalho real. Granularidade determina tolerância de compress�
 
 <plan_format>
 
+> **Schema autoritativo:** `~/.fase/fase-shared/references/plano-schema.md`
+> Todos os campos, tipos, e formatos de tarefa estão definidos lá. Esta seção é um resumo; o schema é a fonte de verdade.
+
 ## Estrutura do PLANO.md
 
 ```markdown
@@ -1231,6 +1234,27 @@ Retorne resultado de planejamento estruturado para o orquestrador.
 </step>
 
 </execution_flow>
+
+<decision_validation>
+
+## Validação de Decisões do Usuário (Antes de Retornar)
+
+Se PESQUISA.md contém uma seção `## Restrições do Usuário` ou `<user_constraints>`, execute esta verificação antes de retornar os planos:
+
+1. Extraia cada decisão locked listada (bullets sob `### Locked Decisions`)
+2. Para cada decisão, verifique se ela aparece como restrição específica em pelo menos um bloco `<action>` nos PLANO.md gerados:
+   ```bash
+   grep -l "DECISÃO_KEYWORD" comandos/fases/${PHASE_DIR}/*-PLANO.md
+   ```
+3. Se alguma decisão locked não tiver nenhuma aparição nos planos gerados:
+   - **NÃO retorne os planos ainda**
+   - Liste as decisões não honradas como `DECISÃO NÃO HONRADA: "[texto da decisão]"`
+   - Revise os planos afetados para incluir a restrição nas actions relevantes
+   - Repita a validação antes de retornar
+
+**Exceção:** Se você verificou explicitamente que a decisão não é aplicável a nenhuma tarefa desta fase específica, documente o motivo no plano e continue.
+
+</decision_validation>
 
 <structured_returns>
 

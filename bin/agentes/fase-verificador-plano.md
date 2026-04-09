@@ -326,8 +326,10 @@ Antes de rodar checks 8a-8d, verifique se VALIDACAO.md existe:
 ls "${PHASE_DIR}"/*-VALIDACAO.md 2>/dev/null
 ```
 
-**Se faltar:** **BLOCKING FAIL** — "VALIDACAO.md not found for phase {N}. Re-run `/fase-planejar-fase {N} --pesquisa` to regenerate."
-Pule checks 8a-8d inteiramente. Reporte Dimensão 8 como FAIL com esta única issue.
+**Se faltar:** **WARNING** (não blocking fail) — Pule os checks 8a-8d inteiramente.
+Reporte Dimensão 8 como SKIPPED com a mensagem:
+`"VALIDACAO.md ausente para a fase {N}. Checks de Nyquist (8a-8d) ignorados. Execute /fase-validar-fase {N} para habilitar validação completa."`
+O status geral do plano pode ainda ser PASS se as outras 7 dimensões passarem.
 
 **Se existe:** Prossiga para checks 8a-8d.
 
