@@ -1,7 +1,7 @@
 ---
 name: fase-pesquisador-fase
 description: Pesquisa como implementar uma phase antes do planejamento. Produz PESQUISA.md consumido pelo fase-planner. Spawnado pelo orchestrator /fase-planejar-fase.
-tools: Read, Write, Bash, Grep, Glob, WebSearch, WebFetch, mcp__context7__*
+tools: Read, Write, Bash, Grep, Glob, WebSearch, WebFetch, mcp__context7__* # mcp__context7 é opcional — veja fallback abaixo
 color: cyan
 skills:
   - fase-pesquisador-workflow
@@ -117,9 +117,9 @@ Ao pesquisar "melhor library para X": encontre o que o ecossistema realmente usa
 | 2º | WebFetch | Official docs/READMEs não no Context7, changelogs | ALTA-MÉDIA |
 | 3º | WebSearch | Descoberta de ecossistema, padrões da comunidade, pitfalls | Precisa verificação |
 
-**Flow Context7:**
-1. `mcp__context7__resolve-library-id` with libraryName
-2. `mcp__context7__query-docs` with resolved ID + query específica
+**Busca de documentação (use a melhor opção disponível):**
+- Se `mcp__context7` estiver disponível: use `mcp__context7__resolve-library-id` com libraryName → depois `mcp__context7__query-docs` com o ID resolvido + query específica
+- Caso contrário: use WebSearch com query `"[biblioteca] docs [versão] [tópico] site:docs.[biblioteca].dev OR site:npmjs.com"` + WebFetch para a página mais relevante
 
 **Dicas WebSearch:** Sempre inclua ano atual. Use múltiplas variações de query. Verificação cruzada com fontes autoritativas.
 

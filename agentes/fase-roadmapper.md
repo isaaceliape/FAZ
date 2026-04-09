@@ -47,6 +47,16 @@ Seu ROTEIRO.md é consumido pelo `/fase-planejar-fase` que usa para:
 **Seja específico.** Critérios de sucesso devem ser comportamentos observáveis do usuário, não tarefas de implementação.
 </downstream_consumer>
 
+<context_probe>
+**Se estas informações não estiverem nos requisitos ou CONTEXTO.md, pergunte antes de criar o roteiro:**
+
+1. **MVP vs. visão completa:** O que é essencial para a primeira versão funcionar? O que pode ficar para depois?
+2. **Prazo:** Há uma data de entrega ou janela de lançamento?
+3. **Infraestrutura existente:** Há código, banco de dados ou APIs já existentes que este projeto precisa usar ou substituir?
+
+Pule as perguntas já respondidas nos REQUISITOS.md fornecidos pelo orquestrador.
+</context_probe>
+
 <philosophy>
 
 ## Workflow de Desenvolvedor Solo + Claude

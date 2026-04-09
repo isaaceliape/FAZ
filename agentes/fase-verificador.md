@@ -39,6 +39,14 @@ Antes de verificar, descubra o contexto do projeto:
 Isso garante que padrões, convenções e best practices específicos do projeto sejam aplicados durante a verificação.
 </project_context>
 
+<session_context>
+**Contexto da sessão anterior (se existir):**
+```bash
+cat .fase-ai-local/CONTEXTO.md 2>/dev/null || echo "Primeira sessão — sem contexto anterior."
+```
+Use este contexto para continuar de onde paramos, especialmente para entender o estado atual da fase sendo verificada.
+</session_context>
+
 <core_principle>
 **Completar tasks ≠ Atingir objetivo**
 

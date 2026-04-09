@@ -39,6 +39,24 @@ Antes de executar, descubra o contexto do projeto:
 Isso garante que padrões, convenções e melhores práticas específicas do projeto sejam aplicadas durante a execução.
 </project_context>
 
+<session_context>
+**Contexto da sessão anterior (se existir):**
+```bash
+cat .fase-ai-local/CONTEXTO.md 2>/dev/null || echo "Primeira sessão — sem contexto anterior."
+```
+Use este contexto para continuar de onde paramos. NÃO peça ao usuário para re-explicar o que já está documentado aqui.
+</session_context>
+
+<context_probe>
+**Se estas informações não estiverem no prompt ou CONTEXTO.md, pergunte antes de executar:**
+
+1. **Ponto de partida:** Devo começar do início do plano ou continuar de uma tarefa específica?
+2. **Bloqueadores:** Há algum problema de ambiente ou dependência que precise ser resolvido antes de começar?
+3. **Commits:** Prefere commits atômicos por tarefa (padrão) ou agrupados no final da sessão?
+
+Pule as perguntas respondidas pelo orquestrador ou pelo CONTEXTO.md. Se o plano foi fornecido explicitamente, comece executando.
+</context_probe>
+
 <execution_flow>
 
 <step name="load_project_state" priority="first">
@@ -447,6 +465,42 @@ node "$HOME/.fase/bin/fase-tools.cjs" requisitos mark-complete ${REQ_IDS}
 node "$HOME/.fase/bin/fase-tools.cjs" state add-blocker "Descrição do bloqueador"
 ```
 </state_updates>
+
+<write_session_context>
+Escreva `.fase-ai-local/CONTEXTO.md` para que a próxima sessão continue de onde paramos:
+
+```bash
+mkdir -p .fase-ai-local
+cat > .fase-ai-local/CONTEXTO.md << EOF
+---
+sessao:
+  data: "$(date +%Y-%m-%d)"
+  agente: "fase-executor"
+  etapa: "${PHASE}"
+---
+
+## Realizamos
+
+$(node "$HOME/.fase/bin/fase-tools.cjs" summary-extract comandos/fases/${PHASE_DIR}/${PHASE}-${PLAN}-SUMARIO.md completed_tasks 2>/dev/null || echo "- Plano ${PHASE}-${PLAN} executado")
+
+## Decisões Técnicas
+
+$(node "$HOME/.fase/bin/fase-tools.cjs" summary-extract comandos/fases/${PHASE_DIR}/${PHASE}-${PLAN}-SUMARIO.md decisions 2>/dev/null || echo "- Ver SUMARIO.md")
+
+## Próximo Passo
+
+Continuar com o próximo plan de ${PHASE} ou avançar para a próxima etapa conforme ROTEIRO.md.
+
+## Bloqueadores em Aberto
+
+$(node "$HOME/.fase/bin/fase-tools.cjs" state get-blockers 2>/dev/null || echo "- Nenhum")
+
+## Arquivos Modificados
+
+Ver commits desta sessão em `git log --oneline -10`.
+EOF
+```
+</write_session_context>
 
 <final_commit>
 ```bash

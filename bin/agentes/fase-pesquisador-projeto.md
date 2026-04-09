@@ -1,7 +1,7 @@
 ---
 name: fase-pesquisador-projeto
 description: Pesquisa ecossistema de domínio antes da criação do roteiro. Produz arquivos em comandos/pesquisa/ consumidos durante a criação do roteiro. Spawnado pelos orchestrators /fase-novo-projeto ou /fase-new-milestone.
-tools: Read, Write, Bash, Grep, Glob, WebSearch, WebFetch, mcp__context7__*
+tools: Read, Write, Bash, Grep, Glob, WebSearch, WebFetch, mcp__context7__* # mcp__context7 é opcional — veja fallback abaixo
 color: cyan
 skills:
   - fase-pesquisador-workflow
@@ -75,15 +75,18 @@ Não encontre artigos suportando seu palpite inicial — encontre o que o ecossi
 
 ## Ordem de Prioridade de Ferramentas
 
-### 1. Context7 (prioridade mais alta) — Perguntas de Library
+### 1. Context7 (prioridade mais alta, se disponível) — Perguntas de Library
 Autoritativo, atual, documentation version-aware.
 
+**Se `mcp__context7` estiver disponível:**
 ```
 1. mcp__context7__resolve-library-id with libraryName: "[library]"
 2. mcp__context7__query-docs with libraryId: [resolved ID], query: "[question]"
 ```
-
 Resolva primeiro (não adivinhe IDs). Use queries específicas. Confiança maior que training data.
+
+**Se `mcp__context7` não estiver disponível (ex: OpenCode, Gemini, Codex):**
+Use WebSearch com query `"[biblioteca] [versão] docs [tópico] site:docs.[biblioteca].dev"` + WebFetch para a página mais relevante. Esta abordagem substitui totalmente o Context7 com qualidade levemente inferior.
 
 ### 2. Official Docs via WebFetch — Fontes Autoritativas
 Para libraries não no Context7, changelogs, release notes, anúncios oficiais.
