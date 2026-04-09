@@ -20,8 +20,8 @@ Antes de cada commit, o hook verifica:
    - `package.json` (válido)
 
 3. ✅ **Diretórios obrigatórios**
-   - `agentes/` (12 agent definitions)
-   - `comandos/` (32 command definitions)
+   - `bin/agentes/` (13 agent definitions)
+   - `bin/comandos/` (command definitions)
 
 ## 🚀 Instalação
 

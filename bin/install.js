@@ -1062,9 +1062,9 @@ function convertClaudeToGeminiToml(content) {
 /**
  * Copy commands to a flat structure for OpenCode
  * OpenCode expects: command/fase-help.md (invoked as /fase-help)
- * Source structure: comandos/help.md
- * 
- * @param {string} srcDir - Source directory (e.g., comandos/)
+ * Source structure: bin/comandos/help.md
+ *
+ * @param {string} srcDir - Source directory (e.g., bin/comandos/)
  * @param {string} destDir - Destination directory (e.g., command/)
  * @param {string} prefix - Prefix for filenames (e.g., 'fase')
  * @param {string} pathPrefix - Path prefix for file references
@@ -1093,7 +1093,7 @@ function copyFlattenedCommands(srcDir, destDir, prefix, pathPrefix, runtime) {
     
     if (entry.isDirectory()) {
       // Recurse into subdirectories, adding to prefix
-      // e.g., comandos/debug/start.md -> command/fase-debug-start.md
+      // e.g., bin/comandos/debug/start.md -> command/fase-debug-start.md
       copyFlattenedCommands(srcPath, destDir, `${prefix}-${entry.name}`, pathPrefix, runtime);
     } else if (entry.name.endsWith('.md')) {
       // Flatten: help.md -> fase-help.md
@@ -1467,7 +1467,7 @@ function uninstall(isGlobal, runtime = 'claude') {
     if (fs.existsSync(faseCommandsDir)) {
       fs.rmSync(faseCommandsDir, { recursive: true });
       removedCount++;
-      console.log(`  ${green}✓${reset} Removido comandos/`);
+      console.log(`  ${green}✓${reset} Removido bin/comandos/`);
     }
   }
 
@@ -2150,7 +2150,7 @@ function install(isGlobal, runtime = 'claude') {
     const commandDir = path.join(targetDir, 'command');
     fs.mkdirSync(commandDir, { recursive: true });
     
-    // Copy comandos/*.md as command/fase-*.md (flatten structure)
+    // Copy bin/comandos/*.md as command/fase-*.md (flatten structure)
     const faseSrc = path.join(src, 'comandos');
     copyFlattenedCommands(faseSrc, commandDir, 'fase', pathPrefix, runtime);
     if (verifyInstalled(commandDir, 'command/fase-*')) {

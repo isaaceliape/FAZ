@@ -27,12 +27,12 @@ cp -r bin/comandos bin/comandos-es
 
 **Estrutura esperada:**
 ```
-agentes-{idioma}/
+bin/agentes-{idioma}/
   ├── fase-planejador.{idioma}.md
   ├── fase-executor.{idioma}.md
   └── ...
 
-comandos-{idioma}/
+bin/comandos-{idioma}/
   ├── ajuda.{idioma}.md
   ├── novo-projeto.{idioma}.md
   └── ...

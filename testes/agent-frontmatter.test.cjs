@@ -13,8 +13,8 @@ const assert = require('node:assert');
 const fs = require('fs');
 const path = require('path');
 
-const AGENTS_DIR = path.join(__dirname, '..', 'agentes');
-const COMMANDS_DIR = path.join(__dirname, '..', 'comandos');
+const AGENTS_DIR = path.join(__dirname, '..', 'bin', 'agentes');
+const COMMANDS_DIR = path.join(__dirname, '..', 'bin', 'comandos');
 
 const ALL_AGENTS = fs.readdirSync(AGENTS_DIR)
   .filter(f => f.startsWith('fase-') && f.endsWith('.md'))
