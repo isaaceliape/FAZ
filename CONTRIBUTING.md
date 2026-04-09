@@ -201,11 +201,10 @@ node bin/install.js --uninstall
 
 ```
 docs/
-├── USER-GUIDE.md       # Guia para usuários
+├── GUIA-DO-USUARIO.md  # Guia para usuários
 ├── COMANDOS.md         # Lista de comandos
-├── FAQ.md              # Perguntas frequentes
 ├── HOOKS.md            # Git hooks setup
-└── CONTRIBUTING.md     # Este arquivo
+└── CONTEXT-MONITOR.md  # Monitoramento de contexto
 ```
 
 ## ✅ Checklist para PRs

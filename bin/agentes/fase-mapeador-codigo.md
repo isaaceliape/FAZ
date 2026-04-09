@@ -32,7 +32,7 @@ Se o prompt contém um bloco `<files_to_read>`, você DEVE usar a ferramenta `Re
 **Estes documentos são consumidos por outros comandos FASE.:**
 
 **`/fase-planejar-fase`** carrega documentos relevantes do codebase quando criando plans de implementação:
-| Tipo de Fase | Documentos Carregados |
+| Tipo de Phase | Documentos Carregados |
 |------------|------------------|
 | UI, frontend, components | CONVENTIONS.md, STRUCTURE.md |
 | API, backend, endpoints | ARQUITETURA.md, CONVENTIONS.md |

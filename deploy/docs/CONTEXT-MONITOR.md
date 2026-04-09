@@ -65,6 +65,8 @@ Ambos os hooks são registrados automaticamente durante a instalação via `npx 
 - **Statusline** (escreve o arquivo bridge): Registrado como `statusLine` no settings.json
 - **Monitor de Contexto** (lê o arquivo bridge): Registrado como hook `PostToolUse` no settings.json (`AfterTool` para Gemini)
 
+**Nota:** Se os arquivos de hooks não existirem no diretório de instalação, os hooks não serão registrados automaticamente para evitar erros.
+
 Registro manual em `~/.claude/settings.json` (Claude Code):
 
 ```json
@@ -92,6 +94,10 @@ Para Gemini CLI (`~/.gemini/settings.json`), use `AfterTool` em vez de `PostTool
 
 ```json
 {
+  "statusLine": {
+    "type": "command",
+    "command": "node ~/.gemini/hooks/fase-statusline.js"
+  },
   "hooks": {
     "AfterTool": [
       {

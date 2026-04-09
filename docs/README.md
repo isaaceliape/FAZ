@@ -8,9 +8,8 @@ Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que prec
 
 | Documento | Descrição |
 |-----------|-----------|
-| [**USER-GUIDE.md**](USER-GUIDE.md) | Guia completo de instalação e uso do FASE |
+| [**GUIA-DO-USUARIO.md**](GUIA-DO-USUARIO.md) | Guia completo de instalação e uso do FASE |
 | [**COMANDOS.md**](COMANDOS.md) | Lista com todos os 32 comandos disponíveis |
-| [**FAQ.md**](FAQ.md) | Perguntas frequentes e respostas |
 | [**NPM-REGISTRY.md**](NPM-REGISTRY.md) | Configuração do npm registry e instalação |
 
 ### Para Desenvolvedores
@@ -25,9 +24,8 @@ Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que prec
 
 ### Sou um Usuário
 
-1. Leia [USER-GUIDE.md](USER-GUIDE.md) para instalação
+1. Leia [GUIA-DO-USUARIO.md](GUIA-DO-USUARIO.md) para instalação
 2. Explore [COMANDOS.md](COMANDOS.md) para ver o que está disponível
-3. Verifique [FAQ.md](FAQ.md) se tiver dúvidas
 
 ### Quero Contribuir
 
@@ -38,8 +36,7 @@ Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que prec
 
 ### Encontrei um Bug
 
-1. Verifique [FAQ.md](FAQ.md) - talvez já haja solução
-2. Procure em [GitHub Issues](https://github.com/isaaceliape/FASE/issues) por issue similar
+1. Procure em [GitHub Issues](https://github.com/isaaceliape/FASE/issues) por issue similar
 3. Abra uma nova issue com os detalhes
 
 ## 📋 Estrutura de Arquivos
@@ -47,9 +44,8 @@ Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que prec
 ```
 docs/
 ├── README.md              # Este arquivo (índice)
-├── USER-GUIDE.md          # Guia para usuários
+├── GUIA-DO-USUARIO.md     # Guia para usuários
 ├── COMANDOS.md            # Lista de comandos
-├── FAQ.md                 # Perguntas frequentes
 └── HOOKS.md               # Git hooks documentation
 ```
 
@@ -69,7 +65,6 @@ docs/
 ## 🆘 Precisa de Ajuda?
 
 - **Problema técnico**: Abra uma [issue](https://github.com/isaaceliape/FASE/issues) com tag `[help]`
-- **Dúvida geral**: Verifique [FAQ.md](FAQ.md) primeiro
 - **Bug descoberto**: Reporte com template `bug_report.md`
 - **Sugestão**: Use template `feature_request.md`
 

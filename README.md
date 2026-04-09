@@ -111,10 +111,10 @@ npx fase-ai --uninstall
 /fase-atualizar
 ```
 
-Ou via npm:
+Ou via npx (sempre usa a versão mais recente):
 
 ```bash
-npm install -g fase-ai@latest
+npx fase-ai@latest
 ```
 
 ---
@@ -276,20 +276,17 @@ FASE oferece **32 comandos em português brasileiro**, organizados por função:
 ## 📚 Documentação Completa
 
 ### Guias Essenciais
-- [📖 Guia do Usuário](docs/guia-do-usuario.md) — Como usar FASE passo-a-passo
+- [📖 Guia do Usuário](docs/GUIA-DO-USUARIO.md) — Como usar FASE passo-a-passo
 - [🔧 Todos os Comandos](docs/COMANDOS.md) — Referência completa com exemplos
 - [📊 Agentes Disponíveis](AGENTS.md) — Como cada agente funciona
-- [🤔 FAQ](docs/FAQ.md) — Perguntas frequentes
 
 ### Para Contribuidores
 - [🤝 Como Contribuir](CONTRIBUTING.md) — Instruções para contribuições
-- [📝 Guia de Tradução](TRANSLATION_GUIDE.md) — Se quer traduzir para outro idioma
 - [🔌 System Hooks](docs/HOOKS.md) — Como adicionar automações
 
 ### Informações do Projeto
 - [📊 Histórico de Mudanças](CHANGELOG.md) — Todas as versões
 - [👥 Maintainers](MAINTAINERS.md) — Quem cuida do projeto
-- [📈 Progresso](PROGRESSO.md) — Status atual de desenvolvimento
 
 ---
 
@@ -373,7 +370,7 @@ Quer ajudar a traduzir ou melhorar o F.A.S.E.?
    /fase-verificar-trabalho
    ```
 
-Para mais detalhes, veja [📖 Guia do Usuário](docs/guia-do-usuario.md).
+Para mais detalhes, veja [📖 Guia do Usuário](docs/GUIA-DO-USUARIO.md).
 
 ---
 

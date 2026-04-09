@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>guia-do-usuario - FASE Docs</title>
+  <title>GUIA-DO-USUARIO - FASE Docs</title>
   <style>
     :root {
       --primary: #00ff88;
@@ -329,10 +329,10 @@
       <h3>📚 Documentação</h3>
       <a href="readme.html" class="sidebar-link ">📖 README</a>
 <a href="COMANDOS.html" class="sidebar-link ">📋 Comandos</a>
-<a href="guia-do-usuario.html" class="sidebar-link active">📘 Guia do Usuário</a>
+<a href="GUIA-DO-USUARIO.html" class="sidebar-link active">📘 Guia do Usuário</a>
 <a href="HOOKS.html" class="sidebar-link ">🔧 Git Hooks</a>
 <a href="NPM-REGISTRY.html" class="sidebar-link ">📦 NPM Registry</a>
-<a href="context-monitor.html" class="sidebar-link ">📊 Context Monitor</a>
+<a href="CONTEXT-MONITOR.html" class="sidebar-link ">📊 Context Monitor</a>
     </aside>
 
     <main class="main">
@@ -664,7 +664,7 @@
 </tbody></table>
 <hr>
 <h2>Referência de Configuração</h2>
-<p>O FASE armazena configurações do projeto em <code>.planning/config.json</code>. Configure durante <code>/fase-novo-projeto</code> ou atualize depois com <code>/fase-configuracoes</code>.</p>
+<p>O FASE armazena configurações do projeto em <code>.planejamento/config.json</code>. Configure durante <code>/fase-novo-projeto</code> ou atualize depois com <code>/fase-configuracoes</code>.</p>
 <h3>Esquema Completo do config.json</h3>
 <pre><code class="language-json">{
   &quot;mode&quot;: &quot;interactive&quot;,
@@ -682,7 +682,7 @@
   },
   &quot;git&quot;: {
     &quot;branching_strategy&quot;: &quot;none&quot;,
-    &quot;phase_branch_template&quot;: &quot;fase/fase-{phase}-{slug}&quot;,
+    &quot;phase_branch_template&quot;: &quot;fase/fase-{fase}-{slug}&quot;,
     &quot;milestone_branch_template&quot;: &quot;fase/{milestone}-{slug}&quot;
   }
 }
@@ -730,17 +730,17 @@
 <td><code>planning.commit_docs</code></td>
 <td><code>true</code>, <code>false</code></td>
 <td><code>true</code></td>
-<td>Se os arquivos de <code>.planning/</code> são commitados no git</td>
+<td>Se os arquivos de <code>.planejamento/</code> são commitados no git</td>
 </tr>
 <tr>
 <td><code>planning.search_gitignored</code></td>
 <td><code>true</code>, <code>false</code></td>
 <td><code>false</code></td>
-<td>Adiciona <code>--no-ignore</code> a buscas amplas para incluir <code>.planning/</code></td>
+<td>Adiciona <code>--no-ignore</code> a buscas amplas para incluir <code>.planejamento/</code></td>
 </tr>
 </tbody></table>
 <blockquote>
-<p><strong>Nota:</strong> Se <code>.planning/</code> está no <code>.gitignore</code>, <code>commit_docs</code> é automaticamente <code>false</code> independente do valor da configuração.</p>
+<p><strong>Nota:</strong> Se <code>.planejamento/</code> está no <code>.gitignore</code>, <code>commit_docs</code> é automaticamente <code>false</code> independente do valor da configuração.</p>
 </blockquote>
 <h3>Opções de Fluxo de Trabalho</h3>
 <table>
@@ -790,14 +790,14 @@
 </thead>
 <tbody><tr>
 <td><code>git.branching_strategy</code></td>
-<td><code>none</code>, <code>phase</code>, <code>milestone</code></td>
+<td><code>none</code>, <code>fase</code>, <code>milestone</code></td>
 <td><code>none</code></td>
 <td>Quando e como as branches são criadas</td>
 </tr>
 <tr>
 <td><code>git.phase_branch_template</code></td>
 <td>String template</td>
-<td><code>fase/fase-{phase}-{slug}</code></td>
+<td><code>fase/fase-{fase}-{slug}</code></td>
 <td>Nome da branch para estratégia por fase</td>
 </tr>
 <tr>
@@ -824,7 +824,7 @@
 <td>Desenvolvimento solo, projetos simples</td>
 </tr>
 <tr>
-<td><code>phase</code></td>
+<td><code>fase</code></td>
 <td>Em cada <code>executar-fase</code></td>
 <td>Uma fase por branch</td>
 <td>Revisão de código por fase, reversão granular</td>
@@ -836,7 +836,7 @@
 <td>Branches de lançamento, PR por versão</td>
 </tr>
 </tbody></table>
-<p><strong>Variáveis de modelo:</strong> <code>{phase}</code> = número com zero à esquerda (ex.: &quot;03&quot;), <code>{slug}</code> = nome em minúsculas com hífens, <code>{milestone}</code> = versão (ex.: &quot;v1.0&quot;).</p>
+<p><strong>Variáveis de modelo:</strong> <code>{fase}</code> = número com zero à esquerda (ex.: &quot;03&quot;), <code>{slug}</code> = nome em minúsculas com hífens, <code>{milestone}</code> = versão (ex.: &quot;v1.0&quot;).</p>
 <h3>Perfis de Modelo (Por Agente)</h3>
 <table>
 <thead>
@@ -866,7 +866,7 @@
 <td>Sonnet</td>
 </tr>
 <tr>
-<td>fase-phase-researcher</td>
+<td>fase-fase-researcher</td>
 <td>Opus</td>
 <td>Sonnet</td>
 <td>Haiku</td>
@@ -1011,7 +1011,7 @@
 <hr>
 <h2>Resolução de Problemas</h2>
 <h3>&quot;Projeto já inicializado&quot;</h3>
-<p>Você executou <code>/fase-novo-projeto</code> mas <code>.planning/PROJETO.md</code> já existe. Esse é um mecanismo de segurança. Se quiser recomeçar, delete o diretório <code>.planning/</code> primeiro.</p>
+<p>Você executou <code>/fase-novo-projeto</code> mas <code>.planejamento/PROJETO.md</code> já existe. Esse é um mecanismo de segurança. Se quiser recomeçar, delete o diretório <code>.planejamento/</code> primeiro.</p>
 <h3>Degradação de Contexto em Sessões Longas</h3>
 <p>Limpe sua janela de contexto entre comandos principais: <code>/clear</code> no Claude Code. O FASE é projetado em torno de contextos frescos — cada subagente recebe uma janela limpa de 200K. Se a qualidade estiver caindo na sessão principal, limpe e use <code>/fase-retomar-trabalho</code> ou <code>/fase-progresso</code> para restaurar o estado.</p>
 <h3>Planos Parecem Errados ou Desalinhados</h3>
@@ -1025,7 +1025,7 @@
 <h3>Custos de Modelo Muito Altos</h3>
 <p>Mude para o perfil budget: <code>/fase-definir-perfil budget</code>. Desabilite os agentes de pesquisa e verificação de plano via <code>/fase-configuracoes</code> se o domínio for familiar para você (ou para o Claude).</p>
 <h3>Trabalhando em Projeto Sensível/Privado</h3>
-<p>Defina <code>commit_docs: false</code> durante <code>/fase-novo-projeto</code> ou via <code>/fase-configuracoes</code>. Adicione <code>.planning/</code> ao seu <code>.gitignore</code>. Os artefatos de planejamento ficam locais e nunca tocam o git.</p>
+<p>Defina <code>commit_docs: false</code> durante <code>/fase-novo-projeto</code> ou via <code>/fase-configuracoes</code>. Adicione <code>.planejamento/</code> ao seu <code>.gitignore</code>. Os artefatos de planejamento ficam locais e nunca tocam o git.</p>
 <h3>Atualização do FASE Sobrescreveu Minhas Mudanças Locais</h3>
 <p>Desde a v1.17, o instalador faz backup de arquivos modificados localmente em <code>fase-local-patches/</code>. Execute <code>/fase-reaplicar-patches</code> para mesclar suas mudanças de volta.</p>
 <h3>Subagente Parece Ter Falhado Mas o Trabalho Foi Feito</h3>
@@ -1079,7 +1079,7 @@
 <hr>
 <h2>Estrutura de Arquivos do Projeto</h2>
 <p>Para referência, aqui está o que o FASE cria no seu projeto:</p>
-<pre><code>.planning/
+<pre><code>.planejamento/
   PROJETO.md              # Visão e contexto do projeto (sempre carregado)
   REQUISITOS.md           # Requisitos v1/v2 com escopo e IDs
   PLANO-ENTREGAS.md       # Divisão de fases com rastreamento de status

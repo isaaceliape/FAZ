@@ -196,9 +196,9 @@ function escapeRegex(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function normalizeEtapaNome(phase) {
-  const match = String(phase).match(/^(\d+)([A-Z])?((?:\.\d+)*)/i);
-  if (!match) return phase;
+function normalizeEtapaNome(etapa) {
+  const match = String(etapa).match(/^(\d+)([A-Z])?((?:\.\d+)*)/i);
+  if (!match) return etapa;
   const padded = match[1].padStart(2, '0');
   const letter = match[2] ? match[2].toUpperCase() : '';
   const decimal = match[3] || '';
@@ -233,7 +233,7 @@ function compareEtapaNum(a, b) {
   return 0;
 }
 
-function searchPhaseInDir(baseDir, relBase, normalized) {
+function searchEtapaInDir(baseDir, relBase, normalized) {
   try {
     const entries = fs.readdirSync(baseDir, { withFileTypes: true });
     const dirs = entries.filter(e => e.isDirectory()).map(e => e.name).sort((a, b) => compareEtapaNum(a, b));
@@ -278,14 +278,14 @@ function searchPhaseInDir(baseDir, relBase, normalized) {
   }
 }
 
-function findEtapaInternal(cwd, phase) {
-  if (!phase) return null;
+function findEtapaInternal(cwd, etapa) {
+  if (!etapa) return null;
 
   const etapasDir = path.join(cwd, '.planejamento', 'etapas');
-  const normalized = normalizeEtapaNome(phase);
+  const normalized = normalizeEtapaNome(etapa);
 
   // Search current phases first
-  const current = searchPhaseInDir(etapasDir, '.planejamento/phases', normalized);
+  const current = searchEtapaInDir(etapasDir, '.planejamento/phases', normalized);
   if (current) return current;
 
   // Search archived milestone phases (newest first)
@@ -304,7 +304,7 @@ function findEtapaInternal(cwd, phase) {
       const version = archiveName.match(/^(v[\d.]+)-phases$/)[1];
       const archivePath = path.join(milestonesDir, archiveName);
       const relBase = '.planejamento/milestones/' + archiveName;
-      const result = searchPhaseInDir(archivePath, relBase, normalized);
+      const result = searchEtapaInDir(archivePath, relBase, normalized);
       if (result) {
         result.archived = version;
         return result;
@@ -352,7 +352,7 @@ function getArchivedEtapasDirs(cwd) {
 
 // ─── Roadmap & model utilities ────────────────────────────────────────────────
 
-function getRoadmapPhaseInternal(cwd, etapaNum) {
+function getRoadmapEtapaInternal(cwd, etapaNum) {
   if (!etapaNum) return null;
   const roadmapPath = path.join(cwd, '.planejamento', 'ROADMAP.md');
   if (!fs.existsSync(roadmapPath)) return null;
@@ -501,10 +501,10 @@ module.exports = {
   escapeRegex,
   normalizeEtapaNome,
   compareEtapaNum,
-  searchPhaseInDir,
+  searchEtapaInDir,
   findEtapaInternal,
   getArchivedEtapasDirs,
-  getRoadmapPhaseInternal,
+  getRoadmapEtapaInternal,
   resolveModelInternal,
   pathExistsInternal,
   generateSlugInternal,

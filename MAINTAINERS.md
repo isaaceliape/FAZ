@@ -108,7 +108,7 @@ Ver [SECURITY.md](SECURITY.md) para mais detalhes.
 ### Quando Atualizar
 
 - ✅ Novo comando adicionado → Atualizar COMANDOS.md
-- ✅ Feature nova → Atualizar USER-GUIDE.md
+- ✅ Feature nova → Atualizar GUIA-DO-USUARIO.md
 - ✅ Breaking change → Nota clara em CHANGELOG.md
 
 ### Padrão de Escrita

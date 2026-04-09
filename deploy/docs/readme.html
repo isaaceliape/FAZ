@@ -329,10 +329,10 @@
       <h3>📚 Documentação</h3>
       <a href="readme.html" class="sidebar-link active">📖 README</a>
 <a href="COMANDOS.html" class="sidebar-link ">📋 Comandos</a>
-<a href="guia-do-usuario.html" class="sidebar-link ">📘 Guia do Usuário</a>
+<a href="GUIA-DO-USUARIO.html" class="sidebar-link ">📘 Guia do Usuário</a>
 <a href="HOOKS.html" class="sidebar-link ">🔧 Git Hooks</a>
 <a href="NPM-REGISTRY.html" class="sidebar-link ">📦 NPM Registry</a>
-<a href="context-monitor.html" class="sidebar-link ">📊 Context Monitor</a>
+<a href="CONTEXT-MONITOR.html" class="sidebar-link ">📊 Context Monitor</a>
     </aside>
 
     <main class="main">
@@ -348,16 +348,12 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="USER-GUIDE.md"><strong>USER-GUIDE.md</strong></a></td>
+<td><a href="GUIA-DO-USUARIO.md"><strong>GUIA-DO-USUARIO.md</strong></a></td>
 <td>Guia completo de instalação e uso do FASE</td>
 </tr>
 <tr>
 <td><a href="COMANDOS.md"><strong>COMANDOS.md</strong></a></td>
 <td>Lista com todos os 32 comandos disponíveis</td>
-</tr>
-<tr>
-<td><a href="FAQ.md"><strong>FAQ.md</strong></a></td>
-<td>Perguntas frequentes e respostas</td>
 </tr>
 <tr>
 <td><a href="NPM-REGISTRY.md"><strong>NPM-REGISTRY.md</strong></a></td>
@@ -388,9 +384,8 @@
 <h2>🎯 Começar Por Aqui</h2>
 <h3>Sou um Usuário</h3>
 <ol>
-<li>Leia <a href="USER-GUIDE.md">USER-GUIDE.md</a> para instalação</li>
+<li>Leia <a href="GUIA-DO-USUARIO.md">GUIA-DO-USUARIO.md</a> para instalação</li>
 <li>Explore <a href="COMANDOS.md">COMANDOS.md</a> para ver o que está disponível</li>
-<li>Verifique <a href="FAQ.md">FAQ.md</a> se tiver dúvidas</li>
 </ol>
 <h3>Quero Contribuir</h3>
 <ol>
@@ -401,16 +396,14 @@
 </ol>
 <h3>Encontrei um Bug</h3>
 <ol>
-<li>Verifique <a href="FAQ.md">FAQ.md</a> - talvez já haja solução</li>
 <li>Procure em <a href="https://github.com/isaaceliape/FASE/issues">GitHub Issues</a> por issue similar</li>
 <li>Abra uma nova issue com os detalhes</li>
 </ol>
 <h2>📋 Estrutura de Arquivos</h2>
 <pre><code>docs/
 ├── README.md              # Este arquivo (índice)
-├── USER-GUIDE.md          # Guia para usuários
+├── GUIA-DO-USUARIO.md     # Guia para usuários
 ├── COMANDOS.md            # Lista de comandos
-├── FAQ.md                 # Perguntas frequentes
 └── HOOKS.md               # Git hooks documentation
 </code></pre>
 <h2>🌐 Documentos em Português</h2>
@@ -430,11 +423,26 @@
 <h2>🆘 Precisa de Ajuda?</h2>
 <ul>
 <li><strong>Problema técnico</strong>: Abra uma <a href="https://github.com/isaaceliape/FASE/issues">issue</a> com tag <code>[help]</code></li>
-<li><strong>Dúvida geral</strong>: Verifique <a href="FAQ.md">FAQ.md</a> primeiro</li>
 <li><strong>Bug descoberto</strong>: Reporte com template <code>bug_report.md</code></li>
 <li><strong>Sugestão</strong>: Use template <code>feature_request.md</code></li>
 </ul>
 <h2>📈 Melhorias Documentadas</h2>
+<h3>v3.2.0 (Março 2026)</h3>
+<p><strong>Path Standardization &amp; Multi-Runtime Architecture</strong></p>
+<ul>
+<li>✅ Todos os comandos e agentes agora usam padrão universal <code>@~/.fase/</code></li>
+<li>✅ Installer converte automaticamente para caminhos específicos de cada runtime</li>
+<li>✅ 129 testes unitários com cobertura completa</li>
+<li>✅ Documentação expandida sobre path standardization</li>
+<li>✅ Renomeação de arquivos: <code>.pt.md</code> → <code>.md</code> para consistência</li>
+</ul>
+<p><strong>Novos Documentos:</strong></p>
+<ul>
+<li>📚 <a href="../TEST_UPDATES_SUMMARY.md">TEST_UPDATES_SUMMARY.md</a> - Rastreamento detalhado de mudanças</li>
+<li>📚 <a href="../COMMAND_PATHS.md">COMMAND_PATHS.md</a> - Explicação do mecanismo de path standardization</li>
+<li>📚 Seções expandidas em <a href="../bin/test/README.md">bin/test/README.md</a> e <a href="../bin/test/TESTING.md">bin/test/TESTING.md</a></li>
+</ul>
+<p><strong>Ver também:</strong> <a href="../CHANGELOG.md">CHANGELOG.md</a> para histórico completo de versões</p>
 <h3>v2.4.0 (Março 2026)</h3>
 <ul>
 <li>✅ Adicionado pre-commit hooks para validação de pacote npm</li>

@@ -8,7 +8,7 @@ const { escapeRegex, normalizeEtapaNome, compareEtapaNum, findEtapaInternal, get
 const { extractFrontmatter } = require('./frontmatter.cjs');
 const { writeStateMd } = require('./state.cjs');
 
-function cmdPhasesList(cwd, options, raw) {
+function cmdEtapasList(cwd, options, raw) {
   const etapasDir = path.join(cwd, '.planejamento', 'etapas');
   const { type, phase, includeArchived } = options;
 
@@ -84,7 +84,7 @@ function cmdPhasesList(cwd, options, raw) {
   }
 }
 
-function cmdPhaseNextDecimal(cwd, basePhase, raw) {
+function cmdEtapaNextDecimal(cwd, basePhase, raw) {
   const etapasDir = path.join(cwd, '.planejamento', 'etapas');
   const normalized = normalizeEtapaNome(basePhase);
 
@@ -149,13 +149,13 @@ function cmdPhaseNextDecimal(cwd, basePhase, raw) {
   }
 }
 
-function cmdFindPhase(cwd, phase, raw) {
-  if (!phase) {
+function cmdFindEtapa(cwd, etapa, raw) {
+  if (!etapa) {
     error('identificador de fase obrigatório');
   }
 
   const etapasDir = path.join(cwd, '.planejamento', 'etapas');
-  const normalized = normalizeEtapaNome(phase);
+  const normalized = normalizeEtapaNome(etapa);
 
   const notFound = { found: false, directory: null, phase_number: null, phase_name: null, plans: [], summaries: [] };
 
@@ -198,7 +198,7 @@ function extractObjective(content) {
   return m ? m[1].trim() : null;
 }
 
-function cmdPhasePlanIndex(cwd, phase, raw) {
+function cmdEtapaPlanIndex(cwd, phase, raw) {
   if (!phase) {
     error('fase obrigatória para phase-plan-index');
   }
@@ -308,7 +308,7 @@ function cmdPhasePlanIndex(cwd, phase, raw) {
   output(result, raw);
 }
 
-function cmdPhaseAdd(cwd, description, raw) {
+function cmdEtapaAdd(cwd, description, raw) {
   if (!description) {
     error('descrição obrigatória para adicionar fase');
   }
@@ -364,7 +364,7 @@ function cmdPhaseAdd(cwd, description, raw) {
   output(result, raw, paddedNum);
 }
 
-function cmdPhaseInsert(cwd, afterPhase, description, raw) {
+function cmdEtapaInsert(cwd, afterPhase, description, raw) {
   if (!afterEtapa || !description) {
     error('fase-anterior e descrição obrigatórias para inserir fase');
   }
@@ -445,7 +445,7 @@ function cmdPhaseInsert(cwd, afterPhase, description, raw) {
   output(result, raw, decimalPhase);
 }
 
-function cmdPhaseRemove(cwd, targetPhase, options, raw) {
+function cmdEtapaRemove(cwd, targetPhase, options, raw) {
   if (!targetPhase) {
     error('número da fase obrigatório para remover fase');
   }
@@ -698,7 +698,7 @@ function cmdPhaseRemove(cwd, targetPhase, options, raw) {
   output(result, raw);
 }
 
-function cmdPhaseComplete(cwd, etapaNum, raw) {
+function cmdEtapaComplete(cwd, etapaNum, raw) {
   if (!etapaNum) {
     error('número da fase obrigatório para completar fase');
   }
@@ -890,12 +890,12 @@ function cmdPhaseComplete(cwd, etapaNum, raw) {
 }
 
 module.exports = {
-  cmdPhasesList,
-  cmdPhaseNextDecimal,
-  cmdFindPhase,
-  cmdPhasePlanIndex,
-  cmdPhaseAdd,
-  cmdPhaseInsert,
-  cmdPhaseRemove,
-  cmdPhaseComplete,
+  cmdEtapasList,
+  cmdEtapaNextDecimal,
+  cmdFindEtapa,
+  cmdEtapaPlanIndex,
+  cmdEtapaAdd,
+  cmdEtapaInsert,
+  cmdEtapaRemove,
+  cmdEtapaComplete,
 };

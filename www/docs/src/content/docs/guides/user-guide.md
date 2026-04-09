@@ -7,7 +7,7 @@ description: Guia detalhado para usar FASE em suas fases
 
 Este é o guia completo para usar FASE em seu fluxo de desenvolvimento.
 
-*Conteúdo será migrado do guia-do-usuario.md*
+*Conteúdo será migrado do GUIA-DO-USUARIO.md*
 
 ## Tópicos
 

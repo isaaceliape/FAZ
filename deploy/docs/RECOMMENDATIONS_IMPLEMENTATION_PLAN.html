@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RECOMMENDATIONS_IMPLEMENTATION_PLAN - FASE Docs</title>
+  <style>
+    :root {
+      --primary: #00ff88;
+      --secondary: #00bfff;
+      --warning: #ffaa00;
+      --danger: #ff3366;
+      --dark-bg: #0a0e27;
+      --grid-bg: #111827;
+      --text: #e5e7eb;
+      --dim: #9ca3af;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .header {
+      background-color: var(--grid-bg);
+      border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+
+    .logo span {
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      border: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .content-wrapper {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: var(--grid-bg);
+      border-right: 1px solid rgba(0, 255, 136, 0.1);
+      padding: 20px;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .sidebar h3 {
+      color: var(--primary);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+      margin-top: 20px;
+    }
+
+    .sidebar h3:first-child {
+      margin-top: 0;
+    }
+
+    .sidebar-link {
+      display: block;
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-link:hover {
+      color: var(--primary);
+      background-color: rgba(0, 255, 136, 0.1);
+      border-left-color: var(--primary);
+    }
+
+    .sidebar-link.active {
+      color: var(--primary);
+      background-color: rgba(0, 255, 136, 0.15);
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+    }
+
+    h1 {
+      color: var(--primary);
+      font-size: 2rem;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      color: var(--secondary);
+      font-size: 1.5rem;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+
+    h3 {
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 15px;
+      color: var(--text);
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      border-bottom: 1px dotted var(--primary);
+      transition: all 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--secondary);
+      border-bottom-style: solid;
+    }
+
+    code {
+      background-color: var(--dark-bg);
+      color: var(--primary);
+      padding: 0.2rem 0.4rem;
+      border-radius: 2px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background-color: var(--dark-bg);
+      border: 1px solid var(--dim);
+      border-radius: 4px;
+      padding: 15px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+
+    pre code {
+      padding: 0;
+      background: none;
+      color: var(--primary);
+    }
+
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    blockquote {
+      border-left: 4px solid var(--primary);
+      background-color: var(--dark-bg);
+      padding: 15px;
+      margin: 15px 0;
+      color: var(--dim);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      border: 1px solid var(--dim);
+    }
+
+    th {
+      background-color: var(--dark-bg);
+      color: var(--primary);
+      padding: 12px;
+      text-align: left;
+      border-bottom: 2px solid var(--primary);
+      border-right: 1px solid var(--dim);
+      font-weight: 600;
+    }
+
+    th:last-child {
+      border-right: none;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid var(--dim);
+      border-right: 1px solid var(--dim);
+    }
+
+    td:last-child {
+      border-right: none;
+    }
+
+    tr:hover {
+      background-color: rgba(0, 255, 136, 0.05);
+    }
+
+    strong {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    em {
+      color: var(--dim);
+      font-style: italic;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--dim);
+      margin: 30px 0;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--dark-bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--secondary);
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .content-wrapper {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+        max-height: 150px;
+        overflow-x: auto;
+        display: flex;
+        gap: 10px;
+      }
+
+      .sidebar h3 {
+        display: none;
+      }
+
+      .sidebar-link {
+        white-space: nowrap;
+        margin-bottom: 0;
+      }
+
+      .main {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">fase<span>-</span>ai</div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="https://github.com/isaaceliape/FASE">GitHub</a>
+    </div>
+  </div>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <h3>📚 Documentação</h3>
+      <a href="readme.html" class="sidebar-link ">📖 README</a>
+<a href="COMANDOS.html" class="sidebar-link ">📋 Comandos</a>
+<a href="GUIA-DO-USUARIO.html" class="sidebar-link ">📘 Guia do Usuário</a>
+<a href="HOOKS.html" class="sidebar-link ">🔧 Git Hooks</a>
+<a href="NPM-REGISTRY.html" class="sidebar-link ">📦 NPM Registry</a>
+<a href="CONTEXT-MONITOR.html" class="sidebar-link ">📊 Context Monitor</a>
+    </aside>
+
+    <main class="main">
+      <h1>📋 Recommendations Implementation Plan</h1>
+<p>Created: 2026-03-28<br>Priority: Organized by impact vs. effort</p>
+<hr>
+<h2>1. 🔧 Fix Failing Test (1 of 129) ✅ <strong>DONE</strong></h2>
+<p><strong>Impact:</strong> High (maintains 100% test confidence)<br><strong>Effort:</strong> Low (15-30 min)<br><strong>Priority:</strong> 🔴 <strong>DO FIRST</strong><br><strong>Completed:</strong> 2026-03-28</p>
+<h3>Root Cause</h3>
+<p>Test was creating directory with <code>mode: 0o755</code> but umask caused it to be created as <code>0o700</code>. The test didn&#39;t explicitly call <code>fs.chmodSync</code> to enforce exact permissions.</p>
+<h3>Tasks</h3>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> <strong>1.1</strong> Investigate failing test: <code>test/providers.test.js:365</code></li>
+<li><input checked="" disabled="" type="checkbox"> <strong>1.2</strong> Identify root cause - umask interference</li>
+<li><input checked="" disabled="" type="checkbox"> <strong>1.3</strong> Implement fix - added <code>fs.chmodSync(configPath, 0o755)</code> and changed assertion to exact match</li>
+<li><input checked="" disabled="" type="checkbox"> <strong>1.4</strong> Run full test suite - 129/129 passing ✅</li>
+<li><input checked="" disabled="" type="checkbox"> <strong>1.5</strong> Commit: <code>fix: Claude config permissions test - explicit chmod for umask compatibility</code></li>
+</ul>
+<h3>Files to Check</h3>
+<ul>
+<li><code>bin/test/providers.test.js</code> (line 365)</li>
+<li>Related permission logic in installer</li>
+</ul>
+<hr>
+<h2>2. 📝 Commit Docs Website Work</h2>
+<p><strong>Impact:</strong> Medium (progress tracking, backup)<br><strong>Effort:</strong> Low (10 min)<br><strong>Priority:</strong> 🟡 <strong>DO EARLY</strong></p>
+<h3>Tasks</h3>
+<ul>
+<li><p><input disabled="" type="checkbox"> <strong>2.1</strong> Review uncommitted changes:</p>
+<pre><code class="language-bash">git diff www/docs/
+</code></pre>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>2.2</strong> Stage and commit docs changes:</p>
+<pre><code class="language-bash">git add www/docs/
+git commit -m &quot;docs: WIP - Astro docs site updates&quot;
+</code></pre>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>2.3</strong> Decide on <code>.astro/</code> folder - add to <code>.gitignore</code> if needed</p>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>2.4</strong> Clean up screenshot files:</p>
+<ul>
+<li><code>fase-docs-colorscheme.png</code> - keep or move to <code>assets/</code>?</li>
+<li><code>fase-docs-validation.png</code> - keep or move to <code>assets/</code>?</li>
+</ul>
+</li>
+</ul>
+<h3>Files Involved</h3>
+<ul>
+<li><code>www/docs/astro.config.mjs</code></li>
+<li><code>www/docs/src/content.config.ts</code></li>
+<li><code>www/docs/src/content/docs/**/*.md</code></li>
+<li><code>www/docs/src/styles/custom.css</code></li>
+<li><code>www/index.html</code></li>
+</ul>
+<hr>
+<h2>3. 🌐 Publish Docs Site to GitHub Pages</h2>
+<p><strong>Impact:</strong> High (better UX, SEO, professionalism)<br><strong>Effort:</strong> Medium (2-4 hours)<br><strong>Priority:</strong> 🟡 <strong>MEDIUM TERM</strong></p>
+<h3>Phase 1: Setup &amp; Configuration</h3>
+<ul>
+<li><p><input disabled="" type="checkbox"> <strong>3.1</strong> Configure Astro for GitHub Pages deployment</p>
+<ul>
+<li>Update <code>astro.config.mjs</code> with <code>site</code> and <code>base</code> config</li>
+<li>Add GitHub Pages deployment action</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>3.2</strong> Create GitHub Actions workflow: <code>.github/workflows/deploy-docs.yml</code></p>
+<ul>
+<li>Build on push to <code>main</code></li>
+<li>Deploy to <code>gh-pages</code> branch</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>3.3</strong> Test local build:</p>
+<pre><code class="language-bash">cd www/docs
+npm run build
+</code></pre>
+</li>
+</ul>
+<h3>Phase 2: Content Polish</h3>
+<ul>
+<li><p><input disabled="" type="checkbox"> <strong>3.4</strong> Add search functionality (Pagefind or Algolia DocSearch)</p>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>3.5</strong> Add versioning support (if planning v4, v5, etc.)</p>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>3.6</strong> Ensure all docs are complete:</p>
+<ul>
+<li>Getting Started</li>
+<li>All 32 commands documented</li>
+<li>All 12 agents documented</li>
+<li>Architecture reference</li>
+<li>Contributing guide</li>
+</ul>
+</li>
+</ul>
+<h3>Phase 3: Deployment</h3>
+<ul>
+<li><p><input disabled="" type="checkbox"> <strong>3.7</strong> Enable GitHub Pages: Settings → Pages → Source: <code>gh-pages</code> branch</p>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>3.8</strong> Update README and landing page links to point to new docs URL</p>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>3.9</strong> Add docs URL to npm package metadata</p>
+</li>
+</ul>
+<h3>Files to Create/Modify</h3>
+<ul>
+<li><code>.github/workflows/deploy-docs.yml</code> (new)</li>
+<li><code>www/docs/astro.config.mjs</code> (update)</li>
+<li><code>www/docs/package.json</code> (add deploy scripts)</li>
+</ul>
+<hr>
+<h2>4. 📚 Add Example Projects</h2>
+<p><strong>Impact:</strong> High (onboarding, demonstration)<br><strong>Effort:</strong> Medium-High (4-8 hours)<br><strong>Priority:</strong> 🟡 <strong>MEDIUM TERM</strong></p>
+<h3>Phase 1: Plan Examples</h3>
+<ul>
+<li><p><input disabled="" type="checkbox"> <strong>4.1</strong> Define 3 example projects:</p>
+<ol>
+<li><strong>Beginner</strong>: CLI tool (e.g., &quot;pomodoro timer&quot;)</li>
+<li><strong>Intermediate</strong>: Refactor legacy script</li>
+<li><strong>Advanced</strong>: Full feature implementation with tests</li>
+</ol>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>4.2</strong> Create example structure:</p>
+<pre><code>examples/
+├── README.md (overview)
+├── example-1-cli-tool/
+│   ├── README.md (walkthrough)
+│   ├── FASE_PHASES.md (phase breakdown)
+│   └── [source code]
+├── example-2-refactor/
+└── example-3-full-feature/
+</code></pre>
+</li>
+</ul>
+<h3>Phase 2: Create Example 1 (CLI Tool)</h3>
+<ul>
+<li><p><input disabled="" type="checkbox"> <strong>4.3</strong> Document the FASE workflow for building a simple CLI:</p>
+<ul>
+<li>Phase 1: Research &amp; Planning</li>
+<li>Phase 2: Core Implementation</li>
+<li>Phase 3: Testing &amp; Polish</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>4.4</strong> Include actual FASE commands used at each step</p>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>4.5</strong> Show before/after: spec → final code</p>
+</li>
+</ul>
+<h3>Phase 3: Create Examples 2 &amp; 3</h3>
+<ul>
+<li><p><input disabled="" type="checkbox"> <strong>4.6</strong> Repeat for refactor example</p>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>4.7</strong> Repeat for full feature example</p>
+</li>
+</ul>
+<h3>Phase 4: Integration</h3>
+<ul>
+<li><p><input disabled="" type="checkbox"> <strong>4.8</strong> Link examples from README.md</p>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>4.9</strong> Add to docs site navigation</p>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>4.10</strong> Create video/GIF walkthroughs (optional but powerful)</p>
+</li>
+</ul>
+<hr>
+<h2>5. 📊 Add Usage Analytics (Opt-in)</h2>
+<p><strong>Impact:</strong> Medium (data-driven decisions)<br><strong>Effort:</strong> Medium (3-5 hours)<br><strong>Priority:</strong> 🟢 <strong>LOWER PRIORITY</strong></p>
+<h3>Phase 1: Design</h3>
+<ul>
+<li><p><input disabled="" type="checkbox"> <strong>5.1</strong> Define what to track:</p>
+<ul>
+<li>Command usage (which commands run most)</li>
+<li>Runtime preference (Claude Code vs OpenCode vs Gemini vs Codex)</li>
+<li>Agent usage</li>
+<li>Session duration (optional)</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>5.2</strong> Privacy design:</p>
+<ul>
+<li><strong>Opt-in only</strong> (default: OFF)</li>
+<li>No code/project content tracked</li>
+<li>Anonymous UUID per installation</li>
+<li>Clear documentation on what&#39;s tracked</li>
+</ul>
+</li>
+</ul>
+<h3>Phase 2: Implementation</h3>
+<ul>
+<li><p><input disabled="" type="checkbox"> <strong>5.3</strong> Add analytics toggle to config:</p>
+<pre><code class="language-bash">/fase-configuracoes
+# → &quot;Enable anonymous usage analytics: [Y/n]&quot;
+</code></pre>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>5.4</strong> Implement tracking in installer/hooks:</p>
+<ul>
+<li>Generate anonymous ID on opt-in</li>
+<li>Log command invocations locally</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>5.5</strong> Add periodic upload (weekly?) to analytics endpoint</p>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>5.6</strong> Choose analytics backend:</p>
+<ul>
+<li>Simple: Google Sheets via API</li>
+<li>Better: Plausible, Fathom (privacy-focused)</li>
+<li>Custom: Self-hosted Countly/Matomo</li>
+</ul>
+</li>
+</ul>
+<h3>Phase 3: Dashboard</h3>
+<ul>
+<li><p><input disabled="" type="checkbox"> <strong>5.7</strong> Create simple dashboard to view aggregated data</p>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>5.8</strong> Document insights in MAINTAINERS.md</p>
+</li>
+</ul>
+<h3>Files to Create/Modify</h3>
+<ul>
+<li><code>bin/analytics.js</code> (new - tracking logic)</li>
+<li><code>comandos/fase-configuracoes.md</code> (update - add analytics toggle)</li>
+<li><code>docs/ANALYTICS.md</code> (new - privacy policy &amp; what&#39;s tracked)</li>
+</ul>
+<hr>
+<h2>6. 📣 Community Growth Initiative</h2>
+<p><strong>Impact:</strong> High (adoption, contributors)<br><strong>Effort:</strong> Ongoing (1-2 hours/week)<br><strong>Priority:</strong> 🟡 <strong>MEDIUM TERM</strong></p>
+<h3>Phase 1: Content Creation</h3>
+<ul>
+<li><p><input disabled="" type="checkbox"> <strong>6.1</strong> Record 5-10 min YouTube tutorial (Portuguese):</p>
+<ul>
+<li>&quot;FASE: Como construir projetos com IA sem enrolação&quot;</li>
+<li>Show full workflow: install → plan → execute → verify</li>
+<li>Post on personal channel + FASE repo README</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>6.2</strong> Write Dev.to article (Portuguese):</p>
+<ul>
+<li>&quot;Como traduzi o Get Shit Done para português e criei o FASE&quot;</li>
+<li>Technical deep-dive + philosophy</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>6.3</strong> Create demo GIFs for README:</p>
+<ul>
+<li>Show FASE in action (terminal recording)</li>
+<li>Use <code>termtosvg</code> or <code>asciinema</code></li>
+</ul>
+</li>
+</ul>
+<h3>Phase 2: Community Outreach</h3>
+<ul>
+<li><p><input disabled="" type="checkbox"> <strong>6.4</strong> Share in Brazilian communities:</p>
+<ul>
+<li>r/brasilprogramming (Reddit)</li>
+<li>Dev.to BR</li>
+<li>LinkedIn (Brazilian dev groups)</li>
+<li>Twitter/X with #brdev #IA</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>6.5</strong> Reach out to potential contributors:</p>
+<ul>
+<li>People who starred the repo</li>
+<li>Brazilian devs who tweet about AI coding</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>6.6</strong> Consider other languages:</p>
+<ul>
+<li>Spanish localization (large market)</li>
+<li>French localization</li>
+</ul>
+</li>
+</ul>
+<h3>Phase 3: Sustainability</h3>
+<ul>
+<li><p><input disabled="" type="checkbox"> <strong>6.7</strong> Add &quot;Community&quot; section to README</p>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>6.8</strong> Set up Discord/Telegram for FASE users (optional)</p>
+</li>
+<li><p><input disabled="" type="checkbox"> <strong>6.9</strong> Create &quot;Showcase&quot; section for projects built with FASE</p>
+</li>
+</ul>
+<hr>
+<h2>📅 Suggested Timeline</h2>
+<h3>Week 1 (Immediate)</h3>
+<ul>
+<li>✅ Fix failing test (#1)</li>
+<li>✅ Commit docs work (#2)</li>
+</ul>
+<h3>Week 2-3</h3>
+<ul>
+<li>📦 Publish docs site (#3)</li>
+<li>📚 Start Example 1 (#4)</li>
+</ul>
+<h3>Week 4-6</h3>
+<ul>
+<li>📚 Complete examples (#4)</li>
+<li>📣 Create tutorial content (#6)</li>
+</ul>
+<h3>Month 2+</h3>
+<ul>
+<li>📊 Analytics (#5) - if still valuable</li>
+<li>📣 Ongoing community growth (#6)</li>
+</ul>
+<hr>
+<h2>🎯 Success Metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Goal</th>
+<th>Metric</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Code Quality</td>
+<td>Test pass rate</td>
+<td>100% (129/129)</td>
+</tr>
+<tr>
+<td>Documentation</td>
+<td>Docs site deployed</td>
+<td>✅ Live</td>
+</tr>
+<tr>
+<td>Onboarding</td>
+<td>Example projects</td>
+<td>3 complete</td>
+</tr>
+<tr>
+<td>Adoption</td>
+<td>npm downloads/month</td>
+<td>+50%</td>
+</tr>
+<tr>
+<td>Community</td>
+<td>GitHub stars</td>
+<td>+100</td>
+</tr>
+<tr>
+<td>Contributors</td>
+<td>Active contributors</td>
+<td>2-3 external</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>🔄 Next Steps</h2>
+<ol>
+<li><strong>Pick one</strong> recommendation to start with</li>
+<li><strong>Break it down</strong> into tasks (already done above)</li>
+<li><strong>Execute</strong> using FASE itself! 🐾</li>
+</ol>
+<hr>
+<p><em>Generated by Clawd • 2026-03-28</em></p>
+
+    </main>
+  </div>
+</body>
+</html>

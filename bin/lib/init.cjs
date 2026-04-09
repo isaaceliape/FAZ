@@ -5,7 +5,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
-const { loadConfig, resolveModelInternal, findEtapaInternal, getRoadmapPhaseInternal, pathExistsInternal, generateSlugInternal, getMilestoneInfo, normalizeEtapaNome, toPosixPath, output, error } = require('./core.cjs');
+const { loadConfig, resolveModelInternal, findEtapaInternal, getRoadmapEtapaInternal, pathExistsInternal, generateSlugInternal, getMilestoneInfo, normalizeEtapaNome, toPosixPath, output, error } = require('./core.cjs');
 
 function cmdInitExecutePhase(cwd, phase, raw) {
   if (!phase) {
@@ -16,7 +16,7 @@ function cmdInitExecutePhase(cwd, phase, raw) {
   const phaseInfo = findEtapaInternal(cwd, phase);
   const milestone = getMilestoneInfo(cwd);
 
-  const roadmapEtapa = getRoadmapPhaseInternal(cwd, phase);
+  const roadmapEtapa = getRoadmapEtapaInternal(cwd, phase);
   const reqMatch = roadmapPhase?.section?.match(/^\*\*Requirements\*\*:[^\S\n]*([^\n]*)$/m);
   const reqExtracted = reqMatch
     ? reqMatch[1].replace(/[\[\]]/g, '').split(',').map(s => s.trim()).filter(Boolean).join(', ')
@@ -88,7 +88,7 @@ function cmdInitPlanPhase(cwd, phase, raw) {
   const config = loadConfig(cwd);
   const phaseInfo = findEtapaInternal(cwd, phase);
 
-  const roadmapEtapa = getRoadmapPhaseInternal(cwd, phase);
+  const roadmapEtapa = getRoadmapEtapaInternal(cwd, phase);
   const reqMatch = roadmapPhase?.section?.match(/^\*\*Requirements\*\*:[^\S\n]*([^\n]*)$/m);
   const reqExtracted = reqMatch
     ? reqMatch[1].replace(/[\[\]]/g, '').split(',').map(s => s.trim()).filter(Boolean).join(', ')
@@ -367,7 +367,7 @@ function cmdInitPhaseOp(cwd, phase, raw) {
 
   // Fallback to ROADMAP.md if no directory exists (e.g., Plans: TBD)
   if (!phaseInfo) {
-    const roadmapEtapa = getRoadmapPhaseInternal(cwd, phase);
+    const roadmapEtapa = getRoadmapEtapaInternal(cwd, phase);
     if (roadmapPhase?.found) {
       const etapaNome = roadmapPhase.phase_name;
       phaseInfo = {

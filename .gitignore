@@ -21,7 +21,7 @@ temp/
 *.tmp
 
 # State files (generated during execution)
-.planning/
+.planejamento/
 STATE.md
 *.state.json
 

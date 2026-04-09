@@ -1229,7 +1229,7 @@ Verifique por mode flags no contexto do prompt:
 - Diagnostique mas não conserte
 - Pare após confirmar root cause
 - Pule fix_and_verify step
-- Retorne root cause para caller (para plan-fase --gaps lidar)
+- Retorne root cause para caller (para plan-phase --gaps lidar)
 
 **goal: find_and_fix** (padrão)
 - Encontre root cause, então conserte e verifique

@@ -1,6 +1,6 @@
 ---
 name: fase-executor
-description: Executa planos do FASE. com commits atômicos, tratamento de desvios, protocolos de checkpoint e gerenciamento de estado. Spawned pelo orquestrador execute-fase ou comando execute-plan.
+description: Executa planos do FASE. com commits atômicos, tratamento de desvios, protocolos de checkpoint e gerenciamento de estado. Spawned pelo orquestrador execute-phase ou comando execute-plan.
 tools: Read, Write, Edit, Bash, Grep, Glob
 color: yellow
 skills:
@@ -45,7 +45,7 @@ Isso garante que padrões, convenções e melhores práticas específicas do pro
 Carregue o contexto de execução:
 
 ```bash
-INIT=$(node "$HOME/.fase/bin/fase-tools.cjs" init execute-fase "${FASE}")
+INIT=$(node "$HOME/.fase/bin/fase-tools.cjs" init execute-phase "${PHASE}")
 if [[ "$INIT" == @file:* ]]; then INIT=$(cat "${INIT#@file:}"); fi
 ```
 
@@ -63,7 +63,7 @@ Se comandos/ ausente: Erro — projeto não inicializado.
 <step name="load_plan">
 Leia o arquivo de plano fornecido no seu contexto de prompt.
 
-Analise: frontmatter (fase, plan, type, autonomous, etapa, depends_on), objetivo, contexto (referências @), tarefas com tipos, critérios de verificação/sucesso, especificação de output.
+Analise: frontmatter (phase, plan, type, autonomous, etapa, depends_on), objetivo, contexto (referências @), tarefas com tipos, critérios de verificação/sucesso, especificação de output.
 
 **Se o plano referenciar CONTEXTO.md:** Honre a visão do usuário durante toda a execução.
 </step>
@@ -257,7 +257,7 @@ Ao atingir checkpoint ou auth gate, retorne esta estrutura:
 ## CHECKPOINT REACHED
 
 **Type:** [human-verify | decision | human-action]
-**Plan:** {fase}-{plan}
+**Plan:** {phase}-{plan}
 **Progress:** {completed}/{total} tarefas completas
 
 ### Tarefas Completadas
@@ -299,11 +299,11 @@ Ao executar tarefa com `tdd="true"`:
 
 **1. Verifique infraestrutura de testes** (se primeira tarefa TDD): detecte tipo de projeto, instale framework de testes se necessário.
 
-**2. RED:** Leia `<behavior>`, crie arquivo de teste, escreva testes que falham, rode (DEVEM falhar), commit: `test({fase}-{plan}): add failing test for [feature]`
+**2. RED:** Leia `<behavior>`, crie arquivo de teste, escreva testes que falham, rode (DEVEM falhar), commit: `test({phase}-{plan}): add failing test for [feature]`
 
-**3. GREEN:** Leia `<implementation>`, escreva código mínimo para passar, rode (DEVEM passar), commit: `feat({fase}-{plan}): implement [feature]`
+**3. GREEN:** Leia `<implementation>`, escreva código mínimo para passar, rode (DEVEM passar), commit: `feat({phase}-{plan}): implement [feature]`
 
-**4. REFACTOR (se necessário):** Limpe, rode testes (DEVEM continuar passando), commit apenas se houver mudanças: `refactor({fase}-{plan}): clean up [feature]`
+**4. REFACTOR (se necessário):** Limpe, rode testes (DEVEM continuar passando), commit apenas se houver mudanças: `refactor({phase}-{plan}): clean up [feature]`
 
 **Tratamento de erro:** RED não falha → investigue. GREEN não passa → debug/itere. REFACTOR quebra → desfaça.
 </tdd_execution>
@@ -331,7 +331,7 @@ git add www/docs/src/types/user.ts
 
 **4. Commit:**
 ```bash
-git commit -m "{type}({fase}-{plan}): {descrição concisa da tarefa}
+git commit -m "{type}({phase}-{plan}): {descrição concisa da tarefa}
 
 - {mudança chave 1}
 - {mudança chave 2}
@@ -342,15 +342,15 @@ git commit -m "{type}({fase}-{plan}): {descrição concisa da tarefa}
 </task_commit_protocol>
 
 <summary_creation>
-Após todas tarefas completarem, crie `{fase}-{plan}-SUMARIO.md` em `comandos/fases/XX-name/`.
+Após todas tarefas completarem, crie `{phase}-{plan}-SUMARIO.md` em `comandos/fases/XX-name/`.
 
 **SEMPRE use a ferramenta Write para criar arquivos** — nunca use `Bash(cat << 'EOF')` ou comandos heredoc para criação de arquivos.
 
 **Use template:** @~/.fase/templates/summary.md
 
-**Frontmatter:** fase, plan, subsystem, tags, grafo de dependência (requires/provides/affects), tech-stack (added/patterns), key-files (created/modified), decisions, metrics (duration, completed date).
+**Frontmatter:** phase, plan, subsystem, tags, grafo de dependência (requires/provides/affects), tech-stack (added/patterns), key-files (created/modified), decisions, metrics (duration, completed date).
 
-**Título:** `# Fase [X] Plan [Y]: [Name] Summary`
+**Título:** `# Etapa [X] Plan [Y]: [Name] Summary`
 
 **One-liner deve ser substantivo:**
 - Bom: "JWT auth com refresh rotation usando biblioteca jose"
@@ -406,18 +406,18 @@ node "$HOME/.fase/bin/fase-tools.cjs" state update-progress
 
 # Registra métricas de execução
 node "$HOME/.fase/bin/fase-tools.cjs" state record-metric \
-  --fase "${FASE}" --plan "${PLAN}" --duration "${DURATION}" \
+  --phase "${PHASE}" --plan "${PLAN}" --duration "${DURATION}" \
   --tasks "${TASK_COUNT}" --files "${FILE_COUNT}"
 
 # Adiciona decisões (extraia de key-decisions do SUMARIO.md)
 for decision in "${DECISIONS[@]}"; do
   node "$HOME/.fase/bin/fase-tools.cjs" state add-decision \
-    --fase "${FASE}" --summary "${decision}"
+    --phase "${PHASE}" --summary "${decision}"
 done
 
 # Atualiza info de sessão
 node "$HOME/.fase/bin/fase-tools.cjs" state record-session \
-  --stopped-at "Completed ${FASE}-${PLAN}-PLANO.md"
+  --stopped-at "Completed ${PHASE}-${PLAN}-PLANO.md"
 ```
 
 ```bash
@@ -450,7 +450,7 @@ node "$HOME/.fase/bin/fase-tools.cjs" state add-blocker "Descrição do bloquead
 
 <final_commit>
 ```bash
-node "$HOME/.fase/bin/fase-tools.cjs" commit "docs({fase}-{plan}): complete [plan-name] plan" --files comandos/fases/XX-name/{fase}-{plan}-SUMARIO.md comandos/ESTADO.md comandos/ROTEIRO.md comandos/REQUISITOS.md
+node "$HOME/.fase/bin/fase-tools.cjs" commit "docs({phase}-{plan}): complete [plan-name] plan" --files comandos/fases/XX-name/{phase}-{plan}-SUMARIO.md comandos/ESTADO.md comandos/ROTEIRO.md comandos/REQUISITOS.md
 ```
 
 Separado de commits por-tarefa — captura apenas resultados de execução.
@@ -460,7 +460,7 @@ Separado de commits por-tarefa — captura apenas resultados de execução.
 ```markdown
 ## PLAN COMPLETE
 
-**Plan:** {fase}-{plan}
+**Plan:** {phase}-{plan}
 **Tasks:** {completed}/{total}
 **SUMMARY:** {caminho para SUMARIO.md}
 

@@ -5,8 +5,10 @@
   "private": true,
   "scripts": {
     "prepare": "husky install || true",
-    "verificar": "cd bin && npm pack --dry-run",
+    "verificar-pacote": "cd bin && npm pack --dry-run",
     "verificar-instalacao": "cd bin && node verificar-instalacao.js",
+    "sync-agentes": "cp agentes/*.md bin/agentes/",
+    "build-docs": "node build-docs.js",
     "test": "cd bin && npm test"
   },
   "devDependencies": {

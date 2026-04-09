@@ -44,7 +44,7 @@ Isso garante que a verificação verifique se os planos seguem convenções espe
 </project_context>
 
 <upstream_input>
-**CONTEXTO.md** (se existe) — Decisões do usuário do `/fase-discuss-fase`
+**CONTEXTO.md** (se existe) — Decisões do usuário do `/fase-discuss-phase`
 
 | Seção | Como Você Usa |
 |---------|----------------|
@@ -273,7 +273,7 @@ issue:
 
 ## Dimensão 7: Context Compliance (se CONTEXTO.md existe)
 
-**Pergunta:** Os planos honram as decisões do usuário do /fase-discuss-fase?
+**Pergunta:** Os planos honram as decisões do usuário do /fase-discuss-phase?
 
 **Só verifique se CONTEXTO.md foi fornecido no contexto de verificação.**
 
@@ -311,7 +311,7 @@ issue:
   plan: "02"
   task: 1
   deferred_idea: "Search/filtering (Deferred Ideas section)"
-  fix_hint: "Remove search task - belongs in future fase per user decision"
+  fix_hint: "Remove search task - belongs in future phase per user decision"
 ```
 
 ## Dimensão 8: Nyquist Compliance
@@ -326,7 +326,7 @@ Antes de rodar checks 8a-8d, verifique se VALIDACAO.md existe:
 ls "${PHASE_DIR}"/*-VALIDACAO.md 2>/dev/null
 ```
 
-**Se faltar:** **BLOCKING FAIL** — "VALIDACAO.md not found for fase {N}. Re-run `/fase-planejar-fase {N} --pesquisa` to regenerate."
+**Se faltar:** **BLOCKING FAIL** — "VALIDACAO.md not found for phase {N}. Re-run `/fase-planejar-fase {N} --pesquisa` to regenerate."
 Pule checks 8a-8d inteiramente. Reporte Dimensão 8 como FAIL com esta única issue.
 
 **Se existe:** Prossiga para checks 8a-8d.
@@ -380,7 +380,7 @@ Se FAIL: retorne ao planner com fixes específicos. Mesmo loop de revisão das o
 
 Carregue o contexto da operação da fase:
 ```bash
-INIT=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" init fase-op "${PHASE_ARG}")
+INIT=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" init phase-op "${PHASE_ARG}")
 if [[ "$INIT" == @file:* ]]; then INIT=$(cat "${INIT#@file:}"); fi
 ```
 
@@ -392,7 +392,7 @@ O orquestrador fornece o conteúdo do CONTEXTO.md no prompt de verificação. Se
 ls "$phase_dir"/*-PLANO.md 2>/dev/null
 # Leia pesquisa para dados de validação Nyquist
 cat "$phase_dir"/*-PESQUISA.md 2>/dev/null
-node "$HOME/.claude/fase/bin/fase-tools.cjs" roteiro get-fase "$phase_number"
+node "$HOME/.claude/fase/bin/fase-tools.cjs" roteiro get-phase "$phase_number"
 ls "$phase_dir"/*-BRIEF.md 2>/dev/null
 ```
 
@@ -507,8 +507,8 @@ Faltando: Nenhuma menção de fetch/API call → Issue: Key link not planned
 ## Step 8: Assess Scope
 
 ```bash
-grep -c "<task" "$PHASE_DIR"/$FASE-01-PLANO.md
-grep "files_modified:" "$PHASE_DIR"/$FASE-01-PLANO.md
+grep -c "<task" "$PHASE_DIR"/$PHASE-01-PLANO.md
+grep "files_modified:" "$PHASE_DIR"/$PHASE-01-PLANO.md
 ```
 
 Limites: 2-3 tarefas/plano é bom, 4 warning, 5+ blocker (split necessário).
@@ -612,7 +612,7 @@ Retorne todas as issues como uma lista YAML estruturada `issues:` (veja exemplos
 ```markdown
 ## VERIFICATION PASSED
 
-**Fase:** {fase-name}
+**Fase:** {phase-name}
 **Planos verificados:** {N}
 **Status:** All checks passed
 
@@ -630,7 +630,7 @@ Retorne todas as issues como uma lista YAML estruturada `issues:` (veja exemplos
 | 01   | 3     | 5     | 1    | Valid  |
 | 02   | 2     | 4     | 2    | Valid  |
 
-Planos verificados. Execute `/fase-executar-fase {fase}` para prosseguir.
+Planos verificados. Execute `/fase-executar-fase {phase}` para prosseguir.
 ```
 
 ## ISSUES FOUND
@@ -638,7 +638,7 @@ Planos verificados. Execute `/fase-executar-fase {fase}` para prosseguir.
 ```markdown
 ## ISSUES FOUND
 
-**Fase:** {fase-name}
+**Fase:** {phase-name}
 **Planos verificados:** {N}
 **Issues:** {X} blocker(s), {Y} warning(s), {Z} info
 

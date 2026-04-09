@@ -329,10 +329,10 @@
       <h3>📚 Documentação</h3>
       <a href="readme.html" class="sidebar-link ">📖 README</a>
 <a href="COMANDOS.html" class="sidebar-link ">📋 Comandos</a>
-<a href="guia-do-usuario.html" class="sidebar-link ">📘 Guia do Usuário</a>
+<a href="GUIA-DO-USUARIO.html" class="sidebar-link ">📘 Guia do Usuário</a>
 <a href="HOOKS.html" class="sidebar-link ">🔧 Git Hooks</a>
 <a href="NPM-REGISTRY.html" class="sidebar-link active">📦 NPM Registry</a>
-<a href="context-monitor.html" class="sidebar-link ">📊 Context Monitor</a>
+<a href="CONTEXT-MONITOR.html" class="sidebar-link ">📊 Context Monitor</a>
     </aside>
 
     <main class="main">
@@ -350,20 +350,25 @@ audit=true
 </code></pre>
 <hr>
 <h2>🚀 Instalação do FASE</h2>
-<h3>Via npm (recomendado)</h3>
-<pre><code class="language-bash"># Usar npm padrão - sempre busca do registry oficial
-npm install -g fase-ai
+<h3>Via npx (recomendado)</h3>
+<pre><code class="language-bash"># Usar npx - sempre busca a versão mais recente do registry oficial
+npx fase-ai
 
-# Ou específico
-npm install -g fase-ai@latest
+# Ou específico para um runtime
+npx fase-ai --claude
+npx fase-ai --opencode
+npx fase-ai --gemini
+npx fase-ai --codex
 </code></pre>
-<h3>Se estiver usando cnpm</h3>
-<pre><code class="language-bash"># Especificar registry explicitamente
-npm install -g fase-ai --registry=https://registry.npmjs.org/
-
-# Ou configurar como default
-npm config set registry https://registry.npmjs.org/
-</code></pre>
+<h3>Observação sobre instalação global</h3>
+<p>FASE agora é instalado <strong>apenas localmente</strong> (por projeto) via <code>npx</code>. Isso garante:</p>
+<ul>
+<li>✅ Cada projeto usa a versão de FASE que foi testada com ele</li>
+<li>✅ Sem conflitos entre diferentes versões do FASE</li>
+<li>✅ Atualizações controladas por projeto</li>
+<li>✅ Menos poluição global no sistema</li>
+</ul>
+<p>Para atualizar, basta usar <code>npx fase-ai@latest</code> que sempre baixa a versão mais recente.</p>
 <hr>
 <h2>✅ Verificação</h2>
 <p>Para confirmar que está usando o registry correto:</p>
@@ -402,7 +407,10 @@ node bin/install.js --help
 <h3>Opção 1: Usar cnpm</h3>
 <pre><code class="language-bash">cnpm install -g fase-ai
 </code></pre>
-<h3>Opção 2: Configurar como default</h3>
+<h3>Opção 2: Configurar npm temporariamente</h3>
+<pre><code class="language-bash">npm install -g fase-ai --registry=https://registry.npmmirror.com
+</code></pre>
+<h3>Opção 3: Configurar como default</h3>
 <pre><code class="language-bash">npm config set registry https://registry.npmmirror.com
 # Depois restaurar
 npm config set registry https://registry.npmjs.org/

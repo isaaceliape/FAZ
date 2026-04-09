@@ -12,14 +12,14 @@ Instalador do sistema de meta-prompting, context engineering e desenvolvimento s
 
 ## 🚀 Instalação
 
-Este pacote é **apenas o instalador**. Use via `npx` (não precisa instalar globalmente):
+Este pacote é **apenas o instalador**. Use via `npx`:
 
 ```bash
 # Instalação interativa (recomendado)
 npx fase-ai
 
 # Ou instale para um runtime específico
-npx fase-ai --opencode --global
+npx fase-ai --opencode
 ```
 
 ### Pré-requisitos
@@ -42,8 +42,6 @@ npx fase-ai [opções]
 
 | Opção | Descrição |
 |-------|-----------|
-| `-g, --global` | Instalar globalmente (no diretório de configuração) |
-| `-l, --local` | Instalar localmente (no diretório atual) |
 | `--claude` | Instalar apenas para Claude Code |
 | `--opencode` | Instalar apenas para OpenCode |
 | `--gemini` | Instalar apenas para Gemini |
@@ -72,36 +70,33 @@ O instalador vai perguntar:
 ### Instalação Não-Interativa
 
 ```bash
-# Claude Code global
-npx fase-ai --claude --global
+# Claude Code
+npx fase-ai --claude
 
-# OpenCode global
-npx fase-ai --opencode --global
+# OpenCode
+npx fase-ai --opencode
 
-# Gemini global
-npx fase-ai --gemini --global
+# Gemini
+npx fase-ai --gemini
 
-# Codex global
-npx fase-ai --codex --global
+# Codex
+npx fase-ai --codex
 
 # Todos os runtimes
-npx fase-ai --all --global
-
-# Projeto local
-npx fase-ai --claude --local
+npx fase-ai --all
 
 # Diretório customizado
-npx fase-ai --codex --global --config-dir ~/.codex-work
+npx fase-ai --codex --config-dir ~/.codex-work
 ```
 
 ### Desinstalar
 
 ```bash
 # Desinstalar de um runtime
-npx fase-ai --opencode --global --uninstall
+npx fase-ai --opencode --uninstall
 
 # Desinstalar de todos
-npx fase-ai --all --global --uninstall
+npx fase-ai --all --uninstall
 ```
 
 ---
@@ -174,7 +169,7 @@ Após instalar, verifique no seu runtime:
 Para documentação completa do F.A.S.E.:
 
 - [Repositório GitHub](https://github.com/isaaceliape/FASE)
-- [Guia do Usuário](https://github.com/isaaceliape/FASE/blob/main/docs/USER-GUIDE.md)
+- [Guia do Usuário](https://github.com/isaaceliape/FASE/blob/main/docs/GUIA-DO-USUARIO.md)
 - [Comandos Disponíveis](https://github.com/isaaceliape/FASE/blob/main/docs/COMANDOS.md)
 
 ---

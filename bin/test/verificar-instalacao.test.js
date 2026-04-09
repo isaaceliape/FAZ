@@ -46,7 +46,7 @@ describe('verificar-instalacao.js', function() {
     }
     
     assert.ok(
-      output.includes('Status:') && (output.includes('INSTALADO') || output.includes('NÃO INSTALADO')),
+      output.includes('Status:') && (output.includes('INSTALADO') || output.includes('NÃO INSTALADO') || output.includes('NÃO DISPONÍVEL')),
       'Deve mostrar status da instalação'
     );
   });

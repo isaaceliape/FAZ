@@ -54,7 +54,7 @@ Isso garante que ações de tarefa referenciem os padrões e bibliotecas correto
 <context_fidelity>
 ## CRÍTICO: Fidelidade às Decisões do Usuário
 
-O orquestrador fornece decisões do usuário em tags `<user_decisions>` de `/fase-discuss-fase`.
+O orquestrador fornece decisões do usuário em tags `<user_decisions>` de `/fase-discuss-phase`.
 
 **Antes de criar QUALQUER tarefa, verifique:**
 
@@ -147,7 +147,7 @@ Descoberta é OBRIGATÓRIA a menos que você possa provar que contexto atual exi
 - Nível 2+: Biblioteca nova não no package.json, API externa, "escolher/selecionar/avaliar" na descrição
 - Nível 3: "arquitetura/design/sistema", múltiplos serviços externos, modelagem de dados, design de auth
 
-Para nichos específicos (3D, jogos, áudio, shaders, ML), sugerir `/fase-pesquisar-fase` antes de plan-fase.
+Para nichos específicos (3D, jogos, áudio, shaders, ML), sugerir `/fase-pesquisar-fase` antes de plan-phase.
 
 </discovery_levels>
 
@@ -273,7 +273,7 @@ Para cada serviço externo, determine:
 2. **Setup de conta** — Usuário precisa criar conta?
 3. **Config de dashboard** — O que deve ser configurado na UI externa?
 
-Registre no frontmatter `user_setup`. Inclua apenas o que Claude literalmente não pode fazer. NÃO exponha na saída de planejamento — execute-fase lida com apresentação.
+Registre no frontmatter `user_setup`. Inclua apenas o que Claude literalmente não pode fazer. NÃO exponha na saída de planejamento — execute-phase lida com apresentação.
 
 </task_breakdown>
 
@@ -404,7 +404,7 @@ Derive planos do trabalho real. Granularidade determina tolerância de compress�
 
 ```markdown
 ---
-fase: XX-name
+phase: XX-name
 plan: NN
 type: execute
 etapa: N                     # Etapa de execução (1, 2, 3...)
@@ -458,7 +458,7 @@ Output: [Artefatos criados]
 </success_criteria>
 
 <output>
-Após conclusão, crie `comandos/fases/XX-name/{fase}-{plan}-SUMARIO.md`
+Após conclusão, crie `comandos/fases/XX-name/{phase}-{plan}-SUMARIO.md`
 </output>
 ```
 
@@ -466,7 +466,7 @@ Após conclusão, crie `comandos/fases/XX-name/{fase}-{plan}-SUMARIO.md`
 
 | Campo | Obrigatório | Propósito |
 |-------|-------------|-----------|
-| `fase` | Sim | Identificador da fase (ex: `01-foundation`) |
+| `phase` | Sim | Identificador da fase (ex: `01-foundation`) |
 | `plan` | Sim | Número do plano dentro da fase |
 | `type` | Sim | `execute` ou `tdd` |
 | `etapa` | Sim | Número da etapa de execução |
@@ -477,7 +477,7 @@ Após conclusão, crie `comandos/fases/XX-name/{fase}-{plan}-SUMARIO.md`
 | `user_setup` | Não | Itens de setup necessários para humanos |
 | `must_haves` | Sim | Critérios de verificação de trás pra frente |
 
-Números de etapa são pré-computados durante o planejamento. Execute-fase lê `etapa` diretamente do frontmatter.
+Números de etapa são pré-computados durante o planejamento. Execute-phase lê `etapa` diretamente do frontmatter.
 
 ## Contexto de Interface para Executores
 
@@ -767,7 +767,7 @@ Candidatos a TDD identificados no task_breakdown ganham planos dedicados (type: 
 
 ```markdown
 ---
-fase: XX-name
+phase: XX-name
 plan: NN
 type: tdd
 ---
@@ -791,11 +791,11 @@ Output: [Feature funcionando e testada]
 
 ## Ciclo Red-Green-Refactor
 
-**RED:** Criar arquivo de teste → escrever teste descrevendo comportamento esperado → rodar teste (DEVE falhar) → commit: `test({fase}-{plan}): add failing test for [feature]`
+**RED:** Criar arquivo de teste → escrever teste descrevendo comportamento esperado → rodar teste (DEVE falhar) → commit: `test({phase}-{plan}): add failing test for [feature]`
 
-**GREEN:** Escrever código mínimo para passar → rodar teste (DEVE passar) → commit: `feat({fase}-{plan}): implement [feature]`
+**GREEN:** Escrever código mínimo para passar → rodar teste (DEVE passar) → commit: `feat({phase}-{plan}): implement [feature]`
 
-**REFACTOR (se necessário):** Limpar → rodar testes (DEVE passar) → commit: `refactor({fase}-{plan}): clean up [feature]`
+**REFACTOR (se necessário):** Limpar → rodar testes (DEVE passar) → commit: `refactor({phase}-{plan}): clean up [feature]`
 
 Cada plano TDD produz 2-3 commits atômicos.
 
@@ -857,7 +857,7 @@ grep -l "status: diagnosed" "$phase_dir"/*-UAT.md 2>/dev/null
 
 ```yaml
 ---
-fase: XX-name
+phase: XX-name
 plan: NN              # Sequencial após existente
 type: execute
 etapa: N               # Computado de depends_on (veja assign_etapas)
@@ -881,7 +881,7 @@ Acionado quando orquestrador fornece `<revision_context>` com issues do checker.
 ### Passo 1: Carregar Planos Existentes
 
 ```bash
-cat comandos/fases/$FASE-*/$FASE-*-PLANO.md
+cat comandos/fases/$PHASE-*/$PHASE-*-PLANO.md
 ```
 
 Construa modelo mental da estrutura atual do plano, tarefas existentes, must_haves.
@@ -929,7 +929,7 @@ Agrupe por plano, dimensão, severidade.
 ### Passo 6: Commit
 
 ```bash
-node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "fix($FASE): revise plans based on checker feedback" --files comandos/fases/$FASE-*/$FASE-*-PLANO.md
+node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "fix($PHASE): revise plans based on checker feedback" --files comandos/fases/$PHASE-*/$PHASE-*-PLANO.md
 ```
 
 ### Passo 7: Retornar Resumo de Revisão
@@ -968,7 +968,7 @@ node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "fix($FASE): revise plans ba
 Carregue contexto de planejamento:
 
 ```bash
-INIT=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" init plan-fase "${FASE}")
+INIT=$(node "$HOME/.claude/fase/bin/fase-tools.cjs" init plan-phase "${PHASE}")
 if [[ "$INIT" == @file:* ]]; then INIT=$(cat "${INIT#@file:}"); fi
 ```
 
@@ -1073,7 +1073,7 @@ Leia o retrospecto mais recente do milestone e tendências cross-milestone. Extr
 Use `phase_dir` do contexto init (já carregado em load_project_state).
 
 ```bash
-cat "$phase_dir"/*-CONTEXTO.md 2>/dev/null   # De /fase-discuss-fase
+cat "$phase_dir"/*-CONTEXTO.md 2>/dev/null   # De /fase-discuss-phase
 cat "$phase_dir"/*-PESQUISA.md 2>/dev/null   # De /fase-pesquisar-fase
 cat "$phase_dir"/*-DISCOVERY.md 2>/dev/null  # De descoberta obrigatória
 ```
@@ -1144,7 +1144,7 @@ Use estrutura de template para cada PLANO.md.
 
 **SEMPRE use a ferramenta Write para criar arquivos** — nunca use `Bash(cat << 'EOF')` ou comandos heredoc para criação de arquivos.
 
-Escreva em `comandos/fases/XX-name/{fase}-{NN}-PLANO.md`
+Escreva em `comandos/fases/XX-name/{phase}-{NN}-PLANO.md`
 
 Inclua todos os campos do frontmatter.
 </step>
@@ -1161,7 +1161,7 @@ Retorna JSON: `{ valid, missing, present, schema }`
 **Se `valid=false`:** Corrija campos obrigatórios faltantes antes de prosseguir.
 
 Campos obrigatórios do frontmatter do plano:
-- `fase`, `plan`, `type`, `etapa`, `depends_on`, `files_modified`, `autonomous`, `must_haves`
+- `phase`, `plan`, `type`, `etapa`, `depends_on`, `files_modified`, `autonomous`, `must_haves`
 
 Também valide estrutura do plano:
 
@@ -1181,7 +1181,7 @@ Retorna JSON: `{ valid, errors, warnings, task_count, tasks }`
 Atualize ROTEIRO.md para finalizar placeholders da fase:
 
 1. Leia `comandos/ROTEIRO.md`
-2. Encontre entrada da fase (`### Fase {N}:`)
+2. Encontre entrada da fase (`### Etapa {N}:`)
 3. Atualize placeholders:
 
 **Goal** (apenas se placeholder):
@@ -1194,8 +1194,8 @@ Atualize ROTEIRO.md para finalizar placeholders da fase:
 **Plan list** (sempre atualize):
 ```
 Plans:
-- [ ] {fase}-01-PLANO.md — {objetivo breve}
-- [ ] {fase}-02-PLANO.md — {objetivo breve}
+- [ ] {phase}-01-PLANO.md — {objetivo breve}
+- [ ] {phase}-02-PLANO.md — {objetivo breve}
 ```
 
 4. Escreva ROTEIRO.md atualizado
@@ -1203,7 +1203,7 @@ Plans:
 
 <step name="git_commit">
 ```bash
-node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "docs($FASE): create fase plan" --files comandos/fases/$FASE-*/$FASE-*-PLANO.md comandos/ROTEIRO.md
+node "$HOME/.claude/fase/bin/fase-tools.cjs" commit "docs($PHASE): create phase plan" --files comandos/fases/$PHASE-*/$PHASE-*-PLANO.md comandos/ROTEIRO.md
 ```
 </step>
 

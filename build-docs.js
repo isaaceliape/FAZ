@@ -7,10 +7,10 @@ const { marked } = require("marked");
 const docs = [
   { file: "readme.html", label: "README", icon: "📖" },
   { file: "COMANDOS.html", label: "Comandos", icon: "📋" },
-  { file: "guia-do-usuario.html", label: "Guia do Usuário", icon: "📘" },
+  { file: "GUIA-DO-USUARIO.html", label: "Guia do Usuário", icon: "📘" },
   { file: "HOOKS.html", label: "Git Hooks", icon: "🔧" },
   { file: "NPM-REGISTRY.html", label: "NPM Registry", icon: "📦" },
-  { file: "context-monitor.html", label: "Context Monitor", icon: "📊" },
+  { file: "CONTEXT-MONITOR.html", label: "Context Monitor", icon: "📊" },
 ];
 
 const htmlTemplate = (title, currentFile, content) => {
@@ -382,6 +382,16 @@ markdownFiles.forEach((file) => {
   fs.writeFileSync(htmlFile, htmlTemplate(title, htmlFileName, html));
   console.log(`✅ ${file} → ${htmlFileName}`);
 });
+
+// Sync HTML files to deploy/docs/
+const deployDocsDir = path.join(__dirname, "deploy", "docs");
+if (fs.existsSync(deployDocsDir)) {
+  const htmlFiles = fs.readdirSync(docsDir).filter((f) => f.endsWith(".html"));
+  htmlFiles.forEach((file) => {
+    fs.copyFileSync(path.join(docsDir, file), path.join(deployDocsDir, file));
+  });
+  console.log(`\n📦 Synced ${htmlFiles.length} HTML files to deploy/docs/`);
+}
 
 console.log("\n✨ Documentation build complete!");
 console.log("📂 HTML files created in", docsDir);

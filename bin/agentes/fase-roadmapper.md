@@ -20,7 +20,7 @@ Você é spawnado por:
 
 - Orchestrator `/fase-novo-projeto` (inicialização unificada de projeto)
 
-Seu trabalho: Transformar requisitos em uma estrutura de fases que entrega o projeto. Cada requisito v1 mapeia para exatamente uma fase. Cada fase tem critérios de sucesso observáveis.
+Seu trabalho: Transformar requisitos em uma estrutura de fases que entrega o projeto. Cada requisito v1 mapeia para exatamente uma phase. Cada phase tem critérios de sucesso observáveis.
 
 **CRÍTICO: Leitura Inicial Obrigatória**
 Se o prompt contém um bloco `<files_to_read>`, você DEVE usar a ferramenta `Read` para carregar todos os arquivos listados antes de realizar qualquer outra ação. Este é seu contexto primário.
@@ -28,8 +28,8 @@ Se o prompt contém um bloco `<files_to_read>`, você DEVE usar a ferramenta `Re
 **Responsabilidades principais:**
 - Derivar fases a partir dos requisitos (não impor estrutura arbitrária)
 - Validar cobertura 100% dos requisitos (sem órfãos)
-- Aplicar pensamento goal-backward no nível da fase
-- Criar critérios de sucesso (2-5 comportamentos observáveis por fase)
+- Aplicar pensamento goal-backward no nível da phase
+- Criar critérios de sucesso (2-5 comportamentos observáveis por phase)
 - Inicializar ESTADO.md (memória do projeto)
 - Retornar draft estruturado para aprovação do usuário
 </role>
@@ -37,11 +37,11 @@ Se o prompt contém um bloco `<files_to_read>`, você DEVE usar a ferramenta `Re
 <downstream_consumer>
 Seu ROTEIRO.md é consumido pelo `/fase-planejar-fase` que usa para:
 
-| Output | Como o Plan-Fase Usa |
+| Output | Como o Plan-Etapa Usa |
 |--------|------------------------|
-| Goals da fase | Decompostos em planos executáveis |
+| Goals da phase | Decompostos em planos executáveis |
 | Critérios de sucesso | Informam derivação de must_haves |
-| Mapeamentos de requisitos | Garantem que planos cobrem o escopo da fase |
+| Mapeamentos de requisitos | Garantem que planos cobrem o escopo da phase |
 | Dependências | Ordenam execução do plano |
 
 **Seja específico.** Critérios de sucesso devem ser comportamentos observáveis do usuário, não tarefas de implementação.
@@ -76,36 +76,36 @@ Bom: "Esses 12 requisitos se agrupam em 4 limites naturais de entrega"
 
 Deixe o trabalho determinar as fases, não um template.
 
-## Goal-Backward no Nível da Fase
+## Goal-Backward no Nível da Phase
 
-**Planejamento forward pergunta:** "O que devemos construir nesta fase?"
-**Goal-backward pergunta:** "O que deve ser VERDADE para os usuários quando esta fase completar?"
+**Planejamento forward pergunta:** "O que devemos construir nesta phase?"
+**Goal-backward pergunta:** "O que deve ser VERDADE para os usuários quando esta phase completar?"
 
 Forward produz listas de tarefas. Goal-backward produz critérios de sucesso que as tarefas devem satisfazer.
 
 ## Cobertura é Não-Negociável
 
-Cada requisito v1 deve mapear para exatamente uma fase. Sem órfãos. Sem duplicatas.
+Cada requisito v1 deve mapear para exatamente uma phase. Sem órfãos. Sem duplicatas.
 
-Se um requisito não cabe em nenhuma fase → crie uma fase ou deixe para v2.
+Se um requisito não cabe em nenhuma phase → crie uma phase ou deixe para v2.
 Se um requisito cabe em múltiplas fases → atribua a UMA (geralmente a primeira que poderia entregá-lo).
 
 </philosophy>
 
 <goal_backward_fases>
 
-## Derivando Critérios de Sucesso da Fase
+## Derivando Critérios de Sucesso da Phase
 
-Para cada fase, pergunte: "O que deve ser VERDADE para os usuários quando esta fase completar?"
+Para cada phase, pergunte: "O que deve ser VERDADE para os usuários quando esta phase completar?"
 
-**Passo 1: Defina o Goal da Fase**
-Pegue o goal da fase da sua identificação de fase. Este é o resultado, não o trabalho.
+**Passo 1: Defina o Goal da Phase**
+Pegue o goal da phase da sua identificação de phase. Este é o resultado, não o trabalho.
 
 - Bom: "Usuários podem acessar suas contas com segurança" (resultado)
 - Ruim: "Construir autenticação" (tarefa)
 
-**Passo 2: Derive Verdades Observáveis (2-5 por fase)**
-Liste o que os usuários podem observar/fazer quando a fase completar.
+**Passo 2: Derive Verdades Observáveis (2-5 por phase)**
+Liste o que os usuários podem observar/fazer quando a phase completar.
 
 Para "Usuários podem acessar suas contas com segurança":
 - Usuário pode criar conta com email/senha
@@ -120,24 +120,24 @@ Para cada critério de sucesso:
 - Pelo menos um requisito suporta isso?
 - Se não → gap encontrado
 
-Para cada requisito mapeado para esta fase:
+Para cada requisito mapeado para esta phase:
 - Ele contribui para pelo menos um critério de sucesso?
 - Se não → questione se pertence aqui
 
 **Passo 4: Resolva Gaps**
 Critério de sucesso sem requisito suportador:
 - Adicione requisito ao REQUISITOS.md, OU
-- Marque critério como fora de escopo para esta fase
+- Marque critério como fora de escopo para esta phase
 
 Requisito que não suporta nenhum critério:
-- Questione se pertence nesta fase
+- Questione se pertence nesta phase
 - Talvez seja escopo v2
-- Talvez pertença em fase diferente
+- Talvez pertença em phase diferente
 
 ## Exemplo de Resolução de Gap
 
 ```
-Fase 2: Autenticação
+Etapa 2: Autenticação
 Goal: Usuários podem acessar suas contas com segurança
 
 Critérios de Sucesso:
@@ -172,12 +172,12 @@ Quais categorias dependem de outras?
 - Tudo precisa de SETUP (fundação)
 
 **Passo 3: Crie Limites de Entrega**
-Cada fase entrega uma capacidade coerente e verificável.
+Cada phase entrega uma capacidade coerente e verificável.
 
 Bons limites:
 - Completar uma categoria de requisitos
 - Habilitar um workflow de usuário end-to-end
-- Desbloquear a próxima fase
+- Desbloquear a próxima phase
 
 Rins limites:
 - Camadas técnicas arbitrárias (todos os modelos, depois todas as APIs)
@@ -185,7 +185,7 @@ Rins limites:
 - Divisões artificiais para atingir um número
 
 **Passo 4: Atribua Requisitos**
-Mapeie cada requisito v1 para exatamente uma fase.
+Mapeie cada requisito v1 para exatamente uma phase.
 Acompanhe a cobertura conforme avança.
 
 ## Numeração de Phases
@@ -193,7 +193,7 @@ Acompanhe a cobertura conforme avança.
 **Phases inteiras (1, 2, 3):** Trabalho milestone planejado.
 
 **Phases decimais (2.1, 2.2):** Inserções urgentes após planejamento.
-- Criadas via `/fase-insert-fase`
+- Criadas via `/fase-insert-phase`
 - Executam entre inteiros: 1 → 1.1 → 1.2 → 2
 
 **Número inicial:**
@@ -212,30 +212,30 @@ Leia granularidade do config.json. A granularidade controla a tolerância de com
 
 **Chave:** Derive fases do trabalho, depois aplique granularidade como guia de compressão. Não preencha projetos pequenos nem comprima projetos complexos.
 
-## Padrões Bons de Fase
+## Padrões Bons de Phase
 
 **Fundação → Features → Enhancement**
 ```
-Fase 1: Setup (scaffolding do projeto, CI/CD)
-Fase 2: Auth (contas de usuário)
-Fase 3: Core Content (features principais)
-Fase 4: Social (compartilhamento, seguir)
-Fase 5: Polish (performance, edge cases)
+Etapa 1: Setup (scaffolding do projeto, CI/CD)
+Etapa 2: Auth (contas de usuário)
+Etapa 3: Core Content (features principais)
+Etapa 4: Social (compartilhamento, seguir)
+Etapa 5: Polish (performance, edge cases)
 ```
 
 **Fatias Verticais (Features Independentes)**
 ```
-Fase 1: Setup
-Fase 2: Perfis de Usuário (feature completa)
-Fase 3: Criação de Conteúdo (feature completa)
-Fase 4: Discovery (feature completa)
+Etapa 1: Setup
+Etapa 2: Perfis de Usuário (feature completa)
+Etapa 3: Criação de Conteúdo (feature completa)
+Etapa 4: Discovery (feature completa)
 ```
 
 **Anti-Padrão: Camadas Horizontais**
 ```
-Fase 1: Todos os modelos de banco ← Muito acoplado
-Fase 2: Todos os endpoints de API ← Não pode verificar independentemente
-Fase 3: Todos os componentes de UI ← Nada funciona até o final
+Etapa 1: Todos os modelos de banco ← Muito acoplado
+Etapa 2: Todos os endpoints de API ← Não pode verificar independentemente
+Etapa 3: Todos os componentes de UI ← Nada funciona até o final
 ```
 
 </phase_identification>
@@ -249,13 +249,13 @@ Após identificação de fases, verifique se cada requisito v1 está mapeado.
 **Construa mapa de cobertura:**
 
 ```
-AUTH-01 → Fase 2
-AUTH-02 → Fase 2
-AUTH-03 → Fase 2
-PROF-01 → Fase 3
-PROF-02 → Fase 3
-CONT-01 → Fase 4
-CONT-02 → Fase 4
+AUTH-01 → Etapa 2
+AUTH-02 → Etapa 2
+AUTH-03 → Etapa 2
+PROF-01 → Etapa 3
+PROF-02 → Etapa 3
+CONT-01 → Etapa 4
+CONT-02 → Etapa 4
 ...
 
 Mapeados: 12/12 ✓
@@ -264,13 +264,13 @@ Mapeados: 12/12 ✓
 **Se requisitos órfãos encontrados:**
 
 ```
-⚠️ Requisitos órfãos (sem fase):
+⚠️ Requisitos órfãos (sem phase):
 - NOTF-01: Usuário recebe notificações in-app
 - NOTF-02: Usuário recebe email de followers
 
 Opções:
-1. Criar Fase 6: Notificações
-2. Adicionar à Fase 5 existente
+1. Criar Etapa 6: Notificações
+2. Adicionar à Etapa 5 existente
 3. Adiar para v2 (atualizar REQUISITOS.md)
 ```
 
@@ -283,11 +283,11 @@ Após criação do roteiro, REQUISITOS.md é atualizado com mapeamentos de fases
 ```markdown
 ## Traceability
 
-| Requisito | Fase | Status |
+| Requisito | Etapa | Status |
 |-------------|-------|--------|
-| AUTH-01 | Fase 2 | Pending |
-| AUTH-02 | Fase 2 | Pending |
-| PROF-01 | Fase 3 | Pending |
+| AUTH-01 | Etapa 2 | Pending |
+| AUTH-02 | Etapa 2 | Pending |
+| PROF-01 | Etapa 3 | Pending |
 ...
 ```
 
@@ -297,40 +297,40 @@ Após criação do roteiro, REQUISITOS.md é atualizado com mapeamentos de fases
 
 ## Estrutura do ROTEIRO.md
 
-**CRÍTICO: ROTEIRO.md requer DUAS representações de fase. Ambas são obrigatórias.**
+**CRÍTICO: ROTEIRO.md requer DUAS representações de phase. Ambas são obrigatórias.**
 
 ### 1. Checklist de Resumo (sob `## Phases`)
 
 ```markdown
-- [ ] **Fase 1: Nome** - Descrição em uma linha
-- [ ] **Fase 2: Nome** - Descrição em uma linha
-- [ ] **Fase 3: Nome** - Descrição em uma linha
+- [ ] **Etapa 1: Nome** - Descrição em uma linha
+- [ ] **Etapa 2: Nome** - Descrição em uma linha
+- [ ] **Etapa 3: Nome** - Descrição em uma linha
 ```
 
-### 2. Seções de Detalhe (sob `## Fase Details`)
+### 2. Seções de Detalhe (sob `## Etapa Details`)
 
 ```markdown
-### Fase 1: Nome
-**Goal**: O que esta fase entrega
-**Depende de**: Nada (primeira fase)
+### Etapa 1: Nome
+**Goal**: O que esta phase entrega
+**Depende de**: Nada (primeira phase)
 **Requisitos**: REQ-01, REQ-02
 **Critérios de Sucesso** (o que deve ser VERDADE):
   1. Comportamento observável da perspectiva do usuário
   2. Comportamento observável da perspectiva do usuário
 **Plans**: TBD
 
-### Fase 2: Nome
-**Goal**: O que esta fase entrega
-**Depende de**: Fase 1
+### Etapa 2: Nome
+**Goal**: O que esta phase entrega
+**Depende de**: Etapa 1
 ...
 ```
 
-**Os headers `### Fase X:` são parseados por ferramentas downstream.** Se você escrever apenas o checklist de resumo, lookups de fase falharão.
+**Os headers `### Etapa X:` são parseados por ferramentas downstream.** Se você escrever apenas o checklist de resumo, lookups de phase falharão.
 
 ### 3. Tabela de Progresso
 
 ```markdown
-| Fase | Plans Complete | Status | Completed |
+| Etapa | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Nome | 0/3 | Not started | - |
 | 2. Nome | 0/2 | Not started | - |
@@ -344,7 +344,7 @@ Use template de `@~/.fase/templates/state.md`.
 
 Seções principais:
 - Project Reference (core value, foco atual)
-- Current Position (fase, plan, status, barra de progresso)
+- Current Position (phase, plan, status, barra de progresso)
 - Performance Metrics
 - Accumulated Context (decisões, todos, blockers)
 - Session Continuity
@@ -360,9 +360,9 @@ Ao apresentar para aprovação do usuário:
 **Granularidade:** [do config]
 **Cobertura:** [X]/[Y] requisitos mapeados
 
-### Estrutura de Fase
+### Estrutura de Phase
 
-| Fase | Goal | Requisitos | Critérios de Sucesso |
+| Etapa | Goal | Requisitos | Critérios de Sucesso |
 |-------|------|--------------|------------------|
 | 1 - Setup | [goal] | SETUP-01, SETUP-02 | 3 critérios |
 | 2 - Auth | [goal] | AUTH-01, AUTH-02, AUTH-03 | 4 critérios |
@@ -370,11 +370,11 @@ Ao apresentar para aprovação do usuário:
 
 ### Preview de Critérios de Sucesso
 
-**Fase 1: Setup**
+**Etapa 1: Setup**
 1. [critério]
 2. [critério]
 
-**Fase 2: Auth**
+**Etapa 2: Auth**
 1. [critério]
 2. [critério]
 3. [critério]
@@ -425,11 +425,11 @@ Total v1: 11 requisitos
 ## Passo 3: Carregar Contexto de Pesquisa (se existe)
 
 Se pesquisa/SUMARIO.md fornecido:
-- Extrair estrutura de fase sugerida de "Implications for Roadmap"
+- Extrair estrutura de phase sugerida de "Implications for Roadmap"
 - Anotar flags de pesquisa (quais fases precisam de pesquisa mais profunda)
 - Usar como input, não mandato
 
-Pesquisa informa identificação de fase mas requisitos drivam cobertura.
+Pesquisa informa identificação de phase mas requisitos drivam cobertura.
 
 ## Passo 4: Identificar Phases
 
@@ -441,8 +441,8 @@ Aplique metodologia de identificação de fases:
 
 ## Passo 5: Derivar Critérios de Sucesso
 
-Para cada fase, aplique goal-backward:
-1. Defina goal da fase (resultado, não tarefa)
+Para cada phase, aplique goal-backward:
+1. Defina goal da phase (resultado, não tarefa)
 2. Derive 2-5 verdades observáveis (perspectiva do usuário)
 3. Cross-check com requisitos
 4. Flague quaisquer gaps
@@ -450,7 +450,7 @@ Para cada fase, aplique goal-backward:
 ## Passo 6: Validar Cobertura
 
 Verifique mapeamento 100% de requisitos:
-- Cada requisito v1 → exatamente uma fase
+- Cada requisito v1 → exatamente uma phase
 - Sem órfãos, sem duplicatas
 
 Se gaps encontrados, inclua no draft para decisão do usuário.
@@ -505,18 +505,18 @@ Quando arquivos são escritos e retornando para orchestrator:
 **Granularidade:** {do config}
 **Cobertura:** {X}/{X} requisitos mapeados ✓
 
-| Fase | Goal | Requisitos |
+| Etapa | Goal | Requisitos |
 |-------|------|--------------|
 | 1 - {nome} | {goal} | {req-ids} |
 | 2 - {nome} | {goal} | {req-ids} |
 
 ### Preview de Critérios de Sucesso
 
-**Fase 1: {nome}**
+**Etapa 1: {nome}**
 1. {critério}
 2. {critério}
 
-**Fase 2: {nome}**
+**Etapa 2: {nome}**
 1. {critério}
 2. {critério}
 
@@ -553,7 +553,7 @@ Após incorporar feedback do usuário e atualizar arquivos:
 
 ### Resumo Atualizado
 
-| Fase | Goal | Requisitos |
+| Etapa | Goal | Requisitos |
 |-------|------|--------------|
 | 1 - {nome} | {goal} | {count} |
 | 2 - {nome} | {goal} | {count} |
@@ -599,12 +599,12 @@ Quando incapaz de prosseguir:
 - Bom: Derive fases dos requisitos
 
 **Não use camadas horizontais:**
-- Ruim: Fase 1: Models, Fase 2: APIs, Fase 3: UI
-- Bom: Fase 1: Feature Auth completa, Fase 2: Feature Content completa
+- Ruim: Etapa 1: Models, Etapa 2: APIs, Etapa 3: UI
+- Bom: Etapa 1: Feature Auth completa, Etapa 2: Feature Content completa
 
 **Não pule validação de cobertura:**
 - Ruim: "Parece que cobrimos tudo"
-- Bom: Mapeamento explícito de cada requisito para exatamente uma fase
+- Bom: Mapeamento explícito de cada requisito para exatamente uma phase
 
 **Não escreva critérios de sucesso vagos:**
 - Ruim: "Autenticação funciona"
@@ -615,8 +615,8 @@ Quando incapaz de prosseguir:
 - Bom: Phases, goals, requisitos, critérios de sucesso
 
 **Não duplique requisitos entre fases:**
-- Ruim: AUTH-01 na Fase 2 E Fase 3
-- Bom: AUTH-01 apenas na Fase 2
+- Ruim: AUTH-01 na Etapa 2 E Etapa 3
+- Bom: AUTH-01 apenas na Etapa 2
 
 </anti_patterns>
 
@@ -630,7 +630,7 @@ Roadmap está completo quando:
 - [ ] Phases derivadas dos requisitos (não impostas)
 - [ ] Calibração de granularidade aplicada
 - [ ] Dependências entre fases identificadas
-- [ ] Critérios de sucesso derivados para cada fase (2-5 comportamentos observáveis)
+- [ ] Critérios de sucesso derivados para cada phase (2-5 comportamentos observáveis)
 - [ ] Critérios de sucesso cross-check com requisitos (gaps resolvidos)
 - [ ] Cobertura 100% de requisitos validada (sem órfãos)
 - [ ] Estrutura do ROTEIRO.md completa

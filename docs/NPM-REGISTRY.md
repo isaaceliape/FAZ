@@ -23,25 +23,29 @@ audit=true
 
 ## 🚀 Instalação do FASE
 
-### Via npm (recomendado)
+### Via npx (recomendado)
 
 ```bash
-# Usar npm padrão - sempre busca do registry oficial
-npm install -g fase-ai
+# Usar npx - sempre busca a versão mais recente do registry oficial
+npx fase-ai
 
-# Ou específico
-npm install -g fase-ai@latest
+# Ou específico para um runtime
+npx fase-ai --claude
+npx fase-ai --opencode
+npx fase-ai --gemini
+npx fase-ai --codex
 ```
 
-### Se estiver usando cnpm
+### Observação sobre instalação global
 
-```bash
-# Especificar registry explicitamente
-npm install -g fase-ai --registry=https://registry.npmjs.org/
+FASE agora é instalado **apenas localmente** (por projeto) via `npx`. Isso garante:
 
-# Ou configurar como default
-npm config set registry https://registry.npmjs.org/
-```
+- ✅ Cada projeto usa a versão de FASE que foi testada com ele
+- ✅ Sem conflitos entre diferentes versões do FASE
+- ✅ Atualizações controladas por projeto
+- ✅ Menos poluição global no sistema
+
+Para atualizar, basta usar `npx fase-ai@latest` que sempre baixa a versão mais recente.
 
 ---
 
@@ -99,7 +103,12 @@ Se você está na China e a instalação é lenta:
 cnpm install -g fase-ai
 ```
 
-### Opção 2: Configurar como default
+### Opção 2: Configurar npm temporariamente
+```bash
+npm install -g fase-ai --registry=https://registry.npmmirror.com
+```
+
+### Opção 3: Configurar como default
 ```bash
 npm config set registry https://registry.npmmirror.com
 # Depois restaurar
