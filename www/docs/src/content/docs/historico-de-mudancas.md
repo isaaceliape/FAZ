@@ -11,6 +11,37 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ---
 
+## [3.3.0] - 2026-04-09
+
+### Adicionado
+- **Novo agente `fase-arquiteto`**: registra decisões arquiteturais em formato ADR, define contratos de API, limites de módulo e modelo de dados
+- **Novo comando `/fase-arquitetar`**: invoca o fase-arquiteto para qualquer tema arquitetural
+- **Novo comando `/fase-contexto`**: exibe, limpa ou resume o contexto persistente da sessão (`.fase-ai-local/CONTEXTO.md`)
+- **Schemas autoritativos**: `bin/fase-shared/references/plano-schema.md` e `validacao-schema.md` documentam PLANO.md e VALIDACAO.md em detalhe
+- **Contexto de sessão persistente**: executores, planejadores e depuradores agora lêem e escrevem `.fase-ai-local/CONTEXTO.md` para continuidade entre sessões
+- **Context probes**: agentes de planejamento, execução e debug agora fazem perguntas de orientação no início de cada sessão
+
+### Corrigido
+- **Locking de estado concorrente**: `bin/lib/state.cjs` usa lockfile exclusivo (`.state-lock`) em torno de todas as escritas em ESTADO.md, eliminando race conditions durante execução paralela
+- **Validação de schema no executor**: `fase-executor` valida o PLANO.md na carga — detecta campos obrigatórios ausentes e corrige parsing de `<verify>`/`<automated>` antes de executar qualquer tarefa
+- **Loop de gap closure com limite**: `fase-verificador` rastreia `closure_attempts` em VERIFICACAO.md; após 3 tentativas sem fechar gaps, emite `## ⚠️ Escalação Humana Necessária` e para de gerar novos planos
+- **Sintetizador com pré-voo**: `fase-sintetizador-pesquisa` aborta com `PESQUISA INCOMPLETA` se qualquer um dos 4 arquivos de pesquisa estiver faltando, em vez de produzir output silenciosamente incompleto
+- **Verificação de plano não-bloqueante**: VALIDACAO.md ausente agora gera WARNING (não BLOCKING FAIL) — checks Nyquist são ignorados e o plano pode passar nas outras 7 dimensões
+- **Propagação de decisões locked**: `fase-pesquisador-fase` valida que todas as decisões do CONTEXTO.md foram copiadas para PESQUISA.md; `fase-planejador` valida que cada decisão locked aparece em pelo menos um `<action>`
+- **MCP degradação graciosa**: `fase-pesquisador-fase` e `fase-pesquisador-projeto` usam Context7 como opcional com fallback para WebSearch
+
+### Alterado
+- Diretórios raiz `agentes/` e `comandos/` removidos — `bin/agentes/` e `bin/comandos/` são agora a única fonte da verdade
+- Script `sync-agentes` removido do package.json
+- Documentação atualizada: COMANDOS.md (32→34), GUIA-DO-USUARIO.md, referências Astro e arquitectura
+
+### Detalhes Técnicos
+- 13 agentes (era 12) — adicionado `fase-arquiteto`
+- 34 comandos (era 32) — adicionados `/fase-arquitetar` e `/fase-contexto`
+- Todos os 132 testes passando
+
+---
+
 ## [3.2.0] - 2026-03-21
 
 ### Adicionado
