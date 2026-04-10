@@ -1,6 +1,6 @@
 <div align="center">
 
-# F.A.S.E. v3.2.0
+# F.A.S.E. v3.3.0
 
 ## Framework de Automação Sem Enrolação
 
@@ -21,6 +21,8 @@ Spec-driven development, context engineering e meta-prompting — agora em portu
 > *"Chega de enrolação. Descreve o que quer e FASE acontecer."*
 
 **[🌐 Visite a Landing Page](https://isaaceliape.github.io/FASE/)** — Conheça o projeto de forma visual
+
+**[📖 Documentação Completa](https://isaaceliape.github.io/FASE/docs/)** — Guias, referência e exemplos
 
 <br>
 
