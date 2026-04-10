@@ -61,7 +61,7 @@ describe('validate health command', () => {
 
   // ─── Check 1: .fase-ai-local/ exists ───────────────────────────────────────────
 
-  test("returns 'broken' when .fase-ai-local directory is missing", () => {
+  test("returns 'quebrado' when .fase-ai-local directory is missing", () => {
     // createTempProject creates .fase-ai-local/phases — remove it entirely
     fs.rmSync(path.join(tmpDir, '.fase-ai-local'), { recursive: true, force: true });
 
@@ -69,7 +69,7 @@ describe('validate health command', () => {
     assert.ok(result.success, `Command failed: ${result.error}`);
 
     const output = JSON.parse(result.output);
-    assert.strictEqual(output.status, 'broken', 'should be broken');
+    assert.strictEqual(output.status, 'quebrado', 'should be broken');
     assert.ok(
       output.errors.some(e => e.code === 'E001'),
       `Expected E001 in errors: ${JSON.stringify(output.errors)}`
@@ -467,7 +467,7 @@ describe('validate health command', () => {
     assert.deepStrictEqual(output.warnings, [], 'should have no warnings');
   });
 
-  test("returns 'degraded' when only warnings exist", () => {
+  test("returns 'degradado' when only warnings exist", () => {
     writeMinimalProjectMd(tmpDir);
     writeMinimalRoadmap(tmpDir, ['1']);
     writeMinimalStateMd(tmpDir);
@@ -478,7 +478,7 @@ describe('validate health command', () => {
     assert.ok(result.success, `Command failed: ${result.error}`);
 
     const output = JSON.parse(result.output);
-    assert.strictEqual(output.status, 'degraded', `Expected degraded, got ${output.status}`);
+    assert.strictEqual(output.status, 'degradado', `Expected degraded, got ${output.status}`);
     assert.strictEqual(output.errors.length, 0, 'should have no errors');
     assert.ok(output.warnings.length > 0, 'should have warnings');
   });

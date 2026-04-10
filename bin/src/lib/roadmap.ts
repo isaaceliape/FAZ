@@ -19,14 +19,14 @@ export function cmdRoadmapGetPhase(cwd: string, etapaNum: string, raw: boolean):
     const escapedEtapa = escapeRegex(etapaNum);
 
     const phasePattern = new RegExp(
-      `#{2,4}\\s*Phase\\s+${escapedEtapa}:\\s*([^\\n]+)`,
+      `#{2,4}\\s*(?:Phase|Etapa)\\s+${escapedEtapa}:\\s*([^\\n]+)`,
       'i'
     );
     const headerMatch = content.match(phasePattern);
 
     if (!headerMatch) {
       const checklistPattern = new RegExp(
-        `-\\s*\\[[ x]\\]\\s*\\*\\*Phase\\s+${escapedEtapa}:\\s*([^*]+)\\*\\*`,
+        `-\\s*\\[[ x]\\]\\s*\\*\\*(?:Phase|Etapa)\\s+${escapedEtapa}:\\s*([^*]+)\\*\\*`,
         'i'
       );
       const checklistMatch = content.match(checklistPattern);
@@ -84,7 +84,7 @@ export function cmdRoadmapAnalyze(cwd: string, raw: boolean): void {
   const content = fs.readFileSync(roadmapPath, 'utf-8');
   const etapasDir = path.join(cwd, '.fase-ai-local', 'etapas');
 
-  const phasePattern = /#{2,4}\s*Phase\s+(\d+[A-Z]?(?:\.\d+)*)\s*:\s*([^\n]+)/gi;
+  const phasePattern = /#{2,4}\s*(?:Phase|Etapa)\s+(\d+[A-Z]?(?:\.\d+)*)\s*:\s*([^\n]+)/gi;
   const phases: {
     number: string;
     name: string;
@@ -244,7 +244,7 @@ export function cmdRoadmapUpdatePlanProgress(cwd: string, etapaNum: string, raw:
   );
 
   const planCountPattern = new RegExp(
-    `(#{2,4}\\s*Phase\\s+${phaseEscaped}[\\s\\S]*?\\*\\*Plans:\\*\\*\\s*)[^\\n]+`,
+    `(#{2,4}\\s*(?:Phase|Etapa)\\s+${phaseEscaped}[\\s\\S]*?\\*\\*Plans:\\*\\*\\s*)[^\\n]+`,
     'i'
   );
   const planCountText = isComplete

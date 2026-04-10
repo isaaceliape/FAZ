@@ -428,14 +428,14 @@ export function getRoadmapEtapaInternal(cwd: string, etapaNum: string | number):
   try {
     const content = fs.readFileSync(roadmapPath, 'utf-8');
     const escapedEtapa = escapeRegex(etapaNum.toString());
-    const phasePattern = new RegExp(`#{2,4}\\s*Phase\\s+${escapedEtapa}:\\s*([^\\n]+)`, 'i');
+    const phasePattern = new RegExp(`#{2,4}\\s*(?:Phase|Etapa)\\s+${escapedEtapa}:\\s*([^\\n]+)`, 'i');
     const headerMatch = content.match(phasePattern);
     if (!headerMatch) return null;
 
     const etapaNome = headerMatch[1].trim();
     const headerIndex = headerMatch.index ?? 0;
     const restOfContent = content.slice(headerIndex);
-    const nextHeaderMatch = restOfContent.match(/\n#{2,4}\s+Phase\s+\d/i);
+    const nextHeaderMatch = restOfContent.match(/\n#{2,4}\s+(?:Phase|Etapa)\s+\d/i);
     const sectionEnd = nextHeaderMatch ? headerIndex + (nextHeaderMatch.index ?? 0) : content.length;
     const section = content.slice(headerIndex, sectionEnd).trim();
 

@@ -320,8 +320,8 @@ describe('config-get command', () => {
     const result = runGsdTools('config-get nonexistent_key', tmpDir);
     assert.strictEqual(result.success, false);
     assert.ok(
-      result.error.includes('Key not found'),
-      `Expected "Key not found" in error: ${result.error}`
+      result.error.includes('Chave não encontrada'),
+      `Expected "Chave não encontrada" in error: ${result.error}`
     );
   });
 
@@ -329,8 +329,8 @@ describe('config-get command', () => {
     const result = runGsdTools('config-get workflow.nonexistent', tmpDir);
     assert.strictEqual(result.success, false);
     assert.ok(
-      result.error.includes('Key not found'),
-      `Expected "Key not found" in error: ${result.error}`
+      result.error.includes('Chave não encontrada'),
+      `Expected "Chave não encontrada" in error: ${result.error}`
     );
   });
 
@@ -340,8 +340,8 @@ describe('config-get command', () => {
       const result = runGsdTools('config-get model_profile', emptyTmpDir);
       assert.strictEqual(result.success, false);
       assert.ok(
-        result.error.includes('No config.json'),
-        `Expected "No config.json" in error: ${result.error}`
+        result.error.includes('Nenhum config.json encontrado'),
+        `Expected "Nenhum config.json encontrado" in error: ${result.error}`
       );
     } finally {
       cleanup(emptyTmpDir);

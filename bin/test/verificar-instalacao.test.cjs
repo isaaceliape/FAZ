@@ -7,7 +7,7 @@ const os = require('os');
 describe('verificar-instalacao.js', function() {
   this.timeout(10000);
   
-  const scriptPath = path.join(__dirname, '..', 'verificar-instalacao.js');
+  const scriptPath = path.join(__dirname, '..', 'dist', 'verificar-instalacao.js');
   
   it('deve existir', function() {
     assert.ok(fs.existsSync(scriptPath), 'Script verificar-instalacao.js deve existir');

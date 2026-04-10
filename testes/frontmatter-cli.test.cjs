@@ -60,7 +60,7 @@ describe('frontmatter get', () => {
     assert.ok(result.success, 'Command should exit 0');
     const parsed = JSON.parse(result.output);
     assert.ok(parsed.error, 'Should have error field');
-    assert.ok(parsed.error.includes('Field not found'), 'Error should mention "Field not found"');
+    assert.ok(parsed.error.includes('Campo não encontrado'), 'Error should mention "Campo não encontrado"');
   });
 
   test('returns error for missing file', () => {

@@ -354,7 +354,7 @@ objective: Manual review needed
     assert.ok(result.success, `Command should succeed: ${result.error}`);
 
     const output = JSON.parse(result.output);
-    assert.strictEqual(output.error, 'Etapa not found', 'should report phase not found');
+    assert.strictEqual(output.error, 'Fase não encontrada', 'should report phase not found');
   });
 });
 

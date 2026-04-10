@@ -599,7 +599,7 @@ export function cmdStateSnapshot(cwd: string, raw: boolean): void {
   const progressPercent = progressRaw ? parseInt(progressRaw.replace('%', ''), 10) : null;
 
   const decisions: { phase: string; summary: string; rationale: string }[] = [];
-  const decisionsMatch = content.match(/##\s*Decisões Tomadas[\s\S]*?\n\|[^\n]+\n\|[-|\s]+\n([\s\S]*?)(?=\n##|\n$|$)/i);
+  const decisionsMatch = content.match(/##\s*(?:Decisões Tomadas|Decisions Made)[\s\S]*?\n\|[^\n]+\n\|[-|\s]+\n([\s\S]*?)(?=\n##|\n$|$)/i);
   if (decisionsMatch) {
     const rows = decisionsMatch[1].trim().split('\n').filter((r: string) => r.includes('|'));
     for (const row of rows) {
@@ -609,7 +609,7 @@ export function cmdStateSnapshot(cwd: string, raw: boolean): void {
   }
 
   const blockers: string[] = [];
-  const blockersMatch = content.match(/##\s*Bloqueadores\s*\n([\s\S]*?)(?=\n##|$)/i);
+  const blockersMatch = content.match(/##\s*(?:Bloqueadores|Blockers)\s*\n([\s\S]*?)(?=\n##|$)/i);
   if (blockersMatch) {
     const items = blockersMatch[1].match(/^-\s+(.+)$/gm) ?? [];
     for (const item of items) blockers.push(item.replace(/^-\s+/, '').trim());
@@ -618,12 +618,12 @@ export function cmdStateSnapshot(cwd: string, raw: boolean): void {
   const session: { last_date: string | null; stopped_at: string | null; resume_file: string | null } = {
     last_date: null, stopped_at: null, resume_file: null,
   };
-  const sessionMatch = content.match(/##\s*Sessão\s*\n([\s\S]*?)(?=\n##|$)/i);
+  const sessionMatch = content.match(/##\s*(?:Sessão|Session)\s*\n([\s\S]*?)(?=\n##|$)/i);
   if (sessionMatch) {
     const s = sessionMatch[1];
-    const lastDateMatch = s.match(/\*\*Última Data:\*\*\s*(.+)/i) ?? s.match(/^Última Data:\s*(.+)/im);
-    const stoppedAtMatch = s.match(/\*\*Parado Em:\*\*\s*(.+)/i) ?? s.match(/^Parado Em:\s*(.+)/im);
-    const resumeFileMatch = s.match(/\*\*Arquivo para Retomar:\*\*\s*(.+)/i) ?? s.match(/^Arquivo para Retomar:\s*(.+)/im);
+    const lastDateMatch = s.match(/\*\*(?:Última Data|Last Date):\*\*\s*(.+)/i) ?? s.match(/^(?:Última Data|Last Date):\s*(.+)/im);
+    const stoppedAtMatch = s.match(/\*\*(?:Parado Em|Stopped At):\*\*\s*(.+)/i) ?? s.match(/^(?:Parado Em|Stopped At):\s*(.+)/im);
+    const resumeFileMatch = s.match(/\*\*(?:Arquivo para Retomar|Resume File):\*\*\s*(.+)/i) ?? s.match(/^(?:Arquivo para Retomar|Resume File):\s*(.+)/im);
     if (lastDateMatch) session.last_date = lastDateMatch[1].trim();
     if (stoppedAtMatch) session.stopped_at = stoppedAtMatch[1].trim();
     if (resumeFileMatch) session.resume_file = resumeFileMatch[1].trim();
