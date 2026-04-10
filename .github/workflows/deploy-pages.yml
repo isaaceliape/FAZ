@@ -1,13 +1,12 @@
-name: Deploy to GitHub Pages
+name: Deploy Docs to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
     paths:
-      - 'www/**'
-      - 'docs/**'
+      - 'www/docs/**'
       - '.github/workflows/deploy-pages.yml'
+
   workflow_dispatch:
 
 permissions:
@@ -20,53 +19,29 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: www/docs/package-lock.json
+      - run: npm ci
+        working-directory: www/docs
+      - run: npm run build
+        working-directory: www/docs
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: www/docs/dist
+
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4.2.0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4.1.0
-        with:
-          node-version: '22'
-
-      - name: Install dependencies
-        run: npm install marked
-
-      - name: Build documentation
-        run: node build-docs.js
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Create deployment directory
-        run: |
-          mkdir -p deploy
-          # Copy landing page and assets
-          cp www/index.html deploy/
-          cp -r www/*.png deploy/ 2>/dev/null || true
-          cp -r www/fonts deploy/ 2>/dev/null || true
-          # Copy generated HTML docs to /docs subdirectory
-          mkdir -p deploy/docs
-          mkdir -p deploy/docs/technical
-          mkdir -p deploy/docs/maintainers
-          cp -r docs/*.html deploy/docs/
-          cp -r docs/*.md deploy/docs/ 2>/dev/null || true
-          # Copy .nojekyll file for cache busting
-          cp docs/.nojekyll deploy/docs/ 2>/dev/null || true
-          # Copy subdirectory files
-          cp -r docs/technical/*.html deploy/docs/technical/ 2>/dev/null || true
-          cp -r docs/maintainers/*.html deploy/docs/maintainers/ 2>/dev/null || true
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: 'deploy'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4
