@@ -69,7 +69,7 @@ Todos os arquivos de estado ficam em `.fase-ai-local/` no projeto do usuário:
 
 ## Gap Closure Loop com Escalação
 
-O loop verificador → planejar-fase --gaps → executor → verificador tem limite de 3 iterações. O `fase-verificador` incrementa `re_verification.closure_attempts` no frontmatter do VERIFICACAO.md a cada rodada. Na 3ª tentativa com gaps restantes, o verificador adiciona uma seção `## ⚠️ Escalação Humana Necessária` e o orchestrator de planejar-fase para de gerar novos planos.
+O loop verificador → planejar-fase --gaps → executor → verificador tem limite de 3 iterações. O `fase-verificador` incrementa `re_verification.closure_attempts` no frontmatter do VERIFICACAO.md a cada rodada. Na 3ª tentativa com gaps restantes, o verificador adiciona uma seção `## <i class="fa fa-warning"></i> Escalação Humana Necessária` e o orchestrator de planejar-fase para de gerar novos planos.
 
 ## Providers Suportados
 

@@ -470,7 +470,7 @@ Edite seu `~/.claude/settings.json` e remova o hook `fase-check-update.js` da se
 
 ### Gap Closure em Loop / "Escalação Humana Necessária"
 
-Após 3 tentativas de gap closure sem sucesso, o FASE para automaticamente e exibe uma seção `## ⚠️ Escalação Humana Necessária` no `VERIFICACAO.md`. Isso significa que o gap é resistente à automação — normalmente por bloqueio arquitetural ou dependência externa.
+Após 3 tentativas de gap closure sem sucesso, o FASE para automaticamente e exibe uma seção `## <i class="fa fa-warning"></i> Escalação Humana Necessária` no `VERIFICACAO.md`. Isso significa que o gap é resistente à automação — normalmente por bloqueio arquitetural ou dependência externa.
 
 Leia a seção de escalação para entender o que foi tentado, depois resolva manualmente antes de tentar novamente com `/fase-planejar-fase --gaps`.
 

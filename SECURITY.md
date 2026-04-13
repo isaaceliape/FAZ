@@ -4,8 +4,8 @@
 
 | Versão | Suportada |
 |--------|-----------|
-| 3.x    | ✅        |
-| < 3.0  | ❌        |
+| 3.x    | <i class="fa fa-check-circle"></i>        |
+| < 3.0  | <i class="fa fa-times-circle"></i>        |
 
 ## Reportar uma Vulnerabilidade
 

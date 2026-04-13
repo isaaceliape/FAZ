@@ -165,10 +165,10 @@ fs.rmSync(tempDir, { recursive: true });
 ```
 
 Esta abordagem permite:
-- ✓ Execução rápida de testes
-- ✓ Sem instalação de Docker necessária
-- ✓ Compatibilidade multiplataforma
-- ✓ Fácil integração com CI/CD
+- <i class="fa fa-check"></i> Execução rápida de testes
+- <i class="fa fa-check"></i> Sem instalação de Docker necessária
+- <i class="fa fa-check"></i> Compatibilidade multiplataforma
+- <i class="fa fa-check"></i> Fácil integração com CI/CD
 
 ## Cobertura de Testes
 

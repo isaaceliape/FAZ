@@ -7,10 +7,10 @@ Complete reference for the official Obsidian CLI (v1.12+). All 115 commands docu
 This OpenClaw skill provides **complete access to Obsidian's official CLI** (v1.12+), enabling AI agents to:
 
 - 📝 **Automate note-taking**: Create daily journals, meeting notes, project logs
-- ✅ **Manage tasks**: Toggle task status, filter by completion, track progress
-- 🔍 **Search and organize**: Find notes, create links, manage tags
+- <i class="fa fa-check-circle"></i> **Manage tasks**: Toggle task status, filter by completion, track progress
+- <i class="fa fa-magnifying-glass"></i> **Search and organize**: Find notes, create links, manage tags
 - 🗄️ **Work with databases**: Query bases, create items, manage views
-- 🎨 **Customize workspace**: Install themes/plugins, manage workspaces
+- <i class="fa fa-palette"></i> **Customize workspace**: Install themes/plugins, manage workspaces
 
 **For OpenClaw users**: Your AI assistant can now read, write, and organize your Obsidian vault automatically.
 
@@ -156,7 +156,7 @@ obsidian vault
 
 ## OpenClaw Use Cases
 
-### 📅 Daily Journal Automation
+### <i class="fa fa-calendar"></i> Daily Journal Automation
 
 Your AI assistant can maintain your daily journal automatically:
 
@@ -187,7 +187,7 @@ obsidian property:set name="date" value="2026-03-01" file="Meeting 2026-03-01"
 obsidian bookmark file="Meeting 2026-03-01.md"
 ```
 
-### ✅ Task Management
+### <i class="fa fa-check-circle"></i> Task Management
 
 AI agent helps you manage tasks across your vault:
 
@@ -202,7 +202,7 @@ obsidian task daily line=3 toggle
 obsidian search query="- [ ]" path="Projects"
 ```
 
-### 🔍 Knowledge Search & Organization
+### <i class="fa fa-magnifying-glass"></i> Knowledge Search & Organization
 
 AI agent finds and connects relevant information:
 
@@ -217,7 +217,7 @@ obsidian backlinks file="Project Alpha"
 obsidian orphans
 ```
 
-### 📊 Database Operations
+### <i class="fa fa-chart-bar"></i> Database Operations
 
 AI agent manages your Obsidian databases:
 
@@ -232,7 +232,7 @@ obsidian base:query file="Projects" format=json
 obsidian base:create name="New Project" content="Description..."
 ```
 
-### 🎨 Workspace Customization
+### <i class="fa fa-palette"></i> Workspace Customization
 
 AI agent sets up your workspace:
 
@@ -398,10 +398,10 @@ obsidian vault="Notes" search query="test"
 这个 OpenClaw skill 提供了 **Obsidian 官方 CLI 的完整访问**（v1.12+），让 AI agent 能够：
 
 - 📝 **自动化笔记**: 创建日记、会议记录、项目日志
-- ✅ **管理任务**: 切换任务状态、筛选、追踪进度
-- 🔍 **搜索和整理**: 查找笔记、创建链接、管理标签
+- <i class="fa fa-check-circle"></i> **管理任务**: 切换任务状态、筛选、追踪进度
+- <i class="fa fa-magnifying-glass"></i> **搜索和整理**: 查找笔记、创建链接、管理标签
 - 🗄️ **操作数据库**: 查询 base、创建条目、管理视图
-- 🎨 **自定义工作区**: 安装主题/插件、管理工作区
+- <i class="fa fa-palette"></i> **自定义工作区**: 安装主题/插件、管理工作区
 
 **对于 OpenClaw 用户**: 你的 AI 助手现在可以自动读取、编写和整理你的 Obsidian 库。
 

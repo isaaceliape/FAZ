@@ -49,8 +49,8 @@ requirements:               # OBRIGATÓRIO — lista de entradas por requisito
 
 | Requisito | Arquivo de Teste | Comando | Status |
 |-----------|-----------------|---------|--------|
-| AUTH-01   | tests/auth.test.ts | `npm test -- --filter=auth-login` | ✓ passing |
-| AUTH-02   | tests/auth.test.ts | `npm test -- --filter=auth-invalid` | ✓ passing |
+| AUTH-01   | tests/auth.test.ts | `npm test -- --filter=auth-login` | <i class="fa fa-check"></i> passing |
+| AUTH-02   | tests/auth.test.ts | `npm test -- --filter=auth-invalid` | <i class="fa fa-check"></i> passing |
 
 ## Gaps de Cobertura
 
@@ -93,8 +93,8 @@ requirements:
 
 | Requisito | Arquivo de Teste | Comando | Status |
 |-----------|-----------------|---------|--------|
-| AUTH-01   | tests/auth.test.ts | `npm test -- --filter=auth-login` | ✓ passing |
-| AUTH-02   | tests/auth.test.ts | `npm test -- --filter=auth-invalid` | ✓ passing |
+| AUTH-01   | tests/auth.test.ts | `npm test -- --filter=auth-login` | <i class="fa fa-check"></i> passing |
+| AUTH-02   | tests/auth.test.ts | `npm test -- --filter=auth-invalid` | <i class="fa fa-check"></i> passing |
 
 ## Gaps de Cobertura
 

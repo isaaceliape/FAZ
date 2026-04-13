@@ -23,7 +23,7 @@ Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que prec
 | [**Git Hooks**](HOOKS.html) | Git hooks e verificações de segurança |
 | [**Padronização de Caminhos**](technical/padronizacao-caminhos.html) | Mecanismo de padronização de caminhos |
 
-## 🎯 Começar Por Aqui
+## <i class="fa fa-bullseye"></i> Começar Por Aqui
 
 ### Sou um Usuário
 
@@ -42,7 +42,7 @@ Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que prec
 1. Procure em [GitHub Issues](https://github.com/isaaceliape/FASE/issues) por issue similar
 2. Abra uma nova issue com os detalhes
 
-## 📋 Estrutura de Arquivos
+## <i class="fa fa-list-check"></i> Estrutura de Arquivos
 
 ```
 docs/
@@ -61,15 +61,15 @@ docs/
 ## 🌐 Documentos em Português
 
 **Toda documentação do FASE é em português brasileiro:**
-- ✅ Guias de usuário
-- ✅ Documentação de development
-- ✅ Comentários no código
-- ✅ Mensagens de erro e output
+- <i class="fa fa-check-circle"></i> Guias de usuário
+- <i class="fa fa-check-circle"></i> Documentação de development
+- <i class="fa fa-check-circle"></i> Comentários no código
+- <i class="fa fa-check-circle"></i> Mensagens de erro e output
 
 **Exceções (em inglês):**
-- ⚙️ Termos técnicos consagrados (framework, hook, commit)
-- 💻 Comandos e código
-- 📦 Nomes de pacotes npm
+- <i class="fa fa-cog"></i> Termos técnicos consagrados (framework, hook, commit)
+- <i class="fa fa-laptop"></i> Comandos e código
+- <i class="fa fa-box"></i> Nomes de pacotes npm
 
 ## 🆘 Precisa de Ajuda?
 
@@ -77,25 +77,25 @@ docs/
 - **Bug descoberto**: Reporte com template `bug_report.md`
 - **Sugestão**: Use template `feature_request.md`
 
-## 📈 Melhorias Documentadas
+## <i class="fa fa-chart-line"></i> Melhorias Documentadas
 
 ### v3.3.0 (Abril 2026)
 
 **Verificação Automática de Versão**
-- ✅ Hook `SessionStart` verifica automaticamente por atualizações no npm
-- ✅ Notificação estilizada mostra versão atual vs disponível
-- ✅ Prompt interativo pergunta se deseja atualizar
-- ✅ Statusline mostra indicador `⬆ /fase:atualizar` quando há atualização
-- ✅ Cache local em `~/.claude/cache/fase-update-check.json`
+- <i class="fa fa-check-circle"></i> Hook `SessionStart` verifica automaticamente por atualizações no npm
+- <i class="fa fa-check-circle"></i> Notificação estilizada mostra versão atual vs disponível
+- <i class="fa fa-check-circle"></i> Prompt interativo pergunta se deseja atualizar
+- <i class="fa fa-check-circle"></i> Statusline mostra indicador `⬆ /fase:atualizar` quando há atualização
+- <i class="fa fa-check-circle"></i> Cache local em `~/.claude/cache/fase-update-check.json`
 
 ### v3.2.0 (Março 2026)
 
 **Path Standardization & Multi-Runtime Architecture**
-- ✅ Todos os comandos e agentes agora usam padrão universal `@~/.fase/`
-- ✅ Installer converte automaticamente para caminhos específicos de cada runtime
-- ✅ 129 testes unitários com cobertura completa
-- ✅ Documentação expandida sobre path standardization
-- ✅ Renomeação de arquivos: `.pt.md` → `.md` para consistência
+- <i class="fa fa-check-circle"></i> Todos os comandos e agentes agora usam padrão universal `@~/.fase/`
+- <i class="fa fa-check-circle"></i> Installer converte automaticamente para caminhos específicos de cada runtime
+- <i class="fa fa-check-circle"></i> 129 testes unitários com cobertura completa
+- <i class="fa fa-check-circle"></i> Documentação expandida sobre path standardization
+- <i class="fa fa-check-circle"></i> Renomeação de arquivos: `.pt.md` → `.md` para consistência
 
 **Novos Documentos:**
 - 📚 [Padronização de Caminhos](technical/padronizacao-caminhos.html) - Explicação do mecanismo de padronização de caminhos
@@ -105,11 +105,11 @@ docs/
 
 ### v2.4.0 (Março 2026)
 
-- ✅ Adicionado pre-commit hooks para validação de pacote npm
-- ✅ Criado GitHub Actions para publicação automática
-- ✅ Templates de issues para bug reports e features
-- ✅ CONTRIBUTING.md com instruções detalhadas
-- ✅ Este índice de documentação
+- <i class="fa fa-check-circle"></i> Adicionado pre-commit hooks para validação de pacote npm
+- <i class="fa fa-check-circle"></i> Criado GitHub Actions para publicação automática
+- <i class="fa fa-check-circle"></i> Templates de issues para bug reports e features
+- <i class="fa fa-check-circle"></i> CONTRIBUTING.md com instruções detalhadas
+- <i class="fa fa-check-circle"></i> Este índice de documentação
 
 ## 📞 Contato
 

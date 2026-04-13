@@ -1,3 +1,6 @@
+/* Font Awesome Icons CDN */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
+
 /* FASE Documentation Custom Styling */
 
 :root {
@@ -219,6 +222,27 @@ header {
 /* Main content */
 main {
   max-width: 900px;
+}
+
+/* Font Awesome Icon Styling */
+i[class*="fa"] {
+  color: var(--primary);
+  margin-right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Icons in headings */
+h1 i, h2 i, h3 i, h4 i, h5 i, h6 i {
+  color: var(--primary);
+  margin-right: 0.75rem;
+}
+
+/* Icons in lists */
+ul li i, ol li i {
+  color: var(--primary);
+  margin-right: 0.5rem;
 }
 
 /* Responsive */

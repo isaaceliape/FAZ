@@ -224,22 +224,22 @@ verify_auth_flow() {
 
   # Step 1: Login form exists
   local login_form=$(grep -r -l "login\|Login" www/docs/src/ --include="*.tsx" 2>/dev/null | head -1)
-  [ -n "$login_form" ] && echo "✓ Login form: $login_form" || echo "✗ Login form: MISSING"
+  [ -n "$login_form" ] && echo "<i class="fa fa-check"></i> Login form: $login_form" || echo "<i class="fa fa-xmark"></i> Login form: MISSING"
 
   # Step 2: Form submits to API
   if [ -n "$login_form" ]; then
     local submits=$(grep -E "fetch.*auth|axios.*auth|/api/auth" "$login_form" 2>/dev/null)
-    [ -n "$submits" ] && echo "✓ Submits to API" || echo "✗ Form doesn't submit to API"
+    [ -n "$submits" ] && echo "<i class="fa fa-check"></i> Submits to API" || echo "<i class="fa fa-xmark"></i> Form doesn't submit to API"
   fi
 
   # Step 3: API route exists
   local api_route=$(find src -path "*api/auth*" -name "*.ts" 2>/dev/null | head -1)
-  [ -n "$api_route" ] && echo "✓ API route: $api_route" || echo "✗ API route: MISSING"
+  [ -n "$api_route" ] && echo "<i class="fa fa-check"></i> API route: $api_route" || echo "<i class="fa fa-xmark"></i> API route: MISSING"
 
   # Step 4: Redirect after success
   if [ -n "$login_form" ]; then
     local redirect=$(grep -E "redirect|router.push|navigate" "$login_form" 2>/dev/null)
-    [ -n "$redirect" ] && echo "✓ Redirects after login" || echo "✗ No redirect after login"
+    [ -n "$redirect" ] && echo "<i class="fa fa-check"></i> Redirects after login" || echo "<i class="fa fa-xmark"></i> No redirect after login"
   fi
 }
 ```
@@ -256,29 +256,29 @@ verify_data_flow() {
 
   # Step 1: Component exists
   local comp_file=$(find src -name "*$component*" -name "*.tsx" 2>/dev/null | head -1)
-  [ -n "$comp_file" ] && echo "✓ Component: $comp_file" || echo "✗ Component: MISSING"
+  [ -n "$comp_file" ] && echo "<i class="fa fa-check"></i> Component: $comp_file" || echo "<i class="fa fa-xmark"></i> Component: MISSING"
 
   if [ -n "$comp_file" ]; then
     # Step 2: Fetches data
     local fetches=$(grep -E "fetch|axios|useSWR|useQuery" "$comp_file" 2>/dev/null)
-    [ -n "$fetches" ] && echo "✓ Has fetch call" || echo "✗ No fetch call"
+    [ -n "$fetches" ] && echo "<i class="fa fa-check"></i> Has fetch call" || echo "<i class="fa fa-xmark"></i> No fetch call"
 
     # Step 3: Has state for data
     local has_state=$(grep -E "useState|useQuery|useSWR" "$comp_file" 2>/dev/null)
-    [ -n "$has_state" ] && echo "✓ Has state" || echo "✗ No state for data"
+    [ -n "$has_state" ] && echo "<i class="fa fa-check"></i> Has state" || echo "<i class="fa fa-xmark"></i> No state for data"
 
     # Step 4: Renders data
     local renders=$(grep -E "\{.*$data_var.*\}|\{$data_var\." "$comp_file" 2>/dev/null)
-    [ -n "$renders" ] && echo "✓ Renders data" || echo "✗ Doesn't render data"
+    [ -n "$renders" ] && echo "<i class="fa fa-check"></i> Renders data" || echo "<i class="fa fa-xmark"></i> Doesn't render data"
   fi
 
   # Step 5: API route exists and returns data
   local route_file=$(find src -path "*$api_route*" -name "*.ts" 2>/dev/null | head -1)
-  [ -n "$route_file" ] && echo "✓ API route: $route_file" || echo "✗ API route: MISSING"
+  [ -n "$route_file" ] && echo "<i class="fa fa-check"></i> API route: $route_file" || echo "<i class="fa fa-xmark"></i> API route: MISSING"
 
   if [ -n "$route_file" ]; then
     local returns_data=$(grep -E "return.*json|res.json" "$route_file" 2>/dev/null)
-    [ -n "$returns_data" ] && echo "✓ API returns data" || echo "✗ API doesn't return data"
+    [ -n "$returns_data" ] && echo "<i class="fa fa-check"></i> API returns data" || echo "<i class="fa fa-xmark"></i> API doesn't return data"
   fi
 }
 ```
@@ -297,19 +297,19 @@ verify_form_flow() {
   if [ -n "$form_file" ]; then
     # Step 1: Has form element
     local has_form=$(grep -E "<form|onSubmit" "$form_file" 2>/dev/null)
-    [ -n "$has_form" ] && echo "✓ Has form" || echo "✗ No form element"
+    [ -n "$has_form" ] && echo "<i class="fa fa-check"></i> Has form" || echo "<i class="fa fa-xmark"></i> No form element"
 
     # Step 2: Handler calls API
     local calls_api=$(grep -E "fetch.*$api_route|axios.*$api_route" "$form_file" 2>/dev/null)
-    [ -n "$calls_api" ] && echo "✓ Calls API" || echo "✗ Doesn't call API"
+    [ -n "$calls_api" ] && echo "<i class="fa fa-check"></i> Calls API" || echo "<i class="fa fa-xmark"></i> Doesn't call API"
 
     # Step 3: Handles response
     local handles_response=$(grep -E "\.then|await.*fetch|setError|setSuccess" "$form_file" 2>/dev/null)
-    [ -n "$handles_response" ] && echo "✓ Handles response" || echo "✗ Doesn't handle response"
+    [ -n "$handles_response" ] && echo "<i class="fa fa-check"></i> Handles response" || echo "<i class="fa fa-xmark"></i> Doesn't handle response"
 
     # Step 4: Shows feedback
     local shows_feedback=$(grep -E "error|success|loading|isLoading" "$form_file" 2>/dev/null)
-    [ -n "$shows_feedback" ] && echo "✓ Shows feedback" || echo "✗ No user feedback"
+    [ -n "$shows_feedback" ] && echo "<i class="fa fa-check"></i> Shows feedback" || echo "<i class="fa fa-xmark"></i> No user feedback"
   fi
 }
 ```

@@ -11,7 +11,7 @@ description: Features nativas e integração com OpenCode
 
 ### 1. Skills 🟢
 
-**Status:** ✅ Totalmente suportado
+**Status:** <i class="fa fa-check-circle"></i> Totalmente suportado
 
 Skills no OpenCode são similares ao Claude Code:
 
@@ -38,7 +38,7 @@ Arquivo: `~/.config/opencode/skills/fase-terminologia.md`
 
 ### 2. Hooks 🟡
 
-**Status:** ✅ Suportado via settings.json
+**Status:** <i class="fa fa-check-circle"></i> Suportado via settings.json
 
 OpenCode segue o padrão de hooks do Claude Code:
 
@@ -66,7 +66,7 @@ OpenCode segue o padrão de hooks do Claude Code:
 
 ### 3. Flat Commands 🟢
 
-**Status:** ✅ Nativo
+**Status:** <i class="fa fa-check-circle"></i> Nativo
 
 OpenCode usa estrutura de comandos plana (sem prefixo `:`):
 
@@ -81,7 +81,7 @@ FASE automaticamente converte comandos durante instalação.
 
 ### 4. XDG Config Standard 🟢
 
-**Status:** ✅ Segue padrão XDG
+**Status:** <i class="fa fa-check-circle"></i> Segue padrão XDG
 
 OpenCode usa XDG Base Directory specification:
 
@@ -173,23 +173,23 @@ No OpenCode, use o prefixo `/fase-`:
 |---------|-------------|----------|
 | Config Path | `~/.claude/` | `~/.config/opencode/` |
 | Command Format | `/fase:cmd` | `/fase-cmd` |
-| MCP Servers | ✅ | ❌ |
-| Voice Mode | ✅ | ❌ |
-| Open Source | ❌ | ✅ |
+| MCP Servers | <i class="fa fa-check-circle"></i> | <i class="fa fa-times-circle"></i> |
+| Voice Mode | <i class="fa fa-check-circle"></i> | <i class="fa fa-times-circle"></i> |
+| Open Source | <i class="fa fa-times-circle"></i> | <i class="fa fa-check-circle"></i> |
 
 ## Vantagens do OpenCode
 
-- ✅ **Open Source:** Comunidade ativa, customizável
-- ✅ **XDG Standard:** Segue convenções Linux/Unix
-- ✅ **Gratuito:** Sem limits de uso
-- ✅ **Skills:** Sistema de extensão robusto
-- ✅ **Hooks:** Automação via settings.json
+- <i class="fa fa-check-circle"></i> **Open Source:** Comunidade ativa, customizável
+- <i class="fa fa-check-circle"></i> **XDG Standard:** Segue convenções Linux/Unix
+- <i class="fa fa-check-circle"></i> **Gratuito:** Sem limits de uso
+- <i class="fa fa-check-circle"></i> **Skills:** Sistema de extensão robusto
+- <i class="fa fa-check-circle"></i> **Hooks:** Automação via settings.json
 
 ## Limitações
 
-- ❌ Sem MCP Servers (integração externa limitada)
-- ❌ Sem Voice Mode
-- ❌ Context window menor que Claude Code
+- <i class="fa fa-times-circle"></i> Sem MCP Servers (integração externa limitada)
+- <i class="fa fa-times-circle"></i> Sem Voice Mode
+- <i class="fa fa-times-circle"></i> Context window menor que Claude Code
 
 ---
 

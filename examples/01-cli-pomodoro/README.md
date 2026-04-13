@@ -4,7 +4,7 @@
 **Objetivo:** Construir um timer Pomodoro simples em Node.js  
 **Tempo Estimado:** 30-45 minutos com FASE
 
-## 📋 Visão Geral do Projeto
+## <i class="fa fa-list-check"></i> Visão Geral do Projeto
 
 Você quer criar uma ferramenta de linha de comando (CLI) que:
 - Executa um timer Pomodoro (25 min trabalho, 5 min pausa)
@@ -12,7 +12,7 @@ Você quer criar uma ferramenta de linha de comando (CLI) que:
 - Toca um som quando o tempo acaba
 - Rastreia sessões completadas
 
-## 🔄 Fluxo FASE Usado
+## <i class="fa fa-arrows-rotate"></i> Fluxo FASE Usado
 
 ### Passo 1: Inicializar o Projeto
 
@@ -82,10 +82,10 @@ Não temos o código-fonte aqui — o ponto é mostrar como **FASE organiza o tr
 ## 📖 Inspeccione a ROADMAP
 
 Abra `.fase-ai-local/ROADMAP.md` para ver:
-- ✅ Fases propostas
-- ✅ Dependências entre fases
-- ✅ Critérios de sucesso
-- ✅ Progresso rastreado
+- <i class="fa fa-check-circle"></i> Fases propostas
+- <i class="fa fa-check-circle"></i> Dependências entre fases
+- <i class="fa fa-check-circle"></i> Critérios de sucesso
+- <i class="fa fa-check-circle"></i> Progresso rastreado
 
 ```bash
 cat .fase-ai-local/ROADMAP.md
@@ -102,7 +102,7 @@ cat .fase-ai-local/ROADMAP.md
 
 ---
 
-## 🎯 Próximos Passos
+## <i class="fa fa-bullseye"></i> Próximos Passos
 
 - Tente com seu próprio projeto
 - Use a mesma estrutura de fases

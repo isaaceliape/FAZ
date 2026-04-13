@@ -1,10 +1,10 @@
-# 📊 FASE Adoption Monitoring Guide
+# <i class="fa fa-chart-bar"></i> FASE Adoption Monitoring Guide
 
 This guide shows you how to track FASE's adoption metrics across npm, GitHub, analytics, and community channels.
 
 ---
 
-## 1. 📦 npm Downloads & Package Metrics
+## 1. <i class="fa fa-box"></i> npm Downloads & Package Metrics
 
 ### Real-time Dashboard
 
@@ -67,7 +67,7 @@ MONTHLY=$(echo $RESPONSE | jq '.downloads | map(.downloads) | add')
 echo "$DATE,weekly=$WEEKLY,monthly=$MONTHLY" >> npm-downloads.csv
 
 # Print
-echo "📦 npm Downloads ($DATE)"
+echo "<i class="fa fa-box"></i> npm Downloads ($DATE)"
 echo "  Weekly: $WEEKLY"
 echo "  Monthly: $MONTHLY"
 ```
@@ -80,7 +80,7 @@ echo "  Monthly: $MONTHLY"
 
 ---
 
-## 2. ⭐ GitHub Metrics
+## 2. <i class="fa fa-star"></i> GitHub Metrics
 
 ### Key Metrics to Track
 
@@ -116,7 +116,7 @@ OPEN_ISSUES=$(echo $RESPONSE | jq '.open_issues_count')
 # Log
 echo "$DATE,stars=$STARS,forks=$FORKS,watchers=$WATCHERS,issues=$OPEN_ISSUES" >> github-stats.csv
 
-echo "⭐ GitHub Stats ($DATE)"
+echo "<i class="fa fa-star"></i> GitHub Stats ($DATE)"
 echo "  Stars: $STARS"
 echo "  Forks: $FORKS"
 echo "  Watchers: $WATCHERS"
@@ -159,7 +159,7 @@ tail -10 github-stars.jsonl | jq '.stars'
 
 ---
 
-## 3. 📊 Analytics — Command Usage & Install Base
+## 3. <i class="fa fa-chart-bar"></i> Analytics — Command Usage & Install Base
 
 ### Active Installs
 
@@ -282,7 +282,7 @@ curl -s https://api.github.com/repos/isaaceliape/FASE/discussions | \
 
 ---
 
-## 5. 📈 Create a Monitoring Dashboard
+## 5. <i class="fa fa-chart-line"></i> Create a Monitoring Dashboard
 
 ### Option A: Simple Google Sheet
 
@@ -356,7 +356,7 @@ jobs:
 
 ---
 
-## 6. 🎯 Key Metrics to Watch
+## 6. <i class="fa fa-bullseye"></i> Key Metrics to Watch
 
 ### North Star Metric
 **Active Installs (unique install IDs with 5+ commands/week)**
@@ -378,7 +378,7 @@ jobs:
 
 ---
 
-## 7. 📅 Monitoring Schedule
+## 7. <i class="fa fa-calendar"></i> Monitoring Schedule
 
 ### Daily
 - Check npm downloads (quick glance)
@@ -398,7 +398,7 @@ jobs:
 
 ---
 
-## 8. 🔧 Example Monitoring Setup
+## 8. <i class="fa fa-wrench"></i> Example Monitoring Setup
 
 ### 1. Create metrics directory
 
@@ -464,35 +464,35 @@ tail -1 github-stats.jsonl | jq '.'
 ```markdown
 # FASE Adoption Report — Week of Apr 10, 2026
 
-## 📦 Package Metrics
+## <i class="fa fa-box"></i> Package Metrics
 - npm weekly downloads: **180** (↑ 20% from last week)
 - npm monthly total: **750**
 - Total downloads all-time: **5,200**
 
-## ⭐ GitHub Metrics
+## <i class="fa fa-star"></i> GitHub Metrics
 - Stars: **52** (↑ 7 new)
 - Forks: **10** (↑ 2 new)
 - Open issues: **3**
 - Discussions: **5**
 
-## 📊 Analytics
+## <i class="fa fa-chart-bar"></i> Analytics
 - Active installs (opt-in): **145**
 - Avg commands/user: **8.2**
 - Top command: `roadmap-analyze`
 - Most popular runtime: Claude Code (62%)
 
-## 💬 Community
+## <i class="fa fa-comments"></i> Community
 - Dev.to article views: **245** (↑ 50)
 - Reddit mentions: **3**
 - Twitter mentions: **8**
 
-## 🎯 Goals Status
+## <i class="fa fa-bullseye"></i> Goals Status
 - 🟢 npm downloads on track
 - 🟢 GitHub stars growing
 - 🟡 Analytics opt-in rate: 35% (target: 40%)
 - 🟡 Community engagement: ramping up
 
-## 📋 Actions This Week
+## <i class="fa fa-list-check"></i> Actions This Week
 - [ ] Post on r/brasilprogramming
 - [ ] Respond to GitHub issues
 - [ ] Update example projects

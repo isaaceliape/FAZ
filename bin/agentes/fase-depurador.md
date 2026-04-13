@@ -358,9 +358,9 @@ Trace para trás:
 **Exemplo:** Funciona local, falha em CI
 ```
 Diferenças:
-- Node version: Mesmo ✓
-- Variáveis de ambiente: Mesmo ✓
-- Timezone: Diferente! ✗
+- Node version: Mesmo <i class="fa fa-check"></i>
+- Variáveis de ambiente: Mesmo <i class="fa fa-check"></i>
+- Timezone: Diferente! <i class="fa fa-xmark"></i>
 
 Teste: Set timezone local para UTC (como CI)
 Resultado: Agora falha local também
@@ -563,7 +563,7 @@ test('should handle undefined user data gracefully', () => {
 });
 
 // 2. Verifique que teste falha (confirma que reproduz bug)
-// ✗ TypeError: Cannot read property 'name' of undefined
+// <i class="fa fa-xmark"></i> TypeError: Cannot read property 'name' of undefined
 
 // 3. Conserte o código
 function processUserData(user) {
@@ -572,7 +572,7 @@ function processUserData(user) {
 }
 
 // 4. Verifique que teste passa
-// ✓ should handle undefined user data gracefully
+// <i class="fa fa-check"></i> should handle undefined user data gracefully
 
 // 5. Teste é agora proteção de regressão para sempre
 ```

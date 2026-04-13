@@ -5,7 +5,7 @@
 **Tempo Estimado:** 4-6 horas com FASE  
 **Complexidade:** Múltiplas dependências, testes obrigatórios, documentação
 
-## 📋 Requisito Funcional
+## <i class="fa fa-list-check"></i> Requisito Funcional
 
 Adicionar autenticação JWT a uma API Express existente:
 - Login/Register endpoints
@@ -15,7 +15,7 @@ Adicionar autenticação JWT a uma API Express existente:
 - Testes unitários e E2E
 - Documentação OpenAPI/Swagger
 
-## 🔄 Fluxo FASE Usado
+## <i class="fa fa-arrows-rotate"></i> Fluxo FASE Usado
 
 ### Phase 1: Research & Architecture
 

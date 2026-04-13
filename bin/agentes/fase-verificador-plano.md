@@ -365,11 +365,11 @@ Para cada referência `<automated>MISSING</automated>`:
 
 | Task | Plan | Etapa | Automated Command | Status |
 |------|------|------|-------------------|--------|
-| {task} | {plan} | {etapa} | `{command}` | ✅ / ❌ |
+| {task} | {plan} | {etapa} | `{command}` | <i class="fa fa-check-circle"></i> / <i class="fa fa-times-circle"></i> |
 
-Sampling: Etapa {N}: {X}/{Y} verified → ✅ / ❌
-Etapa 0: {test file} → ✅ present / ❌ MISSING
-Overall: ✅ PASS / ❌ FAIL
+Sampling: Etapa {N}: {X}/{Y} verified → <i class="fa fa-check-circle"></i> / <i class="fa fa-times-circle"></i>
+Etapa 0: {test file} → <i class="fa fa-check-circle"></i> present / <i class="fa fa-times-circle"></i> MISSING
+Overall: <i class="fa fa-check-circle"></i> PASS / <i class="fa fa-times-circle"></i> FAIL
 ```
 
 Se FAIL: retorne ao planner com fixes específicos. Mesmo loop de revisão das outras dimensões (max 3 loops).

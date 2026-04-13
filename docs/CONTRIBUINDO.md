@@ -4,11 +4,11 @@
 
 Obrigado por considerar contribuir ao FASE! Este documento oferece diretrizes e instruções para participar do projeto.
 
-## 📋 Código de Conduta
+## <i class="fa fa-list-check"></i> Código de Conduta
 
 Este projeto adere a um Código de Conduta. Ao participar, você concorda em manter um ambiente respeitoso e inclusivo. Comportamento abusivo deve ser reportado para maintainers.
 
-## 🎯 Tipos de Contribuição
+## <i class="fa fa-bullseye"></i> Tipos de Contribuição
 
 ### 1. **Traduções** (Novos idiomas)
 
@@ -91,7 +91,7 @@ Descrição detalhada.
 4. Adicionar testes se aplicável
 5. Abrir PR com contextualização
 
-## 🔧 Setup Local
+## <i class="fa fa-wrench"></i> Setup Local
 
 ### Pré-requisitos
 
@@ -174,9 +174,9 @@ npm pack --dry-run
 ```
 
 Isso simula a publicação no npm e mostra:
-- ✅ Quais arquivos serão inclusos
-- ❌ Erros de configuração
-- 📊 Tamanho do pacote
+- <i class="fa fa-check-circle"></i> Quais arquivos serão inclusos
+- <i class="fa fa-times-circle"></i> Erros de configuração
+- <i class="fa fa-chart-bar"></i> Tamanho do pacote
 
 ### Testar Instalação
 
@@ -210,7 +210,7 @@ docs/
 └── CONTRIBUINDO.md          # Este arquivo
 ```
 
-## ✅ Checklist para PRs
+## <i class="fa fa-check-circle"></i> Checklist para PRs
 
 Antes de submeter um PR, verifique:
 
@@ -221,7 +221,7 @@ Antes de submeter um PR, verifique:
 - [ ] `npm pack --dry-run` passa sem erros
 - [ ] Pre-commit hooks não falharam
 
-## 🚀 Processo de Review
+## <i class="fa fa-rocket"></i> Processo de Review
 
 1. **Automático**: GitHub Actions verifica integridade do pacote
 2. **Automático**: Pre-commit hooks validam mudanças

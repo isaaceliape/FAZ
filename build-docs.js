@@ -9,15 +9,15 @@ const packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, "package.jso
 const version = packageJson.version;
 
 const docs = [
-  { file: "index.html", label: "README", icon: "📖" },
-  { file: "COMANDOS.html", label: "Comandos", icon: "📋" },
-  { file: "GUIA-DO-USUARIO.html", label: "Guia do Usuário", icon: "📘" },
-  { file: "CONTRIBUINDO.html", label: "Guia de Contribuição", icon: "🤝" },
-  { file: "HOOKS.html", label: "Git Hooks", icon: "🔧" },
-  { file: "NPM-REGISTRY.html", label: "NPM Registry", icon: "📦" },
-  { file: "technical/padronizacao-caminhos.html", label: "Padronização de Caminhos", icon: "🛣️" },
-  { file: "maintainers/MANTENEDORES.html", label: "Guia de Maintainers", icon: "👨‍💼" },
-  { file: "CONTEXT-MONITOR.html", label: "Monitor de Contexto", icon: "📊" },
+  { file: "index.html", label: "README", icon: "<i class=\"fa fa-book\"></i>" },
+  { file: "COMANDOS.html", label: "Comandos", icon: "<i class=\"fa fa-list-check\"></i>" },
+  { file: "GUIA-DO-USUARIO.html", label: "Guia do Usuário", icon: "<i class=\"fa fa-book-open\"></i>" },
+  { file: "CONTRIBUINDO.html", label: "Guia de Contribuição", icon: "<i class=\"fa fa-handshake\"></i>" },
+  { file: "HOOKS.html", label: "Git Hooks", icon: "<i class=\"fa fa-wrench\"></i>" },
+  { file: "NPM-REGISTRY.html", label: "NPM Registry", icon: "<i class=\"fa fa-box\"></i>" },
+  { file: "technical/padronizacao-caminhos.html", label: "Padronização de Caminhos", icon: "<i class=\"fa fa-road\"></i>" },
+  { file: "maintainers/MANTENEDORES.html", label: "Guia de Maintainers", icon: "<i class=\"fa fa-user-tie\"></i>" },
+  { file: "CONTEXT-MONITOR.html", label: "Monitor de Contexto", icon: "<i class=\"fa fa-chart-bar\"></i>" },
 ];
 
 const htmlTemplate = (title, currentFile, content) => {
@@ -62,6 +62,7 @@ const htmlTemplate = (title, currentFile, content) => {
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>${title} - FASE Docs</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-dWl2hjFlPDATYNKGRekq9h+OhN6Z3BYV+VCugMzKa+2ZgIVsK0Y2SjC1+e6i7B9WDu9Zy4gxXVW5tADhJYXnzw==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <style>
     :root {
       --primary: #00ff88;
@@ -358,6 +359,19 @@ const htmlTemplate = (title, currentFile, content) => {
       background: var(--secondary);
     }
 
+    /* Font Awesome Icon Styling */
+    i[class*="fa"] {
+      color: var(--primary);
+      margin-right: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sidebar-link i {
+      margin-right: 0.5rem;
+    }
+
     /* Mobile */
     @media (max-width: 768px) {
       .content-wrapper {
@@ -408,12 +422,12 @@ const htmlTemplate = (title, currentFile, content) => {
 
   <div class="content-wrapper">
     <aside class="sidebar">
-      <h3>📚 Documentação</h3>
+      <h3><i class="fa fa-book"></i> Documentação</h3>
       ${sidebarLinks}
     </aside>
 
     <main class="main">
-      <div class="version-badge">📦 Versão ${version}</div>
+      <div class="version-badge"><i class="fa fa-box"></i> Versão ${version}</div>
       ${content}
     </main>
   </div>

@@ -100,12 +100,12 @@ Apresente o relatório neste formato:
   RELATÓRIO DE VERIFICAÇÃO F.A.S.E. v{versão}
 ═══════════════════════════════════════════════════════════
 
-📦 INSTALAÇÃO DO PACOTE
+<i class="fa fa-box"></i> INSTALAÇÃO DO PACOTE
   Status: {INSTALADO/NÃO_INSTALADO}
   Versão: {versão}
   Localização: {caminho}
 
-🔧 RUNTIMES CONFIGURADOS
+<i class="fa fa-wrench"></i> RUNTIMES CONFIGURADOS
   Claude Code: {CONFIGURADO/NÃO_CONFIGURADO}
     - Settings: {OK/MISSING}
     - Comandos FASE: {N} encontrados
@@ -127,7 +127,7 @@ Apresente o relatório neste formato:
   Diretório ~/.fase: {EXISTS/MISSING}
   Workflows disponíveis: {N}
 
-⚠️ PROBLEMAS ENCONTRADOS
+<i class="fa fa-warning"></i> PROBLEMAS ENCONTRADOS
   {Lista de problemas encontrados}
 
 💡 AÇÕES SUGERIDAS
@@ -197,18 +197,18 @@ npx fase-ai --all
 
 ## Critérios de Saúde
 
-**✅ Instalação Saudável:**
+**<i class="fa fa-check-circle"></i> Instalação Saudável:**
 - Pacote disponível via npx
 - Pelo menos um runtime configurado
 - Comandos FASE presentes no runtime configurado
 - Workflows disponíveis
 
-**⚠️ Instalação Parcial:**
+**<i class="fa fa-warning"></i> Instalação Parcial:**
 - Pacote disponível mas nenhum runtime configurado
 - Runtime configurado mas sem comandos FASE
 - Workflows ausentes
 
-**❌ Instalação Problemática:**
+**<i class="fa fa-times-circle"></i> Instalação Problemática:**
 - Pacote não disponível via npx
 - Múltiplos problemas de configuração
 - Conflitos de versão detectados
@@ -219,7 +219,7 @@ Apresente o relatório formatado conforme especificado acima.
 
 Se todos os checks passaram, exiba:
 ```
-✅ F.A.S.E. está instalado e configurado corretamente!
+<i class="fa fa-check-circle"></i> F.A.S.E. está instalado e configurado corretamente!
 ```
 
 Se problemas foram encontrados, liste em ordem de prioridade:
@@ -243,12 +243,12 @@ Saída esperada (instalação saudável):
   RELATÓRIO DE VERIFICAÇÃO F.A.S.E. v3.0.2
 ═══════════════════════════════════════════════════════════
 
-📦 INSTALAÇÃO DO PACOTE
+<i class="fa fa-box"></i> INSTALAÇÃO DO PACOTE
   Status: INSTALADO
   Versão: 3.0.2
   Localização: /usr/local/lib/node_modules/fase-ai
 
-🔧 RUNTIMES CONFIGURADOS
+<i class="fa fa-wrench"></i> RUNTIMES CONFIGURADOS
   Claude Code: CONFIGURADO
     - Settings: OK
     - Comandos FASE: 31 encontrados
@@ -270,7 +270,7 @@ Saída esperada (instalação saudável):
   Diretório ~/.fase: EXISTS
   Workflows disponíveis: 12
 
-✅ F.A.S.E. está instalado e configurado corretamente!
+<i class="fa fa-check-circle"></i> F.A.S.E. está instalado e configurado corretamente!
 
 ═══════════════════════════════════════════════════════════
 ```

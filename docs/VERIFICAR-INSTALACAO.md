@@ -29,9 +29,9 @@ node bin/verificar-instalacao.js
 ## O Que É Verificado
 
 ### 1. Instalação do Pacote
-- ✅ Verifica se `fase-ai` está instalado globalmente via npm
-- ✅ Mostra a versão instalada
-- ✅ Mostra o local de instalação
+- <i class="fa fa-check-circle"></i> Verifica se `fase-ai` está instalado globalmente via npm
+- <i class="fa fa-check-circle"></i> Mostra a versão instalada
+- <i class="fa fa-check-circle"></i> Mostra o local de instalação
 
 ### 2. Runtimes Configurados
 Para cada runtime suportado:
@@ -71,12 +71,12 @@ O relatório é dividido em seções:
   RELATÓRIO DE VERIFICAÇÃO F.A.S.E. v3.0.2
 ═══════════════════════════════════════════════════════════
 
-📦 INSTALAÇÃO DO PACOTE
+<i class="fa fa-box"></i> INSTALAÇÃO DO PACOTE
   Status: INSTALADO/NÃO INSTALADO
   Versão: X.Y.Z
   Localização: /caminho/para/pacote
 
-🔧 RUNTIMES CONFIGURADOS
+<i class="fa fa-wrench"></i> RUNTIMES CONFIGURADOS
   Claude Code: CONFIGURADO/NÃO_CONFIGURADO
     - Settings: OK/MISSING
     - Comandos FASE: N encontrados
@@ -98,7 +98,7 @@ O relatório é dividido em seções:
   Diretório ~/.fase: EXISTS/MISSING
   Workflows disponíveis: N
 
-⚠️ PROBLEMAS ENCONTRADOS
+<i class="fa fa-warning"></i> PROBLEMAS ENCONTRADOS
   1. Problema 1
   2. Problema 2
   ...
@@ -113,18 +113,18 @@ O relatório é dividido em seções:
 
 ## Critérios de Saúde
 
-### ✅ Instalação Saudável
+### <i class="fa fa-check-circle"></i> Instalação Saudável
 - Pacote instalado globalmente
 - Pelo menos um runtime configurado
 - Comandos FASE presentes no runtime configurado
 - Workflows disponíveis
 
-### ⚠️ Instalação Parcial
+### <i class="fa fa-warning"></i> Instalação Parcial
 - Pacote instalado mas nenhum runtime configurado
 - Runtime configurado mas sem comandos FASE
 - Workflows ausentes
 
-### ❌ Instalação Problemática
+### <i class="fa fa-times-circle"></i> Instalação Problemática
 - Pacote não instalado
 - Múltiplos problemas de configuração
 - Conflitos de versão detectados
@@ -191,37 +191,37 @@ npx fase-ai --all
   RELATÓRIO DE VERIFICAÇÃO F.A.S.E. v3.0.2
 ═══════════════════════════════════════════════════════════
 
-📦 INSTALAÇÃO DO PACOTE
-  ✓ Status: INSTALADO
-  ✓ Versão: 3.0.2
-  ✓ Localização: /usr/local/lib/node_modules/fase-ai
+<i class="fa fa-box"></i> INSTALAÇÃO DO PACOTE
+  <i class="fa fa-check"></i> Status: INSTALADO
+  <i class="fa fa-check"></i> Versão: 3.0.2
+  <i class="fa fa-check"></i> Localização: /usr/local/lib/node_modules/fase-ai
 
-🔧 RUNTIMES CONFIGURADOS
+<i class="fa fa-wrench"></i> RUNTIMES CONFIGURADOS
 
   Claude Code: CONFIGURADO
-    ✓ Settings: OK
-    ✓ Comandos FASE: 32 encontrados
-    ✓ Hooks: 6 encontrados
+    <i class="fa fa-check"></i> Settings: OK
+    <i class="fa fa-check"></i> Comandos FASE: 32 encontrados
+    <i class="fa fa-check"></i> Hooks: 6 encontrados
 
   OpenCode: NÃO_CONFIGURADO
     - Settings: MISSING
     - Comandos FASE: 0 encontrados
 
   Gemini: CONFIGURADO
-    ✓ Settings: OK
-    ✓ Comandos FASE: 32 encontrados
+    <i class="fa fa-check"></i> Settings: OK
+    <i class="fa fa-check"></i> Comandos FASE: 32 encontrados
 
   Codex: NÃO_CONFIGURADO
     - Config: MISSING
     - Skills FASE: 0 encontradas
 
 📁 WORKFLOWS FASE
-  ✓ Diretório ~/.fase: EXISTS
-  ✓ Workflows disponíveis: 12
+  <i class="fa fa-check"></i> Diretório ~/.fase: EXISTS
+  <i class="fa fa-check"></i> Workflows disponíveis: 12
 
 ═══════════════════════════════════════════════════════════
 
-  ✅ F.A.S.E. está instalado e configurado corretamente!
+  <i class="fa fa-check-circle"></i> F.A.S.E. está instalado e configurado corretamente!
 
 ═══════════════════════════════════════════════════════════
 ```
@@ -233,21 +233,21 @@ npx fase-ai --all
   RELATÓRIO DE VERIFICAÇÃO F.A.S.E. v3.0.2
 ═══════════════════════════════════════════════════════════
 
-📦 INSTALAÇÃO DO PACOTE
-  ✗ Status: NÃO INSTALADO
+<i class="fa fa-box"></i> INSTALAÇÃO DO PACOTE
+  <i class="fa fa-xmark"></i> Status: NÃO INSTALADO
 
-🔧 RUNTIMES CONFIGURADOS
+<i class="fa fa-wrench"></i> RUNTIMES CONFIGURADOS
 
   Claude Code: CONFIGURADO
-    ✓ Settings: OK
-    ✗ Comandos FASE: 0 encontrados
+    <i class="fa fa-check"></i> Settings: OK
+    <i class="fa fa-xmark"></i> Comandos FASE: 0 encontrados
     ⚠ Hooks: 0 encontrados
 
   [...]
 
 ═══════════════════════════════════════════════════════════
 
-  ⚠️  6 PROBLEMA(S) ENCONTRADO(S):
+  <i class="fa fa-warning"></i>  6 PROBLEMA(S) ENCONTRADO(S):
 
   1. Pacote fase-ai não instalado globalmente
   2. Claude Code: Sem comandos FASE instalados

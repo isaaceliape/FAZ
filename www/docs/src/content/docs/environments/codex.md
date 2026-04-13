@@ -11,7 +11,7 @@ description: Features nativas e integração com Codex da Microsoft
 
 ### 1. Multi-Agent Orchestration 🟢
 
-**Status:** ✅ Nativo
+**Status:** <i class="fa fa-check-circle"></i> Nativo
 
 Codex suporta múltiplos agents trabalhando em paralelo:
 
@@ -48,7 +48,7 @@ Codex suporta múltiplos agents trabalhando em paralelo:
 
 ### 2. Skills 🟢
 
-**Status:** ✅ Totalmente suportado
+**Status:** <i class="fa fa-check-circle"></i> Totalmente suportado
 
 Codex usa `<codex_skill_adapter>` para skills:
 
@@ -75,7 +75,7 @@ You are a FASE executor agent. Your role is to implement a phase...
 
 ### 3. VS Code Integration 🟢
 
-**Status:** ✅ Nativo
+**Status:** <i class="fa fa-check-circle"></i> Nativo
 
 Codex integra nativamente com VS Code:
 
@@ -96,7 +96,7 @@ $fase-novo-projeto
 
 ### 4. Enterprise Features 🟢
 
-**Status:** ✅ Nativo
+**Status:** <i class="fa fa-check-circle"></i> Nativo
 
 #### Segurança e Compliance
 - Data residency controls
@@ -114,7 +114,7 @@ $fase-novo-projeto
 
 ### 5. Extended Context 🟡
 
-**Status:** ⚠️ Variável por plano
+**Status:** <i class="fa fa-warning"></i> Variável por plano
 
 Context window varia por plano/subscription. Verifique seu plano para detalhes.
 
@@ -188,17 +188,17 @@ $fase-verificar-trabalho
 
 ## Vantagens do Codex
 
-- ✅ **Multi-Agent:** Orquestração nativa
-- ✅ **VS Code:** Integração IDE profunda
-- ✅ **Enterprise:** Segurança, compliance, SSO
-- ✅ **Microsoft Stack:** Azure, GitHub, Office, Teams
-- ✅ **Skills:** Sistema adaptativo
+- <i class="fa fa-check-circle"></i> **Multi-Agent:** Orquestração nativa
+- <i class="fa fa-check-circle"></i> **VS Code:** Integração IDE profunda
+- <i class="fa fa-check-circle"></i> **Enterprise:** Segurança, compliance, SSO
+- <i class="fa fa-check-circle"></i> **Microsoft Stack:** Azure, GitHub, Office, Teams
+- <i class="fa fa-check-circle"></i> **Skills:** Sistema adaptativo
 
 ## Limitações
 
-- ⚠️ Context window varia por plano
-- ⚠️ Menor flexibilidade que Claude Code
-- ⚠️ Foco em enterprise (pode ser overkill para solo devs)
+- <i class="fa fa-warning"></i> Context window varia por plano
+- <i class="fa fa-warning"></i> Menor flexibilidade que Claude Code
+- <i class="fa fa-warning"></i> Foco em enterprise (pode ser overkill para solo devs)
 
 ---
 
@@ -206,9 +206,9 @@ $fase-verificar-trabalho
 
 | Feature | Claude Code | OpenCode | Gemini | Codex |
 |---------|-------------|----------|--------|-------|
-| Multi-Agent | ⚠️ | ❌ | ❌ | ✅ |
-| VS Code Native | ❌ | ❌ | ❌ | ✅ |
-| Enterprise SSO | ❌ | ❌ | ⚠️ | ✅ |
+| Multi-Agent | <i class="fa fa-warning"></i> | <i class="fa fa-times-circle"></i> | <i class="fa fa-times-circle"></i> | <i class="fa fa-check-circle"></i> |
+| VS Code Native | <i class="fa fa-times-circle"></i> | <i class="fa fa-times-circle"></i> | <i class="fa fa-times-circle"></i> | <i class="fa fa-check-circle"></i> |
+| Enterprise SSO | <i class="fa fa-times-circle"></i> | <i class="fa fa-times-circle"></i> | <i class="fa fa-warning"></i> | <i class="fa fa-check-circle"></i> |
 | Context Window | 1M | Variável | 2M | Variável |
 | Command Prefix | `/` | `/` | `/` | `$` |
 

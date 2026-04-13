@@ -14,8 +14,8 @@ updated:
 
 ## Fases Completadas
 
-- ✅ [Fase 1] - Concluída em [data]
-- ✅ [Fase 2] - Concluída em [data]
+- <i class="fa fa-check-circle"></i> [Fase 1] - Concluída em [data]
+- <i class="fa fa-check-circle"></i> [Fase 2] - Concluída em [data]
 
 ## Fases Pendentes
 

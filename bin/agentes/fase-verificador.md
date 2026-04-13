@@ -153,8 +153,8 @@ Para cada truth, determine se o codebase a habilita.
 
 **Status de verificação:**
 
-- ✓ VERIFIED: Todos os artefatos de suporte passam todos os checks
-- ✗ FAILED: Um ou mais artefatos faltando, stub, ou desconectados
+- <i class="fa fa-check"></i> VERIFIED: Todos os artefatos de suporte passam todos os checks
+- <i class="fa fa-xmark"></i> FAILED: Um ou mais artefatos faltando, stub, ou desconectados
 - ? UNCERTAIN: Não pode verificar programaticamente (precisa humano)
 
 Para cada truth:
@@ -183,9 +183,9 @@ Para cada artefato no resultado:
 
 | exists | issues empty | Status      |
 | ------ | ------------ | ----------- |
-| true   | true         | ✓ VERIFIED  |
-| true   | false        | ✗ STUB      |
-| false  | -            | ✗ MISSING   |
+| true   | true         | <i class="fa fa-check"></i> VERIFIED  |
+| true   | false        | <i class="fa fa-xmark"></i> STUB      |
+| false  | -            | <i class="fa fa-xmark"></i> MISSING   |
 
 **Para verificação de wiring (Level 3)**, cheque imports/usage manualmente para artefatos que passam Levels 1-2:
 
@@ -206,10 +206,10 @@ grep -r "$artifact_name" "${search_path:-www/docs/src/}" --include="*.ts" --incl
 
 | Exists | Substantive | Wired | Status      |
 | ------ | ----------- | ----- | ----------- |
-| ✓      | ✓           | ✓     | ✓ VERIFIED  |
-| ✓      | ✓           | ✗     | ⚠️ ORPHANED |
-| ✓      | ✗           | -     | ✗ STUB      |
-| ✗      | -           | -     | ✗ MISSING   |
+| <i class="fa fa-check"></i>      | <i class="fa fa-check"></i>           | <i class="fa fa-check"></i>     | <i class="fa fa-check"></i> VERIFIED  |
+| <i class="fa fa-check"></i>      | <i class="fa fa-check"></i>           | <i class="fa fa-xmark"></i>     | <i class="fa fa-warning"></i> ORPHANED |
+| <i class="fa fa-check"></i>      | <i class="fa fa-xmark"></i>           | -     | <i class="fa fa-xmark"></i> STUB      |
+| <i class="fa fa-xmark"></i>      | -           | -     | <i class="fa fa-xmark"></i> MISSING   |
 
 ## Step 5: Verificar Key Links (Wiring)
 
@@ -282,8 +282,8 @@ Para cada ID de requirement dos plans:
 1. Encontre sua descrição completa no REQUISITOS.md (`**REQ-ID**: description`)
 2. Mapeie para truths/artefatos verificados em Steps 3-5
 3. Determine status:
-   - ✓ SATISFIED: Evidência de implementação encontrada que cumpre o requirement
-   - ✗ BLOCKED: Sem evidência ou evidência contraditória
+   - <i class="fa fa-check"></i> SATISFIED: Evidência de implementação encontrada que cumpre o requirement
+   - <i class="fa fa-xmark"></i> BLOCKED: Sem evidência ou evidência contraditória
    - ? NEEDS HUMAN: Não pode verificar programaticamente (comportamento UI, qualidade UX)
 
 **6c. Checar por requisitos órfãos:**
@@ -324,7 +324,7 @@ grep -n -E "return null|return \{\}|return \[\]|=> \{\}" "$file" 2>/dev/null
 grep -n -B 2 -A 2 "console\.log" "$file" 2>/dev/null | grep -E "^\s*(const|function|=>)"
 ```
 
-Categorize: 🛑 Blocker (impede objetivo) | ⚠️ Warning (incompleto) | ℹ️ Info (notável)
+Categorize: 🛑 Blocker (impede objetivo) | <i class="fa fa-warning"></i> Warning (incompleto) | ℹ️ Info (notável)
 
 ## Step 8: Identificar Necessidades de Verificação Humana
 
@@ -430,8 +430,8 @@ human_verification: # Apenas se status: human_needed
 
 | #   | Truth   | Status     | Evidência       |
 | --- | ------- | ---------- | --------------- |
-| 1   | {truth} | ✓ VERIFIED | {evidência}     |
-| 2   | {truth} | ✗ FAILED   | {o que está errado} |
+| 1   | {truth} | <i class="fa fa-check"></i> VERIFIED | {evidência}     |
+| 2   | {truth} | <i class="fa fa-xmark"></i> FAILED   | {o que está errado} |
 
 **Score:** {N}/{M} truths verificadas
 
@@ -514,7 +514,7 @@ Se `closure_attempts >= 3` E ainda existem `gaps_remaining` no frontmatter:
 1. Adicione esta seção ao final do relatório VERIFICACAO.md (após os gaps normais):
 
 ```markdown
-## ⚠️ Escalação Humana Necessária
+## <i class="fa fa-warning"></i> Escalação Humana Necessária
 
 Esta fase tentou fechar os gaps abaixo **{closure_attempts} vezes** sem sucesso.
 As tentativas automáticas foram esgotadas. Intervenção manual é necessária.

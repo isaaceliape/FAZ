@@ -11,7 +11,7 @@ description: Features nativas e integração com Gemini CLI do Google
 
 ### 1. Extended Context (2M Tokens) 🟢
 
-**Status:** ✅ Disponível
+**Status:** <i class="fa fa-check-circle"></i> Disponível
 
 Gemini oferece **2M tokens** de contexto, o maior entre os ambientes suportados.
 
@@ -35,7 +35,7 @@ Analyze the entire codebase and identify patterns...
 
 ### 2. Google Integration 🟡
 
-**Status:** ⚠️ Parcialmente suportado
+**Status:** <i class="fa fa-warning"></i> Parcialmente suportado
 
 Gemini integra naturalmente com serviços Google:
 
@@ -57,7 +57,7 @@ Gemini integra naturalmente com serviços Google:
 
 ### 3. Multi-Modal 🟢
 
-**Status:** ✅ Nativo
+**Status:** <i class="fa fa-check-circle"></i> Nativo
 
 Gemini aceita texto + imagem + código:
 
@@ -79,7 +79,7 @@ Generate code structure based on this diagram.
 
 ### 4. Fast Inference 🟢
 
-**Status:** ✅ Nativo
+**Status:** <i class="fa fa-check-circle"></i> Nativo
 
 Gemini tem inference mais rápida que Claude para tasks similares.
 
@@ -92,7 +92,7 @@ Gemini tem inference mais rápida que Claude para tasks similares.
 
 ### 5. Hooks 🟡
 
-**Status:** ⚠️ Suporte limitado
+**Status:** <i class="fa fa-warning"></i> Suporte limitado
 
 Gemini CLI tem suporte básico a hooks. Verifique documentação oficial para detalhes atualizados.
 
@@ -156,17 +156,17 @@ No Gemini, use o prefixo `/fase-`:
 
 ## Vantagens do Gemini
 
-- ✅ **2M Tokens:** Maior context window
-- ✅ **Google Ecosystem:** Integração nativa
-- ✅ **Multi-Modal:** Texto + imagem + código
-- ✅ **Fast:** Inference rápida
-- ✅ **Free Tier:** Generoso para devs
+- <i class="fa fa-check-circle"></i> **2M Tokens:** Maior context window
+- <i class="fa fa-check-circle"></i> **Google Ecosystem:** Integração nativa
+- <i class="fa fa-check-circle"></i> **Multi-Modal:** Texto + imagem + código
+- <i class="fa fa-check-circle"></i> **Fast:** Inference rápida
+- <i class="fa fa-check-circle"></i> **Free Tier:** Generoso para devs
 
 ## Limitações
 
-- ⚠️ MCP Servers não suportados
-- ⚠️ Hooks com suporte limitado
-- ⚠️ Menor adoção que Claude Code
+- <i class="fa fa-warning"></i> MCP Servers não suportados
+- <i class="fa fa-warning"></i> Hooks com suporte limitado
+- <i class="fa fa-warning"></i> Menor adoção que Claude Code
 
 ---
 

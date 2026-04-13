@@ -319,7 +319,7 @@ Padrões verificados de fontes oficiais:
 ### Etapa Requirements → Test Map
 | Req ID | Behavior | Test Type | Automated Command | File Exists? |
 |--------|----------|-----------|-------------------|-------------|
-| REQ-XX | {behavior} | unit | `pytest tests/test_{module}.py::test_{name} -x` | ✅ / ❌ Etapa 0 |
+| REQ-XX | {behavior} | unit | `pytest tests/test_{module}.py::test_{name} -x` | <i class="fa fa-check-circle"></i> / <i class="fa fa-times-circle"></i> Etapa 0 |
 
 ### Sampling Rate
 - **Por task commit:** `{quick run command}`
@@ -465,7 +465,7 @@ Esta seção é REQUERIDA quando IDs são fornecidos. O planner usa para mapear 
 
 Escreva para: `$PHASE_DIR/$PADDED_PHASE-PESQUISA.md`
 
-⚠️ `commit_docs` controla git apenas, NÃO escrita de arquivo. Sempre escreva primeiro.
+<i class="fa fa-warning"></i> `commit_docs` controla git apenas, NÃO escrita de arquivo. Sempre escreva primeiro.
 
 ## Passo 6b: Validar Cópia das Decisões (se CONTEXTO.md existia)
 

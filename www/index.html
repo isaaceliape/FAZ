@@ -21,6 +21,16 @@
 
         <!-- Favicon and Theme -->
         <meta name="theme-color" content="#0a0e27" />
+
+        <!-- Font Awesome Icons CDN -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            integrity="sha512-dWl2hjFlPDATYNKGRekq9h+OhN6Z3BYV+VCugMzKa+2ZgIVsK0Y2SjC1+e6i7B9WDu9Zy4gxXVW5tADhJYXnzw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+
         <style>
             @font-face {
                 font-family: "0xProto";
@@ -302,6 +312,23 @@
             .feature-icon {
                 font-size: 2.5rem;
                 margin-bottom: 20px;
+            }
+
+            /* Font Awesome Icons Styling */
+            .feature-icon i {
+                color: var(--primary);
+                display: inline-block;
+                width: 2.5rem;
+                height: 2.5rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+            }
+
+            .feature-card:hover .feature-icon i {
+                color: var(--secondary);
+                transform: scale(1.1);
             }
 
             .feature-title {
@@ -724,7 +751,7 @@
                 <h2>O que faz</h2>
                 <div class="features">
                     <div class="feature-card">
-                        <div class="feature-icon">🤖</div>
+                        <div class="feature-icon"><i class="fas fa-robot"></i></div>
                         <div class="feature-title">Agents Paralelos</div>
                         <div class="feature-text">
                             Spawn múltiplos agents de IA de forma autônoma para
@@ -733,7 +760,7 @@
                     </div>
 
                     <div class="feature-card">
-                        <div class="feature-icon">📋</div>
+                        <div class="feature-icon"><i class="fas fa-list-check"></i></div>
                         <div class="feature-title">Spec-Driven</div>
                         <div class="feature-text">
                             Desenvolvimento guiado por especificação com
@@ -742,7 +769,7 @@
                     </div>
 
                     <div class="feature-card">
-                        <div class="feature-icon">🔄</div>
+                        <div class="feature-icon"><i class="fas fa-arrows-rotate"></i></div>
                         <div class="feature-title">Arquitetura Limpa</div>
                         <div class="feature-text">
                             Separação clara entre pesquisa, planejamento,
@@ -751,7 +778,7 @@
                     </div>
 
                     <div class="feature-card">
-                        <div class="feature-icon">🌍</div>
+                        <div class="feature-icon"><i class="fas fa-globe"></i></div>
                         <div class="feature-title">Multi-Runtime</div>
                         <div class="feature-text">
                             Funciona com Claude Code, OpenCode, Gemini e Codex
@@ -760,7 +787,7 @@
                     </div>
 
                     <div class="feature-card">
-                        <div class="feature-icon">💾</div>
+                        <div class="feature-icon"><i class="fas fa-floppy-disk"></i></div>
                         <div class="feature-title">Context Aware</div>
                         <div class="feature-text">
                             Gerenciamento inteligente de contexto com
@@ -770,7 +797,7 @@
                     </div>
 
                     <div class="feature-card">
-                        <div class="feature-icon">✅</div>
+                        <div class="feature-icon"><i class="fas fa-circle-check"></i></div>
                         <div class="feature-title">Validação Automática</div>
                         <div class="feature-text">
                             Verificação de fase com goal-backward analysis

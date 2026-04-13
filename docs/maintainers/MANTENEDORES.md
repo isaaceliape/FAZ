@@ -4,11 +4,11 @@
 
 Documentação interna para quem mantém o FASE.
 
-## 👥 Maintainers Atuais
+## <i class="fa fa-users"></i> Maintainers Atuais
 
 - **Isaac Eliape** — Criador e maintainer principal [@isaaceliape](https://github.com/isaaceliape)
 
-## 🔄 Processo de Release
+## <i class="fa fa-arrows-rotate"></i> Processo de Release
 
 ### Antes de Publicar
 
@@ -38,11 +38,11 @@ git push origin main --tags
 
 ### Pós-Release
 
-- ✅ Verificar publicação no npm: https://www.npmjs.com/package/fase-ai
-- ✅ Atualizar release notes no GitHub
-- ✅ Anunciar em comunidades (se relevante)
+- <i class="fa fa-check-circle"></i> Verificar publicação no npm: https://www.npmjs.com/package/fase-ai
+- <i class="fa fa-check-circle"></i> Atualizar release notes no GitHub
+- <i class="fa fa-check-circle"></i> Anunciar em comunidades (se relevante)
 
-## 📋 Checklist de Manutenção
+## <i class="fa fa-list-check"></i> Checklist de Manutenção
 
 ### Semanal
 
@@ -93,7 +93,7 @@ git push origin main --tags
    - Dar prioridade
    - Implementar ou aguardar PR
 
-## 🔐 Segurança
+## <i class="fa fa-lock"></i> Segurança
 
 ### Vulnerabilidades Reportadas
 
@@ -109,9 +109,9 @@ Para reportar vulnerabilidades, abra uma [issue privada de segurança](https://g
 
 ### Quando Atualizar
 
-- ✅ Novo comando adicionado → Atualizar COMANDOS.md
-- ✅ Feature nova → Atualizar GUIA-DO-USUARIO.md
-- ✅ Breaking change → Nota clara em CHANGELOG.md
+- <i class="fa fa-check-circle"></i> Novo comando adicionado → Atualizar COMANDOS.md
+- <i class="fa fa-check-circle"></i> Feature nova → Atualizar GUIA-DO-USUARIO.md
+- <i class="fa fa-check-circle"></i> Breaking change → Nota clara em CHANGELOG.md
 
 ### Padrão de Escrita
 
@@ -156,17 +156,17 @@ npm update
 - **Discussions**: [GitHub Discussions](https://github.com/isaaceliape/FASE/discussions)
 - **Email**: Via issue privada (não publicar emails)
 
-## 📈 Métricas de Sucesso
+## <i class="fa fa-chart-line"></i> Métricas de Sucesso
 
 Rastreie estas métricas para avaliar saúde do projeto:
 
-- 📊 npm downloads/month
-- ⭐ GitHub stars
+- <i class="fa fa-chart-bar"></i> npm downloads/month
+- <i class="fa fa-star"></i> GitHub stars
 - 🐛 Taxa de bugs reportados vs. resolvidos
-- 👥 Contribuidores ativos
+- <i class="fa fa-users"></i> Contribuidores ativos
 - 📝 Issues abertas vs. fechadas
 
-## 🚀 Roadmap de Longo Termo
+## <i class="fa fa-rocket"></i> Roadmap de Longo Termo
 
 Visão para o FASE:
 

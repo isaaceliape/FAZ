@@ -11,18 +11,18 @@ FASE funciona com **4 AI coding assistants**, cada um com suas características 
 
 | Feature | Claude Code | OpenCode | Gemini | Codex |
 |---------|-------------|----------|--------|-------|
-| MCP Servers | ✅ | ❌ | ❌ | ❌ |
-| Hooks | ✅ | ✅ | ⚠️ | ⚠️ |
-| Skills | ✅ | ✅ | ⚠️ | ✅ |
+| MCP Servers | <i class="fa fa-check-circle"></i> | <i class="fa fa-times-circle"></i> | <i class="fa fa-times-circle"></i> | <i class="fa fa-times-circle"></i> |
+| Hooks | <i class="fa fa-check-circle"></i> | <i class="fa fa-check-circle"></i> | <i class="fa fa-warning"></i> | <i class="fa fa-warning"></i> |
+| Skills | <i class="fa fa-check-circle"></i> | <i class="fa fa-check-circle"></i> | <i class="fa fa-warning"></i> | <i class="fa fa-check-circle"></i> |
 | Extended Context | 1M tokens | Variável | 2M tokens | Variável |
-| Voice Mode | ✅ | ❌ | ❌ | ❌ |
-| Plan Mode | ✅ | ⚠️ | ⚠️ | ⚠️ |
+| Voice Mode | <i class="fa fa-check-circle"></i> | <i class="fa fa-times-circle"></i> | <i class="fa fa-times-circle"></i> | <i class="fa fa-times-circle"></i> |
+| Plan Mode | <i class="fa fa-check-circle"></i> | <i class="fa fa-warning"></i> | <i class="fa fa-warning"></i> | <i class="fa fa-warning"></i> |
 
-**Legenda:** ✅ Nativo | ⚠️ Limitado/Parcial | ❌ Não disponível
+**Legenda:** <i class="fa fa-check-circle"></i> Nativo | <i class="fa fa-warning"></i> Limitado/Parcial | <i class="fa fa-times-circle"></i> Não disponível
 
 ## Escolhendo Seu Ambiente
 
-### Claude Code (Anthropic) 🎯
+### Claude Code (Anthropic) <i class="fa fa-bullseye"></i>
 
 **Melhor para:** Desenvolvedores que querem a experiência mais completa e integrada.
 
@@ -37,7 +37,7 @@ FASE funciona com **4 AI coding assistants**, cada um com suas características 
 
 ---
 
-### OpenCode (OpenAI) 🔓
+### OpenCode (OpenAI) <i class="fa fa-unlock"></i>
 
 **Melhor para:** Desenvolvedores que preferem open source e customização.
 

@@ -22,7 +22,7 @@ Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que prec
 | [**HOOKS.md**](HOOKS.md) | Git hooks e verificações de segurança |
 | [**SECURITY.md**](https://github.com/isaaceliape/FASE/blob/main/SECURITY.md) | Política de segurança e relatório de vulnerabilidades |
 
-## 🎯 Começar Por Aqui
+## <i class="fa fa-bullseye"></i> Começar Por Aqui
 
 ### Sou um Usuário
 
@@ -41,7 +41,7 @@ Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que prec
 1. Procure em [GitHub Issues](https://github.com/isaaceliape/FASE/issues) por issue similar
 3. Abra uma nova issue com os detalhes
 
-## 📋 Estrutura de Arquivos
+## <i class="fa fa-list-check"></i> Estrutura de Arquivos
 
 ```
 docs/
@@ -54,15 +54,15 @@ docs/
 ## 🌐 Documentos em Português
 
 **Toda documentação do FASE é em português brasileiro:**
-- ✅ Guias de usuário
-- ✅ Documentação de development
-- ✅ Comentários no código
-- ✅ Mensagens de erro e output
+- <i class="fa fa-check-circle"></i> Guias de usuário
+- <i class="fa fa-check-circle"></i> Documentação de development
+- <i class="fa fa-check-circle"></i> Comentários no código
+- <i class="fa fa-check-circle"></i> Mensagens de erro e output
 
 **Exceções (em inglês):**
-- ⚙️ Termos técnicos consagrados (framework, hook, commit)
-- 💻 Comandos e código
-- 📦 Nomes de pacotes npm
+- <i class="fa fa-cog"></i> Termos técnicos consagrados (framework, hook, commit)
+- <i class="fa fa-laptop"></i> Comandos e código
+- <i class="fa fa-box"></i> Nomes de pacotes npm
 
 ## 🆘 Precisa de Ajuda?
 
@@ -70,16 +70,16 @@ docs/
 - **Bug descoberto**: Reporte com template `bug_report.md`
 - **Sugestão**: Use template `feature_request.md`
 
-## 📈 Melhorias Documentadas
+## <i class="fa fa-chart-line"></i> Melhorias Documentadas
 
 ### v3.2.0 (Março 2026)
 
 **Path Standardization & Multi-Runtime Architecture**
-- ✅ Todos os comandos e agentes agora usam padrão universal `@~/.fase/`
-- ✅ Installer converte automaticamente para caminhos específicos de cada runtime
-- ✅ 129 testes unitários com cobertura completa
-- ✅ Documentação expandida sobre path standardization
-- ✅ Renomeação de arquivos: `.pt.md` → `.md` para consistência
+- <i class="fa fa-check-circle"></i> Todos os comandos e agentes agora usam padrão universal `@~/.fase/`
+- <i class="fa fa-check-circle"></i> Installer converte automaticamente para caminhos específicos de cada runtime
+- <i class="fa fa-check-circle"></i> 129 testes unitários com cobertura completa
+- <i class="fa fa-check-circle"></i> Documentação expandida sobre path standardization
+- <i class="fa fa-check-circle"></i> Renomeação de arquivos: `.pt.md` → `.md` para consistência
 
 **Novos Documentos:**
 - 📚 [TEST_UPDATES_SUMMARY.md](https://github.com/isaaceliape/FASE/blob/main/TEST_UPDATES_SUMMARY.md) - Rastreamento detalhado de mudanças
@@ -90,12 +90,12 @@ docs/
 
 ### v2.4.0 (Março 2026)
 
-- ✅ Adicionado pre-commit hooks para validação de pacote npm
-- ✅ Criado GitHub Actions para publicação automática
-- ✅ Templates de issues para bug reports e features
-- ✅ CONTRIBUTING.md com instruções detalhadas
-- ✅ SECURITY.md com política de segurança
-- ✅ Este índice de documentação
+- <i class="fa fa-check-circle"></i> Adicionado pre-commit hooks para validação de pacote npm
+- <i class="fa fa-check-circle"></i> Criado GitHub Actions para publicação automática
+- <i class="fa fa-check-circle"></i> Templates de issues para bug reports e features
+- <i class="fa fa-check-circle"></i> CONTRIBUTING.md com instruções detalhadas
+- <i class="fa fa-check-circle"></i> SECURITY.md com política de segurança
+- <i class="fa fa-check-circle"></i> Este índice de documentação
 
 ## 📞 Contato
 

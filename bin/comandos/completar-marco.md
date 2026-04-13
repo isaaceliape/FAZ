@@ -52,7 +52,7 @@ Output: Milestone arquivado (roteiro + requisitos), PROJETO.md evoluído, git ta
    fases que fecham os gaps, ou prossiga mesmo assim para aceitar como tech debt.
 
    {Se audit passou:}
-   ✓ Audit do milestone passou. Prosseguindo com completion.
+   <i class="fa fa-check"></i> Audit do milestone passou. Prosseguindo com completion.
    ```
 
 1. **Verifique readiness:**

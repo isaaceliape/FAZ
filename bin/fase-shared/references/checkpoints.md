@@ -20,8 +20,8 @@ Parar para **revisão visual** do que foi gerado.
 ```markdown
 **CHECKPOINT: Review**
 Verifique o código gerado em [arquivo].
-- ✅ Parece correto?
-- ❌ Precisa ajustes?
+- <i class="fa fa-check-circle"></i> Parece correto?
+- <i class="fa fa-times-circle"></i> Precisa ajustes?
 ```
 
 Use quando: Resultado visual é subjetivo (UI, formatting) ou requer julgamento estético.
@@ -47,9 +47,9 @@ Parar para **verificar que efeitos colaterais** não ocorreram.
 ```markdown
 **CHECKPOINT: Verification**
 Antes de continuar, confirme:
-- ✅ Database migration completada sem erros
-- ✅ Tests ainda passando
-- ✅ No breaking changes em produção
+- <i class="fa fa-check-circle"></i> Database migration completada sem erros
+- <i class="fa fa-check-circle"></i> Tests ainda passando
+- <i class="fa fa-check-circle"></i> No breaking changes em produção
 ```
 
 Use quando: Sistema externo foi modificado e precisa de validação.
@@ -97,10 +97,10 @@ curl -s http://localhost:3000/health | jq .
 Em vez de pedir pro usuário rodar comandos, **a automação roda**:
 
 ```bash
-# ❌ ERRADO:
+# <i class="fa fa-times-circle"></i> ERRADO:
 # "Execute: npm run build"
 
-# ✅ CERTO:
+# <i class="fa fa-check-circle"></i> CERTO:
 npm run build  # Com erro handling
 if [ $? -ne 0 ]; then
   echo "Build falhou, checando logs..."
@@ -119,12 +119,12 @@ Quando FASE termina automação significativa:
 ```markdown
 ## Human Verification Required
 
-✅ **Automação Completada:**
+<i class="fa fa-check-circle"></i> **Automação Completada:**
 - Implementados 5 endpoints
 - 12 testes adicionados (11/12 passando)
 - Documentation atualizada
 
-⚠️ **Requer Validação Humana:**
+<i class="fa fa-warning"></i> **Requer Validação Humana:**
 
 **Checkpoint: Review Code**
 - [ ] Review dos 5 endpoints em `src/api/`
@@ -142,21 +142,21 @@ Quando FASE termina automação significativa:
 
 ## Anti-Patterns to Avoid
 
-❌ **"Click here to continue"** — muito vago
+<i class="fa fa-times-circle"></i> **"Click here to continue"** — muito vago
 
-✅ **"Verifique se login funciona em http://localhost:3000/login com user:pass, então continue"**
-
----
-
-❌ **Checkpoint todo passo** — automação demais parada
-
-✅ **1 checkpoint por decisão principal** — fluxo fluido
+<i class="fa fa-check-circle"></i> **"Verifique se login funciona em http://localhost:3000/login com user:pass, então continue"**
 
 ---
 
-❌ **"Desculpa, preciso que você rode isto"** — abdicando de automação
+<i class="fa fa-times-circle"></i> **Checkpoint todo passo** — automação demais parada
 
-✅ **Rodar é automático, pedir confirmação se preciso** — automação-first
+<i class="fa fa-check-circle"></i> **1 checkpoint por decisão principal** — fluxo fluido
+
+---
+
+<i class="fa fa-times-circle"></i> **"Desculpa, preciso que você rode isto"** — abdicando de automação
+
+<i class="fa fa-check-circle"></i> **Rodar é automático, pedir confirmação se preciso** — automação-first
 
 ---
 

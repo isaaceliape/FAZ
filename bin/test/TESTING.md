@@ -2,7 +2,7 @@
 
 Suite completa de testes para FASE (Framework de Automação Sem Enrolação) em todos os provedores suportados e métodos de instalação.
 
-## 📋 Visão Geral
+## <i class="fa fa-list-check"></i> Visão Geral
 
 Esta suite de testes oferece cobertura abrangente para:
 - **4 Provedores**: Claude Code, OpenCode, Gemini, Codex
@@ -10,7 +10,7 @@ Esta suite de testes oferece cobertura abrangente para:
 - **Múltiplos Ambientes**: Alpine, Ubuntu, macOS, caminhos Windows
 - **Casos Extremos**: Symlinks, caminhos longos, caracteres especiais, permissões
 
-## 🚀 Início Rápido
+## <i class="fa fa-rocket"></i> Início Rápido
 
 ### Executar Todos os Testes
 ```bash
@@ -174,7 +174,7 @@ Script runner inteligente com opções:
 ./test/run-docker-tests.sh --cleanup          # Remover dados de teste
 ```
 
-## 📊 Estrutura de Teste
+## <i class="fa fa-chart-bar"></i> Estrutura de Teste
 
 Cada arquivo de teste segue este padrão:
 
@@ -203,7 +203,7 @@ describe('Grupo de Funcionalidade', () => {
 });
 ```
 
-## 🔍 Detalhes de Provedor
+## <i class="fa fa-magnifying-glass"></i> Detalhes de Provedor
 
 ### Claude Code
 ```
@@ -241,7 +241,7 @@ Default Path:   /Users/<user>/.codex
 Hook Example:   /Users/<user>/.codex/hooks/my-hook.js
 ```
 
-## 🔄 Testes de Padronização de Caminhos
+## <i class="fa fa-arrows-rotate"></i> Testes de Padronização de Caminhos
 
 Comandos e agentes do FASE usam referências de caminho padronizadas e agnósticas de ambiente que são convertidas durante a instalação:
 
@@ -261,18 +261,18 @@ O installer (`bin/install.js`) converte caminhos de origem para localizações e
 | Codex | `@~/.fase/` | `~/.codex/fase/` |
 
 ### Cobertura de Testes
-- ✅ Todos os 32 arquivos de comando usam padrão `@~/.fase/`
-- ✅ Todos os 12 arquivos de agente usam padrão `@~/.fase/`
-- ✅ Nenhuma referência de arquivo `.pt.md` restante (todos renomeados para `.md`)
-- ✅ Substituição de caminho funciona nas três funções de cópia do installer
-- ✅ OpenCode recebe caminhos corretamente formatados `~/.config/opencode/fase/`
+- <i class="fa fa-check-circle"></i> Todos os 32 arquivos de comando usam padrão `@~/.fase/`
+- <i class="fa fa-check-circle"></i> Todos os 12 arquivos de agente usam padrão `@~/.fase/`
+- <i class="fa fa-check-circle"></i> Nenhuma referência de arquivo `.pt.md` restante (todos renomeados para `.md`)
+- <i class="fa fa-check-circle"></i> Substituição de caminho funciona nas três funções de cópia do installer
+- <i class="fa fa-check-circle"></i> OpenCode recebe caminhos corretamente formatados `~/.config/opencode/fase/`
 
 ### Testes Relacionados
 - **`testes/phase.test.cjs`** - Valida formatos de caminho de contexto de execução
 - **`testes/agent-frontmatter.test.cjs`** - Valida consistência de arquivo de agente
 - **`bin/test/install.test.js`** - Testa construção básica de caminho e operações de arquivo
 
-## 🛠️ Comandos Comuns
+## <i class="fa fa-hammer"></i> Comandos Comuns
 
 ### Instalação Limpa
 ```bash
@@ -307,15 +307,15 @@ npm test -- --reporter spec
 npm test -- --reporter spec --slow 100
 ```
 
-## 📈 Metas de Cobertura
+## <i class="fa fa-chart-line"></i> Metas de Cobertura
 
 Cobertura atual:
-- ✅ Métodos de instalação: Local, Global, Customizado
-- ✅ Provedores: Claude, OpenCode, Gemini, Codex
-- ✅ Ambientes: Alpine, Ubuntu, macOS
-- ✅ Cenários de erro: Permissões, diretórios faltantes, arquivos corrompidos
-- ✅ Casos extremos: Symlinks, caminhos longos, caracteres especiais
-- ✅ Concorrência: Múltiplas instalações, ciclos rápidos
+- <i class="fa fa-check-circle"></i> Métodos de instalação: Local, Global, Customizado
+- <i class="fa fa-check-circle"></i> Provedores: Claude, OpenCode, Gemini, Codex
+- <i class="fa fa-check-circle"></i> Ambientes: Alpine, Ubuntu, macOS
+- <i class="fa fa-check-circle"></i> Cenários de erro: Permissões, diretórios faltantes, arquivos corrompidos
+- <i class="fa fa-check-circle"></i> Casos extremos: Symlinks, caminhos longos, caracteres especiais
+- <i class="fa fa-check-circle"></i> Concorrência: Múltiplas instalações, ciclos rápidos
 
 Alvo: >90% de cobertura de código
 

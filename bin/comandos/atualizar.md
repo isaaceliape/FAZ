@@ -272,7 +272,7 @@ echo "Agentes com frontmatter inválido: $ERROS_FRONTMATTER"
 ```
 
 Repetir a verificação para cada runtime detectado (`.opencode/agents/`, `.gemini/agents/`, etc.).
-Agentes com frontmatter inválido são marcados como `⚠️` no relatório final; a atualização não é
+Agentes com frontmatter inválido são marcados como `<i class="fa fa-warning"></i>` no relatório final; a atualização não é
 considerada bem-sucedida enquanto houver erros críticos.
 
 ### 5.3 Verificar agentes críticos
@@ -291,13 +291,13 @@ done
 
 Exibir para o usuário:
 
-- ✅ Versão anterior → versão atual instalada
-- ✅ Runtimes atualizados: [lista]
-- ✅ Migrações executadas: [lista com ID e descrição, ou "nenhuma pendente"]
-- 📊 Alterações de arquivos: [resumo de diff por runtime]
-- ✅ Frontmatter válido em todos os agentes (ou lista de problemas)
-- ⚠️ Itens que precisam de atenção (se houver)
-- 📍 Backup disponível em: `.fase-ai-local/.backup/pre-update-TIMESTAMP/`
+- <i class="fa fa-check-circle"></i> Versão anterior → versão atual instalada
+- <i class="fa fa-check-circle"></i> Runtimes atualizados: [lista]
+- <i class="fa fa-check-circle"></i> Migrações executadas: [lista com ID e descrição, ou "nenhuma pendente"]
+- <i class="fa fa-chart-bar"></i> Alterações de arquivos: [resumo de diff por runtime]
+- <i class="fa fa-check-circle"></i> Frontmatter válido em todos os agentes (ou lista de problemas)
+- <i class="fa fa-warning"></i> Itens que precisam de atenção (se houver)
+- <i class="fa fa-location-dot"></i> Backup disponível em: `.fase-ai-local/.backup/pre-update-TIMESTAMP/`
 
 **IMPORTANTE:** Orientar o usuário a **reiniciar o runtime** após a atualização:
 - Claude Code: fechar todas as janelas e reabrir

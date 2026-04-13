@@ -10,7 +10,7 @@ Instalador do sistema de meta-prompting, context engineering e desenvolvimento s
 
 ---
 
-## 🚀 Instalação
+## <i class="fa fa-rocket"></i> Instalação
 
 Este pacote é **apenas o instalador**. Use via `npx`:
 
@@ -30,7 +30,7 @@ npx fase-ai --opencode
 
 ---
 
-## 📦 Uso
+## <i class="fa fa-box"></i> Uso
 
 ### Comando Principal
 
@@ -102,7 +102,7 @@ npx fase-ai --all --uninstall
 
 ---
 
-## 🔧 O Que É Instalado
+## <i class="fa fa-wrench"></i> O Que É Instalado
 
 O instalador configura:
 
@@ -133,7 +133,7 @@ O instalador configura:
 
 ---
 
-## 🔄 Verificação Automática de Versão
+## <i class="fa fa-arrows-rotate"></i> Verificação Automática de Versão
 
 O FASE verifica automaticamente por atualizações:
 
@@ -154,7 +154,7 @@ node ~/.claude/fase-ai/fase-tools.js check-update 3.3.0
 node ~/.claude/fase-ai/hooks/fase-check-update.js
 ```
 
-## 🎯 Verificar Instalação
+## <i class="fa fa-bullseye"></i> Verificar Instalação
 
 ### Verificação Automática
 
@@ -167,11 +167,11 @@ node bin/verificar-instalacao.js
 ```
 
 O comando verifica:
-- ✅ Instalação do pacote global
-- ✅ Configuração de cada runtime (Claude Code, OpenCode, Gemini, Codex)
-- ✅ Comandos FASE instalados
-- ✅ Hooks e workflows
-- ✅ Sugere ações corretivas para problemas encontrados
+- <i class="fa fa-check-circle"></i> Instalação do pacote global
+- <i class="fa fa-check-circle"></i> Configuração de cada runtime (Claude Code, OpenCode, Gemini, Codex)
+- <i class="fa fa-check-circle"></i> Comandos FASE instalados
+- <i class="fa fa-check-circle"></i> Hooks e workflows
+- <i class="fa fa-check-circle"></i> Sugere ações corretivas para problemas encontrados
 
 ### Verificação Manual
 
@@ -202,7 +202,7 @@ Contribuições são bem-vindas! Abra uma issue ou PR no [GitHub](https://github
 
 ---
 
-## 📄 Licença
+## <i class="fa fa-file"></i> Licença
 
 MIT — veja o arquivo [LICENSE](https://github.com/isaaceliape/FASE/blob/main/LICENSE) para detalhes.
 

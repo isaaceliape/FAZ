@@ -261,8 +261,8 @@ Para padrões automation-first completos, lifecycle de server, manipulação CLI
 
 **Comportamento de checkpoint em auto-mode** (quando `AUTO_CFG` é `"true"`):
 
-- **checkpoint:human-verify** → Auto-aprove. Log `⚡ Auto-approved: [o-que-construido]`. Continue para próxima tarefa.
-- **checkpoint:decision** → Auto-selecione primeira opção (planners front-load a escolha recomendada). Log `⚡ Auto-selected: [nome opcao]`. Continue para próxima tarefa.
+- **checkpoint:human-verify** → Auto-aprove. Log `<i class="fa fa-bolt"></i> Auto-approved: [o-que-construido]`. Continue para próxima tarefa.
+- **checkpoint:decision** → Auto-selecione primeira opção (planners front-load a escolha recomendada). Log `<i class="fa fa-bolt"></i> Auto-selected: [nome opcao]`. Continue para próxima tarefa.
 - **checkpoint:human-action** → PARE normalmente. Auth gates não podem ser automatizados — retorne mensagem estruturada de checkpoint usando checkpoint_return_format.
 
 **Comportamento padrão de checkpoint** (quando `AUTO_CFG` não é `"true"`):

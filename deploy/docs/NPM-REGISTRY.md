@@ -1,8 +1,8 @@
-# 📦 Configuração do npm Registry
+# <i class="fa fa-box"></i> Configuração do npm Registry
 
 O FASE está configurado para usar o **npm registry oficial** como fonte única de verdade para publicação e instalação.
 
-## 🔧 Configuração Atual
+## <i class="fa fa-wrench"></i> Configuração Atual
 
 ### Arquivo: `.npmrc` (raiz)
 
@@ -21,7 +21,7 @@ audit=true
 
 ---
 
-## 🚀 Instalação do FASE
+## <i class="fa fa-rocket"></i> Instalação do FASE
 
 ### Via npx (recomendado)
 
@@ -40,16 +40,16 @@ npx fase-ai --codex
 
 FASE agora é instalado **apenas localmente** (por projeto) via `npx`. Isso garante:
 
-- ✅ Cada projeto usa a versão de FASE que foi testada com ele
-- ✅ Sem conflitos entre diferentes versões do FASE
-- ✅ Atualizações controladas por projeto
-- ✅ Menos poluição global no sistema
+- <i class="fa fa-check-circle"></i> Cada projeto usa a versão de FASE que foi testada com ele
+- <i class="fa fa-check-circle"></i> Sem conflitos entre diferentes versões do FASE
+- <i class="fa fa-check-circle"></i> Atualizações controladas por projeto
+- <i class="fa fa-check-circle"></i> Menos poluição global no sistema
 
 Para atualizar, basta usar `npx fase-ai@latest` que sempre baixa a versão mais recente.
 
 ---
 
-## ✅ Verificação
+## <i class="fa fa-check-circle"></i> Verificação
 
 Para confirmar que está usando o registry correto:
 
@@ -63,7 +63,7 @@ npm config get registry
 
 ---
 
-## 📋 Para Contribuidores
+## <i class="fa fa-list-check"></i> Para Contribuidores
 
 Se você está desenvolvendo o FASE localmente:
 
@@ -83,18 +83,18 @@ O arquivo `.npmrc` garante que todos os contribuidores usem o mesmo registry.
 
 ---
 
-## 🔐 Publicação
+## <i class="fa fa-lock"></i> Publicação
 
 Quando publicamos no npm:
 
-1. ✅ GitHub Actions valida o pacote
-2. ✅ Autentica com `NPM_TOKEN` secret
-3. ✅ Publica em `https://registry.npmjs.org/`
-4. ✅ Fica disponível globalmente em minutos
+1. <i class="fa fa-check-circle"></i> GitHub Actions valida o pacote
+2. <i class="fa fa-check-circle"></i> Autentica com `NPM_TOKEN` secret
+3. <i class="fa fa-check-circle"></i> Publica em `https://registry.npmjs.org/`
+4. <i class="fa fa-check-circle"></i> Fica disponível globalmente em minutos
 
 ---
 
-## 🌍 Para Usuários Chineses
+## <i class="fa fa-globe"></i> Para Usuários Chineses
 
 Se você está na China e a instalação é lenta:
 
@@ -117,7 +117,7 @@ npm config set registry https://registry.npmjs.org/
 
 ---
 
-## 📊 Informações do Pacote
+## <i class="fa fa-chart-bar"></i> Informações do Pacote
 
 - **Pacote**: fase-ai
 - **Registry Oficial**: https://registry.npmjs.org/

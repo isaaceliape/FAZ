@@ -32,13 +32,13 @@ _Pending: Add insights as they come up_
 
 ## Reminder Preference
 
-✅ Isaac requested: "Please remind me before the session"
+<i class="fa fa-check-circle"></i> Isaac requested: "Please remind me before the session"
 - Send reminder on Tuesday afternoons before therapy
 - Check calendar for exact time each week
 
 ## Post-Session Follow-up
 
-✅ Isaac requested: "after the session finishes be proactive and ask me what is the focus for the next week based on the therapy session"
+<i class="fa fa-check-circle"></i> Isaac requested: "after the session finishes be proactive and ask me what is the focus for the next week based on the therapy session"
 - Check in after session ends (Tuesday evening or Wednesday morning)
 - Ask: "What's the focus for next week based on your session?"
 - Log any goals, insights, or homework in this file

@@ -104,9 +104,9 @@ Ao desenvolver localmente com arquivos de comando fonte do FASE (`comandos/*.md`
 ## Consistência em Múltiplos Ambientes
 
 Todos os 32 comandos do FASE agora seguem a mesma convenção de caminho:
-- ✅ 13 comandos com referências de workflow usam `@~/.fase/`
-- ✅ 19 comandos sem referências externas (auto-contidos)
-- ✅ Instalador converte corretamente caminhos para cada runtime
-- ✅ OpenCode recebe caminhos corretamente formatados `~/.config/opencode/fase/`
+- <i class="fa fa-check-circle"></i> 13 comandos com referências de workflow usam `@~/.fase/`
+- <i class="fa fa-check-circle"></i> 19 comandos sem referências externas (auto-contidos)
+- <i class="fa fa-check-circle"></i> Instalador converte corretamente caminhos para cada runtime
+- <i class="fa fa-check-circle"></i> OpenCode recebe caminhos corretamente formatados `~/.config/opencode/fase/`
 
 Isso garante compatibilidade de comando em Claude Code, OpenCode, Gemini e Codex sem ramificação específica do ambiente na lógica do comando.

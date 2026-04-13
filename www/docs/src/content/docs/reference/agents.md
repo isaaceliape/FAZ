@@ -33,7 +33,7 @@ Verifica planos em 8 dimensões antes da execução. VALIDACAO.md ausente gera W
 Executa os planos tarefa por tarefa. Valida o schema do PLANO.md na carga, escreve CONTEXTO.md ao final de cada sessão.
 
 ### `fase-verificador`
-Verifica o trabalho executado contra os objetivos da fase. Mantém contador `closure_attempts` em VERIFICACAO.md. Após 3 tentativas sem fechar todos os gaps, emite `## ⚠️ Escalação Humana Necessária`.
+Verifica o trabalho executado contra os objetivos da fase. Mantém contador `closure_attempts` em VERIFICACAO.md. Após 3 tentativas sem fechar todos os gaps, emite `## <i class="fa fa-warning"></i> Escalação Humana Necessária`.
 
 ---
 

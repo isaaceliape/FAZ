@@ -35,26 +35,26 @@ Spec-driven development, context engineering e meta-prompting — agora em portu
 O **F.A.S.E.** é a versão em português brasileiro do **Get Shit Done (GSD)** — um sistema de meta-prompting e context engineering que faz os assistentes de IA (Claude Code, OpenCode, Gemini, Codex) funcionarem de verdade em projetos de software.
 
 Ele traz:
-- 🎯 **Spec-driven development** — descreva o que quer, o AI constrói
+- <i class="fa fa-bullseye"></i> **Spec-driven development** — descreva o que quer, o AI constrói
 - 🧠 **Context engineering avançado** — organize prompts para máximo proveito
-- 🔄 **Meta-prompting** — direcione o AI com precisão
-- 📊 **Workflow estruturado** — 12 agentes especializados
-- 💬 **32 comandos** em português brasileiro para um fluxo contínuo
+- <i class="fa fa-arrows-rotate"></i> **Meta-prompting** — direcione o AI com precisão
+- <i class="fa fa-chart-bar"></i> **Workflow estruturado** — 12 agentes especializados
+- <i class="fa fa-comments"></i> **32 comandos** em português brasileiro para um fluxo contínuo
 
 **Traduzimos:**
-- ✅ 12 agentes de prompt (pesquisadores, verificadores, planejadores, executores)
-- ✅ 32 comandos interativos
-- ✅ Documentação completa
-- ✅ Mensagens e outputs
+- <i class="fa fa-check-circle"></i> 12 agentes de prompt (pesquisadores, verificadores, planejadores, executores)
+- <i class="fa fa-check-circle"></i> 32 comandos interativos
+- <i class="fa fa-check-circle"></i> Documentação completa
+- <i class="fa fa-check-circle"></i> Mensagens e outputs
 
 **Mantivemos em inglês:**
-- 🔧 Termos técnicos consolidados (ex: "context window", "checkpoint", "hooks")
-- 💻 Comandos de terminal e código-fonte
-- 📦 Nomes de pacotes npm e APIs
+- <i class="fa fa-wrench"></i> Termos técnicos consolidados (ex: "context window", "checkpoint", "hooks")
+- <i class="fa fa-laptop"></i> Comandos de terminal e código-fonte
+- <i class="fa fa-box"></i> Nomes de pacotes npm e APIs
 
 ---
 
-## 🚀 Instalação Rápida
+## <i class="fa fa-rocket"></i> Instalação Rápida
 
 ### Instalação Interativa (Recomendado)
 
@@ -97,7 +97,7 @@ Após instalar, teste o comando de ajuda:
 $fase-ajuda
 ```
 
-Se vir a mensagem de boas-vindas, FASE foi instalado com sucesso! ✅
+Se vir a mensagem de boas-vindas, FASE foi instalado com sucesso! <i class="fa fa-check-circle"></i>
 
 ### Desinstalação
 
@@ -197,14 +197,14 @@ asciinema rec assets/demo-workflow.cast
 
 ## ✨ Novidades em v3.3.0
 
-### 🔔 Verificação Automática de Versão
+### <i class="fa fa-bell"></i> Verificação Automática de Versão
 O FASE agora verifica automaticamente por atualizações:
 - **Hook SessionStart**: Verifica silenciosamente no npm registry
 - **Notificação visível**: Caixa estilizada mostra versão atual e disponível
 - **Prompt interativo**: Pergunta se deseja atualizar automaticamente
 - **Statusline integrada**: Mostra `⬆ /fase:atualizar` quando há atualização
 
-### 🎯 Path Standardization
+### <i class="fa fa-bullseye"></i> Path Standardization
 Todos os comandos e agentes agora usam um padrão universal `@~/.fase/` que é convertido automaticamente para caminhos específicos de cada runtime durante a instalação:
 
 - **Claude Code**: `~/.claude/fase/`
@@ -214,15 +214,15 @@ Todos os comandos e agentes agora usam um padrão universal `@~/.fase/` que é c
 
 Isso garante que FASE funciona identicamente em todos os 4 runtimes, sem duplicação de código.
 
-### 📈 Melhorias de Testes
-- ✅ 129 testes unitários com cobertura completa
-- ✅ Testes para path standardization em todos os runtimes
-- ✅ Documentação expandida de testes
+### <i class="fa fa-chart-line"></i> Melhorias de Testes
+- <i class="fa fa-check-circle"></i> 129 testes unitários com cobertura completa
+- <i class="fa fa-check-circle"></i> Testes para path standardization em todos os runtimes
+- <i class="fa fa-check-circle"></i> Documentação expandida de testes
 
 ### 📚 Documentação Melhorada
-- ✅ Novos documentos explicando path standardization
-- ✅ Documentação expandida em bin/test/ com rastreamento detalhado
-- ✅ Seções expandidas em guias de testes
+- <i class="fa fa-check-circle"></i> Novos documentos explicando path standardization
+- <i class="fa fa-check-circle"></i> Documentação expandida em bin/test/ com rastreamento detalhado
+- <i class="fa fa-check-circle"></i> Seções expandidas em guias de testes
 
 ---
 
@@ -258,15 +258,15 @@ A filosofia:
 - 🚫 Sem teatro enterprise (reunião que podia ser email)
 - 🚫 Sem burocracia desnecessária
 - 🚫 Sem story points, sprint ceremonies, retrospectives
-- ✅ Só você, sua visão, e o assistente de IA construindo
+- <i class="fa fa-check-circle"></i> Só você, sua visão, e o assistente de IA construindo
 
 ---
 
-## 📋 Comandos Disponíveis
+## <i class="fa fa-list-check"></i> Comandos Disponíveis
 
 FASE oferece **32 comandos em português brasileiro**, organizados por função:
 
-### 🎯 Core / Inicialização
+### <i class="fa fa-bullseye"></i> Core / Inicialização
 ```bash
 /fase-ajuda              # Mostra ajuda completa
 /fase-novo-projeto       # Inicializa novo projeto com FASE
@@ -284,7 +284,7 @@ FASE oferece **32 comandos em português brasileiro**, organizados por função:
 /fase-roadmapper         # Cria roadmap visual (via agente)
 ```
 
-### 🔍 Research & Analysis
+### <i class="fa fa-magnifying-glass"></i> Research & Analysis
 ```bash
 /fase-pesquisar-fase     # Pesquisa contexto para uma fase
 /fase-mapear-codigo      # Mapeia codebase existente
@@ -292,7 +292,7 @@ FASE oferece **32 comandos em português brasileiro**, organizados por função:
 /fase-planejar-lacunas   # Identifica gaps no plano
 ```
 
-### ✅ Verification & Validation
+### <i class="fa fa-check-circle"></i> Verification & Validation
 ```bash
 /fase-verificar-trabalho # Valida código executado
 /fase-validar-fase       # Verifica completude de fase
@@ -300,7 +300,7 @@ FASE oferece **32 comandos em português brasileiro**, organizados por função:
 /fase-checar-tarefas     # Revisa task list
 ```
 
-### 🔧 Execution & Development
+### <i class="fa fa-wrench"></i> Execution & Development
 ```bash
 /fase-executar-fase      # Executa uma fase completa
 /fase-rapido             # Modo fast-track para tarefas simples
@@ -315,7 +315,7 @@ FASE oferece **32 comandos em português brasileiro**, organizados por função:
 /fase-discutir-fase      # Abre discussão estruturada
 ```
 
-### 🛠️ Maintenance & Administration
+### <i class="fa fa-hammer"></i> Maintenance & Administration
 ```bash
 /fase-pausar-trabalho    # Pausa execução
 /fase-retomar-trabalho   # Continua de onde parou
@@ -332,7 +332,7 @@ FASE oferece **32 comandos em português brasileiro**, organizados por função:
 
 ---
 
-## 🎯 Pra Quem É Isso?
+## <i class="fa fa-bullseye"></i> Pra Quem É Isso?
 
 ### Perfil Ideal
 - **Solo devs** que não querem fingir que são uma empresa de 50 pessoas
@@ -341,18 +341,18 @@ FASE oferece **32 comandos em português brasileiro**, organizados por função:
 - **Quem cansou** de descrever algo e receber respostas inconsistentes do AI
 
 ### Casos de Uso
-✅ Projetos pessoais com requisitos bem definidos
-✅ MVPs que precisam ir para produção rápido
-✅ Refatorações estruturadas de legacies
-✅ Automation scripts e ferramentas internas
-✅ Prototipagem rápida de ideias
-✅ Aprendizado de novas tecnologias/linguagens
+<i class="fa fa-check-circle"></i> Projetos pessoais com requisitos bem definidos
+<i class="fa fa-check-circle"></i> MVPs que precisam ir para produção rápido
+<i class="fa fa-check-circle"></i> Refatorações estruturadas de legacies
+<i class="fa fa-check-circle"></i> Automation scripts e ferramentas internas
+<i class="fa fa-check-circle"></i> Prototipagem rápida de ideias
+<i class="fa fa-check-circle"></i> Aprendizado de novas tecnologias/linguagens
 
 ### O Que FASE Não É
-❌ Substituto para design de sistema em time
-❌ Solução para requisitos vagos ou mal definidos
-❌ Ferramenta para escrever documentação de produto
-❌ Gerenciador de sprint/kanban (use Jira/Linear para isso)
+<i class="fa fa-times-circle"></i> Substituto para design de sistema em time
+<i class="fa fa-times-circle"></i> Solução para requisitos vagos ou mal definidos
+<i class="fa fa-times-circle"></i> Ferramenta para escrever documentação de produto
+<i class="fa fa-times-circle"></i> Gerenciador de sprint/kanban (use Jira/Linear para isso)
 
 ---
 
@@ -360,40 +360,40 @@ FASE oferece **32 comandos em português brasileiro**, organizados por função:
 
 ### Guias Essenciais
 - [📖 Guia do Usuário](docs/GUIA-DO-USUARIO.md) — Como usar FASE passo-a-passo
-- [🔧 Todos os Comandos](docs/COMANDOS.md) — Referência completa com exemplos
+- [<i class="fa fa-wrench"></i> Todos os Comandos](docs/COMANDOS.md) — Referência completa com exemplos
 - [🔌 System Hooks](docs/HOOKS.md) — Como adicionar automações
 
 ### Para Contribuidores
 - [🤝 Como Contribuir](CONTRIBUTING.md) — Instruções para contribuições
-- [🔧 Path Standardization](docs/technical/COMMAND_PATHS.md) — Como comandos funcionam em diferentes runtimes
+- [<i class="fa fa-wrench"></i> Path Standardization](docs/technical/COMMAND_PATHS.md) — Como comandos funcionam em diferentes runtimes
 - [📚 Testes](bin/test/) — Cobertura completa e como rodar testes
 
 ### Informações do Projeto
-- [📊 Histórico de Mudanças](CHANGELOG.md) — Todas as versões
-- [👥 Maintainers](docs/maintainers/MAINTAINERS.md) — Quem cuida do projeto
+- [<i class="fa fa-chart-bar"></i> Histórico de Mudanças](CHANGELOG.md) — Todas as versões
+- [<i class="fa fa-users"></i> Maintainers](docs/maintainers/MAINTAINERS.md) — Quem cuida do projeto
 
 ---
 
 ## ✨ Recursos Principais
 
-### 🎯 Spec-Driven Development
+### <i class="fa fa-bullseye"></i> Spec-Driven Development
 Trabalhe com especificações claras e deixe o AI transformar em código funcional. Cada fase é uma entrega concreta.
 
 ### 🧠 Context Engineering
 FASE organiza automaticamente o contexto da sua sessão para que o AI sempre tenha as informações certas no local certo.
 
-### 🔄 Ciclo de Vida Estruturado
+### <i class="fa fa-arrows-rotate"></i> Ciclo de Vida Estruturado
 **Pesquisa → Planejamento → Execução → Verificação → Iteração**
 
 Cada etapa tem seu agente especializado.
 
-### 📋 Rastreamento de Estado
+### <i class="fa fa-list-check"></i> Rastreamento de Estado
 Histórico automático de fases, tarefas e checkpoints. Retome trabalho de onde parou, semanas depois.
 
 ### 🔌 Extensível
 Crie seus próprios hooks e customize o comportamento via `settings.json` nativa.
 
-### 🌍 Multi-Runtime
+### <i class="fa fa-globe"></i> Multi-Runtime
 Funciona com:
 - **Claude Code** (Anthropic)
 - **OpenCode** (OpenAI)
@@ -428,7 +428,7 @@ Quer ajudar a traduzir ou melhorar o F.A.S.E.?
 
 ---
 
-## ⚡ Quick Start
+## <i class="fa fa-bolt"></i> Quick Start
 
 1. **Instale FASE:**
    ```bash
@@ -466,7 +466,7 @@ Para mais detalhes, veja [📖 Guia do Usuário](docs/GUIA-DO-USUARIO.md).
 - 🌐 [Traduções](https://github.com/isaaceliape/FASE/issues/new?labels=traducao)
 
 ### Discussões
-- 💬 [Discussions no GitHub](https://github.com/isaaceliape/FASE/discussions)
+- <i class="fa fa-comments"></i> [Discussions no GitHub](https://github.com/isaaceliape/FASE/discussions)
 - 🎓 Compartilhe workflows, dicas e best practices
 
 ---
@@ -481,6 +481,6 @@ Para mais detalhes, veja [📖 Guia do Usuário](docs/GUIA-DO-USUARIO.md).
 
 Feito com 🇧🇷 e 💙 para a comunidade brasileira de devs.
 
-[⭐ Dê uma star se FASE foi útil!](https://github.com/isaaceliape/FASE)
+[<i class="fa fa-star"></i> Dê uma star se FASE foi útil!](https://github.com/isaaceliape/FASE)
 
 </div>

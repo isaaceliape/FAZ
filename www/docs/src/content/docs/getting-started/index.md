@@ -20,29 +20,29 @@ FASE automatiza tarefas de desenvolvimento, pesquisa, planejamento e execução 
 
 FASE elimina a burocracia desnecessária:
 
-- ✅ Sem theater enterprise (reunião que podia ser email)
-- ✅ Sem burocracia desnecessária
-- ✅ Sem story points, sprint ceremonies, retrospective
-- ✅ Só você, sua visão, e o Claude Code construindo
+- <i class="fa fa-check-circle"></i> Sem theater enterprise (reunião que podia ser email)
+- <i class="fa fa-check-circle"></i> Sem burocracia desnecessária
+- <i class="fa fa-check-circle"></i> Sem story points, sprint ceremonies, retrospective
+- <i class="fa fa-check-circle"></i> Só você, sua visão, e o Claude Code construindo
 
 ## Características Principais
 
-### 🤖 Agents Paralelos
+### <i class="fa fa-robot"></i> Agents Paralelos
 Spawn múltiplos agents de IA de forma autônoma para pesquisa, planejamento e execução em paralelo.
 
-### 📋 Spec-Driven
+### <i class="fa fa-list-check"></i> Spec-Driven
 Desenvolvimento guiado por especificação com critérios de sucesso verificáveis para cada fase.
 
-### 🔄 Arquitetura Limpa
+### <i class="fa fa-arrows-rotate"></i> Arquitetura Limpa
 Separação clara entre pesquisa, planejamento, execução e verificação com checkpoints persistentes.
 
-### 🌍 Multi-Runtime
+### <i class="fa fa-globe"></i> Multi-Runtime
 Funciona com Claude Code, OpenCode, Gemini e Codex com o mesmo conjunto de comandos.
 
-### 💾 Context Aware
+### <i class="fa fa-floppy-disk"></i> Context Aware
 Gerenciamento inteligente de contexto com persistência de estado para trabalho de longa duração.
 
-### ✅ Validação Automática
+### <i class="fa fa-check-circle"></i> Validação Automática
 Verificação de fase com goal-backward analysis garante que objetivos são alcançados.
 
 ## Comece Agora

@@ -1,4 +1,4 @@
-# 🔧 Comandos do F.A.S.E.
+# <i class="fa fa-wrench"></i> Comandos do F.A.S.E.
 
 > **Versão**: 3.2.0 | Última atualização: 2026-03-25
 
@@ -6,7 +6,7 @@
 
 ---
 
-## 📋 Índice
+## <i class="fa fa-list-check"></i> Índice
 
 - [Essenciais](#essenciais) — Comandos principais
 - [Planejamento](#planejamento) — Planejamento e milestones
@@ -615,4 +615,4 @@ Define o perfil de modelo a ser usado.
 
 ---
 
-**"Chega de enrolação. Descreve o que quer e FASE acontecer."** 🇧🇷🚀
+**"Chega de enrolação. Descreve o que quer e FASE acontecer."** 🇧🇷<i class="fa fa-rocket"></i>

@@ -151,9 +151,9 @@ Etapa 2: Autenticação
 Goal: Usuários podem acessar suas contas com segurança
 
 Critérios de Sucesso:
-1. Usuário pode criar conta com email/senha ← AUTH-01 ✓
-2. Usuário pode fazer login entre sessões ← AUTH-02 ✓
-3. Usuário pode fazer logout de qualquer página ← AUTH-03 ✓
+1. Usuário pode criar conta com email/senha ← AUTH-01 <i class="fa fa-check"></i>
+2. Usuário pode fazer login entre sessões ← AUTH-02 <i class="fa fa-check"></i>
+3. Usuário pode fazer logout de qualquer página ← AUTH-03 <i class="fa fa-check"></i>
 4. Usuário pode resetar senha esquecida ← ??? GAP
 
 Requisitos: AUTH-01, AUTH-02, AUTH-03
@@ -268,13 +268,13 @@ CONT-01 → Etapa 4
 CONT-02 → Etapa 4
 ...
 
-Mapeados: 12/12 ✓
+Mapeados: 12/12 <i class="fa fa-check"></i>
 ```
 
 **Se requisitos órfãos encontrados:**
 
 ```
-⚠️ Requisitos órfãos (sem phase):
+<i class="fa fa-warning"></i> Requisitos órfãos (sem phase):
 - NOTF-01: Usuário recebe notificações in-app
 - NOTF-02: Usuário recebe email de followers
 
@@ -393,8 +393,8 @@ Ao apresentar para aprovação do usuário:
 
 ### Cobertura
 
-✓ Todos os [X] requisitos v1 mapeados
-✓ Sem requisitos órfãos
+<i class="fa fa-check"></i> Todos os [X] requisitos v1 mapeados
+<i class="fa fa-check"></i> Sem requisitos órfãos
 
 ### Aguardando
 
@@ -513,7 +513,7 @@ Quando arquivos são escritos e retornando para orchestrator:
 
 **Phases:** {N}
 **Granularidade:** {do config}
-**Cobertura:** {X}/{X} requisitos mapeados ✓
+**Cobertura:** {X}/{X} requisitos mapeados <i class="fa fa-check"></i>
 
 | Etapa | Goal | Requisitos |
 |-------|------|--------------|
@@ -540,7 +540,7 @@ Usuário pode revisar arquivos reais:
 
 ### Notas de Cobertura
 
-⚠️ Issues encontradas durante criação:
+<i class="fa fa-warning"></i> Issues encontradas durante criação:
 - {descrição do gap}
 - Resolução aplicada: {o que foi feito}
 ```
@@ -568,7 +568,7 @@ Após incorporar feedback do usuário e atualizar arquivos:
 | 1 - {nome} | {goal} | {count} |
 | 2 - {nome} | {goal} | {count} |
 
-**Cobertura:** {X}/{X} requisitos mapeados ✓
+**Cobertura:** {X}/{X} requisitos mapeados <i class="fa fa-check"></i>
 
 ### Pronto para Planejamento
 

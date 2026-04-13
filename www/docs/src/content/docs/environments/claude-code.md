@@ -11,7 +11,7 @@ description: Features nativas e integração com Claude Code da Anthropic
 
 ### 1. MCP Servers 🟢
 
-**Status:** ✅ Totalmente suportado
+**Status:** <i class="fa fa-check-circle"></i> Totalmente suportado
 
 MCP (Model Context Protocol) permite integrar Claude Code com ferramentas externas:
 
@@ -92,7 +92,7 @@ MCP (Model Context Protocol) permite integrar Claude Code com ferramentas extern
 
 ### 2. Hooks 🟢
 
-**Status:** ✅ Totalmente suportado
+**Status:** <i class="fa fa-check-circle"></i> Totalmente suportado
 
 Hooks rodam comandos shell em pontos específicos do lifecycle:
 
@@ -158,7 +158,7 @@ Hooks rodam comandos shell em pontos específicos do lifecycle:
 
 ### 3. Skills 🟢
 
-**Status:** ✅ Totalmente suportado
+**Status:** <i class="fa fa-check-circle"></i> Totalmente suportado
 
 Skills são instruções e comandos customizados:
 
@@ -190,7 +190,7 @@ Arquivo: `.claude/skills/fase-terminologia.md`
 
 ### 4. Extended Context (1M Tokens) 🟢
 
-**Status:** ✅ Disponível em planos Max, Team, Enterprise
+**Status:** <i class="fa fa-check-circle"></i> Disponível em planos Max, Team, Enterprise
 
 #### Análise Multi-Fase em Único Agent
 
@@ -217,7 +217,7 @@ Depois: Single agent analisa 4-5 fases de uma vez.
 
 ### 5. Voice Mode 🟢
 
-**Status:** ✅ Disponível
+**Status:** <i class="fa fa-check-circle"></i> Disponível
 
 Push-to-talk voice input (segurar spacebar para falar).
 
@@ -230,7 +230,7 @@ Push-to-talk voice input (segurar spacebar para falar).
 
 ### 6. Plan Mode 🟢
 
-**Status:** ✅ Totalmente suportado
+**Status:** <i class="fa fa-check-circle"></i> Totalmente suportado
 
 Plan Mode alinha perfeitamente com filosofia FASE:
 
@@ -304,8 +304,8 @@ No Claude Code, use o prefixo `/fase-`:
 ## Roadmap de Implementação
 
 ### Quick Wins (1-2 semanas)
-1. ✅ Hooks para notificações
-2. ✅ Skills para terminologia
+1. <i class="fa fa-check-circle"></i> Hooks para notificações
+2. <i class="fa fa-check-circle"></i> Skills para terminologia
 3. 🔲 Slack MCP integration
 
 ### Medium Effort (2-4 semanas)

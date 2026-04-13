@@ -43,7 +43,7 @@ Bem-vindo aos exemplos de FASE! Aqui você verá como usar o framework em três 
 
 ---
 
-## 🚀 Como Usar Estes Exemplos
+## <i class="fa fa-rocket"></i> Como Usar Estes Exemplos
 
 1. **Escolha um nível** que corresponda ao seu projeto
 2. **Leia o README.md** de cada exemplo para entender a estrutura

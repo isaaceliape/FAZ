@@ -46,7 +46,7 @@ Antes de gerar planos de gap closure, leia VERIFICACAO.md e verifique o campo `r
 grep "closure_attempts:" comandos/fases/${PHASE_DIR}/*-VERIFICACAO.md 2>/dev/null
 ```
 
-Se `closure_attempts >= 3` E existe seção `## ⚠️ Escalação Humana Necessária` no VERIFICACAO.md:
+Se `closure_attempts >= 3` E existe seção `## <i class="fa fa-warning"></i> Escalação Humana Necessária` no VERIFICACAO.md:
 - **NÃO gere novos planos de gap closure**
 - Exiba a seção de escalação do VERIFICACAO.md para o usuário
 - Oriente o usuário a resolver manualmente antes de retentar

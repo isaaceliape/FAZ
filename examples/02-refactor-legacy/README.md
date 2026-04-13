@@ -4,7 +4,7 @@
 **Objetivo:** Refatorar um script de 500+ linhas mantendo funcionalidade  
 **Tempo Estimado:** 2-3 horas com FASE
 
-## 📋 Cenário
+## <i class="fa fa-list-check"></i> Cenário
 
 Você herdou um script `data-processor.js` que:
 - Processa arquivos CSV
@@ -14,7 +14,7 @@ Você herdou um script `data-processor.js` que:
 
 Você quer refatorar mantendo a funcionalidade.
 
-## 🔄 Fluxo FASE Usado
+## <i class="fa fa-arrows-rotate"></i> Fluxo FASE Usado
 
 ### 1. Mapear o Código Existente
 

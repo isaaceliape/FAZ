@@ -2,26 +2,26 @@
 
 Os hooks do git garantem que nenhum pacote quebrado seja publicado no npm.
 
-## 🔐 O que é verificado
+## <i class="fa fa-lock"></i> O que é verificado
 
 ### Pre-commit Hook (`.husky/pre-commit`)
 
 Antes de cada commit, o hook verifica:
 
-1. ✅ **Integridade do pacote npm**
+1. <i class="fa fa-check-circle"></i> **Integridade do pacote npm**
    - Testa se `npm pack --dry-run` funciona
    - Verifica se há arquivos no pacote
 
-2. ✅ **Arquivos essenciais**
+2. <i class="fa fa-check-circle"></i> **Arquivos essenciais**
    - `install.js` (CLI principal)
    - `lib/core.cjs` e outros módulos
    - `package.json` (válido)
 
-3. ✅ **Diretórios obrigatórios**
+3. <i class="fa fa-check-circle"></i> **Diretórios obrigatórios**
    - `agentes/` (12 agent definitions)
    - `comandos/` (32 command definitions)
 
-## 🚀 Instalação
+## <i class="fa fa-rocket"></i> Instalação
 
 Os hooks são instalados automaticamente ao instalar dependências:
 
@@ -42,7 +42,7 @@ npm pack --dry-run
 npm run verificar
 ```
 
-## ⚠️ Contornar hooks (não recomendado)
+## <i class="fa fa-warning"></i> Contornar hooks (não recomendado)
 
 Se você **realmente** precisa ignorar um hook:
 
@@ -50,7 +50,7 @@ Se você **realmente** precisa ignorar um hook:
 git commit --no-verify
 ```
 
-⚠️ **Use apenas em emergências!** Commits sem verificação podem quebrar a publicação.
+<i class="fa fa-warning"></i> **Use apenas em emergências!** Commits sem verificação podem quebrar a publicação.
 
 ## 📚 Referência
 
@@ -75,6 +75,6 @@ chmod +x .husky/pre-commit
 
 ### Hook falha mas quero commitar mesmo
 
-Consulte ⚠️ acima, mas first:
+Consulte <i class="fa fa-warning"></i> acima, mas first:
 1. Abra uma issue descrevendo o problema
 2. Execute `npm pack --dry-run` para ver o erro real

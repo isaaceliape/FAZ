@@ -106,7 +106,7 @@ Perguntar ao usuário:
 
 | # | Arquivo | Status |
 |---|------|--------|
-| 1 | {file_path} | ✓ Merged |
+| 1 | {file_path} | <i class="fa fa-check"></i> Merged |
 | 2 | {file_path} | ○ Skipped (já está no upstream) |
 | 3 | {file_path} | ⚠ Conflict resolved |
 

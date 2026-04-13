@@ -24,7 +24,7 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Corrigido
 - **Locking de estado concorrente**: `bin/lib/state.cjs` usa lockfile exclusivo (`.state-lock`) em torno de todas as escritas em ESTADO.md, eliminando race conditions durante execução paralela
 - **Validação de schema no executor**: `fase-executor` valida o PLANO.md na carga — detecta campos obrigatórios ausentes e corrige parsing de `<verify>`/`<automated>` antes de executar qualquer tarefa
-- **Loop de gap closure com limite**: `fase-verificador` rastreia `closure_attempts` em VERIFICACAO.md; após 3 tentativas sem fechar gaps, emite `## ⚠️ Escalação Humana Necessária` e para de gerar novos planos
+- **Loop de gap closure com limite**: `fase-verificador` rastreia `closure_attempts` em VERIFICACAO.md; após 3 tentativas sem fechar gaps, emite `## <i class="fa fa-warning"></i> Escalação Humana Necessária` e para de gerar novos planos
 - **Sintetizador com pré-voo**: `fase-sintetizador-pesquisa` aborta com `PESQUISA INCOMPLETA` se qualquer um dos 4 arquivos de pesquisa estiver faltando, em vez de produzir output silenciosamente incompleto
 - **Verificação de plano não-bloqueante**: VALIDACAO.md ausente agora gera WARNING (não BLOCKING FAIL) — checks Nyquist são ignorados e o plano pode passar nas outras 7 dimensões
 - **Propagação de decisões locked**: `fase-pesquisador-fase` valida que todas as decisões do CONTEXTO.md foram copiadas para PESQUISA.md; `fase-planejador` valida que cada decisão locked aparece em pelo menos um `<action>`
