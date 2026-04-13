@@ -9,9 +9,13 @@ const os = require('os');
 
 // Lê JSON do stdin
 let input = '';
-// Guarda de timeout: se stdin não fechar em 3s (ex.: problemas de pipe no
-// Windows/Git Bash), sai silenciosamente em vez de travar.
-const stdinTimeout = setTimeout(() => process.exit(0), 3000);
+// Guarda de timeout: se stdin não fechar em tempo limite (default: 5s),
+// sai silenciosamente em vez de travar. Configurável via FASE_STATUSLINE_TIMEOUT
+const STATUSLINE_TIMEOUT = parseInt(process.env.FASE_STATUSLINE_TIMEOUT || '5000', 10);
+const stdinTimeout = setTimeout(() => {
+  process.stderr.write(`[fase-statusline] Timeout após ${STATUSLINE_TIMEOUT}ms\n`);
+  process.exit(0);
+}, STATUSLINE_TIMEOUT);
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', chunk => input += chunk);
 process.stdin.on('end', () => {
