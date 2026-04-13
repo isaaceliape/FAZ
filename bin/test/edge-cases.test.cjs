@@ -308,7 +308,12 @@ describe('Edge Cases and Complex Scenarios', () => {
       fs.chmodSync(configPath, 0o644);
     });
 
-    it('should handle directories with no execute permission', () => {
+    it('should handle directories with no execute permission', function() {
+      // Skip this test when running as root (chmod doesn't work as expected)
+      if (process.getuid && process.getuid() === 0) {
+        this.skip();
+      }
+
       const configPath = path.join(tempDir, 'no-exec', 'config.json');
       fs.mkdirSync(path.dirname(configPath), { recursive: true });
       fs.writeFileSync(configPath, JSON.stringify({ test: true }));

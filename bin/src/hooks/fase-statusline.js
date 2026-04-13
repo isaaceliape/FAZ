@@ -7,11 +7,19 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
+// Constantes de timeout e limites
+const DEFAULT_STDIN_TIMEOUT_MS = 5000; // Default timeout para leitura de stdin
+const PROGRESS_BAR_SEGMENTS = 10; // Número de segmentos na barra de progresso
+const AUTO_COMPACT_BUFFER_PCT = 16.5; // Percentual de buffer para compactação automática
+const COLOR_YELLOW_THRESHOLD = 50; // Limiar de uso para cor amarela
+const COLOR_ORANGE_THRESHOLD = 65; // Limiar de uso para cor laranja
+const COLOR_RED_THRESHOLD = 80; // Limiar de uso para cor vermelha (crítico)
+
 // Lê JSON do stdin
 let input = '';
 // Guarda de timeout: se stdin não fechar em tempo limite (default: 5s),
 // sai silenciosamente em vez de travar. Configurável via FASE_STATUSLINE_TIMEOUT
-const STATUSLINE_TIMEOUT = parseInt(process.env.FASE_STATUSLINE_TIMEOUT || '5000', 10);
+const STATUSLINE_TIMEOUT = parseInt(process.env.FASE_STATUSLINE_TIMEOUT || String(DEFAULT_STDIN_TIMEOUT_MS), 10);
 const stdinTimeout = setTimeout(() => {
   process.stderr.write(`[fase-statusline] Timeout após ${STATUSLINE_TIMEOUT}ms\n`);
   process.exit(0);
@@ -28,7 +36,6 @@ process.stdin.on('end', () => {
     const remaining = data.context_window?.remaining_percentage;
 
     // Exibição da janela de contexto
-    const AUTO_COMPACT_BUFFER_PCT = 16.5;
     let ctx = '';
     if (remaining != null) {
       const usableRemaining = Math.max(0, ((remaining - AUTO_COMPACT_BUFFER_PCT) / (100 - AUTO_COMPACT_BUFFER_PCT)) * 100);
@@ -50,16 +57,16 @@ process.stdin.on('end', () => {
         }
       }
 
-      // Constrói barra de progresso (10 segmentos)
-      const filled = Math.floor(used / 10);
-      const bar = '█'.repeat(filled) + '░'.repeat(10 - filled);
+      // Constrói barra de progresso com segmentos definidos
+      const filled = Math.floor(used / (100 / PROGRESS_BAR_SEGMENTS));
+      const bar = '█'.repeat(filled) + '░'.repeat(PROGRESS_BAR_SEGMENTS - filled);
 
-      // Cor baseada nos limites
-      if (used < 50) {
+      // Cor baseada nos limites configurados
+      if (used < COLOR_YELLOW_THRESHOLD) {
         ctx = ` \x1b[32m${bar} ${used}%\x1b[0m`;
-      } else if (used < 65) {
+      } else if (used < COLOR_ORANGE_THRESHOLD) {
         ctx = ` \x1b[33m${bar} ${used}%\x1b[0m`;
-      } else if (used < 80) {
+      } else if (used < COLOR_RED_THRESHOLD) {
         ctx = ` \x1b[38;5;208m${bar} ${used}%\x1b[0m`;
       } else {
         ctx = ` \x1b[5;31m💀 ${bar} ${used}%\x1b[0m`;

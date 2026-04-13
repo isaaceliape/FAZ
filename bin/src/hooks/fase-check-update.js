@@ -47,6 +47,7 @@ if (!fs.existsSync(cacheDir)) {
 // Executa verificação em segundo plano
 const child = spawn(process.execPath, ['-e', `
   const fs = require('fs');
+  const path = require('path');
   const { execSync } = require('child_process');
 
   const cacheFile = ${JSON.stringify(cacheFile)};
@@ -61,12 +62,16 @@ const child = spawn(process.execPath, ['-e', `
     } else if (fs.existsSync(globalVersionFile)) {
       installed = fs.readFileSync(globalVersionFile, 'utf8').trim();
     }
-  } catch (e) {}
+  } catch (e) {
+    // Falha silenciosa na leitura de versão
+  }
 
   let latest = null;
   try {
     latest = execSync('npm view fase-ai version', { encoding: 'utf8', timeout: 10000, windowsHide: true }).trim();
-  } catch (e) {}
+  } catch (e) {
+    // Falha silenciosa ao verificar versão no npm
+  }
 
   const result = {
     update_available: latest && installed !== latest,
@@ -75,7 +80,17 @@ const child = spawn(process.execPath, ['-e', `
     checked: Math.floor(Date.now() / 1000)
   };
 
-  fs.writeFileSync(cacheFile, JSON.stringify(result));
+  // Operação atômica: escreve em arquivo temporário e depois move
+  const tempFile = cacheFile + '.tmp';
+  try {
+    fs.writeFileSync(tempFile, JSON.stringify(result));
+    fs.renameSync(tempFile, cacheFile);
+  } catch (e) {
+    // Falha silenciosa na escrita de cache - próxima sessão tentará novamente
+    try {
+      fs.unlinkSync(tempFile);
+    } catch {}
+  }
 `], {
   stdio: 'ignore',
   windowsHide: true,

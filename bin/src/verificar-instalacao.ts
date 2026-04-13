@@ -77,7 +77,9 @@ function countFiles(dirPath: string, pattern: RegExp): number {
   try {
     const files = fs.readdirSync(dirPath).filter((f: string) => pattern.test(f));
     return files.length;
-  } catch {
+  } catch (e) {
+    const err = e as { message?: string };
+    console.error(`[verificar-instalacao] Erro ao contar arquivos em ${dirPath}: ${err.message}`);
     return 0;
   }
 }
@@ -100,7 +102,9 @@ function countFilesRecursive(dirPath: string, pattern: RegExp): number {
       }
     }
     return count;
-  } catch {
+  } catch (e) {
+    const err = e as { message?: string };
+    console.error(`[verificar-instalacao] Erro ao contar arquivos recursivos em ${dirPath}: ${err.message}`);
     return 0;
   }
 }
@@ -111,7 +115,9 @@ function countFilesRecursive(dirPath: string, pattern: RegExp): number {
 function getNpmPrefix(): string {
   try {
     return execSync('npm prefix -g', { encoding: 'utf8' }).trim();
-  } catch {
+  } catch (e) {
+    const err = e as { message?: string };
+    console.error(`[verificar-instalacao] Erro ao obter prefixo npm global: ${err.message}`);
     return '';
   }
 }
@@ -136,7 +142,9 @@ if (isInstalled) {
     const version = run('npx fase-ai --version 2>/dev/null') || pkg.version;
     console.log(`  ${green}✓${reset} Versão: ${version}`);
     console.log(`  ${green}✓${reset} Localização: ${globalPkgPath}`);
-  } catch {
+  } catch (e) {
+    const err = e as { message?: string };
+    console.error(`[verificar-instalacao] Erro ao obter versão do pacote: ${err.message}`);
     console.log(`  ${yellow}⚠${reset} Versão: ${pkg.version} (package.json)`);
     console.log(`  ${yellow}⚠${reset} Localização: ${globalPkgPath}`);
   }

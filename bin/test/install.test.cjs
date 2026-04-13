@@ -68,7 +68,12 @@ describe('FASE Installation', () => {
       assert.strictEqual(fs.readFileSync(versionFile, 'utf8'), version, 'VERSION content should match');
     });
 
-    it('should handle permission errors gracefully', () => {
+    it('should handle permission errors gracefully', function() {
+      // Skip this test when running as root (chmod doesn't prevent write access)
+      if (process.getuid && process.getuid() === 0) {
+        this.skip();
+      }
+
       const readOnlyDir = path.join(tempDir, 'readonly');
       fs.mkdirSync(readOnlyDir);
 
@@ -164,7 +169,12 @@ describe('FASE Installation', () => {
   });
 
   describe('Error Messages', () => {
-    it('should provide helpful error messages for permission issues', () => {
+    it('should provide helpful error messages for permission issues', function() {
+      // Skip this test when running as root (chmod doesn't prevent write access)
+      if (process.getuid && process.getuid() === 0) {
+        this.skip();
+      }
+
       const readOnlyDir = path.join(tempDir, 'readonly-error');
       fs.mkdirSync(readOnlyDir);
       fs.chmodSync(readOnlyDir, 0o444);

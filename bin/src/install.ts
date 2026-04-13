@@ -231,6 +231,43 @@ const explicitConfigDir = parseConfigDirArg();
 const hasHelp = args.includes('--help') || args.includes('-h');
 const forceStatusline = args.includes('--force-statusline');
 
+// Track temporary files for cleanup
+const tempFiles: string[] = [];
+
+/**
+ * Clean up temporary files on process exit
+ */
+function cleanupTempFiles() {
+  for (const file of tempFiles) {
+    try {
+      if (fs.existsSync(file)) {
+        fs.unlinkSync(file);
+      }
+    } catch (e) {
+      const err = e as { message?: string };
+      console.error(`[install] Erro ao limpar arquivo temporário ${file}: ${err.message}`);
+    }
+  }
+}
+
+// Install process exit handlers
+process.on('SIGINT', () => {
+  console.log('\n  Limpando arquivos temporários...');
+  cleanupTempFiles();
+  process.exit(1);
+});
+
+process.on('SIGTERM', () => {
+  cleanupTempFiles();
+  process.exit(1);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error(`[install] Erro não tratado: ${error.message}`);
+  cleanupTempFiles();
+  process.exit(1);
+});
+
 console.log(banner);
 
 // Run verification if --verificar-instalacao flag is provided

@@ -419,7 +419,12 @@ describe('Installation Integration Tests', () => {
       assert.strictEqual(errorCaught, true);
     });
 
-    it('should handle permission errors during installation', () => {
+    it('should handle permission errors during installation', function() {
+      // Skip this test when running as root (chmod doesn't prevent write access)
+      if (process.getuid && process.getuid() === 0) {
+        this.skip();
+      }
+
       const dir = path.join(tempDir, 'readonly');
       fs.mkdirSync(dir);
       fs.chmodSync(dir, 0o444);

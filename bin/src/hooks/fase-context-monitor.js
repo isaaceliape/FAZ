@@ -8,13 +8,15 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const WARNING_THRESHOLD = 35;
-const CRITICAL_THRESHOLD = 25;
-const STALE_SECONDS = 60;
-const DEBOUNCE_CALLS = 5;
+// Constantes de limites e timeouts
+const WARNING_THRESHOLD = 35; // Percentual de contexto restante para aviso
+const CRITICAL_THRESHOLD = 25; // Percentual de contexto restante para crítico
+const STALE_SECONDS = 60; // Tempo limite para dados de contexto (segundos)
+const DEBOUNCE_CALLS = 5; // Número de chamadas antes de mostrar novo aviso
+const STDIN_TIMEOUT_MS = 3000; // Timeout para leitura de stdin (milissegundos)
 
 let input = '';
-const stdinTimeout = setTimeout(() => process.exit(0), 3000);
+const stdinTimeout = setTimeout(() => process.exit(0), STDIN_TIMEOUT_MS);
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', chunk => input += chunk);
 process.stdin.on('end', () => {
@@ -56,8 +58,9 @@ process.stdin.on('end', () => {
       try {
         warnData = JSON.parse(fs.readFileSync(warnPath, 'utf8'));
         firstWarn = false;
-      } catch {
-        // Arquivo corrompido, reinicia
+      } catch (e) {
+        // Arquivo corrompido, reinicia com dados padrão
+        process.stderr.write(`[fase-context-monitor] Aviso de dados corrompido em ${warnPath}: ${e.message}\n`);
       }
     }
 
@@ -107,7 +110,9 @@ process.stdin.on('end', () => {
     };
 
     process.stdout.write(JSON.stringify(output));
-  } catch {
+  } catch (e) {
+    // Erro ao processar métricas de contexto - falha silenciosa para não interferir com o hook
+    process.stderr.write(`[fase-context-monitor] Erro ao processar contexto: ${e.message}\n`);
     process.exit(0);
   }
 });
