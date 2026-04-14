@@ -182,7 +182,9 @@ export function loadConfig(cwd: string): Config {
       const depthToGranularity: Record<string, string> = { quick: 'coarse', standard: 'standard', comprehensive: 'fine' };
       parsed['granularity'] = depthToGranularity[parsed['depth'] as string] ?? parsed['depth'];
       delete parsed['depth'];
-      try { fs.writeFileSync(configPath, JSON.stringify(parsed, null, 2), 'utf-8'); } catch {}
+      try { fs.writeFileSync(configPath, JSON.stringify(parsed, null, 2), 'utf-8'); } catch (err) {
+        process.stderr.write(`[core:loadConfig] Failed to migrate config: ${(err as Error).message}\n`);
+      }
     }
 
     const get = (key: string, nested?: { section: string; field: string }): unknown => {
@@ -219,7 +221,8 @@ export function loadConfig(cwd: string): Config {
       brave_search:               (get('brave_search') ?? defaults.brave_search) as boolean,
       model_overrides:            (parsed['model_overrides'] as Record<string, string> | null | undefined) ?? null,
     };
-  } catch {
+  } catch (err) {
+    process.stderr.write(`[core:loadConfig] Failed to load config from ${configPath}: ${(err as Error).message}\n`);
     return defaults;
   }
 }
@@ -342,7 +345,8 @@ export function searchEtapaInDir(baseDir: string, relBase: string, normalized: s
       has_context: hasContext,
       has_verification: hasVerification,
     };
-  } catch {
+  } catch (err) {
+    process.stderr.write(`[core:searchEtapaInDir] Failed to search etapa directory: ${(err as Error).message}\n`);
     return null;
   }
 }
@@ -378,7 +382,9 @@ export function findEtapaInternal(cwd: string, etapa: string): EtapaInfo | null 
         return result;
       }
     }
-  } catch {}
+  } catch (err) {
+    process.stderr.write(`[core:findEtapaInternal] Failed to search archived etapas: ${(err as Error).message}\n`);
+  }
 
   return null;
 }
@@ -413,7 +419,9 @@ export function getArchivedEtapasDirs(cwd: string): ArchivedEtapaEntry[] {
         });
       }
     }
-  } catch {}
+  } catch (err) {
+    process.stderr.write(`[core:getArchivedEtapasDirs] Failed to read archived etapas: ${(err as Error).message}\n`);
+  }
 
   return results;
 }
@@ -449,7 +457,8 @@ export function getRoadmapEtapaInternal(cwd: string, etapaNum: string | number):
       goal,
       section,
     };
-  } catch {
+  } catch (err) {
+    process.stderr.write(`[core:getRoadmapEtapaInternal] Failed to read roadmap: ${(err as Error).message}\n`);
     return null;
   }
 }
@@ -476,7 +485,8 @@ export function pathExistsInternal(cwd: string, targetPath: string): boolean {
   try {
     fs.statSync(fullPath);
     return true;
-  } catch {
+  } catch (err) {
+    // Silently return false for non-existent paths (expected behavior)
     return false;
   }
 }
@@ -511,7 +521,8 @@ export function getMilestoneInfo(cwd: string): MilestoneInfo {
       version: versionMatch ? versionMatch[0] : 'v1.0',
       name: 'milestone',
     };
-  } catch {
+  } catch (err) {
+    process.stderr.write(`[core:getMilestoneInfo] Failed to read roadmap: ${(err as Error).message}\n`);
     return { version: 'v1.0', name: 'milestone' };
   }
 }
@@ -525,7 +536,9 @@ export function getMilestoneEtapaFilter(cwd: string): MilestoneEtapaFilter {
     while ((m = phasePattern.exec(roadmap)) !== null) {
       milestonePhaseNums.add(m[1]);
     }
-  } catch {}
+  } catch (err) {
+    process.stderr.write(`[core:getMilestoneEtapaFilter] Failed to read roadmap: ${(err as Error).message}\n`);
+  }
 
   if (milestonePhaseNums.size === 0) {
     const passAll = ((() => true) as unknown) as MilestoneEtapaFilter;
@@ -544,4 +557,65 @@ export function getMilestoneEtapaFilter(cwd: string): MilestoneEtapaFilter {
   }
   (isDirInMilestone as MilestoneEtapaFilter).phaseCount = milestonePhaseNums.size;
   return isDirInMilestone as MilestoneEtapaFilter;
+}
+
+// ─── Disk space utilities ─────────────────────────────────────────────────────
+
+/**
+ * Validate environment variables and return status.
+ * @returns Object with valid status, missing vars, and warnings
+ */
+export function validateEnvVars(): { valid: boolean; missing: string[]; warnings: string[] } {
+  const result: { valid: boolean; missing: string[]; warnings: string[] } = { valid: true, missing: [], warnings: [] };
+  
+  // Optional but recommended
+  if (!process.env.BRAVE_API_KEY) {
+    result.warnings.push('BRAVE_API_KEY not set — Brave search features will be disabled');
+  }
+  
+  // Log warnings
+  result.warnings.forEach((warn: string) => {
+    process.stderr.write(`[env] Warning: ${warn}\n`);
+  });
+  
+  return result;
+}
+
+/**
+ * Check if there's enough disk space at the target path.
+ * @param targetPath - Path where file will be written
+ * @param minBytes - Minimum required bytes (default: 1MB)
+ * @returns true if enough space is available
+ */
+export function checkDiskSpace(targetPath: string, minBytes: number = 1024 * 1024): boolean {
+  try {
+    const dir = path.dirname(targetPath);
+    
+    if (process.platform === 'win32') {
+      // Windows: use fsutil
+      const driveLetter = dir[0];
+      const output = execSync(`fsutil volume diskfree ${driveLetter}:`, { encoding: 'utf8' });
+      const match = output.match(/Total free bytes\s*:\s*(\d+)/);
+      if (match) {
+        const freeBytes = parseInt(match[1], 10);
+        return freeBytes >= minBytes;
+      }
+    } else {
+      // Unix/Linux/macOS: use df
+      const output = execSync(`df -k "${dir}" | tail -1`, { encoding: 'utf8' });
+      const parts = output.trim().split(/\s+/);
+      if (parts.length >= 4) {
+        const availableKB = parseInt(parts[3], 10) * 1024;
+        return availableKB >= minBytes;
+      }
+    }
+    
+    // If we can't determine, assume OK but log warning
+    process.stderr.write(`[core:checkDiskSpace] Could not verify disk space for ${targetPath}\n`);
+    return true;
+  } catch (err) {
+    process.stderr.write(`[core:checkDiskSpace] Error checking disk space: ${(err as Error).message}\n`);
+    // If check fails, assume OK to avoid blocking operations
+    return true;
+  }
 }

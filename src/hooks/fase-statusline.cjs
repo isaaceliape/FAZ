@@ -8,12 +8,24 @@ const path = require('path');
 const os = require('os');
 
 // Lê JSON do stdin
+const MAX_INPUT_SIZE = 10 * 1024 * 1024;  // 10MB limit
 let input = '';
-// Guarda de timeout: se stdin não fechar em 3s (ex.: problemas de pipe no
-// Windows/Git Bash), sai silenciosamente em vez de travar.
-const stdinTimeout = setTimeout(() => process.exit(0), 3000);
+let inputSize = 0;
+// Guarda de timeout: se stdin não fechar em 10s (ex.: problemas de pipe no
+// Windows/Git Bash), sai com log em vez de travar.
+const stdinTimeout = setTimeout(() => {
+  process.stderr.write('[fase-statusline] stdin timeout, exiting\n');
+  process.exit(0);
+}, 10000);
 process.stdin.setEncoding('utf8');
-process.stdin.on('data', chunk => input += chunk);
+process.stdin.on('data', chunk => {
+  inputSize += chunk.length;
+  if (inputSize > MAX_INPUT_SIZE) {
+    process.stderr.write('[fase-statusline] Input size exceeds 10MB limit, truncating\n');
+    process.stdin.destroy();
+  }
+  input += chunk;
+});
 process.stdin.on('end', () => {
   clearTimeout(stdinTimeout);
   try {

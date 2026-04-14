@@ -6,7 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import {
   escapeRegex, loadConfig, getMilestoneInfo, getMilestoneEtapaFilter,
-  output, error, ensureInsidePlanejamento,
+  output, error, ensureInsidePlanejamento, checkDiskSpace,
 } from './core.js';
 import { extractFrontmatter, reconstructFrontmatter, type ParsedFrontmatter } from './frontmatter.js';
 
@@ -217,7 +217,9 @@ function acquireStateLock(lockPath: string, maxAttempts = 10, baseDelayMs = 50):
         try {
           fs.unlinkSync(pidFile);
           fs.rmdirSync(lockDir);
-        } catch {}
+        } catch (err) {
+          process.stderr.write(`[state:acquireLock] Cleanup error: ${(err as Error).message}\n`);
+        }
       });
       
       return true;
@@ -242,7 +244,9 @@ function acquireStateLock(lockPath: string, maxAttempts = 10, baseDelayMs = 50):
               fs.unlinkSync(pidFile);
               fs.rmdirSync(lockDir);
               continue; // Retry immediately
-            } catch {}
+            } catch (err) {
+              process.stderr.write(`[state:acquireLock] Failed to remove stale lock: ${(err as Error).message}\n`);
+            }
           }
         } else {
           // Invalid PID file, treat as stale
@@ -250,15 +254,20 @@ function acquireStateLock(lockPath: string, maxAttempts = 10, baseDelayMs = 50):
             fs.unlinkSync(pidFile);
             fs.rmdirSync(lockDir);
             continue;
-          } catch {}
+          } catch (err) {
+            process.stderr.write(`[state:acquireLock] Failed to remove invalid PID lock: ${(err as Error).message}\n`);
+          }
         }
-      } catch {
+      } catch (readErr) {
         // Can't read PID file, treat as stale
+        process.stderr.write(`[state:acquireLock] Can't read PID file: ${(readErr as Error).message}\n`);
         try {
           fs.unlinkSync(pidFile);
           fs.rmdirSync(lockDir);
           continue;
-        } catch {}
+        } catch (cleanupErr) {
+          process.stderr.write(`[state:acquireLock] Failed to cleanup stale lock: ${(cleanupErr as Error).message}\n`);
+        }
       }
       
       // Exponential backoff
@@ -281,11 +290,19 @@ function releaseStateLock(lockPath: string): void {
     if (fs.existsSync(lockDir)) {
       fs.rmdirSync(lockDir);
     }
-  } catch {}
+  } catch (err) {
+    process.stderr.write(`[state:releaseLock] Failed to release lock: ${(err as Error).message}\n`);
+  }
 }
 
 export function writeStateMd(statePath: string, content: string, cwd: string): void {
   ensureInsidePlanejamento(cwd, statePath, 'STATE.md write');
+  
+  // Check disk space before acquiring lock
+  if (!checkDiskSpace(statePath, 1024 * 1024)) {  // 1MB minimum
+    error('Espaço em disco insuficiente para salvar STATE.md');
+  }
+  
   const lockPath = path.join(path.dirname(statePath), '.state-lock');
   acquireStateLock(lockPath);
   try {
@@ -305,7 +322,10 @@ export function cmdStateLoad(cwd: string, raw: boolean): void {
   let stateRaw = '';
   try {
     stateRaw = fs.readFileSync(path.join(planejamentoDir, 'STATE.md'), 'utf-8');
-  } catch {}
+  } catch (err) {
+    // STATE.md doesn't exist yet - that's OK for new projects
+    process.stderr.write(`[state:cmdStateLoad] STATE.md not found: ${(err as Error).message}\n`);
+  }
 
   const configExists = fs.existsSync(path.join(planejamentoDir, 'config.json'));
   const roadmapExists = fs.existsSync(path.join(planejamentoDir, 'ROADMAP.md'));
@@ -358,7 +378,8 @@ export function cmdStateGet(cwd: string, section: string | undefined, raw: boole
     if (sectionMatch) { output({ [section]: sectionMatch[1].trim() }, raw, sectionMatch[1].trim()); return; }
 
     output({ error: `Seção ou campo "${section}" não encontrado` }, raw, '');
-  } catch {
+  } catch (err) {
+    process.stderr.write(`[state:cmdStateGet] Error reading STATE.md: ${(err as Error).message}\n`);
     error('STATE.md não encontrado');
   }
 }
@@ -387,7 +408,8 @@ export function cmdStatePatch(cwd: string, patches: Record<string, string>, raw:
 
     if (results.updated.length > 0) writeStateMd(statePath, content, cwd);
     output(results, raw, results.updated.length > 0 ? 'true' : 'false');
-  } catch {
+  } catch (err) {
+    process.stderr.write(`[state:cmdStatePatch] Error: ${(err as Error).message}\n`);
     error('STATE.md not found');
   }
 }

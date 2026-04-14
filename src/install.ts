@@ -8,6 +8,7 @@ import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { saveAnalyticsConfig } from './lib/analytics.js';
 import { checkAndPromptForUpdate } from './lib/version-check.js';
+import { validateEnvVars } from './lib/core.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -15,14 +16,18 @@ const __dirname = path.dirname(__filename);
  * Safely parses JSON with proper error handling.
  * @param jsonStr - JSON string to parse
  * @param context - Description of what's being parsed for error messages
- * @returns Parsed JSON object
+ * @param options - Options for error handling (exitOnError: whether to exit on failure)
+ * @returns Parsed JSON object, or null if parsing fails and exitOnError is false
  */
-function safeJsonParse(jsonStr, context = 'JSON') {
+function safeJsonParse(jsonStr, context = 'JSON', options = { exitOnError: true }) {
   try {
     return JSON.parse(jsonStr);
   } catch (err) {
     console.error(`Invalid ${context}: ${err.message}`);
-    process.exit(1);
+    if (options.exitOnError) {
+      process.exit(1);
+    }
+    return null;
   }
 }
 // Colors
@@ -194,6 +199,7 @@ const banner = '\n' +
   '  Framework de Automação Sem Enrolação\n' +
   '  Sistema de meta-prompting, context engineering e\n' +
   '  desenvolvimento spec-driven para Claude Code, OpenCode, Gemini e Codex.\n';
+
 // Parse --config-dir argument
 function parseConfigDirArg() {
   const configDirIndex = args.findIndex(arg => arg === '--config-dir' || arg === '-c');
@@ -1447,7 +1453,8 @@ function uninstall(isGlobal, runtime = 'claude') {
     const configPath = path.join(opencodeConfigDir, 'opencode.json');
     if (fs.existsSync(configPath)) {
       try {
-        const config = safeJsonParse(fs.readFileSync(configPath, 'utf8'), 'opencode.json');
+        const config = safeJsonParse(fs.readFileSync(configPath, 'utf8'), 'opencode.json', { exitOnError: false });
+        if (!config) return;  // Skip if JSON is invalid
         let modified = false;
         // Remove FASE permission entries
         if (config.permission) {

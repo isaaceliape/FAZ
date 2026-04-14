@@ -12,7 +12,7 @@ import { extractFrontmatter, type ParsedFrontmatter } from './frontmatter.js';
 
 /**
  * Validates that a user-provided path stays within the cwd boundary.
- * Prevents path traversal attacks (e.g., ../../../etc/passwd).
+ * Prevents path traversal attacks (e.g., ../../../etc/passwd) including via symlinks.
  * @param cwd - The project root directory
  * @param userPath - The user-provided path to validate
  * @returns The resolved absolute path if valid
@@ -22,11 +22,27 @@ export function validatePathInsideCwd(cwd: string, userPath: string): string {
   const resolved = path.resolve(cwd, userPath);
   const normalizedCwd = path.resolve(cwd) + path.sep;
   
+  // Check logical path first
   if (resolved !== path.resolve(cwd) && !resolved.startsWith(normalizedCwd)) {
     error(`Path traversal detected: "${userPath}" escapes project boundary`);
   }
   
-  return resolved;
+  // Resolve symlinks and check physical path
+  try {
+    const realPath = fs.realpathSync(resolved);
+    const realCwd = fs.realpathSync(cwd);
+    const normalizedRealCwd = realCwd + path.sep;
+    
+    if (realPath !== realCwd && !realPath.startsWith(normalizedRealCwd)) {
+      error(`Path traversal detected via symlink: "${userPath}" resolves outside project boundary`);
+    }
+    
+    return realPath;
+  } catch (err) {
+    // File doesn't exist yet - that's OK for write operations
+    // Just return the resolved logical path
+    return resolved;
+  }
 }
 
 /**
@@ -138,7 +154,9 @@ export function cmdVerifyPathExists(cwd: string, targetPath: string, raw: boolea
     const stats = fs.statSync(fullPath);
     const type = stats.isDirectory() ? 'directory' : stats.isFile() ? 'file' : 'other';
     output({ exists: true, type }, raw, 'true');
-  } catch {
+  } catch (err) {
+    // Path doesn't exist or can't be accessed - return false
+    process.stderr.write(`[cmdVerifyPathExists] Path inaccessible: ${(err as Error).message}\n`);
     output({ exists: false, type: null }, raw, 'false');
   }
 }
@@ -251,8 +269,9 @@ export function cmdHistoryDigest(cwd: string, raw: boolean): void {
             });
           }
 
-        } catch {
-          // Skip malformed summaries
+        } catch (err) {
+          // Skip malformed summaries but log for debugging
+          process.stderr.write(`[cmdHistoryDigest] Skipping malformed summary: ${(err as Error).message}\n`);
         }
       }
     }

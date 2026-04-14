@@ -1,82 +1,112 @@
-# Git Hooks - Segurança de Commits
+# Hooks do FASE - Monitoramento e Status
 
-> **Versão**: 3.3.1 | Última atualização: 2026-04-10
+> **Versão**: 3.5.0 | Última atualização: 2026-04-10
 
-Os hooks do git garantem que nenhum pacote quebrado seja publicado no npm.
+O FASE utiliza hooks para monitoramento de contexto, statusline e verificação de atualizações.
 
-## 🔐 O que é verificado
+## 🔐 Segurança e Limites
 
-### Pre-commit Hook (`.husky/pre-commit`)
+### Timeout de Input
 
-Antes de cada commit, o hook verifica:
+- **Timeout**: 10 segundos (3s antes da v3.4.0)
+- **Motivo**: Prevenir deadlocks em sistemas lentos ou com problemas de pipe
+- **Comportamento**: Hook sai com log `[fase-*] stdin timeout, exiting`
 
-1. ✅ **Integridade do pacote npm**
-   - Testa se `npm pack --dry-run` funciona
-   - Verifica se há arquivos no pacote
+### Limite de Tamanho de Input
 
-2. ✅ **Arquivos essenciais**
-   - `install.js` (CLI principal)
-   - `lib/core.cjs` e outros módulos
-   - `package.json` (válido)
+- **Limite**: 10MB
+- **Motivo**: Prevenir problemas de memória com inputs grandes
+- **Comportamento**: Hook truncar input e log `[fase-*] Input size exceeds 10MB limit, truncating`
 
-3. ✅ **Diretórios obrigatórios**
-   - `bin/agentes/` (13 agent definitions)
-   - `bin/comandos/` (command definitions)
+## 📊 Hooks Disponíveis
 
-## 🚀 Instalação
+### fase-context-monitor
 
-Os hooks são instalados automaticamente ao instalar dependências:
+Monitora uso do contexto e exibe avisos quando está baixo.
 
-```bash
-npm install
-npm run prepare
+**Gatilho**: `PostToolUse` / `AfterTool`
+
+**Saída**: Adiciona contexto adicional com avisos de uso do contexto
+
+### fase-statusline
+
+Exibe modelo, tarefa atual, diretório e uso do contexto na statusline.
+
+**Gatilho**: `SessionStart`
+
+**Formato**: `modelo | tarefa | diretório | contexto%`
+
+### fase-check-update
+
+Verifica silenciosamente por atualizações no npm registry.
+
+**Gatilho**: `SessionStart`
+
+**Cache**: 5 minutos em `~/.claude/cache/fase-update-check.json`
+
+## 🚀 Configuração
+
+Os hooks são configurados automaticamente durante a instalação do FASE. Para personalizar:
+
+### Claude Code
+
+Edite `~/.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [{
+      "type": "command",
+      "command": "node /caminho/para/FASE/hooks/fase-statusline.cjs"
+    }],
+    "PostToolUse": [{
+      "type": "command",
+      "command": "node /caminho/para/FASE/hooks/fase-context-monitor.cjs"
+    }]
+  }
+}
 ```
 
-## 🧪 Testar os hooks
+### OpenCode
 
-Para verificar manualmente se tudo está correto:
+Edite `~/.config/opencode/opencode.json`:
 
-```bash
-cd bin
-npm pack --dry-run
-
-# Ou use o script:
-npm run verificar
+```json
+{
+  "hooks": {
+    "SessionStart": ["node /caminho/para/FASE/hooks/fase-statusline.cjs"],
+    "AfterTool": ["node /caminho/para/FASE/hooks/fase-context-monitor.cjs"]
+  }
+}
 ```
-
-## ⚠️ Contornar hooks (não recomendado)
-
-Se você **realmente** precisa ignorar um hook:
-
-```bash
-git commit --no-verify
-```
-
-⚠️ **Use apenas em emergências!** Commits sem verificação podem quebrar a publicação.
-
-## 📚 Referência
-
-- [Husky - Git Hooks Simplificado](https://typicode.github.io/husky/)
-- [Git Hooks Nativos](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks)
 
 ## 🆘 Troubleshooting
 
-### Hook não está rodando
+### Hook não aparece na saída
+
+Verifique se o caminho está correto no settings.json e se o arquivo tem permissão de execução:
 
 ```bash
-# Reinstalar hooks
-npx husky install
+chmod +x ~/.fase-ai/hooks/*.cjs
 ```
 
-### Permissão negada ao executar
+### Timeout frequente
+
+Se hooks estão expirando frequentemente em sistemas lentos:
+- Verifique se há processos consumindo CPU
+- Considere aumentar o timeout (editar arquivo do hook)
+- O timeout de 10s é suficiente para a maioria dos casos
+
+### Logs de erro
+
+Hooks logam erros para stderr. Para debug:
 
 ```bash
-# Garantir que o hook é executável
-chmod +x .husky/pre-commit
+# Executar hook manualmente
+node ~/.fase-ai/hooks/fase-context-monitor.cjs < input.json
 ```
 
-### Hook falha mas quero commitar mesmo
+## 📚 Referência
 
-Consulte ⚠️ acima, mas first:
-1. Abra uma issue descrevendo o problema
-2. Execute `npm pack --dry-run` para ver o erro real
+- [Claude Code Hooks](https://docs.anthropic.com/claude-code/hooks)
+- [OpenCode Hooks](https://docs.opencode.ai/hooks)

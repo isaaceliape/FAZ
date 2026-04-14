@@ -12,11 +12,23 @@ const WARNING_THRESHOLD = 35;
 const CRITICAL_THRESHOLD = 25;
 const STALE_SECONDS = 60;
 const DEBOUNCE_CALLS = 5;
+const MAX_INPUT_SIZE = 10 * 1024 * 1024;  // 10MB limit
 
 let input = '';
-const stdinTimeout = setTimeout(() => process.exit(0), 3000);
+let inputSize = 0;
+const stdinTimeout = setTimeout(() => {
+  process.stderr.write('[fase-context-monitor] stdin timeout, exiting\n');
+  process.exit(0);
+}, 10000);  // 10 seconds for slow systems
 process.stdin.setEncoding('utf8');
-process.stdin.on('data', chunk => input += chunk);
+process.stdin.on('data', chunk => {
+  inputSize += chunk.length;
+  if (inputSize > MAX_INPUT_SIZE) {
+    process.stderr.write('[fase-context-monitor] Input size exceeds 10MB limit, truncating\n');
+    process.stdin.destroy();
+  }
+  input += chunk;
+});
 process.stdin.on('end', () => {
   clearTimeout(stdinTimeout);
   try {

@@ -1,19 +1,80 @@
 {
-  "name": "fase-development",
-  "version": "3.3.0",
-  "description": "FASE - Workspace de desenvolvimento",
-  "private": true,
+  "name": "fase-ai",
+  "version": "3.5.0",
+  "description": "FASE. - Framework de Automação Sem Enrolação. Brazilian Portuguese translation of get-shit-done for AI coding assistants",
+  "type": "module",
+  "bin": {
+    "fase-ai": "dist/install.js",
+    "fase": "dist/install.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaaceliape/FASE.git"
+  },
+  "keywords": [
+    "fase",
+    "get-shit-done",
+    "gsd",
+    "ai",
+    "automation",
+    "claude-code",
+    "opencode",
+    "gemini",
+    "codex",
+    "portuguese",
+    "brazilian",
+    "spec-driven",
+    "context-engineering",
+    "meta-prompting"
+  ],
+  "author": "Isaac Eliape",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/isaaceliape/FASE/issues"
+  },
+  "homepage": "https://github.com/isaaceliape/FASE#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "prepare": "husky install || true",
-    "verificar-pacote": "cd bin && npm pack --dry-run",
-    "verificar-instalacao": "cd bin && node verificar-instalacao.js",
-    "build-docs": "node build-docs.js",
-    "test": "cd bin && npm test"
+    "build": "tsc",
+    "postbuild": "node scripts/fix-shebangs.mjs",
+    "verificar-pacote": "npm pack --dry-run",
+    "verificar-instalacao": "node dist/verificar-instalacao.js",
+    "build-docs": "node build-docs.cjs",
+    "test": "mocha test/*.test.cjs",
+    "test:install": "mocha test/install.test.cjs",
+    "test:providers": "mocha test/providers.test.cjs",
+    "test:integration": "mocha test/integration.test.cjs",
+    "test:docker": "mocha test/docker-test.cjs",
+    "test:edge-cases": "mocha test/edge-cases.test.cjs",
+    "test:watch": "mocha test/*.test.cjs --watch",
+    "test:coverage": "mocha test/*.test.cjs --reporter json > test-results.json",
+    "test:docker:all": "cd test && bash run-docker-tests.sh --all",
+    "test:docker:clean": "cd test && bash run-docker-tests.sh --cleanup",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "husky": "^9.0.0"
+    "@types/node": "^25.6.0",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.0.0",
+    "mocha": "^10.0.0",
+    "typescript": "^6.0.2"
   },
   "dependencies": {
     "marked": "^17.0.4"
-  }
+  },
+  "lint-staged": {
+    "package.json": [
+      "node -e \"import('./package.json', { assert: { type: 'json' } }).then(m => console.log('✓ package.json válido'))\""
+    ]
+  },
+  "files": [
+    "dist/",
+    "agentes/",
+    "comandos/",
+    "fase-shared/",
+    "README.md"
+  ]
 }

@@ -5,6 +5,37 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-br/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/spec/v2.0.0.html).
 
+## [3.5.0] - 2026-04-10
+
+### Adicionado
+
+- **Validação de espaço em disco**: Verificação automática antes de escrever arquivos críticos (STATE.md)
+- **Validação de variáveis de ambiente**: Aviso quando `BRAVE_API_KEY` não está configurada
+- **Rate limiting para métricas**: Retry com backoff exponencial para APIs do npm/GitHub (429)
+- **Limite de tamanho de input**: Proteção de 10MB em hooks para prevenir problemas de memória
+- **Logging de erros**: 17 blocos `catch {}` substituídos com logging adequado para debugging
+
+### Segurança
+
+- **Proteção contra path traversal via symlink**: Validação de caminhos resolve symlinks antes de verificar limites do projeto
+- **Timeout estendido em hooks**: 3s → 10s para sistemas lentos, com logging de timeout
+
+### Melhorias
+
+- **JSON parse gracioso**: `safeJsonParse()` agora suporta `exitOnError: false` para falhas não-críticas
+- **Métricas resilientes**: Script de tracking continua mesmo com falhas de API
+
+### Testes
+
+- +16 novos testes cobrindo edge cases (41 testes totais em edge-cases.test.cjs)
+- Total: 148 testes passando
+
+### Notas Técnicas
+
+- **Arquivos modificados**: 8 arquivos fonte + 1 arquivo de teste
+- **Compatibilidade**: Nenhuma mudança que quebra compatibilidade
+- **Build**: TypeScript compilation bem-sucedida, todos os testes passando
+
 ## [3.3.1] - 2026-04-10
 
 ### Corrigido
@@ -57,7 +88,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/spec/v2.0.
 ## [3.1.0] - 2026-03-20
 
 ### Corrigido
-- Corrigida referência de agente no comando planejar-fase
+- Corrigida referência de agente no comando planejar-etapa
 
 ## [3.0.0] - 2026-03-20
 

@@ -1,6 +1,6 @@
 <div align="center">
 
-# F.A.S.E. v3.3.1
+# FASE. v3.5.0
 
 ## Framework de Automação Sem Enrolação
 
@@ -32,7 +32,7 @@ Spec-driven development, context engineering e meta-prompting — agora em portu
 
 ## 🤔 O Que É Isso?
 
-O **F.A.S.E.** é a versão em português brasileiro do **Get Shit Done (GSD)** — um sistema de meta-prompting e context engineering que faz os assistentes de IA (Claude Code, OpenCode, Gemini, Codex) funcionarem de verdade em projetos de software.
+O **FASE.** é a versão em português brasileiro do **Get Shit Done (GSD)** — um sistema de meta-prompting e context engineering que faz os assistentes de IA (Claude Code, OpenCode, Gemini, Codex) funcionarem de verdade em projetos de software.
 
 Ele traz:
 - 🎯 **Spec-driven development** — descreva o que quer, o AI constrói
@@ -171,9 +171,9 @@ asciinema rec assets/demo-install.cast
 ```bash
 # Record a workflow session with these steps:
 # 1. /fase-novo-projeto
-# 2. /fase-planejar-fase 1
-# 3. /fase-executar-fase 1
-# 4. /fase-validar-fase 1
+# 2. /fase-planejar-etapa 1
+# 3. /fase-executar-etapa 1
+# 4. /fase-validar-etapa 1
 
 asciinema rec assets/demo-workflow.cast
 ```
@@ -221,7 +221,7 @@ Isso garante que FASE funciona identicamente em todos os 4 runtimes, sem duplica
 
 ### 📚 Documentação Melhorada
 - ✅ Novos documentos explicando path standardization
-- ✅ Documentação expandida em bin/test/ com rastreamento detalhado
+- ✅ Documentação expandida em test/ com rastreamento detalhado
 - ✅ Seções expandidas em guias de testes
 
 ---
@@ -248,9 +248,9 @@ Context monitoring para gerenciar estado e histórico automaticamente via integr
 ### 4. **Instalador Universal**
 Suporta múltiplos runtimes (Claude Code, OpenCode, Gemini, Codex) com detecção automática
 
-## 📖 Por Que "F.A.S.E."?
+## 📖 Por Que "FASE."?
 
-**F.A.S.E.** = **Framework de Automação Sem Enrolação**
+**FASE.** = **Framework de Automação Sem Enrolação**
 
 É um trocadilho com "fases de desenvolvimento" porque cada entrega é uma fase concluída, sem burocracia.
 
@@ -276,17 +276,17 @@ FASE oferece **32 comandos em português brasileiro**, organizados por função:
 ### 📐 Planning & Roadmapping
 ```bash
 /fase-novo-marco         # Cria novo milestone
-/fase-planejar-fase      # Detalha planejamento de uma fase
-/fase-adicionar-fase     # Adiciona fase ao roadmap
-/fase-inserir-fase       # Insere fase em posição específica
-/fase-remover-fase       # Remove fase do plano
+/fase-planejar-etapa      # Detalha planejamento de uma fase
+/fase-adicionar-etapa     # Adiciona fase ao roadmap
+/fase-inserir-etapa       # Insere fase em posição específica
+/fase-remover-etapa       # Remove fase do plano
 /fase-progresso          # Mostra status de conclusão
 /fase-roadmapper         # Cria roadmap visual (via agente)
 ```
 
 ### 🔍 Research & Analysis
 ```bash
-/fase-pesquisar-fase     # Pesquisa contexto para uma fase
+/fase-pesquisar-etapa     # Pesquisa contexto para uma fase
 /fase-mapear-codigo      # Mapeia codebase existente
 /fase-listar-premissas   # Lista assunções da fase
 /fase-planejar-lacunas   # Identifica gaps no plano
@@ -295,14 +295,14 @@ FASE oferece **32 comandos em português brasileiro**, organizados por função:
 ### ✅ Verification & Validation
 ```bash
 /fase-verificar-trabalho # Valida código executado
-/fase-validar-fase       # Verifica completude de fase
+/fase-validar-etapa       # Verifica completude de fase
 /fase-auditar-marco      # Audita um milestone
 /fase-checar-tarefas     # Revisa task list
 ```
 
 ### 🔧 Execution & Development
 ```bash
-/fase-executar-fase      # Executa uma fase completa
+/fase-executar-etapa      # Executa uma fase completa
 /fase-rapido             # Modo fast-track para tarefas simples
 /fase-adicionar-testes   # Gera testes para código
 /fase-adicionar-tarefa   # Adiciona task ao histórico
@@ -312,7 +312,7 @@ FASE oferece **32 comandos em português brasileiro**, organizados por função:
 ```bash
 /fase-debug              # Diagnostica problemas
 /fase-depurador          # Invoca agente debugger (via agente)
-/fase-discutir-fase      # Abre discussão estruturada
+/fase-discutir-etapa      # Abre discussão estruturada
 ```
 
 ### 🛠️ Maintenance & Administration
@@ -366,7 +366,7 @@ FASE oferece **32 comandos em português brasileiro**, organizados por função:
 ### Para Contribuidores
 - [🤝 Como Contribuir](CONTRIBUTING.md) — Instruções para contribuições
 - [🔧 Path Standardization](docs/technical/COMMAND_PATHS.md) — Como comandos funcionam em diferentes runtimes
-- [📚 Testes](bin/test/) — Cobertura completa e como rodar testes
+- [📚 Testes](test/) — Cobertura completa e como rodar testes
 
 ### Informações do Projeto
 - [📊 Histórico de Mudanças](CHANGELOG.md) — Todas as versões
@@ -404,7 +404,7 @@ Funciona com:
 
 ## 🙏 Créditos & Origem
 
-**F.A.S.E.** é uma **tradução comunitária em português brasileiro** do projeto original:
+**FASE.** é uma **tradução comunitária em português brasileiro** do projeto original:
 
 - **Original:** [gsd-build/get-shit-done](https://github.com/gsd-build/get-shit-done) por TÂCHES
 - **Tradução & Manutenção:** Isaac Eliape
@@ -418,7 +418,7 @@ Sem o trabalho incrível da comunidade GSD, isso não existiria. 🙌
 
 ## 🤝 Como Contribuir
 
-Quer ajudar a traduzir ou melhorar o F.A.S.E.?
+Quer ajudar a traduzir ou melhorar o FASE.?
 
 1. **Fork** este repo
 2. **Traduza** um agent ou documento
@@ -441,12 +441,12 @@ Quer ajudar a traduzir ou melhorar o F.A.S.E.?
    ```
 
 3. **Descreva o que quer construir:**
-   - Use `/fase-planejar-fase` para quebrar em fases
+   - Use `/fase-planejar-etapa` para quebrar em fases
    - Cada fase é uma entrega concreta
 
 4. **Execute as fases:**
    ```bash
-   /fase-executar-fase
+   /fase-executar-etapa
    ```
 
 5. **Verifique o trabalho:**
