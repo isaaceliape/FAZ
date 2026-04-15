@@ -1,6 +1,6 @@
 # fase-ai
 
-**FASE. v3.5.0** — Framework de Automação Sem Enrolação
+**FASE. v3.5.1** — Framework de Automação Sem Enrolação
 
 Instalador do sistema de meta-prompting, context engineering e desenvolvimento spec-driven para Claude Code, OpenCode, Gemini e Codex. Tradução brasileira do [get-shit-done-cc](https://www.npmjs.com/package/get-shit-done-cc).
 
@@ -38,6 +38,7 @@ npx fase-ai --opencode
 | `OPENCODE_CONFIG_DIR` | Diretório customizado para OpenCode | `~/.config/opencode` |
 | `GEMINI_CONFIG_DIR` | Diretório customizado para Gemini | `~/.gemini` |
 | `CODEX_HOME` | Diretório customizado para Codex | `~/.codex` |
+| `FASE_STATUSLINE_TIMEOUT` | Timeout para hooks em milissegundos | `10000` (10 segundos) |
 
 **Nota:** O FASE valida variáveis de ambiente na inicialização e exibe avisos para configurações recomendadas não definidas.
 

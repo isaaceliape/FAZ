@@ -1,6 +1,6 @@
 {
   "name": "fase-ai",
-  "version": "3.5.0",
+  "version": "3.5.1",
   "description": "FASE. - Framework de Automação Sem Enrolação. Brazilian Portuguese translation of get-shit-done for AI coding assistants",
   "type": "module",
   "bin": {
@@ -44,13 +44,11 @@
     "verificar-instalacao": "node dist/verificar-instalacao.js",
     "build-docs": "node build-docs.cjs",
     "test": "mocha test/*.test.cjs",
-    "test:install": "mocha test/install.test.cjs",
-    "test:providers": "mocha test/providers.test.cjs",
-    "test:integration": "mocha test/integration.test.cjs",
-    "test:docker": "mocha test/docker-test.cjs",
     "test:edge-cases": "mocha test/edge-cases.test.cjs",
+    "test:teses": "mocha testes/*.test.cjs --require ./testes/test-helper.cjs",
+    "test:all": "npm run test:edge-cases && npm run test:teses",
+    "test:coverage": "mocha test/*.test.cjs testes/*.test.cjs --reporter json > test-results.json",
     "test:watch": "mocha test/*.test.cjs --watch",
-    "test:coverage": "mocha test/*.test.cjs --reporter json > test-results.json",
     "test:docker:all": "cd test && bash run-docker-tests.sh --all",
     "test:docker:clean": "cd test && bash run-docker-tests.sh --cleanup",
     "prepublishOnly": "npm run build"

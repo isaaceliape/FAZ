@@ -5,6 +5,33 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-br/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/spec/v2.0.0.html).
 
+## [3.5.1] - 2026-04-15
+
+### Corrigido
+
+- **Configuração de testes**: Scripts do package.json agora apontam para arquivos existentes
+- **Imports quebrados**: Testes em `testes/` atualizados para importar de `dist/` em vez de `bin/`
+- **Contagem de testes**: Correção no CHANGELOG — 41 testes automatizados (não 148)
+- **Testes órfãos**: 17 arquivos em `testes/` agora são executados via `npm run test:teses`
+
+### Adicionado
+
+- **Test helper**: `testes/test-helper.cjs` valida build antes de rodar testes
+- **Documentação**: `docs/TESTING.md` guia completo de testes
+- **Scripts**: `npm run test:all`, `npm run test:teses`, `npm run test:coverage`
+
+### Infraestrutura
+
+- **Test directories**: Documentada estrutura `test/` (moderno) vs `testes/` (legado)
+- **Build validation**: Testes falham rápido se `dist/` não existe
+- **Import paths**: Padronizados para `dist/*.js` (compiled output)
+
+### Notas Técnicas
+
+- **Arquivos modificados**: package.json, 17 arquivos de teste, testes/test-helper.cjs (novo)
+- **Compatibilidade**: Nenhuma mudança que quebra compatibilidade
+- **Testes**: 41 edge cases + 17 arquivos legacy = suite completa rodando
+
 ## [3.5.0] - 2026-04-10
 
 ### Adicionado
@@ -28,7 +55,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/spec/v2.0.
 ### Testes
 
 - +16 novos testes cobrindo edge cases (41 testes totais em edge-cases.test.cjs)
-- Total: 148 testes passando
+- Total: 41 testes automatizados (correção: afirmação anterior de 148 testes estava incorreta)
 
 ### Notas Técnicas
 

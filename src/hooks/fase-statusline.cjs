@@ -12,11 +12,13 @@ const MAX_INPUT_SIZE = 10 * 1024 * 1024;  // 10MB limit
 let input = '';
 let inputSize = 0;
 // Guarda de timeout: se stdin não fechar em 10s (ex.: problemas de pipe no
-// Windows/Git Bash), sai com log em vez de travar.
+// Windows/Git Hash), sai com log em vez de travar.
+// Configurable via FASE_STATUSLINE_TIMEOUT env var (default: 10000ms)
+const stdinTimeoutMs = parseInt(process.env.FASE_STATUSLINE_TIMEOUT || '10000', 10);
 const stdinTimeout = setTimeout(() => {
-  process.stderr.write('[fase-statusline] stdin timeout, exiting\n');
+  process.stderr.write(`[fase-statusline] stdin timeout (${stdinTimeoutMs}ms), exiting\n`);
   process.exit(0);
-}, 10000);
+}, stdinTimeoutMs);
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', chunk => {
   inputSize += chunk.length;

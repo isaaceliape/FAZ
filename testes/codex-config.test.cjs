@@ -23,7 +23,7 @@ const {
   mergeCodexConfig,
   GSD_CODEX_MARKER,
   CODEX_AGENT_SANDBOX,
-} = require('../bin/install.js');
+} = require('../dist/install.js');
 
 // ─── getCodexSkillAdapterHeader ─────────────────────────────────────────────────
 
@@ -463,7 +463,7 @@ describe('installCodexConfig (integration)', () => {
   const hasAgents = fs.existsSync(agentsSrc);
 
   (hasAgents ? test : test.skip)('generates config.toml and agent .toml files', () => {
-    const { installCodexConfig } = require('../bin/install.js');
+    const { installCodexConfig } = require('../dist/install.js');
     const count = installCodexConfig(tmpTarget, agentsSrc);
 
     assert.ok(count >= 11, `installed ${count} agents (expected >= 11)`);

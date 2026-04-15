@@ -506,7 +506,7 @@ describe('STATE.md frontmatter sync', () => {
 // stateExtractField and stateReplaceField helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
-const { stateExtractField, stateReplaceField } = require('../bin/lib/state.cjs');
+const { stateExtractField, stateReplaceField } = require('../dist/lib/state.js');
 
 describe('stateExtractField and stateReplaceField helpers', () => {
   // stateExtractField tests

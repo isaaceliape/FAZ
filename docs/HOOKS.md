@@ -1,6 +1,6 @@
 # Hooks do FASE - Monitoramento e Status
 
-> **Versão**: 3.5.0 | Última atualização: 2026-04-10
+> **Versão**: 3.5.1 | Última atualização: 2026-04-15
 
 O FASE utiliza hooks para monitoramento de contexto, statusline e verificação de atualizações.
 
@@ -8,9 +8,17 @@ O FASE utiliza hooks para monitoramento de contexto, statusline e verificação 
 
 ### Timeout de Input
 
-- **Timeout**: 10 segundos (3s antes da v3.4.0)
+- **Timeout**: 10 segundos (configurável)
+- **Variável de Ambiente**: `FASE_STATUSLINE_TIMEOUT` (em milissegundos)
+- **Padrão**: `10000` (10 segundos)
 - **Motivo**: Prevenir deadlocks em sistemas lentos ou com problemas de pipe
 - **Comportamento**: Hook sai com log `[fase-*] stdin timeout, exiting`
+
+**Exemplo de uso:**
+```bash
+# Aumentar timeout para 30 segundos em sistemas lentos
+export FASE_STATUSLINE_TIMEOUT=30000
+```
 
 ### Limite de Tamanho de Input
 

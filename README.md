@@ -1,6 +1,6 @@
 <div align="center">
 
-# FASE. v3.5.0
+# FASE. v3.5.1
 
 ## Framework de Automação Sem Enrolação
 
@@ -213,11 +213,13 @@ Todos os comandos e agentes agora usam um padrão universal `@~/.fase/` que é c
 - **Codex**: `~/.codex/fase/`
 
 Isso garante que FASE funciona identicamente em todos os 4 runtimes, sem duplicação de código.
-
 ### 📈 Melhorias de Testes
-- ✅ 129 testes unitários com cobertura completa
+
+- ✅ 41 testes de edge cases (test/edge-cases.test.cjs)
+- ✅ 17 arquivos de testes legacy (testes/)
 - ✅ Testes para path standardization em todos os runtimes
-- ✅ Documentação expandida de testes
+- ✅ Validação de segurança (path traversal, race conditions, timeout)
+- ✅ Documentação expandida de testes (docs/TESTING.md)
 
 ### 📚 Documentação Melhorada
 - ✅ Novos documentos explicando path standardization

@@ -1,6 +1,6 @@
 # 🤝 Guia de Contribuição
 
-> **Versão**: 3.2.0 | Última atualização: 2026-03-25
+> **Versão**: 3.5.1 | Última atualização: 2026-04-15
 
 Obrigado por considerar contribuir ao FASE! Este documento oferece diretrizes e instruções para participar do projeto.
 
@@ -220,8 +220,43 @@ Antes de submeter um PR, verifique:
 - [ ] Sem conflitos com `main`
 - [ ] `npm pack --dry-run` passa sem erros
 - [ ] Pre-commit hooks não falharam
+- [ ] **Testes passando**: `npm run build && npm test`
 
-## <i class="fa fa-rocket"></i> Processo de Review
+## 🧪 Rodando Testes
+
+FASE possui dois conjuntos de testes:
+
+### Testes de Edge Cases (test/)
+```bash
+npm test                    # 41 testes de edge cases
+npm run test:edge-cases     # Mesmo comando
+```
+
+### Testes Legacy (testes/)
+```bash
+npm run test:teses          # 17 arquivos de testes legacy
+```
+
+### Todos os Testes
+```bash
+npm run test:all            # Executa ambos os conjuntos
+```
+
+### Pré-requisitos
+Os testes requerem build prévio:
+```bash
+npm run build && npm test
+```
+
+O helper de testes (`testes/test-helper.cjs`) valida automaticamente que o build foi executado.
+
+### Escrevendo Novos Testes
+Adicione novos testes em `test/` seguindo o padrão em `edge-cases.test.cjs`.
+Veja [docs/TESTING.md](TESTING.md) para guia completo.
+
+---
+
+## <i class="fa fa-check-circle"></i> Checklist para PRs
 
 1. **Automático**: GitHub Actions verifica integridade do pacote
 2. **Automático**: Pre-commit hooks validam mudanças

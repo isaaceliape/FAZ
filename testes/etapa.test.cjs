@@ -1329,7 +1329,7 @@ describe('phase complete command', () => {
 // compareEtapaNum and normalizeEtapaNome (imported directly)
 // ─────────────────────────────────────────────────────────────────────────────
 
-const { compareEtapaNum, normalizeEtapaNome } = require('../bin/lib/core.cjs');
+const { compareEtapaNum, normalizeEtapaNome } = require('../dist/lib/core.js');
 
 describe('compareEtapaNum', () => {
   test('sorts integer phases numerically', () => {

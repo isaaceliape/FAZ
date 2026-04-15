@@ -29,6 +29,24 @@ export function isInsidePlanejamento(cwd, filePath) {
     const normalizedPlanej = path.normalize(planejPath);
     return normalizedFull.startsWith(normalizedPlanej + path.sep) || normalizedFull === normalizedPlanej;
 }
+/**
+ * Guardrail: Validates that a user-provided path doesn't escape the project boundary (cwd).
+ * Protects against path traversal attacks via ../../../etc/passwd patterns.
+ *
+ * @param cwd - Project root directory (trusted base)
+ * @param userPath - User-provided path (untrusted input)
+ * @returns Resolved absolute path if valid
+ * @throws Error if path escapes project boundary
+ */
+export function validatePathInsideCwd(cwd, userPath) {
+    const resolved = path.resolve(cwd, userPath);
+    const relative = path.relative(cwd, resolved);
+    // Check if relative path tries to escape (starts with ..) or is absolute
+    if (relative.startsWith('..') || path.isAbsolute(relative)) {
+        throw new Error(`Path traversal detected: "${userPath}" escapes project boundary`);
+    }
+    return resolved;
+}
 // ─── Model Profile Table ──────────────────────────────────────────────────────
 export const MODEL_PROFILES = {
     'gsd-planner': { quality: 'opus', balanced: 'opus', budget: 'sonnet' },

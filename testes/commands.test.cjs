@@ -1068,7 +1068,7 @@ describe('commit command', () => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 describe('websearch command', () => {
-  const { cmdWebsearch } = require('../bin/lib/commands.cjs');
+  const { cmdWebsearch } = require('../dist/lib/commands.js');
   let origFetch;
   let origApiKey;
   let origStdoutWrite;

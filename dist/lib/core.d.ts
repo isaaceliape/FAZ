@@ -66,6 +66,16 @@ export declare function toPosixPath(p: string): string;
 export declare function ensureInsidePlanejamento(cwd: string, filePath: string, operation?: string): string;
 /** Check if a path is inside .fase-ai without throwing */
 export declare function isInsidePlanejamento(cwd: string, filePath: string): boolean;
+/**
+ * Guardrail: Validates that a user-provided path doesn't escape the project boundary (cwd).
+ * Protects against path traversal attacks via ../../../etc/passwd patterns.
+ *
+ * @param cwd - Project root directory (trusted base)
+ * @param userPath - User-provided path (untrusted input)
+ * @returns Resolved absolute path if valid
+ * @throws Error if path escapes project boundary
+ */
+export declare function validatePathInsideCwd(cwd: string, userPath: string): string;
 export declare const MODEL_PROFILES: Record<string, ModelProfile>;
 export declare function output(result: unknown, raw?: boolean, rawValue?: unknown): void;
 export declare function error(message: string): never;
