@@ -1,0 +1,43 @@
+# Git files
+.git/
+.gitignore
+.github/
+
+# npm config
+.npmrc
+
+# Node
+node_modules/
+package-lock.json
+yarn.lock
+npm-debug.log*
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Development
+.husky/
+.env
+.env.local
+.env.*.local
+
+# Docs (não incluir no package)
+../docs/
+../CONTRIBUTING.md
+../SECURITY.md
+../CHANGELOG.md
+
+# Tests and CI
+.github/
+.gitignore
+
+# Temp files
+tmp/
+temp/
+*.tmp
+*.tgz

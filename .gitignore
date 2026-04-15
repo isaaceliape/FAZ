@@ -44,3 +44,8 @@ bin/dist/
 
 # Keep bin package lock
 !.bin/package-lock.json
+
+# Test and coverage artifacts
+test-results.json
+.nyc_output/
+coverage/
