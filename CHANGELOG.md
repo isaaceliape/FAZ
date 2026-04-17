@@ -5,6 +5,21 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-br/1.0.0/),
 e este projeto adiere ao [Versionamento Semântico](https://semver.org/spec/v2.0.0.html).
 
+## [3.5.2] - 2026-04-17
+
+### Adicionado
+
+- **Documentação atualizada**: Landing page e docs com status de release v3.5.1
+- **Status badge**: Página inicial exibe "v3.5.1 - Todos os testes passando"
+- **Informações de testes**: Docs mostram 34/34 comandos validados, 4/4 runtimes funcionando
+- **Versão na documentação**: Sincronização de versão em www/index.html, docs/index.html, docs/README.md
+
+### Publicação
+
+- 📦 **npm**: Pronto para publicação em `@isaaceliape/fase-ai`
+- 🏷️ **Tag**: v3.5.2 (release de documentação)
+- 📝 **Changelog**: Histórico completo de mudanças disponível
+
 ## [3.5.1] - 2026-04-17
 
 ### Corrigido
