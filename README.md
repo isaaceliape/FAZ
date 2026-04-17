@@ -368,7 +368,14 @@ FASE oferece **32 comandos em português brasileiro**, organizados por função:
 ### Para Contribuidores
 - [🤝 Como Contribuir](CONTRIBUTING.md) — Instruções para contribuições
 - [🔧 Path Standardization](docs/technical/COMMAND_PATHS.md) — Como comandos funcionam em diferentes runtimes
-- [📚 Testes](test/) — Cobertura completa e como rodar testes
+- [📚 Testes](docs/TESTING.md) — Guia de testes, como rodar e contribuir
+- [✅ Resultados de Testes](TEST_RESULTS.md) — Últimos resultados de validação
+
+### Build & Development
+- **Build:** `npm run build` — Compila TypeScript e copia static files
+- **Test:** `npm test` — Executa testes de edge cases
+- **Test All:** `npm run test:all` — Executa todos os testes (legacy + moderno)
+- **Estrutura:** `src/` (TypeScript) → `dist/` (compilado com static files)
 
 ### Informações do Projeto
 - [📊 Histórico de Mudanças](CHANGELOG.md) — Todas as versões

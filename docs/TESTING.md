@@ -105,6 +105,14 @@ describe('Your Feature', function() {
 
 ## Test Categories
 
+### Build System & Installation (`TEST_RESULTS.md`)
+Validates the installation system and build process:
+- Static directory copying (comandos, agentes, docs, fase-shared)
+- CLI entry point generation (shebangs, executable permissions)
+- Runtime-specific installations (Claude Code, OpenCode, Gemini, Codex)
+- Command integrity (frontmatter, file structure)
+- **Latest Results:** ✅ 100% success rate (34/34 commands, 4/4 runtimes)
+
 ### Edge Cases (`test/edge-cases.test.cjs`)
 Tests for unusual inputs and boundary conditions:
 - Symlink handling
@@ -258,5 +266,5 @@ Until migration is complete, both directories are supported.
 
 ---
 
-**Last Updated:** 2026-04-15  
-**Version:** 1.0 (for FASE v3.5.1)
+**Last Updated:** 2026-04-17  
+**Version:** 1.1 (for FASE v3.5.1 - Added build system tests)

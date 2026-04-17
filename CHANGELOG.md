@@ -3,7 +3,36 @@
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-br/1.0.0/),
-e este projeto adere ao [Versionamento Semântico](https://semver.org/spec/v2.0.0.html).
+e este projeto adiere ao [Versionamento Semântico](https://semver.org/spec/v2.0.0.html).
+
+## [3.5.1] - 2026-04-17
+
+### Corrigido
+
+- **Build system**: Diretórios estáticos (`comandos/`, `agentes/`, `docs/`, `fase-shared/`) agora são copiados para `dist/` durante o build
+- **npm package**: Problema `ENOENT: no such file or directory` ao instalar via `npx fase-ai@latest` foi resolvido
+- **Instalação quebrada**: Variável `sharedPath` indefinida em 4 locais do `install.ts` — substituída por `pathPrefix`
+- **Postbuild script**: `scripts/fix-shebangs.mjs` agora realiza cópia recursiva de diretórios estáticos
+
+### Adicionado
+
+- **Validação completa**: Todos 34 comandos validados com sucesso (100% de taxa)
+- **Teste de runtimes**: Verificação de instalação para Claude Code, OpenCode, Gemini e Codex
+- **Documentação de testes**: `TEST_RESULTS.md` com resultados abrangentes de validação
+
+### Teste
+
+- ✅ **Build system**: 3/3 testes passando
+- ✅ **Commands**: 34/34 comandos válidos
+- ✅ **Runtimes**: 4/4 instalações bem-sucedidas (Claude Code, OpenCode, Gemini, Codex)
+- ✅ **Bug fixes**: 2/2 problemas resolvidos
+- ✅ **Package**: Integridade completa e pronta para distribuição npm
+
+### Detalhes Técnicos
+
+- **Arquivos modificados**: `scripts/fix-shebangs.mjs`, `src/install.ts` (4 linhas)
+- **Compatibilidade**: Nenhuma mudança que quebra compatibilidade
+- **Impacto**: Correção de bugs críticos que afetam instalações via npm
 
 ## [3.5.1] - 2026-04-15
 
