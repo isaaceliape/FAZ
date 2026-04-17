@@ -1,6 +1,6 @@
 # 📚 Documentação do FASE
 
-> **Versão**: 3.3.1 | Última atualização: 2026-04-10
+> **Versão**: 3.5.1 ✅ | Última atualização: 2026-04-17 | Status: Todos os testes passando (34/34 comandos, 4/4 runtimes)
 
 Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que precisa para instalar, usar e contribuir ao projeto.
 
