@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>CONTRIBUINDO - FASE Docs</title>
+  <style>
+    :root {
+      --primary: #00ff88;
+      --secondary: #00bfff;
+      --warning: #ffaa00;
+      --danger: #ff3366;
+      --dark-bg: #0a0e27;
+      --grid-bg: #111827;
+      --text: #e5e7eb;
+      --dim: #9ca3af;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .header {
+      background-color: var(--grid-bg);
+      border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+      transition: color 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .logo:hover {
+      color: var(--primary);
+    }
+
+    .logo span {
+      color: var(--primary);
+    }
+
+    .logo:hover span {
+      color: var(--secondary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      border: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .content-wrapper {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: var(--grid-bg);
+      border-right: 1px solid rgba(0, 255, 136, 0.1);
+      padding: 20px;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .sidebar h3 {
+      color: var(--primary);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+      margin-top: 20px;
+    }
+
+    .sidebar h3:first-child {
+      margin-top: 0;
+    }
+
+    .sidebar-link {
+      display: block;
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-link:hover {
+      color: var(--primary);
+      background-color: rgba(0, 255, 136, 0.1);
+      border-left-color: var(--primary);
+    }
+
+    .sidebar-link.active {
+      color: var(--primary);
+      background-color: rgba(0, 255, 136, 0.15);
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+    }
+
+    h1 {
+      color: var(--primary);
+      font-size: 2rem;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      color: var(--secondary);
+      font-size: 1.5rem;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+
+    h3 {
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 15px;
+      color: var(--text);
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      border-bottom: 1px dotted var(--primary);
+      transition: all 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--secondary);
+      border-bottom-style: solid;
+    }
+
+    code {
+      background-color: var(--dark-bg);
+      color: var(--primary);
+      padding: 0.2rem 0.4rem;
+      border-radius: 2px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background-color: var(--dark-bg);
+      border: 1px solid var(--dim);
+      border-radius: 4px;
+      padding: 15px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+
+    pre code {
+      padding: 0;
+      background: none;
+      color: var(--primary);
+    }
+
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    blockquote {
+      border-left: 4px solid var(--primary);
+      background-color: var(--dark-bg);
+      padding: 15px;
+      margin: 15px 0;
+      color: var(--dim);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      border: 1px solid var(--dim);
+    }
+
+    th {
+      background-color: var(--dark-bg);
+      color: var(--primary);
+      padding: 12px;
+      text-align: left;
+      border-bottom: 2px solid var(--primary);
+      border-right: 1px solid var(--dim);
+      font-weight: 600;
+    }
+
+    th:last-child {
+      border-right: none;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid var(--dim);
+      border-right: 1px solid var(--dim);
+    }
+
+    td:last-child {
+      border-right: none;
+    }
+
+    tr:hover {
+      background-color: rgba(0, 255, 136, 0.05);
+    }
+
+    strong {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    em {
+      color: var(--dim);
+      font-style: italic;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--dim);
+      margin: 30px 0;
+    }
+
+    .version-badge {
+      display: inline-block;
+      background-color: rgba(0, 255, 136, 0.15);
+      color: var(--primary);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: 1px solid var(--primary);
+      margin-bottom: 20px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--dark-bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--secondary);
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .content-wrapper {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+        max-height: 150px;
+        overflow-x: auto;
+        display: flex;
+        gap: 10px;
+      }
+
+      .sidebar h3 {
+        display: none;
+      }
+
+      .sidebar-link {
+        white-space: nowrap;
+        margin-bottom: 0;
+      }
+
+      .main {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="index.html" class="logo">fase<span>-</span>ai</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="https://github.com/isaaceliape/FASE">GitHub</a>
+    </div>
+  </div>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <h3>📚 Documentação</h3>
+      <a href="index.html" class="sidebar-link ">📖 README</a>
+<a href="COMANDOS.html" class="sidebar-link ">📋 Comandos</a>
+<a href="guia-do-usuario.html" class="sidebar-link ">📘 Guia do Usuário</a>
+<a href="CONTRIBUINDO.html" class="sidebar-link active">🤝 Guia de Contribuição</a>
+<a href="HOOKS.html" class="sidebar-link ">🔧 Git Hooks</a>
+<a href="NPM-REGISTRY.html" class="sidebar-link ">📦 NPM Registry</a>
+<a href="technical/padronizacao-caminhos.html" class="sidebar-link ">🛣️ Padronização de Caminhos</a>
+<a href="maintainers/MANTENEDORES.html" class="sidebar-link ">👨‍💼 Guia de Maintainers</a>
+<a href="monitor-contexto.html" class="sidebar-link ">📊 Monitor de Contexto</a>
+    </aside>
+
+    <main class="main">
+      <div class="version-badge">📦 Versão 3.2.0</div>
+      <h1>🤝 Guia de Contribuição</h1>
+<blockquote>
+<p><strong>Versão</strong>: 3.2.0 | Última atualização: 2026-03-25</p>
+</blockquote>
+<p>Obrigado por considerar contribuir ao FASE! Este documento oferece diretrizes e instruções para participar do projeto.</p>
+<h2>📋 Código de Conduta</h2>
+<p>Este projeto adere a um Código de Conduta. Ao participar, você concorda em manter um ambiente respeitoso e inclusivo. Comportamento abusivo deve ser reportado para maintainers.</p>
+<h2>🎯 Tipos de Contribuição</h2>
+<h3>1. <strong>Traduções</strong> (Novos idiomas)</h3>
+<p>Se quiser traduzir FASE para outro idioma:</p>
+<pre><code class="language-bash"># Duplicar estrutura para novo idioma
+cp -r bin/agentes bin/agentes-es    # Exemplo: espanhol
+cp -r bin/comandos bin/comandos-es
+</code></pre>
+<ol>
+<li>Traduzir os arquivos <code>.md</code> no novo idioma</li>
+<li>Criar issue descrevendo o idioma</li>
+<li>Abrir PR com a tradução</li>
+<li>Aguardar revisão</li>
+</ol>
+<p><strong>Estrutura esperada:</strong></p>
+<pre><code>agentes-{idioma}/
+  ├── fase-planejador.{idioma}.md
+  ├── fase-executor.{idioma}.md
+  └── ...
+
+comandos-{idioma}/
+  ├── ajuda.{idioma}.md
+  ├── novo-projeto.{idioma}.md
+  └── ...
+</code></pre>
+<h3>2. <strong>Novos Comandos</strong></h3>
+<p>Adicionar um novo comando ao FASE:</p>
+<ol>
+<li><strong>Criar arquivo</strong> em <code>comandos/seu-comando.md</code></li>
+</ol>
+<pre><code class="language-markdown">---
+name: seu-comando
+description: Descrição breve do que o comando faz
+type: command
+---
+
+# /fase-seu-comando
+
+Descrição detalhada.
+
+## Uso
+
+```bash
+/fase-seu-comando [opções]
+</code></pre>
+<h2>Opções</h2>
+<ul>
+<li><code>--flag</code>: Descrição</li>
+</ul>
+<h2>Exemplos</h2>
+<p>[Exemplos de uso]</p>
+<pre><code>
+2. **Atualizar** `bin/lib/commands.cjs` para registrar o comando
+3. **Testar** localmente antes de submeter PR
+4. **Documentar** em `docs/COMANDOS.md`
+
+### 3. **Correções de Bugs**
+
+1. Abrir issue descrevendo o bug
+2. Forkar o repositório
+3. Criar branch: `git checkout -b fix/descricao-do-bug`
+4. Fazer commit com mensagem descritiva
+5. Push para a branch: `git push origin fix/descricao-do-bug`
+6. Abrir PR com detalhes
+
+### 4. **Melhorias e Features**
+
+1. Discutir no issue primeiro (para evitar trabalho duplicado)
+2. Forkar e criar branch descritiva
+3. Implementar com mensagens de commit claras
+4. Adicionar testes se aplicável
+5. Abrir PR com contextualização
+
+## 🔧 Setup Local
+
+### Pré-requisitos
+
+- Node.js &gt;= 14.0.0
+- Git
+- npm ou yarn
+
+### Instalação
+
+```bash
+# Clonar repositório
+git clone https://github.com/seu-usuario/FASE.git
+cd FASE
+
+# Instalar dependências
+npm install
+
+# Instalar git hooks
+npx husky install
+</code></pre>
+<h3>Teste o Instalador Localmente</h3>
+<pre><code class="language-bash"># Teste com flags
+node bin/install.js --help
+node bin/install.js --claude --local
+
+# Verifique se o pacote foi criado corretamente
+npm run verificar
+</code></pre>
+<h2>📝 Convenções de Commit</h2>
+<p>Siga o formato <a href="https://www.conventionalcommits.org/pt-br/">Conventional Commits</a>:</p>
+<pre><code>&lt;tipo&gt;(&lt;escopo&gt;): &lt;descrição curta&gt;
+
+&lt;descrição detalhada opcional&gt;
+
+&lt;footer opcional&gt;
+</code></pre>
+<h3>Tipos</h3>
+<ul>
+<li><code>feat:</code> Nova feature</li>
+<li><code>fix:</code> Correção de bug</li>
+<li><code>docs:</code> Mudanças em documentação</li>
+<li><code>style:</code> Formatação, sem mudança lógica</li>
+<li><code>refactor:</code> Refatoração de código</li>
+<li><code>test:</code> Adicionar ou atualizar testes</li>
+<li><code>chore:</code> Tarefas de build, dependências</li>
+</ul>
+<h3>Exemplos</h3>
+<pre><code class="language-bash"># Feature nova
+git commit -m &quot;feat(comandos): adicionar /fase-novo-comando
+
+Implementa novo comando que permite...&quot;
+
+# Correção
+git commit -m &quot;fix(install.js): corrigir bug ao criar diretório
+
+Problema: o hook falhava ao criar .claude/
+Solução: verificar se diretório existe antes&quot;
+
+# Documentação
+git commit -m &quot;docs: atualizar guia de instalação&quot;
+</code></pre>
+<h2>🧪 Testing</h2>
+<h3>Verificar Integridade do Pacote</h3>
+<pre><code class="language-bash">cd bin
+npm pack --dry-run
+</code></pre>
+<p>Isso simula a publicação no npm e mostra:</p>
+<ul>
+<li>✅ Quais arquivos serão inclusos</li>
+<li>❌ Erros de configuração</li>
+<li>📊 Tamanho do pacote</li>
+</ul>
+<h3>Testar Instalação</h3>
+<pre><code class="language-bash"># Instalação local (projeto atual)
+node bin/install.js --claude --local
+
+# Instalar globalmente (seu computador)
+node bin/install.js --claude --global
+
+# Uninstall
+node bin/install.js --uninstall
+</code></pre>
+<h2>📖 Documentação</h2>
+<h3>Padrão de Escrita</h3>
+<ul>
+<li><strong>Português brasileiro</strong> em toda documentação em <code>.md</code></li>
+<li><strong>Inglês</strong> apenas para termos técnicos consagrados</li>
+<li><strong>Código e comandos</strong> sempre em inglês (invariável)</li>
+</ul>
+<h3>Estrutura de Documentação</h3>
+<pre><code>docs/
+├── guia-do-usuario.md       # Guia para usuários
+├── COMANDOS.md              # Lista de comandos
+├── HOOKS.md                 # Git hooks setup
+├── CONTRIBUINDO.md          # Este arquivo
+└── technical/
+    └── padronizacao-caminhos.md     # Path standardization
+</code></pre>
+<h2>✅ Checklist para PRs</h2>
+<p>Antes de submeter um PR, verifique:</p>
+<ul>
+<li><input disabled="" type="checkbox"> Branch criada a partir de <code>main</code></li>
+<li><input disabled="" type="checkbox"> Commits seguem Conventional Commits</li>
+<li><input disabled="" type="checkbox"> Documentação atualizada</li>
+<li><input disabled="" type="checkbox"> Sem conflitos com <code>main</code></li>
+<li><input disabled="" type="checkbox"> <code>npm pack --dry-run</code> passa sem erros</li>
+<li><input disabled="" type="checkbox"> Pre-commit hooks não falharam</li>
+</ul>
+<h2>🚀 Processo de Review</h2>
+<ol>
+<li><strong>Automático</strong>: GitHub Actions verifica integridade do pacote</li>
+<li><strong>Automático</strong>: Pre-commit hooks validam mudanças</li>
+<li><strong>Manual</strong>: Um maintainer revisa o código</li>
+<li><strong>Merge</strong>: Se aprovado, seu PR será merged</li>
+</ol>
+<h2>📞 Precisa de Ajuda?</h2>
+<ul>
+<li><strong>Issues</strong>: <a href="https://github.com/isaaceliape/FASE/issues">GitHub Issues</a></li>
+<li><strong>Discussões</strong>: <a href="https://github.com/isaaceliape/FASE/discussions">GitHub Discussions</a></li>
+<li><strong>Email</strong>: Abrir issue para contato</li>
+</ul>
+<h2>📜 Licença</h2>
+<p>Ao contribuir, você concorda que suas contribuições serão licenciadas sob a <a href="https://github.com/isaaceliape/FASE/blob/main/LICENSE">MIT License</a>.</p>
+<hr>
+<p><strong>Obrigado por contribuir! 🙌</strong></p>
+<p>Cada contribuição, pequena ou grande, ajuda a melhorar FASE para a comunidade brasileira.</p>
+
+    </main>
+  </div>
+</body>
+</html>

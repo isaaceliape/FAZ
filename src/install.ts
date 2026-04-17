@@ -995,7 +995,7 @@ function copyFlattenedCommands(srcDir, destDir, prefix, pathPrefix, runtime) {
       content = content.replace(globalClaudeHomeRegex, toHomePrefix(pathPrefix));
       content = content.replace(localClaudeRegex, `./${getDirName(runtime)}/`);
       content = content.replace(opencodeDirRegex, pathPrefix);
-      content = content.replace(globalFaseRegex, sharedPath);
+      content = content.replace(globalFaseRegex, pathPrefix);
       content = content.replace(globalFaseHomeRegex, sharedHomePath);
       content = processAttribution(content, getCommitAttribution(runtime));
       content = convertClaudeToOpencodeFrontmatter(content);
@@ -1051,7 +1051,7 @@ function copyCommandsAsCodexSkills(srcDir, skillsDir, prefix, pathPrefix, runtim
       content = content.replace(globalClaudeHomeRegex, toHomePrefix(pathPrefix));
       content = content.replace(localClaudeRegex, `./${getDirName(runtime)}/`);
       content = content.replace(codexDirRegex, pathPrefix);
-      content = content.replace(globalFaseRegex, sharedPath);
+      content = content.replace(globalFaseRegex, pathPrefix);
       content = content.replace(globalFaseHomeRegex, sharedHomePath);
       content = processAttribution(content, getCommitAttribution(runtime));
       content = convertClaudeCommandToCodexSkill(content, skillName);
@@ -1095,7 +1095,7 @@ function copyWithPathReplacement(srcDir, destDir, pathPrefix, runtime, isCommand
       content = content.replace(globalClaudeRegex, pathPrefix);
       content = content.replace(globalClaudeHomeRegex, toHomePrefix(pathPrefix));
       content = content.replace(localClaudeRegex, `./${dirName}/`);
-      content = content.replace(globalFaseRegex, sharedPath);
+      content = content.replace(globalFaseRegex, pathPrefix);
       content = content.replace(globalFaseHomeRegex, sharedHomePath);
       content = processAttribution(content, getCommitAttribution(runtime));
       // Convert frontmatter for opencode compatibility
@@ -1961,7 +1961,7 @@ function install(isGlobal, runtime = 'claude') {
         const sharedHomePath = '$HOME/.fase-ai/';
         content = content.replace(dirRegex, pathPrefix);
         content = content.replace(homeDirRegex, toHomePrefix(pathPrefix));
-        content = content.replace(globalFaseRegex, sharedPath);
+        content = content.replace(globalFaseRegex, pathPrefix);
         content = content.replace(globalFaseHomeRegex, sharedHomePath);
         content = processAttribution(content, getCommitAttribution(runtime));
         // Convert frontmatter for runtime compatibility

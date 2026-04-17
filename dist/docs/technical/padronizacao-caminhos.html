@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>padronizacao-caminhos - FASE Docs</title>
+  <style>
+    :root {
+      --primary: #00ff88;
+      --secondary: #00bfff;
+      --warning: #ffaa00;
+      --danger: #ff3366;
+      --dark-bg: #0a0e27;
+      --grid-bg: #111827;
+      --text: #e5e7eb;
+      --dim: #9ca3af;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .header {
+      background-color: var(--grid-bg);
+      border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+      transition: color 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .logo:hover {
+      color: var(--primary);
+    }
+
+    .logo span {
+      color: var(--primary);
+    }
+
+    .logo:hover span {
+      color: var(--secondary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      border: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .content-wrapper {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: var(--grid-bg);
+      border-right: 1px solid rgba(0, 255, 136, 0.1);
+      padding: 20px;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .sidebar h3 {
+      color: var(--primary);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+      margin-top: 20px;
+    }
+
+    .sidebar h3:first-child {
+      margin-top: 0;
+    }
+
+    .sidebar-link {
+      display: block;
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-link:hover {
+      color: var(--primary);
+      background-color: rgba(0, 255, 136, 0.1);
+      border-left-color: var(--primary);
+    }
+
+    .sidebar-link.active {
+      color: var(--primary);
+      background-color: rgba(0, 255, 136, 0.15);
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+    }
+
+    h1 {
+      color: var(--primary);
+      font-size: 2rem;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      color: var(--secondary);
+      font-size: 1.5rem;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+
+    h3 {
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 15px;
+      color: var(--text);
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      border-bottom: 1px dotted var(--primary);
+      transition: all 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--secondary);
+      border-bottom-style: solid;
+    }
+
+    code {
+      background-color: var(--dark-bg);
+      color: var(--primary);
+      padding: 0.2rem 0.4rem;
+      border-radius: 2px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background-color: var(--dark-bg);
+      border: 1px solid var(--dim);
+      border-radius: 4px;
+      padding: 15px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+
+    pre code {
+      padding: 0;
+      background: none;
+      color: var(--primary);
+    }
+
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    blockquote {
+      border-left: 4px solid var(--primary);
+      background-color: var(--dark-bg);
+      padding: 15px;
+      margin: 15px 0;
+      color: var(--dim);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      border: 1px solid var(--dim);
+    }
+
+    th {
+      background-color: var(--dark-bg);
+      color: var(--primary);
+      padding: 12px;
+      text-align: left;
+      border-bottom: 2px solid var(--primary);
+      border-right: 1px solid var(--dim);
+      font-weight: 600;
+    }
+
+    th:last-child {
+      border-right: none;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid var(--dim);
+      border-right: 1px solid var(--dim);
+    }
+
+    td:last-child {
+      border-right: none;
+    }
+
+    tr:hover {
+      background-color: rgba(0, 255, 136, 0.05);
+    }
+
+    strong {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    em {
+      color: var(--dim);
+      font-style: italic;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--dim);
+      margin: 30px 0;
+    }
+
+    .version-badge {
+      display: inline-block;
+      background-color: rgba(0, 255, 136, 0.15);
+      color: var(--primary);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: 1px solid var(--primary);
+      margin-bottom: 20px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--dark-bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--secondary);
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .content-wrapper {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+        max-height: 150px;
+        overflow-x: auto;
+        display: flex;
+        gap: 10px;
+      }
+
+      .sidebar h3 {
+        display: none;
+      }
+
+      .sidebar-link {
+        white-space: nowrap;
+        margin-bottom: 0;
+      }
+
+      .main {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="../index.html" class="logo">fase<span>-</span>ai</a>
+    <div class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="https://github.com/isaaceliape/FASE">GitHub</a>
+    </div>
+  </div>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <h3>📚 Documentação</h3>
+      <a href="../index.html" class="sidebar-link ">📖 README</a>
+<a href="../COMANDOS.html" class="sidebar-link ">📋 Comandos</a>
+<a href="../guia-do-usuario.html" class="sidebar-link ">📘 Guia do Usuário</a>
+<a href="../CONTRIBUINDO.html" class="sidebar-link ">🤝 Guia de Contribuição</a>
+<a href="../HOOKS.html" class="sidebar-link ">🔧 Git Hooks</a>
+<a href="../NPM-REGISTRY.html" class="sidebar-link ">📦 NPM Registry</a>
+<a href="padronizacao-caminhos.html" class="sidebar-link active">🛣️ Padronização de Caminhos</a>
+<a href="../maintainers/MANTENEDORES.html" class="sidebar-link ">👨‍💼 Guia de Maintainers</a>
+<a href="../monitor-contexto.html" class="sidebar-link ">📊 Monitor de Contexto</a>
+    </aside>
+
+    <main class="main">
+      <div class="version-badge">📦 Versão 3.2.0</div>
+      <h1>Padronização de Caminhos de Comandos</h1>
+<blockquote>
+<p><strong>Versão</strong>: 3.2.0 | Última atualização: 2026-03-25</p>
+</blockquote>
+<h2>Visão Geral</h2>
+<p>Os comandos do FASE usam referências de caminho agnósticas ao ambiente que são convertidas para caminhos específicos do runtime durante a instalação. Isso permite que as mesmas definições de comando funcionem em múltiplos ambientes (Claude Code, OpenCode, Gemini, Codex).</p>
+<h2>Convenção de Caminhos</h2>
+<h3>Arquivos Fonte (<code>comandos/*.md</code>)</h3>
+<p>Os arquivos de comando fonte usam referências de caminho universal:</p>
+<ul>
+<li><strong>Workflows</strong>: <code>@~/.fase/workflows/workflow-name.md</code></li>
+<li><strong>Templates</strong>: <code>@~/.fase/templates/template-name.md</code></li>
+<li><strong>Referências</strong>: <code>@~/.fase/references/reference-name.md</code></li>
+<li><strong>Ferramentas do runtime</strong>: <code>$HOME/.fase/bin/fase-tools.cjs</code></li>
+</ul>
+<p>Esses caminhos são <strong>agnósticos ao ambiente</strong> e usados em:</p>
+<ol>
+<li>Blocos <code>&lt;execution_context&gt;</code> (para carregamento de contexto do Claude Code)</li>
+<li>Referências inline nas seções <code>&lt;process&gt;</code></li>
+<li>Blocos de código bash para execução de scripts</li>
+</ol>
+<h3>Conversão de Caminhos Durante Instalação</h3>
+<p>Quando FASE é instalado via <code>npx fase-ai [--runtime]</code>, o instalador (<code>bin/install.js</code>) converte esses caminhos universais para localizações específicas do runtime:</p>
+<table>
+<thead>
+<tr>
+<th>Runtime</th>
+<th>Caminho Convertido</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Claude Code</strong></td>
+<td><code>~/.claude/fase/</code></td>
+</tr>
+<tr>
+<td><strong>Gemini</strong></td>
+<td><code>~/.gemini/fase/</code></td>
+</tr>
+<tr>
+<td><strong>OpenCode</strong></td>
+<td><code>~/.config/opencode/fase/</code></td>
+</tr>
+<tr>
+<td><strong>Codex</strong></td>
+<td><code>~/.codex/fase/</code></td>
+</tr>
+</tbody></table>
+<h4>Exemplos de Conversão</h4>
+<p><strong>Para Instalação no Gemini:</strong></p>
+<pre><code>Fonte:       @~/.fase/workflows/plan-phase.md
+Instalado:   @~/.gemini/fase/workflows/plan-phase.md
+</code></pre>
+<p><strong>Para Instalação no OpenCode:</strong></p>
+<pre><code>Fonte:       $HOME/.fase/bin/fase-tools.cjs
+Instalado:   $HOME/.config/opencode/fase/bin/fase-tools.cjs
+</code></pre>
+<p><strong>Para Instalação no Claude Code:</strong></p>
+<pre><code>Fonte:       ~/.fase/workflows/add-phase.md
+Instalado:   ~/.claude/fase/workflows/add-phase.md
+</code></pre>
+<h2>Detalhes de Implementação</h2>
+<h3>Regras de Substituição de Caminhos do Instalador</h3>
+<p>O instalador aplica substituições de caminho em três funções:</p>
+<ol>
+<li><strong><code>copyFlattenedCommands</code></strong> - para OpenCode (estrutura de comando simples)</li>
+<li><strong><code>copyCommandsAsCodexSkills</code></strong> - para Codex (estrutura de skill)</li>
+<li><strong><code>copyWithPathReplacement</code></strong> - para Claude Code e Gemini</li>
+</ol>
+<p>Padrões de substituição:</p>
+<ul>
+<li><code>~/\.fase/</code> → <code>&lt;pathPrefix&gt;fase/</code> (por exemplo, <code>~/.claude/fase/</code>)</li>
+<li><code>$HOME/.fase/</code> → <code>&lt;homePrefix&gt;fase/</code> (por exemplo, <code>$HOME/.claude/fase/</code>)</li>
+</ul>
+<p>Para OpenCode especificamente:</p>
+<ul>
+<li><code>~/.fase</code> → <code>~/.config/opencode/fase</code></li>
+<li><code>$HOME/.fase</code> → <code>$HOME/.config/opencode/fase</code></li>
+</ul>
+<h3>Arquivos Distribuídos (<code>bin/comandos/*.md</code>)</h3>
+<p>O diretório <code>bin/</code> contém arquivos de comando pré-construídos distribuídos via NPM. Esses arquivos:</p>
+<ul>
+<li>Têm blocos <code>&lt;execution_context&gt;</code> <strong>removidos</strong> (não necessários após instalação)</li>
+<li>Têm referências inline <code>~/.fase/</code> <strong>preservadas</strong> para o instalador substituir</li>
+<li>Contêm texto completamente traduzido para português</li>
+<li>São instalados em localizações específicas do runtime pelo instalador</li>
+</ul>
+<h2>Arquivos de Workflow/Template</h2>
+<p>Os arquivos reais de workflow, template e referência são fornecidos por:</p>
+<ol>
+<li><strong>GSD (projeto upstream)</strong> - fornece os arquivos de workflow principal</li>
+<li><strong>FASE</strong> - fornece versões localizadas em português</li>
+</ol>
+<p>Esses arquivos são instalados na localização de caminho convertido (por exemplo, <code>~/.claude/fase/workflows/</code>, <code>~/.gemini/fase/workflows/</code>).</p>
+<h2>Uso em Desenvolvimento</h2>
+<p>Ao desenvolver localmente com arquivos de comando fonte do FASE (<code>comandos/*.md</code>), você precisa ter arquivos de workflow disponíveis em <code>~/.fase/</code> para que o Claude Code carregue via blocos <code>&lt;execution_context&gt;</code>. Opções:</p>
+<ol>
+<li><p><strong>Symlink para instalação do GSD:</strong></p>
+<pre><code class="language-bash">ln -s ~/.claude/fase ~/.fase
+</code></pre>
+</li>
+<li><p><strong>Apontar para workflows de desenvolvimento:</strong>
+Se estiver trabalhando em workflows do GSD localmente, ajuste o symlink para apontar para seu diretório local <code>workflows/</code> do GSD</p>
+</li>
+<li><p><strong>Instalar GSD primeiro:</strong>
+Certifique-se de que o GSD está instalado em seu ambiente de runtime antes de desenvolver comandos do FASE</p>
+</li>
+</ol>
+<h2>Consistência em Múltiplos Ambientes</h2>
+<p>Todos os 32 comandos do FASE agora seguem a mesma convenção de caminho:</p>
+<ul>
+<li>✅ 13 comandos com referências de workflow usam <code>@~/.fase/</code></li>
+<li>✅ 19 comandos sem referências externas (auto-contidos)</li>
+<li>✅ Instalador converte corretamente caminhos para cada runtime</li>
+<li>✅ OpenCode recebe caminhos corretamente formatados <code>~/.config/opencode/fase/</code></li>
+</ul>
+<p>Isso garante compatibilidade de comando em Claude Code, OpenCode, Gemini e Codex sem ramificação específica do ambiente na lógica do comando.</p>
+
+    </main>
+  </div>
+</body>
+</html>

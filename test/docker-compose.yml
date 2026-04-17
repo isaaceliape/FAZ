@@ -1,0 +1,177 @@
+version: '3.8'
+
+services:
+  # Test suite runner
+  test:
+    build:
+      context: ..
+      dockerfile: test/Dockerfile.test
+    container_name: fase-test
+    volumes:
+      - ../:/app
+      - test-cache:/app/node_modules
+    environment:
+      - NODE_ENV=test
+    command: npm test
+
+  # Claude installation test
+  claude-test:
+    image: node:18-alpine
+    container_name: fase-claude-test
+    working_dir: /app
+    volumes:
+      - ../:/app
+      - claude-config:/root/.claude
+      - test-cache:/app/node_modules
+    environment:
+      - CLAUDE_CONFIG_DIR=/root/.claude
+      - HOME=/root
+    command: >
+      sh -c "
+        npm install &&
+        npm install -g . &&
+        fase-ai --claude --global &&
+        test -d /root/.claude &&
+        echo '✓ Claude installation successful'
+      "
+
+  # OpenCode installation test
+  opencode-test:
+    image: node:18-alpine
+    container_name: fase-opencode-test
+    working_dir: /app
+    volumes:
+      - ../:/app
+      - opencode-config:/root/.config/opencode
+      - test-cache:/app/node_modules
+    environment:
+      - OPENCODE_CONFIG_DIR=/root/.config/opencode
+      - XDG_CONFIG_HOME=/root/.config
+      - HOME=/root
+    command: >
+      sh -c "
+        npm install &&
+        npm install -g . &&
+        fase-ai --opencode --global &&
+        test -d /root/.config/opencode &&
+        echo '✓ OpenCode installation successful'
+      "
+
+  # Gemini installation test
+  gemini-test:
+    image: node:18-alpine
+    container_name: fase-gemini-test
+    working_dir: /app
+    volumes:
+      - ../:/app
+      - gemini-config:/root/.gemini
+      - test-cache:/app/node_modules
+    environment:
+      - GEMINI_CONFIG_DIR=/root/.gemini
+      - HOME=/root
+    command: >
+      sh -c "
+        npm install &&
+        npm install -g . &&
+        fase-ai --gemini --global &&
+        test -d /root/.gemini &&
+        echo '✓ Gemini installation successful'
+      "
+
+  # Codex installation test
+  codex-test:
+    image: node:18-alpine
+    container_name: fase-codex-test
+    working_dir: /app
+    volumes:
+      - ../:/app
+      - codex-config:/root/.codex
+      - test-cache:/app/node_modules
+    environment:
+      - CODEX_HOME=/root/.codex
+      - HOME=/root
+    command: >
+      sh -c "
+        npm install &&
+        npm install -g . &&
+        fase-ai --codex --global &&
+        test -d /root/.codex &&
+        echo '✓ Codex installation successful'
+      "
+
+  # All providers installation test
+  all-test:
+    image: node:18-alpine
+    container_name: fase-all-test
+    working_dir: /app
+    volumes:
+      - ../:/app
+      - claude-config:/root/.claude
+      - opencode-config:/root/.config/opencode
+      - gemini-config:/root/.gemini
+      - codex-config:/root/.codex
+      - test-cache:/app/node_modules
+    environment:
+      - CLAUDE_CONFIG_DIR=/root/.claude
+      - OPENCODE_CONFIG_DIR=/root/.config/opencode
+      - GEMINI_CONFIG_DIR=/root/.gemini
+      - CODEX_HOME=/root/.codex
+      - XDG_CONFIG_HOME=/root/.config
+      - HOME=/root
+    command: >
+      sh -c "
+        npm install &&
+        npm install -g . &&
+        fase-ai --all --global &&
+        test -d /root/.claude &&
+        test -d /root/.config/opencode &&
+        test -d /root/.gemini &&
+        test -d /root/.codex &&
+        echo '✓ All providers installed successfully'
+      "
+
+  # Ubuntu-based test
+  ubuntu-test:
+    image: node:18
+    container_name: fase-ubuntu-test
+    working_dir: /app
+    volumes:
+      - ../:/app
+      - ubuntu-cache:/app/node_modules
+    environment:
+      - NODE_ENV=test
+      - HOME=/root
+    command: >
+      bash -c "
+        apt-get update &&
+        npm install &&
+        npm test &&
+        echo '✓ Tests passed on Ubuntu'
+      "
+
+  # Alpine-based test
+  alpine-test:
+    image: node:18-alpine
+    container_name: fase-alpine-test
+    working_dir: /app
+    volumes:
+      - ../:/app
+      - alpine-cache:/app/node_modules
+    environment:
+      - NODE_ENV=test
+      - HOME=/root
+    command: >
+      sh -c "
+        npm install &&
+        npm test &&
+        echo '✓ Tests passed on Alpine'
+      "
+
+volumes:
+  test-cache:
+  claude-config:
+  opencode-config:
+  gemini-config:
+  codex-config:
+  ubuntu-cache:
+  alpine-cache:

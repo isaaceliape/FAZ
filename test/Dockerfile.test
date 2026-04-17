@@ -1,0 +1,60 @@
+# Test image for FASE installations
+# Builds and tests FASE in a clean container environment
+
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install additional tools for testing
+RUN apk add --no-cache \
+    bash \
+    git \
+    curl \
+    jq
+
+# Copy test files
+COPY . .
+
+# Install dependencies
+RUN npm install
+
+# Run all tests
+RUN npm test
+
+# Test Claude installation
+RUN npm install -g . && \
+    fase-ai --claude --global && \
+    test -d /root/.claude && \
+    echo "✓ Claude installation successful"
+
+# Test OpenCode installation
+RUN fase-ai --opencode --global && \
+    test -d /root/.config/opencode && \
+    echo "✓ OpenCode installation successful"
+
+# Test Gemini installation
+RUN fase-ai --gemini --global && \
+    test -d /root/.gemini && \
+    echo "✓ Gemini installation successful"
+
+# Test Codex installation
+RUN fase-ai --codex --global && \
+    test -d /root/.codex && \
+    echo "✓ Codex installation successful"
+
+# Verify all providers
+RUN if [ -d /root/.claude ] && \
+       [ -d /root/.config/opencode ] && \
+       [ -d /root/.gemini ] && \
+       [ -d /root/.codex ]; then \
+    echo "✓ All providers installed successfully"; \
+  else \
+    echo "✗ Some providers are missing"; \
+    exit 1; \
+  fi
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD test -d /root/.claude || exit 1
+
+CMD ["npm", "test"]
