@@ -1,12 +1,12 @@
 /**
- * GSD Tools Test Helpers
+ * FASE Test Helpers
  */
 
 const { execSync, execFileSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const TOOLS_PATH = path.join(__dirname, '..', 'bin', 'dist', 'fase-tools.js');
+const TOOLS_PATH = path.join(__dirname, '..', 'dist', 'fase-tools.js');
 
 /**
  * Run gsd-tools command.

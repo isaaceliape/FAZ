@@ -6,6 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import { execSync } from 'child_process';
+import { ConfigError, FileError, PathTraversalError, wrapError } from './errors.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -89,7 +90,11 @@ export function ensureInsidePlanejamento(cwd: string, filePath: string, operatio
   const normalizedPlanej = path.normalize(planejPath);
 
   if (!normalizedFull.startsWith(normalizedPlanej + path.sep) && normalizedFull !== normalizedPlanej) {
-    throw new Error(`${operation} must be inside .fase-ai/: ${filePath}`);
+    throw new PathTraversalError(
+      `${operation} must be inside .fase-ai/: ${filePath}`,
+      'PATH_OUTSIDE_BOUNDARY',
+      { path: filePath, boundary: '.fase-ai', operation }
+    );
   }
   return fullPath;
 }
@@ -110,7 +115,7 @@ export function isInsidePlanejamento(cwd: string, filePath: string): boolean {
  * @param cwd - Project root directory (trusted base)
  * @param userPath - User-provided path (untrusted input)
  * @returns Resolved absolute path if valid
- * @throws Error if path escapes project boundary
+ * @throws PathTraversalError if path escapes project boundary
  */
 export function validatePathInsideCwd(cwd: string, userPath: string): string {
   const resolved = path.resolve(cwd, userPath);
@@ -118,7 +123,11 @@ export function validatePathInsideCwd(cwd: string, userPath: string): string {
   
   // Check if relative path tries to escape (starts with ..) or is absolute
   if (relative.startsWith('..') || path.isAbsolute(relative)) {
-    throw new Error(`Path traversal detected: "${userPath}" escapes project boundary`);
+    throw new PathTraversalError(
+      `Path traversal detected: "${userPath}" escapes project boundary`,
+      'PATH_TRAVERSAL_DETECTED',
+      { userPath, resolved, cwd }
+    );
   }
   
   return resolved;

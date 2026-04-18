@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>MANTENEDORES - FASE Docs</title>
+  <style>
+    :root {
+      --primary: #00ff88;
+      --secondary: #00bfff;
+      --warning: #ffaa00;
+      --danger: #ff3366;
+      --dark-bg: #0a0e27;
+      --grid-bg: #111827;
+      --text: #e5e7eb;
+      --dim: #9ca3af;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .header {
+      background-color: var(--grid-bg);
+      border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+      transition: color 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .logo:hover {
+      color: var(--primary);
+    }
+
+    .logo span {
+      color: var(--primary);
+    }
+
+    .logo:hover span {
+      color: var(--secondary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      border: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .content-wrapper {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: var(--grid-bg);
+      border-right: 1px solid rgba(0, 255, 136, 0.1);
+      padding: 20px;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .sidebar h3 {
+      color: var(--primary);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+      margin-top: 20px;
+    }
+
+    .sidebar h3:first-child {
+      margin-top: 0;
+    }
+
+    .sidebar-link {
+      display: block;
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-link:hover {
+      color: var(--primary);
+      background-color: rgba(0, 255, 136, 0.1);
+      border-left-color: var(--primary);
+    }
+
+    .sidebar-link.active {
+      color: var(--primary);
+      background-color: rgba(0, 255, 136, 0.15);
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+    }
+
+    h1 {
+      color: var(--primary);
+      font-size: 2rem;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      color: var(--secondary);
+      font-size: 1.5rem;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+
+    h3 {
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 15px;
+      color: var(--text);
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      border-bottom: 1px dotted var(--primary);
+      transition: all 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--secondary);
+      border-bottom-style: solid;
+    }
+
+    code {
+      background-color: var(--dark-bg);
+      color: var(--primary);
+      padding: 0.2rem 0.4rem;
+      border-radius: 2px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background-color: var(--dark-bg);
+      border: 1px solid var(--dim);
+      border-radius: 4px;
+      padding: 15px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+
+    pre code {
+      padding: 0;
+      background: none;
+      color: var(--primary);
+    }
+
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    blockquote {
+      border-left: 4px solid var(--primary);
+      background-color: var(--dark-bg);
+      padding: 15px;
+      margin: 15px 0;
+      color: var(--dim);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      border: 1px solid var(--dim);
+    }
+
+    th {
+      background-color: var(--dark-bg);
+      color: var(--primary);
+      padding: 12px;
+      text-align: left;
+      border-bottom: 2px solid var(--primary);
+      border-right: 1px solid var(--dim);
+      font-weight: 600;
+    }
+
+    th:last-child {
+      border-right: none;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid var(--dim);
+      border-right: 1px solid var(--dim);
+    }
+
+    td:last-child {
+      border-right: none;
+    }
+
+    tr:hover {
+      background-color: rgba(0, 255, 136, 0.05);
+    }
+
+    strong {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    em {
+      color: var(--dim);
+      font-style: italic;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--dim);
+      margin: 30px 0;
+    }
+
+    .version-badge {
+      display: inline-block;
+      background-color: rgba(0, 255, 136, 0.15);
+      color: var(--primary);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: 1px solid var(--primary);
+      margin-bottom: 20px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--dark-bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--secondary);
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .content-wrapper {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+        max-height: 150px;
+        overflow-x: auto;
+        display: flex;
+        gap: 10px;
+      }
+
+      .sidebar h3 {
+        display: none;
+      }
+
+      .sidebar-link {
+        white-space: nowrap;
+        margin-bottom: 0;
+      }
+
+      .main {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="../index.html" class="logo">fase<span>-</span>ai</a>
+    <div class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="https://github.com/isaaceliape/FASE">GitHub</a>
+    </div>
+  </div>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <h3>📚 Documentação</h3>
+      <a href="../index.html" class="sidebar-link ">📖 README</a>
+<a href="../COMANDOS.html" class="sidebar-link ">📋 Comandos</a>
+<a href="../guia-do-usuario.html" class="sidebar-link ">📘 Guia do Usuário</a>
+<a href="../CONTRIBUINDO.html" class="sidebar-link ">🤝 Guia de Contribuição</a>
+<a href="../HOOKS.html" class="sidebar-link ">🔧 Git Hooks</a>
+<a href="../NPM-REGISTRY.html" class="sidebar-link ">📦 NPM Registry</a>
+<a href="../technical/padronizacao-caminhos.html" class="sidebar-link ">🛣️ Padronização de Caminhos</a>
+<a href="MANTENEDORES.html" class="sidebar-link active">👨‍💼 Guia de Maintainers</a>
+<a href="../monitor-contexto.html" class="sidebar-link ">📊 Monitor de Contexto</a>
+    </aside>
+
+    <main class="main">
+      <div class="version-badge">📦 Versão 3.2.0</div>
+      <h1>👨‍💼 Guia para Maintainers</h1>
+<blockquote>
+<p><strong>Versão</strong>: 3.2.0 | Última atualização: 2026-03-25</p>
+</blockquote>
+<p>Documentação interna para quem mantém o FASE.</p>
+<h2>👥 Maintainers Atuais</h2>
+<ul>
+<li><strong>Isaac Eliape</strong> — Criador e maintainer principal <a href="https://github.com/isaaceliape">@isaaceliape</a></li>
+</ul>
+<h2>🔄 Processo de Release</h2>
+<h3>Antes de Publicar</h3>
+<pre><code class="language-bash"># 1. Verify everything
+./scripts/verificar-release.sh
+
+# 2. Run local tests
+./scripts/testar-local.sh
+
+# 3. Review changelog
+vim CHANGELOG.md
+</code></pre>
+<h3>Publicando (Automático)</h3>
+<pre><code class="language-bash"># 1. Tag the release
+git tag -a v2.5.0 -m &quot;Release v2.5.0: Descrição aqui&quot;
+
+# 2. Push tags
+git push origin main --tags
+
+# 3. GitHub Actions publica automaticamente
+# Verifique: https://github.com/isaaceliape/FASE/actions
+</code></pre>
+<h3>Pós-Release</h3>
+<ul>
+<li>✅ Verificar publicação no npm: <a href="https://www.npmjs.com/package/fase-ai">https://www.npmjs.com/package/fase-ai</a></li>
+<li>✅ Atualizar release notes no GitHub</li>
+<li>✅ Anunciar em comunidades (se relevante)</li>
+</ul>
+<h2>📋 Checklist de Manutenção</h2>
+<h3>Semanal</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Revisar issues abertas</li>
+<li><input disabled="" type="checkbox"> Responder a pull requests</li>
+<li><input disabled="" type="checkbox"> Verificar se há vulnerabilidades de dependências</li>
+</ul>
+<h3>Mensal</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Executar <code>npm audit</code> em bin/</li>
+<li><input disabled="" type="checkbox"> Revisar CONTRIBUTING.md para clareza</li>
+<li><input disabled="" type="checkbox"> Verificar estatísticas de uso (npm downloads)</li>
+</ul>
+<h3>Trimestral</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Planejar features para próxima versão</li>
+<li><input disabled="" type="checkbox"> Revisar documentação inteira</li>
+<li><input disabled="" type="checkbox"> Atualizar dependências devDependencies</li>
+</ul>
+<h2>🐛 Processamento de Issues</h2>
+<h3>Bug Reports</h3>
+<ol>
+<li><p><strong>Triage</strong></p>
+<ul>
+<li>Verificar se é realmente um bug</li>
+<li>Solicitar mais informações se necessário</li>
+<li>Tag com <code>bug</code> e prioridade</li>
+</ul>
+</li>
+<li><p><strong>Investigação</strong></p>
+<ul>
+<li>Reproduzir o bug localmente</li>
+<li>Identificar a causa</li>
+<li>Criar PR com fix</li>
+</ul>
+</li>
+<li><p><strong>Resolução</strong></p>
+<ul>
+<li>Merge do PR</li>
+<li>Fechar a issue</li>
+<li>Mencionar versão que contém o fix</li>
+</ul>
+</li>
+</ol>
+<h3>Feature Requests</h3>
+<ol>
+<li><p><strong>Discussão</strong></p>
+<ul>
+<li>Avaliar alinhamento com visão do projeto</li>
+<li>Discussão pública na issue</li>
+<li>Decidir se aceita</li>
+</ul>
+</li>
+<li><p><strong>Implementação</strong> (se aprovado)</p>
+<ul>
+<li>Criar label <code>accepted</code></li>
+<li>Dar prioridade</li>
+<li>Implementar ou aguardar PR</li>
+</ul>
+</li>
+</ol>
+<h2>🔐 Segurança</h2>
+<h3>Vulnerabilidades Reportadas</h3>
+<ol>
+<li><strong>Responda em privado</strong> — Não abrir issue pública</li>
+<li><strong>Investigar</strong> — Confirmar e avaliar impacto</li>
+<li><strong>Fixar</strong> — Criar PR com fix</li>
+<li><strong>Publicar</strong> — Release com fix</li>
+<li><strong>Divulgar</strong> — Comunicar a vulnerabilidade após fix publicado</li>
+</ol>
+<p>Para reportar vulnerabilidades, abra uma <a href="https://github.com/isaaceliape/FASE/security/advisories">issue privada de segurança</a>.</p>
+<h2>📚 Documentação</h2>
+<h3>Quando Atualizar</h3>
+<ul>
+<li>✅ Novo comando adicionado → Atualizar COMANDOS.md</li>
+<li>✅ Feature nova → Atualizar USER-GUIDE.md</li>
+<li>✅ Breaking change → Nota clara em CHANGELOG.md</li>
+</ul>
+<h3>Padrão de Escrita</h3>
+<ul>
+<li>Português brasileiro em toda documentação</li>
+<li>Termos técnicos em inglês quando necessário</li>
+<li>Exemplos com real-world use cases</li>
+</ul>
+<h2>🧙‍♂️ Dicas e Tricks</h2>
+<h3>Testar Localmente</h3>
+<pre><code class="language-bash"># Instalação local para desenvolvimento
+node bin/install.js --claude --local
+
+# Verificar arquivo gerado
+ls -la .claude/command/
+</code></pre>
+<h3>Debug do Install Script</h3>
+<pre><code class="language-bash"># Ver todos os logs
+node bin/install.js --claude --local 2&gt;&amp;1 | tee /tmp/install.log
+
+# Validar JSON do package.json
+jq empty bin/package.json
+</code></pre>
+<h3>Gerenciar Dependências</h3>
+<p>Manter devDependencies atualizadas:</p>
+<pre><code class="language-bash">npm outdated
+npm update
+</code></pre>
+<h2>📞 Comunicação</h2>
+<ul>
+<li><strong>Issues</strong>: <a href="https://github.com/isaaceliape/FASE/issues">GitHub Issues</a></li>
+<li><strong>Discussions</strong>: <a href="https://github.com/isaaceliape/FASE/discussions">GitHub Discussions</a></li>
+<li><strong>Email</strong>: Via issue privada (não publicar emails)</li>
+</ul>
+<h2>📈 Métricas de Sucesso</h2>
+<p>Rastreie estas métricas para avaliar saúde do projeto:</p>
+<ul>
+<li>📊 npm downloads/month</li>
+<li>⭐ GitHub stars</li>
+<li>🐛 Taxa de bugs reportados vs. resolvidos</li>
+<li>👥 Contribuidores ativos</li>
+<li>📝 Issues abertas vs. fechadas</li>
+</ul>
+<h2>🚀 Roadmap de Longo Termo</h2>
+<p>Visão para o FASE:</p>
+<ol>
+<li><strong>v2.5+</strong>: Melhorias de infra (hooks, CI/CD, templates)</li>
+<li><strong>v3.0</strong>: Possível refactor para TypeScript</li>
+<li><strong>Futuro</strong>: Suporte a mais runtimes (mais IDEs de AI)</li>
+</ol>
+<hr>
+<p><strong>Versão</strong>: 3.2.0
+<strong>Última atualização</strong>: 2026-03-13
+<strong>Mantido por</strong>: Isaac Eliape</p>
+
+    </main>
+  </div>
+</body>
+</html>

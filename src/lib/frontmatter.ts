@@ -4,7 +4,8 @@
 
 import fs from 'fs';
 import path from 'path';
-import { safeReadFile, output, error, ensureInsidePlanejamento } from './core.js';
+import { safeReadFile, output, ensureInsidePlanejamento } from './core.js';
+import { ValidationError, FileError } from './errors.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -230,7 +231,9 @@ export const FRONTMATTER_SCHEMAS: Record<string, FrontmatterSchema> = {
 };
 
 export function cmdFrontmatterGet(cwd: string, filePath: string, field: string | undefined, raw: boolean): void {
-  if (!filePath) { error('caminho do arquivo obrigatório'); }
+  if (!filePath) {
+    throw new ValidationError('caminho do arquivo obrigatório', 'MISSING_FILE_PATH');
+  }
   const fullPath = path.isAbsolute(filePath) ? filePath : path.join(cwd, filePath);
   const content = safeReadFile(fullPath);
   if (!content) { output({ error: 'Arquivo não encontrado', path: filePath }, raw); return; }
@@ -245,7 +248,9 @@ export function cmdFrontmatterGet(cwd: string, filePath: string, field: string |
 }
 
 export function cmdFrontmatterSet(cwd: string, filePath: string, field: string | undefined, value: string | undefined, raw: boolean): void {
-  if (!filePath || !field || value === undefined) { error('arquivo, campo e valor obrigatórios'); }
+  if (!filePath || !field || value === undefined) {
+    throw new ValidationError('arquivo, campo e valor obrigatórios', 'MISSING_REQUIRED_PARAMS');
+  }
   try {
     const fullPath = ensureInsidePlanejamento(cwd, filePath, 'frontmatter set');
     if (!fs.existsSync(fullPath)) { output({ error: 'Arquivo não encontrado', path: filePath }, raw); return; }
@@ -263,14 +268,18 @@ export function cmdFrontmatterSet(cwd: string, filePath: string, field: string |
 }
 
 export function cmdFrontmatterMerge(cwd: string, filePath: string, data: string | undefined, raw: boolean): void {
-  if (!filePath || !data) { error('arquivo e dados obrigatórios'); }
+  if (!filePath || !data) {
+    throw new ValidationError('arquivo e dados obrigatórios', 'MISSING_REQUIRED_PARAMS');
+  }
   try {
     const fullPath = ensureInsidePlanejamento(cwd, filePath, 'frontmatter merge');
     if (!fs.existsSync(fullPath)) { output({ error: 'Arquivo não encontrado', path: filePath }, raw); return; }
     const content = fs.readFileSync(fullPath, 'utf-8');
     const fm = extractFrontmatter(content);
     let mergeData: ParsedFrontmatter;
-    try { mergeData = JSON.parse(data) as ParsedFrontmatter; } catch { error('JSON inválido para --data'); return; }
+    try { mergeData = JSON.parse(data) as ParsedFrontmatter; } catch {
+      throw new ValidationError('JSON inválido para --data', 'INVALID_JSON');
+    }
     Object.assign(fm, mergeData);
     const newContent = spliceFrontmatter(content, fm);
     fs.writeFileSync(fullPath, newContent, 'utf-8');
@@ -281,9 +290,16 @@ export function cmdFrontmatterMerge(cwd: string, filePath: string, data: string 
 }
 
 export function cmdFrontmatterValidate(cwd: string, filePath: string, schemaName: string | undefined, raw: boolean): void {
-  if (!filePath || !schemaName) { error('arquivo e esquema obrigatórios'); }
+  if (!filePath || !schemaName) {
+    throw new ValidationError('arquivo e esquema obrigatórios', 'MISSING_REQUIRED_PARAMS');
+  }
   const schema = FRONTMATTER_SCHEMAS[schemaName];
-  if (!schema) { error(`Esquema desconhecido: ${schemaName}. Disponíveis: ${Object.keys(FRONTMATTER_SCHEMAS).join(', ')}`); }
+  if (!schema) {
+    throw new ValidationError(
+      `Esquema desconhecido: ${schemaName}. Disponíveis: ${Object.keys(FRONTMATTER_SCHEMAS).join(', ')}`,
+      'UNKNOWN_SCHEMA'
+    );
+  }
   try {
     const fullPath = ensureInsidePlanejamento(cwd, filePath, 'frontmatter validate');
     const content = safeReadFile(fullPath);

@@ -5,6 +5,48 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-br/1.0.0/),
 e este projeto adiere ao [Versionamento Semântico](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2026-04-18
+
+### Added
+
+- **Error Handling System**: 9 typed error classes for better error management
+  - `FaseError` (base class), `ConfigError`, `FileError`, `ValidationError`
+  - `PathTraversalError`, `ProviderError`, `HookError`, `InstallationError`, `TemplateError`
+  - All errors thrown instead of `process.exit()` for better testability
+- **Logging System**: Unified logging with pino
+  - Log levels: debug, info, warn, error, fatal
+  - File output with rotation (7 days, 10MB max)
+  - Logs stored in `~/.fase-ai/logs/`
+- **Modular Architecture**: 8 new modules in `src/install/`
+  - `providers.ts` — Provider detection and config directories
+  - `settings.ts` — Settings.json management
+  - `attribution.ts` — Commit attribution handling
+  - `analytics.ts` — Analytics preferences
+  - `hooks.ts` — Hook file management
+  - `frontmatter-convert.ts` — Frontmatter conversion between providers
+  - `uninstall.ts` — Uninstallation logic
+  - `index.ts` — Module entry point
+
+### Changed
+
+- **Breaking**: Error handling now throws errors instead of calling `process.exit(1)`
+- **Breaking**: New modular structure in `src/install/`
+- **Breaking**: Logging uses pino instead of console.*
+
+### Fixed
+
+- Path traversal protection enhanced
+- TypeScript types added to all new code
+- 155 tests passing (100% pass rate)
+
+### Security
+
+- No hardcoded secrets
+- Path validation improved
+- Input validation enhanced
+
+---
+
 ## [3.5.3] - 2026-04-17
 
 ### Adicionado

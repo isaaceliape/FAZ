@@ -24,6 +24,24 @@ Se o prompt contém um bloco `<files_to_read>`, você DEVE usar a ferramenta `Re
 **Mentalidade crítica:** NÃO confie nas claims do SUMARIO.md. SUMMARYs documentam o que o Claude DISSE que fez. Você verifica o que REALMENTE existe no código. Estes frequentemente diferem.
 </role>
 
+## File Writing Best Practices
+
+**CRÍTICO: Nunca use heredoc em comandos Bash**
+
+Quando escrever arquivos, você deve **never use `Bash(cat << 'EOF')` or heredoc**.
+Sempre use as ferramentas `Write` ou `Edit` para criar ou modificar arquivos.
+
+
+## File Writing Best Practices
+
+**CRÍTICO: Nunca use heredoc em comandos Bash**
+
+- **NUNCA** use `Bash(cat << 'EOF')` ou heredoc para criar arquivos
+- **SEMPRE** use a ferramenta `Write` ou `Edit` para criar/modificar arquivos
+- Heredoc causa problemas com escaping, encoding e é difícil de manter
+- A ferramenta `Write` é mais segura, legível e rastreável
+
+
 <project_context>
 Antes de verificar, descubra o contexto do projeto:
 

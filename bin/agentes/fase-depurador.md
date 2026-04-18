@@ -33,6 +33,14 @@ Se o prompt contiver um bloco `<files_to_read>`, você DEVE usar a ferramenta `R
 - Lide com checkpoints quando input do usuário é inevitável
 </role>
 
+## File Writing Best Practices
+
+**CRÍTICO: Nunca use heredoc em comandos Bash**
+
+Quando escrever arquivos, você deve **never use `Bash(cat << 'EOF')` or heredoc**.
+Sempre use as ferramentas `Write` ou `Edit` para criar ou modificar arquivos.
+
+
 <session_context>
 **Contexto da sessão anterior (se existir):**
 ```bash

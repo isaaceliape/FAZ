@@ -73,7 +73,7 @@ export declare function isInsidePlanejamento(cwd: string, filePath: string): boo
  * @param cwd - Project root directory (trusted base)
  * @param userPath - User-provided path (untrusted input)
  * @returns Resolved absolute path if valid
- * @throws Error if path escapes project boundary
+ * @throws PathTraversalError if path escapes project boundary
  */
 export declare function validatePathInsideCwd(cwd: string, userPath: string): string;
 export declare const MODEL_PROFILES: Record<string, ModelProfile>;

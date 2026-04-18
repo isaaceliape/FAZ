@@ -3,7 +3,8 @@
  */
 import fs from 'fs';
 import path from 'path';
-import { safeReadFile, output, error, ensureInsidePlanejamento } from './core.js';
+import { safeReadFile, output, ensureInsidePlanejamento } from './core.js';
+import { ValidationError } from './errors.js';
 // ─── Parsing engine ───────────────────────────────────────────────────────────
 export function extractFrontmatter(content) {
     const frontmatter = {};
@@ -218,7 +219,7 @@ export const FRONTMATTER_SCHEMAS = {
 };
 export function cmdFrontmatterGet(cwd, filePath, field, raw) {
     if (!filePath) {
-        error('caminho do arquivo obrigatório');
+        throw new ValidationError('caminho do arquivo obrigatório', 'MISSING_FILE_PATH');
     }
     const fullPath = path.isAbsolute(filePath) ? filePath : path.join(cwd, filePath);
     const content = safeReadFile(fullPath);
@@ -241,7 +242,7 @@ export function cmdFrontmatterGet(cwd, filePath, field, raw) {
 }
 export function cmdFrontmatterSet(cwd, filePath, field, value, raw) {
     if (!filePath || !field || value === undefined) {
-        error('arquivo, campo e valor obrigatórios');
+        throw new ValidationError('arquivo, campo e valor obrigatórios', 'MISSING_REQUIRED_PARAMS');
     }
     try {
         const fullPath = ensureInsidePlanejamento(cwd, filePath, 'frontmatter set');
@@ -269,7 +270,7 @@ export function cmdFrontmatterSet(cwd, filePath, field, value, raw) {
 }
 export function cmdFrontmatterMerge(cwd, filePath, data, raw) {
     if (!filePath || !data) {
-        error('arquivo e dados obrigatórios');
+        throw new ValidationError('arquivo e dados obrigatórios', 'MISSING_REQUIRED_PARAMS');
     }
     try {
         const fullPath = ensureInsidePlanejamento(cwd, filePath, 'frontmatter merge');
@@ -284,8 +285,7 @@ export function cmdFrontmatterMerge(cwd, filePath, data, raw) {
             mergeData = JSON.parse(data);
         }
         catch {
-            error('JSON inválido para --data');
-            return;
+            throw new ValidationError('JSON inválido para --data', 'INVALID_JSON');
         }
         Object.assign(fm, mergeData);
         const newContent = spliceFrontmatter(content, fm);
@@ -298,11 +298,11 @@ export function cmdFrontmatterMerge(cwd, filePath, data, raw) {
 }
 export function cmdFrontmatterValidate(cwd, filePath, schemaName, raw) {
     if (!filePath || !schemaName) {
-        error('arquivo e esquema obrigatórios');
+        throw new ValidationError('arquivo e esquema obrigatórios', 'MISSING_REQUIRED_PARAMS');
     }
     const schema = FRONTMATTER_SCHEMAS[schemaName];
     if (!schema) {
-        error(`Esquema desconhecido: ${schemaName}. Disponíveis: ${Object.keys(FRONTMATTER_SCHEMAS).join(', ')}`);
+        throw new ValidationError(`Esquema desconhecido: ${schemaName}. Disponíveis: ${Object.keys(FRONTMATTER_SCHEMAS).join(', ')}`, 'UNKNOWN_SCHEMA');
     }
     try {
         const fullPath = ensureInsidePlanejamento(cwd, filePath, 'frontmatter validate');
