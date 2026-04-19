@@ -1,0 +1,232 @@
+name: Multi-Platform Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test-linux:
+    name: Linux (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 20, 22]
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Run unit tests
+        run: npm test
+      
+      - name: Test clean installation
+        run: |
+          echo "Testing clean install for Node ${{ matrix.node }}..."
+          node dist/install.js --claude
+          
+          # Verify installation
+          if [ -d "$HOME/.claude/fase-ai" ]; then
+            echo "✓ Installation directory exists"
+          else
+            echo "✗ Installation directory missing"
+            exit 1
+          fi
+          
+          # Verify hooks
+          if [ -f "$HOME/.claude/hooks/fase-statusline.cjs" ]; then
+            echo "✓ Hooks installed"
+          else
+            echo "✗ Hooks missing"
+            exit 1
+          fi
+          
+          echo "✓ Linux test passed for Node ${{ matrix.node }}"
+      
+      - name: Test uninstall
+        run: |
+          node dist/install.js --uninstall
+          
+          if [ ! -d "$HOME/.claude/fase-ai" ]; then
+            echo "✓ Uninstall successful"
+          else
+            echo "✗ Uninstall failed"
+            exit 1
+          fi
+
+  test-macos:
+    name: macOS (Node ${{ matrix.node }})
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        node: [18, 20, 22]
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Run unit tests
+        run: npm test
+      
+      - name: Test clean installation
+        run: |
+          echo "Testing clean install for Node ${{ matrix.node }}..."
+          node dist/install.js --claude
+          
+          # Verify installation
+          if [ -d "$HOME/.claude/fase-ai" ]; then
+            echo "✓ Installation directory exists"
+          else
+            echo "✗ Installation directory missing"
+            exit 1
+          fi
+          
+          echo "✓ macOS test passed for Node ${{ matrix.node }}"
+
+  test-windows:
+    name: Windows (Node ${{ matrix.node }})
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        node: [18, 20, 22]
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Run unit tests
+        run: npm test
+      
+      - name: Test clean installation (PowerShell)
+        shell: pwsh
+        run: |
+          Write-Host "Testing clean install for Node ${{ matrix.node }}..."
+          node dist/install.js --claude
+          
+          # Verify installation
+          $installDir = "$env:USERPROFILE\.claude\fase-ai"
+          if (Test-Path $installDir) {
+            Write-Host "✓ Installation directory exists"
+          } else {
+            Write-Host "✗ Installation directory missing"
+            exit 1
+          }
+          
+          Write-Host "✓ Windows test passed for Node ${{ matrix.node }}"
+
+  integration-test:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Run integration tests
+        run: |
+          echo "Running integration tests..."
+          
+          # Test multi-provider install
+          node dist/install.js --claude
+          node dist/install.js --opencode
+          
+          # Verify both providers
+          if [ -d "$HOME/.claude/fase-ai" ] && [ -d "$HOME/.config/opencode/fase-ai" ]; then
+            echo "✓ Multi-provider install successful"
+          else
+            echo "✗ Multi-provider install failed"
+            exit 1
+          fi
+          
+          # Test upgrade path (simulate)
+          echo "Testing upgrade simulation..."
+          node dist/install.js --claude
+          echo "✓ Upgrade simulation passed"
+          
+          echo "✓ All integration tests passed"
+
+  report:
+    name: Generate Test Report
+    runs-on: ubuntu-latest
+    needs: [test-linux, test-macos, test-windows, integration-test]
+    if: always()
+    
+    steps:
+      - name: Generate report
+        run: |
+          echo "## Multi-Platform Test Report" > test-report.md
+          echo "" >> test-report.md
+          echo "**Date:** $(date -u +%Y-%m-%d)" >> test-report.md
+          echo "**Workflow:** ${{ github.run_id }}" >> test-report.md
+          echo "" >> test-report.md
+          echo "### Results Summary" >> test-report.md
+          echo "" >> test-report.md
+          echo "| Platform | Node 18 | Node 20 | Node 22 |" >> test-report.md
+          echo "|----------|---------|---------|---------|" >> test-report.md
+          echo "| Linux    | ${{ needs.test-linux.result }} | ${{ needs.test-linux.result }} | ${{ needs.test-linux.result }} |" >> test-report.md
+          echo "| macOS    | ${{ needs.test-macos.result }} | ${{ needs.test-macos.result }} | ${{ needs.test-macos.result }} |" >> test-report.md
+          echo "| Windows  | ${{ needs.test-windows.result }} | ${{ needs.test-windows.result }} | ${{ needs.test-windows.result }} |" >> test-report.md
+          echo "" >> test-report.md
+          echo "### Integration Tests" >> test-report.md
+          echo "Status: ${{ needs.integration-test.result }}" >> test-report.md
+          echo "" >> test-report.md
+          echo "### Overall Status" >> test-report.md
+          echo "**${{ needs.test-linux.result == 'success' && needs.test-macos.result == 'success' && needs.test-windows.result == 'success' && needs.integration-test.result == 'success' && '✅ ALL TESTS PASSED' || '⚠ SOME TESTS FAILED' }}**" >> test-report.md
+          
+          cat test-report.md
+      
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: test-report.md

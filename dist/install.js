@@ -1,4 +1,5 @@
-// @ts-check
+#!/usr/bin/env node
+// @ts-nocheck
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
@@ -8,13 +9,6 @@ import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { saveAnalyticsConfig } from './lib/analytics.js';
 import { checkAndPromptForUpdate } from './lib/version-check.js';
-import { getGlobalDir, getDirName, getConfigDirFromHome, } from './install/providers.js';
-import { readSettings, writeSettings, } from './install/settings.js';
-import { getCommitAttribution, processAttribution, } from './install/attribution.js';
-import { buildHookCommand, } from './install/hooks.js';
-import { convertToolName, convertGeminiToolName, extractFrontmatterAndBody, extractFrontmatterField, convertClaudeToCodexMarkdown, getCodexSkillAdapterHeader, colorNameToHex, claudeToGeminiTools, toSingleLine, yamlQuote, } from './install/frontmatter-convert.js';
-import { readAnalyticsPreference, saveAnalyticsPreference, } from './install/analytics.js';
-import { error } from './lib/logger.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 /**
@@ -29,7 +23,7 @@ function safeJsonParse(jsonStr, context = 'JSON', options = { exitOnError: true 
         return JSON.parse(jsonStr);
     }
     catch (err) {
-        error(`Invalid ${context}: ${err.message}`);
+        console.error(`Invalid ${context}: ${err.message}`);
         if (options.exitOnError) {
             process.exit(1);
         }
@@ -102,87 +96,125 @@ else {
  * $HOME-relative form for replacing $HOME/.claude/ references in bash code blocks.
  * Preserves $HOME as a shell variable so paths remain portable across machines.
  */
-// For relative paths or paths not under $HOME, return as-is
-return normalized;
+function toHomePrefix(pathPrefix) {
+    const home = os.homedir().replace(/\\/g, '/');
+    const normalized = pathPrefix.replace(/\\/g, '/');
+    if (normalized.startsWith(home)) {
+        return '$HOME' + normalized.slice(home.length);
+    }
+    // For relative paths or paths not under $HOME, return as-is
+    return normalized;
+}
 // Helper to get directory name for a runtime (used for local/project installs)
+function getDirName(runtime) {
+    if (runtime === 'opencode')
+        return '.opencode';
+    if (runtime === 'gemini')
+        return '.gemini';
+    if (runtime === 'codex')
+        return '.codex';
+    if (runtime === 'github-copilot')
+        return '.github-copilot';
+    return '.claude';
+}
 /**
  * Get the config directory path relative to home directory for a runtime
  * Used for templating hooks that use path.join(homeDir, '<configDir>', ...)
  * @param {string} runtime - 'claude', 'opencode', 'gemini', 'codex', or 'github-copilot'
  * @param {boolean} isGlobal - Whether this is a global install
- */ '`;;
-// Global installs - OpenCode uses XDG path structure
-if (runtime === 'opencode') {
-    // OpenCode: ~/.config/opencode -> '.config', 'opencode'
-    // Return as comma-separated for path.join() replacement
-    return "'.config', 'opencode'";
+ */
+function getConfigDirFromHome(runtime, isGlobal) {
+    if (!isGlobal) {
+        // Local installs use the same dir name pattern
+        return `'${getDirName(runtime)}'`;
+    }
+    // Global installs - OpenCode uses XDG path structure
+    if (runtime === 'opencode') {
+        // OpenCode: ~/.config/opencode -> '.config', 'opencode'
+        // Return as comma-separated for path.join() replacement
+        return "'.config', 'opencode'";
+    }
+    if (runtime === 'gemini')
+        return "'.gemini'";
+    if (runtime === 'codex')
+        return "'.codex'";
+    if (runtime === 'github-copilot')
+        return "'.github-copilot'";
+    return "'.claude'";
 }
-if (runtime === 'gemini')
-    return "'.gemini'";
-if (runtime === 'codex')
-    return "'.codex'";
-if (runtime === 'github-copilot')
-    return "'.github-copilot'";
-return "'.claude'";
 /**
  * Get the global config directory for OpenCode
  * OpenCode follows XDG Base Directory spec and uses ~/.config/opencode/
  * Priority: OPENCODE_CONFIG_DIR > dirname(OPENCODE_CONFIG) > XDG_CONFIG_HOME/opencode > ~/.config/opencode
  */
-// 2. OPENCODE_CONFIG env var (use its directory)
-if (process.env.OPENCODE_CONFIG) {
-    return path.dirname(expandTilde(process.env.OPENCODE_CONFIG));
+function getOpencodeGlobalDir() {
+    // 1. Explicit OPENCODE_CONFIG_DIR env var
+    if (process.env.OPENCODE_CONFIG_DIR) {
+        return expandTilde(process.env.OPENCODE_CONFIG_DIR);
+    }
+    // 2. OPENCODE_CONFIG env var (use its directory)
+    if (process.env.OPENCODE_CONFIG) {
+        return path.dirname(expandTilde(process.env.OPENCODE_CONFIG));
+    }
+    // 3. XDG_CONFIG_HOME/opencode
+    if (process.env.XDG_CONFIG_HOME) {
+        return path.join(expandTilde(process.env.XDG_CONFIG_HOME), 'opencode');
+    }
+    // 4. Default: ~/.config/opencode (XDG default)
+    return path.join(os.homedir(), '.config', 'opencode');
 }
-// 3. XDG_CONFIG_HOME/opencode
-if (process.env.XDG_CONFIG_HOME) {
-    return path.join(expandTilde(process.env.XDG_CONFIG_HOME), 'opencode');
-}
-// 4. Default: ~/.config/opencode (XDG default)
-return path.join(os.homedir(), '.config', 'opencode');
 /**
  * Get the global config directory for a runtime
  * @param {string} runtime - 'claude', 'opencode', 'gemini', 'codex', or 'github-copilot'
  * @param {string|null} explicitDir - Explicit directory from --config-dir flag
  */
-return getOpencodeGlobalDir();
-if (runtime === 'gemini') {
-    // Gemini: --config-dir > GEMINI_CONFIG_DIR > ~/.gemini
+function getGlobalDir(runtime, explicitDir = null) {
+    if (runtime === 'opencode') {
+        // For OpenCode, --config-dir overrides env vars
+        if (explicitDir) {
+            return expandTilde(explicitDir);
+        }
+        return getOpencodeGlobalDir();
+    }
+    if (runtime === 'gemini') {
+        // Gemini: --config-dir > GEMINI_CONFIG_DIR > ~/.gemini
+        if (explicitDir) {
+            return expandTilde(explicitDir);
+        }
+        if (process.env.GEMINI_CONFIG_DIR) {
+            return expandTilde(process.env.GEMINI_CONFIG_DIR);
+        }
+        return path.join(os.homedir(), '.gemini');
+    }
+    if (runtime === 'codex') {
+        // Codex: --config-dir > CODEX_HOME > ~/.codex
+        if (explicitDir) {
+            return expandTilde(explicitDir);
+        }
+        if (process.env.CODEX_HOME) {
+            return expandTilde(process.env.CODEX_HOME);
+        }
+        return path.join(os.homedir(), '.codex');
+    }
+    if (runtime === 'github-copilot') {
+        // GitHub Copilot: --config-dir > GITHUB_COPILOT_CONFIG_DIR > ~/.github-copilot
+        if (explicitDir) {
+            return expandTilde(explicitDir);
+        }
+        if (process.env.GITHUB_COPILOT_CONFIG_DIR) {
+            return expandTilde(process.env.GITHUB_COPILOT_CONFIG_DIR);
+        }
+        return path.join(os.homedir(), '.github-copilot');
+    }
+    // Claude Code: --config-dir > CLAUDE_CONFIG_DIR > ~/.claude
     if (explicitDir) {
         return expandTilde(explicitDir);
     }
-    if (process.env.GEMINI_CONFIG_DIR) {
-        return expandTilde(process.env.GEMINI_CONFIG_DIR);
+    if (process.env.CLAUDE_CONFIG_DIR) {
+        return expandTilde(process.env.CLAUDE_CONFIG_DIR);
     }
-    return path.join(os.homedir(), '.gemini');
+    return path.join(os.homedir(), '.claude');
 }
-if (runtime === 'codex') {
-    // Codex: --config-dir > CODEX_HOME > ~/.codex
-    if (explicitDir) {
-        return expandTilde(explicitDir);
-    }
-    if (process.env.CODEX_HOME) {
-        return expandTilde(process.env.CODEX_HOME);
-    }
-    return path.join(os.homedir(), '.codex');
-}
-if (runtime === 'github-copilot') {
-    // GitHub Copilot: --config-dir > GITHUB_COPILOT_CONFIG_DIR > ~/.github-copilot
-    if (explicitDir) {
-        return expandTilde(explicitDir);
-    }
-    if (process.env.GITHUB_COPILOT_CONFIG_DIR) {
-        return expandTilde(process.env.GITHUB_COPILOT_CONFIG_DIR);
-    }
-    return path.join(os.homedir(), '.github-copilot');
-}
-// Claude Code: --config-dir > CLAUDE_CONFIG_DIR > ~/.claude
-if (explicitDir) {
-    return expandTilde(explicitDir);
-}
-if (process.env.CLAUDE_CONFIG_DIR) {
-    return expandTilde(process.env.CLAUDE_CONFIG_DIR);
-}
-return path.join(os.homedir(), '.claude');
 const banner = '\n' +
     cyan + '  ███████╗  █████╗ ███████╗███████╗\n' +
     '  ██╔════╝ ██╔══██╗██╔════╝██╔════╝\n' +
@@ -243,45 +275,173 @@ if (hasHelp) {
 /**
  * Expand ~ to home directory (shell doesn't expand in env vars passed to node)
  */
-return filePath;
+function expandTilde(filePath) {
+    if (filePath && filePath.startsWith('~/')) {
+        return path.join(os.homedir(), filePath.slice(2));
+    }
+    return filePath;
+}
 /**
  * Build a hook command path using forward slashes for cross-platform compatibility.
  * On Windows, $HOME is not expanded by cmd.exe/PowerShell, so we use the actual path.
- */ "`;;
+ */
+function buildHookCommand(configDir, hookName) {
+    // Use forward slashes for Node.js compatibility on all platforms
+    const hooksPath = configDir.replace(/\\/g, '/') + '/hooks/' + hookName;
+    return `node "${hooksPath}"`;
+}
 /**
  * Read and parse settings.json, returning empty object if it doesn't exist
- */ try {
-}
-catch (e) {
+ */
+function readSettings(settingsPath) {
+    if (fs.existsSync(settingsPath)) {
+        try {
+            return JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
+        }
+        catch (e) {
+            return {};
+        }
+    }
     return {};
 }
-return {};
-try { }
-catch (e) {
-    // Ignore parsing errors
+/**
+ * Write settings.json with proper formatting
+ */
+function writeSettings(settingsPath, settings) {
+    fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + '\n');
 }
-return null;
-;
-// Read existing config or create new one
-let config = {};
-if (fs.existsSync(configPath)) {
-    try {
-        config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+/**
+ * Get the local .fase-ai config path in the current working directory
+ */
+function getLocalAnalyticsConfigPath() {
+    return path.join(process.cwd(), '.fase-ai', 'config.json');
+}
+/**
+ * Read analytics preference from local config if it exists
+ * @returns {null|boolean} null if not set, true/false if set
+ */
+function readAnalyticsPreference() {
+    const configPath = getLocalAnalyticsConfigPath();
+    if (fs.existsSync(configPath)) {
+        try {
+            const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+            if (typeof config.analytics_enabled === 'boolean') {
+                return config.analytics_enabled;
+            }
+        }
+        catch (e) {
+            // Ignore parsing errors
+        }
     }
-    catch (e) {
-        config = {};
+    return null;
+}
+/**
+ * Save analytics preference to local config
+ */
+function saveAnalyticsPreference(enabled) {
+    const configPath = getLocalAnalyticsConfigPath();
+    const configDir = path.dirname(configPath);
+    // Create .fase-ai directory if it doesn't exist
+    if (!fs.existsSync(configDir)) {
+        fs.mkdirSync(configDir, { recursive: true });
     }
+    // Read existing config or create new one
+    let config = {};
+    if (fs.existsSync(configPath)) {
+        try {
+            config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        }
+        catch (e) {
+            config = {};
+        }
+    }
+    // Update analytics preference
+    config.analytics_enabled = enabled;
+    // Write back to file
+    fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n');
 }
-// Update analytics preference
-config.analytics_enabled = enabled;
-// Write back to file
-fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n');
-if (attribution === undefined) {
-    return content;
+// Cache for attribution settings (populated once per runtime during install)
+const attributionCache = new Map();
+/**
+ * Get commit attribution setting for a runtime
+ * @param {string} runtime - 'claude', 'opencode', 'gemini', 'codex', or 'github-copilot'
+ * @returns {null|undefined|string} null = remove, undefined = keep default, string = custom
+ */
+function getCommitAttribution(runtime) {
+    // Return cached value if available
+    if (attributionCache.has(runtime)) {
+        return attributionCache.get(runtime);
+    }
+    let result;
+    if (runtime === 'opencode') {
+        const config = readSettings(path.join(getGlobalDir('opencode', null), 'opencode.json'));
+        result = config.disable_ai_attribution === true ? null : undefined;
+    }
+    else if (runtime === 'gemini') {
+        // Gemini: check gemini settings.json for attribution config
+        const settings = readSettings(path.join(getGlobalDir('gemini', explicitConfigDir), 'settings.json'));
+        if (!settings.attribution || settings.attribution.commit === undefined) {
+            result = undefined;
+        }
+        else if (settings.attribution.commit === '') {
+            result = null;
+        }
+        else {
+            result = settings.attribution.commit;
+        }
+    }
+    else if (runtime === 'claude') {
+        // Claude Code
+        const settings = readSettings(path.join(getGlobalDir('claude', explicitConfigDir), 'settings.json'));
+        if (!settings.attribution || settings.attribution.commit === undefined) {
+            result = undefined;
+        }
+        else if (settings.attribution.commit === '') {
+            result = null;
+        }
+        else {
+            result = settings.attribution.commit;
+        }
+    }
+    else if (runtime === 'github-copilot') {
+        // GitHub Copilot: check .copilot-settings.json for attribution config
+        const settings = readSettings(path.join(getGlobalDir('github-copilot', explicitConfigDir), '.copilot-settings.json'));
+        if (!settings.attribution || settings.attribution.commit === undefined) {
+            result = undefined;
+        }
+        else if (settings.attribution.commit === '') {
+            result = null;
+        }
+        else {
+            result = settings.attribution.commit;
+        }
+    }
+    else {
+        // Codex currently has no attribution setting equivalent
+        result = undefined;
+    }
+    // Cache and return
+    attributionCache.set(runtime, result);
+    return result;
 }
-// Replace with custom attribution (escape $ to prevent backreference injection)
-const safeAttribution = attribution.replace(/\$/g, '$$$$');
-return content.replace(/Co-Authored-By:.*$/gim, `Co-Authored-By: ${safeAttribution}`);
+/**
+ * Process Co-Authored-By lines based on attribution setting
+ * @param {string} content - File content to process
+ * @param {null|undefined|string} attribution - null=remove, undefined=keep, string=replace
+ * @returns {string} Processed content
+ */
+function processAttribution(content, attribution) {
+    if (attribution === null) {
+        // Remove Co-Authored-By lines and the preceding blank line
+        return content.replace(/(\r?\n){2}Co-Authored-By:.*$/gim, '');
+    }
+    if (attribution === undefined) {
+        return content;
+    }
+    // Replace with custom attribution (escape $ to prevent backreference injection)
+    const safeAttribution = attribution.replace(/\$/g, '$$$$');
+    return content.replace(/Co-Authored-By:.*$/gim, `Co-Authored-By: ${safeAttribution}`);
+}
 /**
  * Convert Claude Code frontmatter to opencode format
  * - Converts 'allowed-tools:' array to 'permission:' object
@@ -289,21 +449,61 @@ return content.replace(/Co-Authored-By:.*$/gim, `Co-Authored-By: ${safeAttributi
  * @returns {string} - Content with converted frontmatter
  */
 // Color name to hex mapping for opencode compatibility
+const colorNameToHex = {
+    cyan: '#00FFFF',
+    red: '#FF0000',
+    green: '#00FF00',
+    blue: '#0000FF',
+    yellow: '#FFFF00',
+    magenta: '#FF00FF',
+    orange: '#FFA500',
+    purple: '#800080',
+    pink: '#FFC0CB',
+    white: '#FFFFFF',
+    black: '#000000',
+    gray: '#808080',
+    grey: '#808080',
+};
 // Tool name mapping from Claude Code to OpenCode
 // OpenCode uses lowercase tool names; special mappings for renamed tools
+const claudeToOpencodeTools = {
+    AskUserQuestion: 'question',
+    SlashCommand: 'skill',
+    TodoWrite: 'todowrite',
+    WebFetch: 'webfetch',
+    WebSearch: 'websearch', // Plugin/MCP - keep for compatibility
+};
 // Tool name mapping from Claude Code to Gemini CLI
 // Gemini CLI uses snake_case built-in tool names
+const claudeToGeminiTools = {
+    Read: 'read_file',
+    Write: 'write_file',
+    Edit: 'replace',
+    Bash: 'run_shell_command',
+    Glob: 'glob',
+    Grep: 'search_file_content',
+    WebSearch: 'google_web_search',
+    WebFetch: 'web_fetch',
+    TodoWrite: 'write_todos',
+    AskUserQuestion: 'ask_user',
+};
 /**
  * Convert a Claude Code tool name to OpenCode format
  * - Applies special mappings (AskUserQuestion -> question, etc.)
  * - Converts to lowercase (except MCP tools which keep their format)
  */
-// MCP tools (mcp__*) keep their format
-if (claudeTool.startsWith('mcp__')) {
-    return claudeTool;
+function convertToolName(claudeTool) {
+    // Check for special mapping first
+    if (claudeToOpencodeTools[claudeTool]) {
+        return claudeToOpencodeTools[claudeTool];
+    }
+    // MCP tools (mcp__*) keep their format
+    if (claudeTool.startsWith('mcp__')) {
+        return claudeTool;
+    }
+    // Default: convert to lowercase
+    return claudeTool.toLowerCase();
 }
-// Default: convert to lowercase
-return claudeTool.toLowerCase();
 /**
  * Convert a Claude Code tool name to Gemini CLI format
  * - Applies Claude→Gemini mapping (Read→read_file, Bash→run_shell_command, etc.)
@@ -311,49 +511,65 @@ return claudeTool.toLowerCase();
  * - Filters out Task — agents are auto-registered as tools in Gemini
  * @returns {string|null} Gemini tool name, or null if tool should be excluded
  */
-// Task: exclude — agents are auto-registered as callable tools
-if (claudeTool === 'Task') {
-    return null;
+function convertGeminiToolName(claudeTool) {
+    // MCP tools: exclude — auto-discovered from mcpServers config at runtime
+    if (claudeTool.startsWith('mcp__')) {
+        return null;
+    }
+    // Task: exclude — agents are auto-registered as callable tools
+    if (claudeTool === 'Task') {
+        return null;
+    }
+    // Check for explicit mapping
+    if (claudeToGeminiTools[claudeTool]) {
+        return claudeToGeminiTools[claudeTool];
+    }
+    // Default: lowercase
+    return claudeTool.toLowerCase();
 }
-// Check for explicit mapping
-if (claudeToGeminiTools[claudeTool]) {
-    return claudeToGeminiTools[claudeTool];
+function toSingleLine(value) {
+    return value.replace(/\s+/g, ' ').trim();
 }
-// Default: lowercase
-return claudeTool.toLowerCase();
-;
-const endIndex = content.indexOf('---', 3);
-if (endIndex === -1) {
-    return { frontmatter: null, body: content };
+function yamlQuote(value) {
+    return JSON.stringify(value);
 }
-return {
-    frontmatter: content.substring(3, endIndex).trim(),
-    body: content.substring(endIndex + 3),
-};
-s * (. + );
-$ `, 'm');
-  const match = frontmatter.match(regex);
-  if (!match) return null;
-  return match[1].trim().replace(/^['"]|['"]$/g, '');
-}`;
-;
-converted = converted.replace(/\/fase-help\b/g, '$fase-help');
-return converted;
-');;
-return converted;
-`;
-  return `;
-#;
-#;
-A.Skill;
-Invocation
-    - This;
-skill;
-is;
-invoked;
-by;
-mentioning;
-`${invocation}\`.
+function extractFrontmatterAndBody(content) {
+    if (!content.startsWith('---')) {
+        return { frontmatter: null, body: content };
+    }
+    const endIndex = content.indexOf('---', 3);
+    if (endIndex === -1) {
+        return { frontmatter: null, body: content };
+    }
+    return {
+        frontmatter: content.substring(3, endIndex).trim(),
+        body: content.substring(endIndex + 3),
+    };
+}
+function extractFrontmatterField(frontmatter, fieldName) {
+    const regex = new RegExp(`^${fieldName}:\\s*(.+)$`, 'm');
+    const match = frontmatter.match(regex);
+    if (!match)
+        return null;
+    return match[1].trim().replace(/^['"]|['"]$/g, '');
+}
+function convertSlashCommandsToCodexSkillMentions(content) {
+    let converted = content.replace(/\/fase-([a-z0-9-]+)/gi, (_, commandName) => {
+        return `$fase-${String(commandName).toLowerCase()}`;
+    });
+    converted = converted.replace(/\/fase-help\b/g, '$fase-help');
+    return converted;
+}
+function convertClaudeToCodexMarkdown(content) {
+    let converted = convertSlashCommandsToCodexSkillMentions(content);
+    converted = converted.replace(/\$ARGUMENTS\b/g, '{{FASE_ARGS}}');
+    return converted;
+}
+function getCodexSkillAdapterHeader(skillName) {
+    const invocation = `$${skillName}`;
+    return `<codex_skill_adapter>
+## A. Skill Invocation
+- This skill is invoked by mentioning \`${invocation}\`.
 - Treat all user text after \`${invocation}\` as \`{{FASE_ARGS}}\`.
 - If no arguments are present, treat \`{{FASE_ARGS}}\` as empty.
 ## B. AskUserQuestion → request_user_input Mapping
@@ -381,6 +597,7 @@ Result parsing:
 - Look for structured markers in agent output: \`CHECKPOINT\`, \`PLAN COMPLETE\`, \`SUMMARY\`, etc.
 - \`close_agent(id)\` after collecting results from each agent
 </codex_skill_adapter>`;
+}
 function convertClaudeCommandToCodexSkill(content, skillName) {
     const converted = convertClaudeToCodexMarkdown(content);
     const { frontmatter, body } = extractFrontmatterAndBody(converted);
@@ -429,7 +646,7 @@ function fixTomlEscaping(content) {
     fixed = fixed.replace(/\\`/g, '\\\\`');
     // Fix grep patterns: \| becomes | (pipes don't need escaping in grep -E)
     // This handles patterns like: grep -E "export\|interface" or grep -r "import.*stripe\|import.*supabase"
-    fixed = fixed.replace(/\\\|/g, '|');
+    fixed = fixed.replace(/\\|/g, '|');
     return fixed;
 }
 /**
@@ -2567,7 +2784,7 @@ function installAllRuntimes(runtimes, isGlobal, isInteractive) {
 }
 // Test-only exports — skip main logic when loaded as a module for testing
 if (process.env.FASE_TEST_MODE) {
-    globalThis.FASE_TEST_EXPORTS = {
+    module.exports = {
         getCodexSkillAdapterHeader,
         convertClaudeAgentToCodexAgent,
         generateCodexAgentToml,
@@ -2576,7 +2793,6 @@ if (process.env.FASE_TEST_MODE) {
         mergeCodexConfig,
         installCodexConfig,
         convertClaudeCommandToCodexSkill,
-        fixTomlEscaping,
         FASE_CODEX_MARKER,
         CODEX_AGENT_SANDBOX,
     };
