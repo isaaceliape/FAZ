@@ -50,6 +50,8 @@ export function getDirName(runtime) {
         return '.codex';
     if (runtime === 'github-copilot')
         return '.github-copilot';
+    if (runtime === 'qwen')
+        return '.qwen';
     return '.claude';
 }
 /**
@@ -83,6 +85,8 @@ export function getConfigDirFromHome(runtime, isGlobal) {
         return "'.codex'";
     if (runtime === 'github-copilot')
         return "'.github-copilot'";
+    if (runtime === 'qwen')
+        return "'.qwen'";
     return "'.claude'";
 }
 /**
@@ -164,6 +168,16 @@ export function getGlobalDir(runtime, explicitDir = null) {
         }
         return path.join(os.homedir(), '.github-copilot');
     }
+    if (runtime === 'qwen') {
+        // Qwen Code: --config-dir > QWEN_CONFIG_DIR > ~/.qwen
+        if (explicitDir) {
+            return expandTilde(explicitDir);
+        }
+        if (process.env.QWEN_CONFIG_DIR) {
+            return expandTilde(process.env.QWEN_CONFIG_DIR);
+        }
+        return path.join(os.homedir(), '.qwen');
+    }
     // Claude Code: --config-dir > CLAUDE_CONFIG_DIR > ~/.claude
     if (explicitDir) {
         return expandTilde(explicitDir);
@@ -186,7 +200,7 @@ export function getGlobalDir(runtime, explicitDir = null) {
  * ```
  */
 export function isValidProvider(runtime) {
-    return ['claude', 'opencode', 'gemini', 'codex', 'github-copilot'].includes(runtime);
+    return ['claude', 'opencode', 'gemini', 'codex', 'github-copilot', 'qwen'].includes(runtime);
 }
 /**
  * Get all supported providers
@@ -194,6 +208,6 @@ export function isValidProvider(runtime) {
  * @returns Array of valid provider runtime names
  */
 export function getSupportedProviders() {
-    return ['claude', 'opencode', 'gemini', 'codex', 'github-copilot'];
+    return ['claude', 'opencode', 'gemini', 'codex', 'github-copilot', 'qwen'];
 }
 //# sourceMappingURL=providers.js.map

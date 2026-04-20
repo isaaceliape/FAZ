@@ -94,6 +94,36 @@ npx fase-ai --qwen
 npx fase-ai --all
 ```
 
+### Instalação via Dev Dependency (Recomendado para Times)
+
+Para projetos em equipe, instale FASE como dev dependency para garantir **versão consistente** entre todos os desenvolvedores:
+
+```bash
+# Instalar como dev dependency
+npm install --save-dev fase-ai@4.0.0
+
+# Ou com yarn
+yarn add --dev fase-ai@4.0.0
+
+# Ou com pnpm
+pnpm add --save-dev fase-ai@4.0.0
+```
+
+O FASE será instalado automaticamente via `postinstall` após o `npm install`. Para configurar quais runtimes instalar, crie `.fase-ai/config.json`:
+
+```json
+{
+  "runtimes": ["claude", "opencode"],
+  "auto_install": true
+}
+```
+
+**Benefícios:**
+- ✅ **Versão fixa** no `package.json` — todo time usa a mesma versão
+- ✅ **Funciona offline** após instalação inicial
+- ✅ **CI/CD friendly** — instalação automática no pipeline
+- ✅ **Sem conflitos** — cada projeto pode usar versão diferente
+
 ### Verificar Instalação
 
 Após instalar, teste o comando de ajuda:

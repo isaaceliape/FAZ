@@ -82,3 +82,14 @@ export declare function convertClaudeToCodexMarkdown(content: string): string;
  * @returns Skill adapter header markdown
  */
 export declare function getCodexSkillAdapterHeader(skillName: string): string;
+/**
+ * Convert Claude Code agent content to Qwen Code command format
+ * Qwen Commands use markdown files with optional YAML frontmatter
+ * - Only 'description' is supported in frontmatter
+ * - tools, color, skills are stripped (not supported)
+ * - Command name comes from filename, not frontmatter
+ *
+ * @param content - Claude agent content
+ * @returns Qwen command content
+ */
+export declare function convertClaudeToQwenCommand(content: string): string;

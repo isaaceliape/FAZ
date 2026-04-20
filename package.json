@@ -40,6 +40,7 @@
     "prepare": "husky install || true",
     "build": "tsc",
     "postbuild": "node scripts/fix-shebangs.mjs && node scripts/sync-version.mjs",
+    "postinstall": "node dist/install.js --auto-detect || true",
     "sync-version": "node scripts/sync-version.mjs",
     "verificar-pacote": "npm pack --dry-run",
     "verificar-instalacao": "node dist/verificar-instalacao.js",

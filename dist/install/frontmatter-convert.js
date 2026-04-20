@@ -169,4 +169,49 @@ export function getCodexSkillAdapterHeader(skillName) {
 </codex_skill_adapter>
 `;
 }
+/**
+ * Convert Claude Code agent content to Qwen Code command format
+ * Qwen Commands use markdown files with optional YAML frontmatter
+ * - Only 'description' is supported in frontmatter
+ * - tools, color, skills are stripped (not supported)
+ * - Command name comes from filename, not frontmatter
+ *
+ * @param content - Claude agent content
+ * @returns Qwen command content
+ */
+export function convertClaudeToQwenCommand(content) {
+    // Replace tool name references in content
+    let convertedContent = content;
+    // Replace ~/.claude and $HOME/.claude with Qwen's config location
+    convertedContent = convertedContent.replace(/~\/\.claude\b/g, '~/.qwen');
+    convertedContent = convertedContent.replace(/\$HOME\/\.claude\b/g, '$HOME/.qwen');
+    // Replace ~/.fase and $HOME/.fase with Qwen's config location
+    convertedContent = convertedContent.replace(/~\/\.fase\b/g, '~/.qwen');
+    convertedContent = convertedContent.replace(/\$HOME\/\.fase\b/g, '$HOME/.qwen');
+    // Check if content has frontmatter
+    if (!convertedContent.startsWith('---')) {
+        return convertedContent;
+    }
+    // Find the end of frontmatter
+    const endIndex = convertedContent.indexOf('---', 3);
+    if (endIndex === -1) {
+        return convertedContent;
+    }
+    const frontmatter = convertedContent.substring(3, endIndex).trim();
+    const body = convertedContent.substring(endIndex + 3);
+    // Parse frontmatter line by line and extract only description
+    const lines = frontmatter.split('\n');
+    let description = null;
+    for (const line of lines) {
+        const trimmed = line.trim();
+        // Extract description field
+        if (trimmed.startsWith('description:')) {
+            description = trimmed.substring(12).trim().replace(/^['"]|['"]$/g, '');
+        }
+        // name, tools, color, skills are ignored for Qwen Commands
+    }
+    // Build new frontmatter (only description if present)
+    const newFrontmatter = description ? `---\ndescription: ${JSON.stringify(description)}\n---` : '';
+    return newFrontmatter ? `${newFrontmatter}\n${body}` : body;
+}
 //# sourceMappingURL=frontmatter-convert.js.map

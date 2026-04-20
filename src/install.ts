@@ -72,6 +72,7 @@ const hasAll = args.includes('--all');
 const hasUninstall = args.includes('--uninstall') || args.includes('-u');
 const hasVerificar = args.includes('--verificar-instalacao') || args.includes('--verificar') || args.includes('-v');
 const hasAtualizar = args.includes('--atualizar') || args.includes('--update');
+const hasAutoDetect = args.includes('--auto-detect');
 // Runtime selection - can be set by flags or interactive prompt
 let selectedRuntimes = [];
 if (hasAll) {
@@ -267,7 +268,12 @@ if (hasVerificar) {
 }
 // Show help if requested
 if (hasHelp) {
-  console.log(`  ${yellow}Uso:${reset} npx fase-ai [opções]\n\n  ${yellow}Opções:${reset}\n    ${cyan}--claude${reset}                  Instalar apenas para Claude Code\n    ${cyan}--opencode${reset}                Instalar apenas para OpenCode\n    ${cyan}--gemini${reset}                  Instalar apenas para Gemini\n    ${cyan}--codex${reset}                   Instalar apenas para Codex\n    ${cyan}--github-copilot${reset}          Instalar apenas para GitHub Copilot\n    ${cyan}--qwen${reset}                    Instalar apenas para Qwen Code\n    ${cyan}--all${reset}                     Instalar para todos os runtimes\n    ${cyan}-u, --uninstall${reset}           Desinstalar o FASE (remover todos os arquivos)\n    ${cyan}--atualizar${reset}               Atualizar FASE: detecta runtimes instalados e reinstala\n    ${cyan}-v, --verificar${reset}           Verificar instalação e gerar relatório\n    ${cyan}-c, --config-dir <caminho>${reset} Especificar diretório de configuração customizado\n    ${cyan}-h, --help${reset}                Exibir esta mensagem de ajuda\n    ${cyan}--force-statusline${reset}        Substituir configuração de statusline existente\n\n  ${yellow}Exemplos:${reset}\n    ${dim}# Instalação interativa (solicita runtime)${reset}\n    npx fase-ai\n\n    ${dim}# Instalar para Claude Code${reset}\n    npx fase-ai --claude\n\n    ${dim}# Instalar para OpenCode${reset}\n    npx fase-ai --opencode\n\n    ${dim}# Instalar para Gemini${reset}\n    npx fase-ai --gemini\n\n    ${dim}# Instalar para Codex${reset}\n    npx fase-ai --codex\n\n    ${dim}# Instalar para GitHub Copilot${reset}\n    npx fase-ai --github-copilot\n\n    ${dim}# Instalar para Qwen Code${reset}\n    npx fase-ai --qwen\n\n    ${dim}# Instalar para todos os runtimes${reset}\n    npx fase-ai --all\n\n    ${dim}# Atualizar todos os runtimes instalados${reset}\n    npx fase-ai --atualizar\n\n    ${dim}# Atualizar apenas Claude Code${reset}\n    npx fase-ai --claude --atualizar\n\n    ${dim}# Verificar instalação${reset}\n    npx fase-ai --verificar\n\n    ${dim}# Desinstalação interativa (solicita confirma)${reset}\n    npx fase-ai --uninstall\n\n    ${dim}# Desinstalar do GitHub Copilot${reset}\n    npx fase-ai --github-copilot --uninstall\n\n    ${dim}# Desinstalar do Codex${reset}\n    npx fase-ai --codex --uninstall\n\n    ${dim}# Desinstalar do OpenCode${reset}\n    npx fase-ai --opencode --uninstall\n\n    ${dim}# Desinstalar do Qwen Code${reset}\n    npx fase-ai --qwen --uninstall\n\n  ${yellow}Notas:${reset}\n    A opção --config-dir é útil quando você tem múltiplas configurações.\n    Tem prioridade sobre as variáveis de ambiente CLAUDE_CONFIG_DIR / GEMINI_CONFIG_DIR / CODEX_HOME / GITHUB_COPILOT_CONFIG_DIR / QWEN_CONFIG_DIR.\n    Use ${cyan}--uninstall${reset} sem localização para um processo interativo seguro.\n    Use ${cyan}--atualizar${reset} para re-instalar mantendo configurações existentes.\n`);
+  console.log(`  ${yellow}Uso:${reset} npx fase-ai [opções]\n\n  ${yellow}Opções:${reset}\n    ${cyan}--claude${reset}                  Instalar apenas para Claude Code\n    ${cyan}--opencode${reset}                Instalar apenas para OpenCode\n    ${cyan}--gemini${reset}                  Instalar apenas para Gemini\n    ${cyan}--codex${reset}                   Instalar apenas para Codex\n    ${cyan}--github-copilot${reset}          Instalar apenas para GitHub Copilot\n    ${cyan}--qwen${reset}                    Instalar apenas para Qwen Code\n    ${cyan}--all${reset}                     Instalar para todos os runtimes\n    ${cyan}-u, --uninstall${reset}           Desinstalar o FASE (remover todos os arquivos)\n    ${cyan}--atualizar${reset}               Atualizar FASE: detecta runtimes instalados e reinstala\n    ${cyan}-v, --verificar${reset}           Verificar instalação e gerar relatório\n    ${cyan}-c, --config-dir <caminho>${reset} Especificar diretório de configuração customizado\n    ${cyan}-h, --help${reset}                Exibir esta mensagem de ajuda\n    ${cyan}--force-statusline${reset}        Substituir configuração de statusline existente
+    ${cyan}--auto-detect${reset}             Modo automático: detecta runtimes e usa configuração do projeto\n\n  ${yellow}Exemplos:${reset}\n    ${dim}# Instalação interativa (solicita runtime)${reset}\n    npx fase-ai\n\n    ${dim}# Instalar para Claude Code${reset}\n    npx fase-ai --claude\n\n    ${dim}# Instalar para OpenCode${reset}\n    npx fase-ai --opencode\n\n    ${dim}# Instalar para Gemini${reset}\n    npx fase-ai --gemini\n\n    ${dim}# Instalar para Codex${reset}\n    npx fase-ai --codex\n\n    ${dim}# Instalar para GitHub Copilot${reset}\n    npx fase-ai --github-copilot\n\n    ${dim}# Instalar para Qwen Code${reset}\n    npx fase-ai --qwen\n\n    ${dim}# Instalar para todos os runtimes${reset}
+    npx fase-ai --all
+
+    ${dim}# Instalação automática (para package.json postinstall)${reset}\n    npx fase-ai --all\n\n    ${dim}# Atualizar todos os runtimes instalados${reset}\n    npx fase-ai --atualizar\n\n    ${dim}# Atualizar apenas Claude Code${reset}\n    npx fase-ai --claude --atualizar\n\n    ${dim}# Verificar instalação${reset}\n    npx fase-ai --verificar\n\n    ${dim}# Desinstalação interativa (solicita confirma)${reset}\n    npx fase-ai --uninstall\n\n    ${dim}# Desinstalar do GitHub Copilot${reset}\n    npx fase-ai --github-copilot --uninstall\n\n    ${dim}# Desinstalar do Codex${reset}\n    npx fase-ai --codex --uninstall\n\n    ${dim}# Desinstalar do OpenCode${reset}\n    npx fase-ai --opencode --uninstall\n\n    ${dim}# Desinstalar do Qwen Code${reset}\n    npx fase-ai --qwen --uninstall\n\n  ${yellow}Notas:${reset}\n    A opção --config-dir é útil quando você tem múltiplas configurações.\n    Tem prioridade sobre as variáveis de ambiente CLAUDE_CONFIG_DIR / GEMINI_CONFIG_DIR / CODEX_HOME / GITHUB_COPILOT_CONFIG_DIR / QWEN_CONFIG_DIR.\n    Use ${cyan}--uninstall${reset} sem localização para um processo interativo seguro.\n    Use ${cyan}--atualizar${reset} para re-instalar mantendo configurações existentes.
+    Use ${cyan}--auto-detect${reset} para instalação via npm postinstall (package.json).\n`);
   process.exit(0);
 }
 /**
@@ -358,6 +364,63 @@ function saveAnalyticsPreference(enabled) {
   
   // Write back to file
   fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n');
+}
+/**
+ * Detect if running as npm postinstall script
+ * Checks npm lifecycle environment variables
+ */
+function isRunningAsPostinstall() {
+  return process.env.npm_lifecycle_event === 'postinstall' ||
+         process.env.INIT_CWD !== undefined;
+}
+/**
+ * Read project-level FASE configuration from .fase-ai/config.json
+ * @returns {Object} Configuration object with defaults
+ */
+function readProjectConfig() {
+  const configPath = path.join(process.cwd(), '.fase-ai', 'config.json');
+  const defaults = {
+    runtimes: ['claude'],
+    auto_install: true,
+    skip_confirmation: true
+  };
+
+  if (fs.existsSync(configPath)) {
+    try {
+      const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+      return { ...defaults, ...config };
+    } catch (e) {
+      // Ignore parsing errors, use defaults
+    }
+  }
+  return defaults;
+}
+/**
+ * Detect available AI runtimes in the system
+ * @returns {string[]} Array of detected runtime names
+ */
+function detectAvailableRuntimes() {
+  const detected = [];
+  const checks = [
+    { runtime: 'claude', command: 'claude' },
+    { runtime: 'opencode', command: 'opencode' },
+    { runtime: 'gemini', command: 'gemini' },
+    { runtime: 'codex', command: 'codex' },
+    { runtime: 'github-copilot', command: 'gh' },
+    { runtime: 'qwen', command: 'qwen' }
+  ];
+
+  for (const check of checks) {
+    try {
+      execSync(`which ${check.command}`, { stdio: 'ignore' });
+      detected.push(check.runtime);
+    } catch {
+      // Command not found, skip
+    }
+  }
+
+  // Default to claude if none detected
+  return detected.length > 0 ? detected : ['claude'];
 }
 // Cache for attribution settings (populated once per runtime during install)
 const attributionCache = new Map();
@@ -2754,10 +2817,38 @@ if (process.env.FASE_TEST_MODE) {
     convertClaudeCommandToCodexSkill,
     FASE_CODEX_MARKER,
     CODEX_AGENT_SANDBOX,
+    // Auto-detect mode exports
+    isRunningAsPostinstall,
+    readProjectConfig,
+    detectAvailableRuntimes,
   };
 } else {
 // Main logic
 (async () => {
+  // Handle auto-detect mode (postinstall or --auto-detect flag)
+  if (hasAutoDetect || isRunningAsPostinstall()) {
+    const projectConfig = readProjectConfig();
+
+    if (!projectConfig.auto_install) {
+      console.log(`  ${dim}FASE auto-install disabled in .fase-ai/config.json${reset}\n`);
+      process.exit(0);
+    }
+
+    // Determine runtimes to install
+    let runtimesToInstall = selectedRuntimes.length > 0 ? selectedRuntimes : projectConfig.runtimes;
+
+    // If no runtimes specified, try to detect available ones
+    if (runtimesToInstall.length === 0) {
+      runtimesToInstall = detectAvailableRuntimes();
+    }
+
+    console.log(`  ${cyan}FASE${reset} ${dim}v${pkg.version}${reset} — Instalação automática detectada\n`);
+    console.log(`  Runtimes: ${runtimesToInstall.join(', ')}\n`);
+
+    installAllRuntimes(runtimesToInstall, false, false);
+    return;
+  }
+
   // Check for updates at session start (unless we're already updating)
   if (!hasAtualizar && !hasUninstall && !hasVerificar) {
     await checkAndPromptForUpdate(pkg.version);

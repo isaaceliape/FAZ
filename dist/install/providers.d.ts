@@ -13,7 +13,7 @@
 /**
  * Supported provider runtimes
  */
-export type ProviderRuntime = 'claude' | 'opencode' | 'gemini' | 'codex' | 'github-copilot';
+export type ProviderRuntime = 'claude' | 'opencode' | 'gemini' | 'codex' | 'github-copilot' | 'qwen';
 /**
  * Expand ~ to home directory (shell doesn't expand in env vars passed to node)
  *
