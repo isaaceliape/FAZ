@@ -6,7 +6,7 @@
  * because they are not valid JS/TS syntax. This script:
  * 1. Prepends shebangs to CLI entry points
  * 2. Marks them executable
- * 3. Copies static directories (comandos, agentes, fase-shared, docs) to dist/
+ * 3. Copies static directories (.github/commands, .github/agents, fase-shared, docs) to dist/
  */
 
 import { readFileSync, writeFileSync, chmodSync, existsSync, readdirSync, mkdirSync, copyFileSync, statSync } from 'fs';
@@ -19,7 +19,7 @@ const distDir = join(rootDir, 'dist');
 
 const SHEBANG = '#!/usr/bin/env node\n';
 const CLI_FILES = ['install.js', 'verificar-instalacao.js'];
-const STATIC_DIRS = ['comandos', 'agentes', 'fase-shared', 'docs'];
+const STATIC_DIRS = ['.github/commands', '.github/agents', 'fase-shared', 'docs'];
 
 // Copy static directories from root to dist/
 function copyStaticDir(dirName) {
