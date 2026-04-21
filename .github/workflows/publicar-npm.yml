@@ -128,31 +128,37 @@ jobs:
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG_NAME: v${{ needs.check-version.outputs.current-version }}
         run: |
           VERSION=${{ needs.check-version.outputs.current-version }}
           TAG="v${VERSION}"
           
-          RELEASE_NOTES="## Changes
+          # Create release notes file to avoid shell interpretation of backticks
+          cat > /tmp/release_notes.md << 'RELEASE_EOF'
+          ## Changes
           
           ${{ steps.changelog.outputs.changelog }}
           
           ## Installation
           
-          \`\`\`bash
-          npm install fase-ai@${VERSION}
+          ```bash
+          npm install fase-ai@VERSION_PLACEHOLDER
           # or
-          npx fase-ai@${VERSION}
-          \`\`\`
+          npx fase-ai@VERSION_PLACEHOLDER
+          ```
           
-          **Published on npm:** https://www.npmjs.com/package/fase-ai/${VERSION}"
+          **Published on npm:** https://www.npmjs.com/package/fase-ai/VERSION_PLACEHOLDER
+          RELEASE_EOF
           
+          # Replace version placeholder
+          sed -i "s/VERSION_PLACEHOLDER/$VERSION/g" /tmp/release_notes.md
+          
+          # Create or update release
           gh release create "$TAG" \
             --title "Release $TAG" \
-            --notes "$RELEASE_NOTES" \
+            --notes-file /tmp/release_notes.md \
             2>/dev/null || gh release edit "$TAG" \
             --title "Release $TAG" \
-            --notes "$RELEASE_NOTES"
+            --notes-file /tmp/release_notes.md
           
           echo "✓ GitHub Release created/updated: $TAG"
 
