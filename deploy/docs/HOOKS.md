@@ -18,8 +18,8 @@ Antes de cada commit, o hook verifica:
    - `package.json` (válido)
 
 3. <i class="fa fa-check-circle"></i> **Diretórios obrigatórios**
-   - `agentes/` (12 agent definitions)
-   - `comandos/` (32 command definitions)
+   - `.github/agents/` (13 agent definitions)
+   - `.github/commands/` (34+ command definitions)
 
 ## <i class="fa fa-rocket"></i> Instalação
 
