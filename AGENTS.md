@@ -432,6 +432,46 @@ To add a new agent:
 
 ---
 
+## Active Projects & Initiatives
+
+### 🚀 GitHub Copilot Folder Structure Migration
+
+**Status:** ✅ PLAN COMPLETE - Ready for Execution  
+**Objective:** Migrate GitHub Copilot installation from root-level folders to GitHub-standard `.github` folder structure
+
+**Target State:**
+- Agents: `/agentes/` → `.github/agents/` ✓
+- Hooks: `/hooks/` → `.github/hooks/` (organized by function) ✓
+- Skills: `/skills/` → `.github/skills/` (organized by category) ✓
+- Workflows: Already in `.github/workflows/` ✓
+- Commands: `/comandos/` → `.github/commands/` ✓
+
+**Planning Complete:**
+- ✅ Questionnaire administered (24 questions)
+- ✅ Comprehensive investigation performed
+- ✅ Detailed execution plan created
+- ✅ 18 atomic commits planned
+- ✅ Test strategy defined
+- ✅ Rollback procedures documented
+- ✅ Success criteria established
+
+**Key Decisions Made:**
+- **Backward Compatibility:** Deprecation warnings (old paths work temporarily)
+- **Migration Pace:** All-at-once migration
+- **Risk Tolerance:** High (full migration in one go)
+- **Validation:** Unit + integration tests
+- **Rollback:** Git history enables easy revert
+- **Team Capacity:** Single developer, limited time
+- **Success Metrics:** A) Folder structure ✓ + B) No broken imports ✓ + C) Tests pass ✓
+
+**Execution Plan:** `.github/docs/migracoes/copilot-folder-structure/PLANO.md`  
+**Questionnaire:** `.github/docs/migracoes/copilot-folder-structure/QUESTIONARIO.md`  
+**Estimated Duration:** 5 hours (300 min total)
+
+**Next Step:** Execute Phase 1 (Preparation)
+
+---
+
 ## Related Documentation
 
 - **Installation:** [README.md](README.md)
@@ -439,9 +479,11 @@ To add a new agent:
 - **Getting Started:** [Getting Started Guide](docs/index.html)
 - **Technical Docs:** [/docs](docs/)
 - **Project Structure:** See `scripts/mapeador-codigo.md` output
+- **Migration Plans:** `.github/docs/migracoes/`
 
 ---
 
 **Last Updated:** 2026-04-21  
 **FASE Version:** 4.0.2  
-**Total Agents:** 13
+**Total Agents:** 13  
+**Active Migrations:** 1 (GitHub Copilot Folder Structure)
