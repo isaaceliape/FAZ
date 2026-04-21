@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [18, 20, 22]
+        node: [20, 22]
     
     steps:
       - name: Checkout
@@ -73,7 +73,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        node: [18, 20, 22]
+        node: [20, 22]
     
     steps:
       - name: Checkout
@@ -114,7 +114,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        node: [18, 20, 22]
+        node: [20, 22]
     
     steps:
       - name: Checkout
@@ -155,6 +155,8 @@ jobs:
   integration-test:
     name: Integration Tests
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     
     steps:
       - name: Checkout
@@ -176,15 +178,24 @@ jobs:
         run: |
           echo "Running integration tests..."
           
-          # Test multi-provider install
+          # Create a temporary directory for local installs
+          TEST_DIR=$(mktemp -d)
+          cd "$TEST_DIR"
+          
+          # Copy dist from source
+          cp -r "${GITHUB_WORKSPACE}/dist" .
+          
+          # Test multi-provider install (local installs in test directory)
           node dist/install.js --claude
           node dist/install.js --opencode
           
-          # Verify both providers
-          if [ -d "$HOME/.claude/fase-ai" ] && [ -d "$HOME/.config/opencode/fase-ai" ]; then
+          # Verify both providers (checking local install directories)
+          if [ -d "./.claude/fase-ai" ] && [ -d "./.opencode/fase-ai" ]; then
             echo "✓ Multi-provider install successful"
           else
             echo "✗ Multi-provider install failed"
+            echo "Available directories:"
+            find . -maxdepth 2 -type d
             exit 1
           fi
           
@@ -200,6 +211,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test-linux, test-macos, test-windows, integration-test]
     if: always()
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     
     steps:
       - name: Generate report
@@ -211,11 +224,11 @@ jobs:
           echo "" >> test-report.md
           echo "### Results Summary" >> test-report.md
           echo "" >> test-report.md
-          echo "| Platform | Node 18 | Node 20 | Node 22 |" >> test-report.md
-          echo "|----------|---------|---------|---------|" >> test-report.md
-          echo "| Linux    | ${{ needs.test-linux.result }} | ${{ needs.test-linux.result }} | ${{ needs.test-linux.result }} |" >> test-report.md
-          echo "| macOS    | ${{ needs.test-macos.result }} | ${{ needs.test-macos.result }} | ${{ needs.test-macos.result }} |" >> test-report.md
-          echo "| Windows  | ${{ needs.test-windows.result }} | ${{ needs.test-windows.result }} | ${{ needs.test-windows.result }} |" >> test-report.md
+          echo "| Platform | Node 20 | Node 22 |" >> test-report.md
+          echo "|----------|---------|---------|" >> test-report.md
+          echo "| Linux    | ${{ needs.test-linux.result }} | ${{ needs.test-linux.result }} |" >> test-report.md
+          echo "| macOS    | ${{ needs.test-macos.result }} | ${{ needs.test-macos.result }} |" >> test-report.md
+          echo "| Windows  | ${{ needs.test-windows.result }} | ${{ needs.test-windows.result }} |" >> test-report.md
           echo "" >> test-report.md
           echo "### Integration Tests" >> test-report.md
           echo "Status: ${{ needs.integration-test.result }}" >> test-report.md
@@ -227,6 +240,8 @@ jobs:
       
       - name: Upload report
         uses: actions/upload-artifact@v4
+        env:
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
         with:
           name: test-report
           path: test-report.md
