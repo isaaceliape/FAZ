@@ -266,7 +266,7 @@ Deprecated paths: Old 'skills/' path now redirects via compatibility layer.
 
 ---
 
-## Phase 3: Code Updates (60 min)
+## Phase 3: Code Updates ✅ COMPLETE (60 min)
 
 ### Task U3.1: Update build script paths
 **Atomic task:** Update `scripts/fix-shebangs.mjs` with new paths
@@ -390,7 +390,7 @@ Ensures npm package includes files from new locations.
 
 ---
 
-## Phase 4: Test Updates (45 min)
+## Phase 4: Test Updates ✅ COMPLETE (45 min)
 
 ### Task T4.1: Update test path references
 **Atomic task:** Update 9 test files with new paths
