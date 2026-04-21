@@ -42,7 +42,7 @@ bin/comandos-{idioma}/
 
 Adicionar um novo comando ao FASE:
 
-1. **Criar arquivo** em `bin/comandos/seu-comando.md`
+1. **Criar arquivo** em `.github/commands/seu-comando.md`
 
 ```markdown
 ---
