@@ -34,25 +34,3 @@ export function toHomePrefix(pathPrefix: string): string {
   // For relative paths or paths not under $HOME, return as-is
   return normalized;
 }
-
-/**
- * Expand tilde (~) in file paths to the user's home directory
- */
-export function expandTilde(filePath: string): string {
-  if (filePath.startsWith('~')) {
-    return os.homedir() + filePath.slice(1);
-  }
-  return filePath;
-}
-
-/**
- * Helper to get directory name for a runtime (used for local/project installs)
- */
-export function getDirName(runtime: string): string {
-  if (runtime === 'opencode') return '.opencode';
-  if (runtime === 'gemini') return '.gemini';
-  if (runtime === 'codex') return '.codex';
-  if (runtime === 'github-copilot') return '.github-copilot';
-  if (runtime === 'qwen') return '.qwen';
-  return '.claude';
-}

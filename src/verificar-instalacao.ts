@@ -3,11 +3,9 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import { fileURLToPath } from 'url';
-import { createLogger } from './lib/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const logger = createLogger();
 
 // Colors
 const cyan = '\x1b[36m';
@@ -119,31 +117,31 @@ function getNpmPrefix(): string {
 }
 
 // Main verification logic
-logger.info('\n' + cyan + '  ═══════════════════════════════════════════════════════════' + reset);
-logger.info(cyan + '  RELATÓRIO DE VERIFICAÇÃO FASE. v' + pkg.version + reset);
-logger.info(cyan + '  ═══════════════════════════════════════════════════════════' + reset + '\n');
+console.log('\n' + cyan + '  ═══════════════════════════════════════════════════════════' + reset);
+console.log(cyan + '  RELATÓRIO DE VERIFICAÇÃO FASE. v' + pkg.version + reset);
+console.log(cyan + '  ═══════════════════════════════════════════════════════════' + reset + '\n');
 
 const issues: string[] = [];
 const suggestions: Suggestion[] = [];
 
 // 1. Check global package installation
-logger.info(bold + '📦 INSTALAÇÃO DO PACOTE' + reset);
+console.log(bold + '📦 INSTALAÇÃO DO PACOTE' + reset);
 const npmPrefix = getNpmPrefix();
 const globalPkgPath = npmPrefix ? path.join(npmPrefix, 'node_modules', 'fase-ai') : '';
 const isInstalled = globalPkgPath && fileExists(globalPkgPath);
 
 if (isInstalled) {
-  logger.info(`  ${green}✓${reset} Status: ${green}INSTALADO${reset}`);
+  console.log(`  ${green}✓${reset} Status: ${green}INSTALADO${reset}`);
   try {
     const version = run('npx fase-ai --version 2>/dev/null') || pkg.version;
-    logger.info(`  ${green}✓${reset} Versão: ${version}`);
-    logger.info(`  ${green}✓${reset} Localização: ${globalPkgPath}`);
+    console.log(`  ${green}✓${reset} Versão: ${version}`);
+    console.log(`  ${green}✓${reset} Localização: ${globalPkgPath}`);
   } catch {
-    logger.info(`  ${yellow}⚠${reset} Versão: ${pkg.version} (package.json)`);
-    logger.info(`  ${yellow}⚠${reset} Localização: ${globalPkgPath}`);
+    console.log(`  ${yellow}⚠${reset} Versão: ${pkg.version} (package.json)`);
+    console.log(`  ${yellow}⚠${reset} Localização: ${globalPkgPath}`);
   }
 } else {
-  logger.info(`  ${red}✗${reset} Status: ${red}NÃO INSTALADO${reset}`);
+  console.log(`  ${red}✗${reset} Status: ${red}NÃO INSTALADO${reset}`);
   issues.push('Pacote fase-ai não instalado globalmente');
   suggestions.push({
     priority: 1,
@@ -153,10 +151,10 @@ if (isInstalled) {
   });
 }
 
-logger.info('');
+console.log();
 
 // 2. Check runtimes
-logger.info(bold + '🔧 RUNTIMES CONFIGURADOS' + reset);
+console.log(bold + '🔧 RUNTIMES CONFIGURADOS' + reset);
 
 const runtimes: Runtime[] = [
   {
@@ -210,7 +208,7 @@ for (const runtime of runtimes) {
   const statusColor = isConfigured ? green : yellow;
   const statusText = isConfigured ? 'CONFIGURADO' : 'NÃO_CONFIGURADO';
 
-  logger.info(`\n  ${bold}${runtime.name}:${reset} ${statusColor}${statusText}${reset}`);
+  console.log(`\n  ${bold}${runtime.name}:${reset} ${statusColor}${statusText}${reset}`);
 
   if (isConfigured) {
     // Check settings/config
@@ -225,9 +223,9 @@ for (const runtime of runtimes) {
     }
 
     if (hasSettings) {
-      logger.info(`    ${green}✓${reset} ${settingsLabel}: OK`);
+      console.log(`    ${green}✓${reset} ${settingsLabel}: OK`);
     } else {
-      logger.info(`    ${yellow}⚠${reset} ${settingsLabel}: MISSING`);
+      console.log(`    ${yellow}⚠${reset} ${settingsLabel}: MISSING`);
       issues.push(`${runtime.name}: ${settingsLabel} ausente`);
       suggestions.push({
         priority: 2,
@@ -251,9 +249,9 @@ for (const runtime of runtimes) {
     }
 
     if (commandCount > 0) {
-      logger.info(`    ${green}✓${reset} ${commandLabel}: ${commandCount} encontrados`);
+      console.log(`    ${green}✓${reset} ${commandLabel}: ${commandCount} encontrados`);
     } else {
-      logger.info(`    ${red}✗${reset} ${commandLabel}: ${green}0${reset} encontrados`);
+      console.log(`    ${red}✗${reset} ${commandLabel}: ${green}0${reset} encontrados`);
       issues.push(`${runtime.name}: Sem comandos FASE instalados`);
       suggestions.push({
         priority: 2,
@@ -267,48 +265,48 @@ for (const runtime of runtimes) {
     if (runtime.hooksDir) {
       const hookCount = countFiles(runtime.hooksDir, runtime.hookPattern || /^fase-.*\.js$/);
       if (hookCount > 0) {
-        logger.info(`    ${green}✓${reset} Hooks: ${hookCount} encontrados`);
+        console.log(`    ${green}✓${reset} Hooks: ${hookCount} encontrados`);
       } else {
-        logger.info(`    ${yellow}⚠${reset} Hooks: ${yellow}0${reset} encontrados`);
+        console.log(`    ${yellow}⚠${reset} Hooks: ${yellow}0${reset} encontrados`);
         // Hooks are optional, so just a warning
       }
     }
   } else {
-    logger.info(`    ${dim}- Settings: MISSING${reset}`);
-    logger.info(`    ${dim}- Comandos FASE: 0 encontrados${reset}`);
+    console.log(`    ${dim}- Settings: MISSING${reset}`);
+    console.log(`    ${dim}- Comandos FASE: 0 encontrados${reset}`);
   }
 }
 
-logger.info('');
+console.log('\n');
 
-logger.info('');
+console.log('\n');
 
 // 5. Summary
-logger.info(cyan + '═══════════════════════════════════════════════════════════' + reset);
+console.log(cyan + '═══════════════════════════════════════════════════════════' + reset);
 
 if (issues.length === 0) {
-  logger.info(`\n  ${green}${bold}✅ FASE. está instalado e configurado corretamente!${reset}\n`);
+  console.log(`\n  ${green}${bold}✅ FASE. está instalado e configurado corretamente!${reset}\n`);
 } else {
-  logger.info(`\n  ${red}${bold}⚠️  ${issues.length} PROBLEMA(S) ENCONTRADO(S):${reset}\n`);
+  console.log(`\n  ${red}${bold}⚠️  ${issues.length} PROBLEMA(S) ENCONTRADO(S):${reset}\n`);
 
   for (let i = 0; i < issues.length; i++) {
-    logger.info(`  ${i + 1}. ${yellow}${issues[i]}${reset}`);
+    console.log(`  ${i + 1}. ${yellow}${issues[i]}${reset}`);
   }
 
-  logger.info(`\n  ${bold}💡 AÇÕES SUGERIDAS:${reset}\n`);
+  console.log(`\n  ${bold}💡 AÇÕES SUGERIDAS:${reset}\n`);
 
   // Sort suggestions by priority
   suggestions.sort((a: Suggestion, b: Suggestion) => a.priority - b.priority);
 
   for (let i = 0; i < suggestions.length; i++) {
     const s = suggestions[i];
-    logger.info(`  ${i + 1}. ${yellow}${s.issue}${reset}`);
-    logger.info(`     ${dim}Comando:${reset} ${cyan}${s.command}${reset}`);
-    logger.info(`     ${dim}${s.description}${reset}\n`);
+    console.log(`  ${i + 1}. ${yellow}${s.issue}${reset}`);
+    console.log(`     ${dim}Comando:${reset} ${cyan}${s.command}${reset}`);
+    console.log(`     ${dim}${s.description}${reset}\n`);
   }
 }
 
-logger.info(cyan + '═══════════════════════════════════════════════════════════' + reset + '\n');
+console.log(cyan + '═══════════════════════════════════════════════════════════' + reset + '\n');
 
 // Exit with appropriate code
 process.exit(issues.length > 0 ? 1 : 0);
