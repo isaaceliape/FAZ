@@ -40,7 +40,7 @@ jobs:
           node dist/install.js --claude
           
           # Verify installation (local install path)
-          if [ -d "./.claude/fase-ai" ]; then
+          if [ -d "./.claude/fase" ]; then
             echo "✓ Installation directory exists"
           else
             echo "✗ Installation directory missing"
@@ -63,7 +63,7 @@ jobs:
         run: |
           node dist/install.js --uninstall
           
-          if [ ! -d "./.claude/fase-ai" ]; then
+          if [ ! -d "./.claude/fase" ]; then
             echo "✓ Uninstall successful"
           else
             echo "✗ Uninstall failed"
@@ -102,7 +102,7 @@ jobs:
           node dist/install.js --claude
           
           # Verify installation (local install path)
-          if [ -d "./.claude/fase-ai" ]; then
+          if [ -d "./.claude/fase" ]; then
             echo "✓ Installation directory exists"
           else
             echo "✗ Installation directory missing"
@@ -146,7 +146,7 @@ jobs:
           node dist/install.js --claude
           
           # Verify installation (local install path)
-          $installDir = "./.claude/fase-ai"
+          $installDir = "./.claude/fase"
           if (Test-Path $installDir) {
             Write-Host "✓ Installation directory exists"
           } else {
@@ -184,6 +184,9 @@ jobs:
         run: |
           echo "Running integration tests..."
           
+          # Copy package.json to dist (needed by install.js)
+          cp package.json dist/
+          
           # Create a temporary directory for local installs
           TEST_DIR=$(mktemp -d)
           cd "$TEST_DIR"
@@ -196,7 +199,7 @@ jobs:
           node dist/install.js --opencode
           
           # Verify both providers (checking local install directories)
-          if [ -d "./.claude/fase-ai" ] && [ -d "./.opencode/fase-ai" ]; then
+          if [ -d "./.claude/fase" ] && [ -d "./.opencode/fase" ]; then
             echo "✓ Multi-provider install successful"
           else
             echo "✗ Multi-provider install failed"
