@@ -1,6 +1,6 @@
 {
-  "version": "3.5.3",
-  "timestamp": "2026-04-18T11:37:04.981Z",
+  "version": "4.0.0",
+  "timestamp": "2026-04-21T07:53:57.945Z",
   "files": {
     "commands/fase/adicionar-etapa.md": "73e23694abdecf78ef7d02ceeeaf0f1204605a1bfd496ce0557dcfedfcce6944",
     "commands/fase/adicionar-tarefa.md": "bfc856ef6ee9fe09ceb0a935e03510ea789a3c781d7852e5422993ec588b3f33",

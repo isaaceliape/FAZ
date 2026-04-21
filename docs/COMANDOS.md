@@ -1,6 +1,6 @@
 # <i class="fa fa-wrench"></i> Comandos do F.A.S.E.
 
-> **Versão**: 3.2.0 | Última atualização: 2026-03-25
+> **Versão**: 4.0.0 ✅ | Última atualização: 2026-04-20
 
 **34 comandos em português brasileiro para Claude Code.**
 

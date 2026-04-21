@@ -1,6 +1,6 @@
 # 🤝 Guia de Contribuição
 
-> **Versão**: 3.5.1 | Última atualização: 2026-04-15
+> **Versão**: 4.0.0 ✅ | Última atualização: 2026-04-20
 
 Obrigado por considerar contribuir ao FASE! Este documento oferece diretrizes e instruções para participar do projeto.
 

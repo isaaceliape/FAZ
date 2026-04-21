@@ -1,6 +1,6 @@
 <div align="center">
 
-# FASE. v3.5.3
+# FASE. v4.0.0
 
 ## Framework de Automação Sem Enrolação
 
@@ -14,7 +14,7 @@ Spec-driven development, context engineering e meta-prompting — agora em portu
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 <br>
 
-**Funciona no Mac, Windows e Linux. Node.js 14+**
+**Funciona no Mac, Windows e Linux. Node.js 18+**
 
 <br>
 
@@ -38,11 +38,11 @@ Ele traz:
 - 🎯 **Spec-driven development** — descreva o que quer, o AI constrói
 - 🧠 **Context engineering avançado** — organize prompts para máximo proveito
 - 🔄 **Meta-prompting** — direcione o AI com precisão
-- 📊 **Workflow estruturado** — 12 agentes especializados
-- 💬 **32 comandos** em português brasileiro para um fluxo contínuo
+- 📊 **Workflow estruturado** — 13 agentes especializados
+- 💬 **34 comandos** em português brasileiro para um fluxo contínuo
 
 **Traduzimos:**
-- ✅ 12 agentes de prompt (pesquisadores, verificadores, planejadores, executores)
+- ✅ 13 agentes de prompt (pesquisadores, verificadores, planejadores, executores)
 - ✅ 34 comandos interativos
 - ✅ Documentação completa
 - ✅ Mensagens e outputs
@@ -305,7 +305,7 @@ A filosofia:
 
 ## 📋 Comandos Disponíveis
 
-FASE oferece **32 comandos em português brasileiro**, organizados por função:
+FASE oferece **34 comandos em português brasileiro**, organizados por função:
 
 ### 🎯 Core / Inicialização
 ```bash

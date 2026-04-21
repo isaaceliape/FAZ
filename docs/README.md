@@ -1,6 +1,6 @@
 # 📚 Documentação do FASE
 
-> **Versão**: 3.5.3 ✅ | Última atualização: 2026-04-17 | Status: Todos os testes passando (34/34 comandos, 5/5 runtimes)
+> **Versão**: 4.0.0 ✅ | Última atualização: 2026-04-20 | Status: Todos os testes passando (34/34 comandos, 6/6 runtimes)
 
 Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que precisa para instalar, usar e contribuir ao projeto.
 
@@ -11,7 +11,7 @@ Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que prec
 | Documento | Descrição |
 |-----------|-----------|
 | [**Guia do Usuário**](guia-do-usuario.html) | Guia completo de instalação e uso do FASE |
-| [**Comandos**](COMANDOS.html) | Lista com todos os 32 comandos disponíveis |
+| [**Comandos**](COMANDOS.html) | Lista com todos os 34 comandos disponíveis |
 | [**NPM Registry**](NPM-REGISTRY.html) | Configuração do npm registry e instalação |
 | [**Verificação de Versão**](VERIFICAR-VERSAO.html) | Sistema automático de verificação de atualizações |
 

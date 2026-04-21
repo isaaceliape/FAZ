@@ -76,21 +76,22 @@ describe('Landing Page Validation', function() {
   });
 
   describe('Runtime Information', function() {
-    it('should display 5 runtimes in stats section', function() {
+    it('should display 6 runtimes in stats section', function() {
       // Look for the stat box with runtimes count
       const statsSectionMatch = wwwIndexContent.match(/<div class="stat-number">(\d+)<\/div>\s*<div class="stat-label">Runtimes<\/div>/);
       assert.ok(statsSectionMatch, 'Should find runtimes stat box');
       const runtimeCount = parseInt(statsSectionMatch[1], 10);
-      assert.strictEqual(runtimeCount, 5, 'Runtime count should be 5');
+      assert.strictEqual(runtimeCount, 6, 'Runtime count should be 6');
     });
 
-    it('should list all 5 supported runtimes', function() {
+    it('should list all 6 supported runtimes', function() {
       const expectedRuntimes = [
         { name: 'Claude Code', path: '~/.claude' },
         { name: 'OpenCode', path: '~/.config/opencode' },
         { name: 'Gemini', path: '~/.gemini' },
         { name: 'Codex', path: '~/.codex' },
-        { name: 'GitHub Copilot', path: '~/.github-copilot' }
+        { name: 'GitHub Copilot', path: '~/.github-copilot' },
+        { name: 'Qwen Code', path: '~/.qwen' }
       ];
 
       for (const runtime of expectedRuntimes) {
@@ -106,13 +107,14 @@ describe('Landing Page Validation', function() {
     });
 
     it('should mention GitHub Copilot in hero section', function() {
-      // The hero section should mention all 5 runtimes
+      // The hero section should mention all 6 runtimes
       assert.ok(
         wwwIndexContent.includes('GitHub Copilot') ||
         wwwIndexContent.includes('Claude Code') &&
         wwwIndexContent.includes('OpenCode') &&
         wwwIndexContent.includes('Gemini') &&
-        wwwIndexContent.includes('Codex'),
+        wwwIndexContent.includes('Codex') &&
+        wwwIndexContent.includes('Qwen Code'),
         'Hero section should mention the AI assistants'
       );
     });

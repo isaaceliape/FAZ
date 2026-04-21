@@ -1,6 +1,6 @@
 # Verificar Instalação - Documentação
 
-> **Versão**: 3.2.0 | Última atualização: 2026-03-25
+> **Versão**: 4.0.0 ✅ | Última atualização: 2026-04-20
 
 ## Visão Geral
 

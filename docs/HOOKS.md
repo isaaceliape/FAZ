@@ -1,6 +1,6 @@
 # Hooks do FASE - Monitoramento e Status
 
-> **Versão**: 3.5.1 | Última atualização: 2026-04-15
+> **Versão**: 4.0.0 ✅ | Última atualização: 2026-04-20
 
 O FASE utiliza hooks para monitoramento de contexto, statusline e verificação de atualizações.
 
