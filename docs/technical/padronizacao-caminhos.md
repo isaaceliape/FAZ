@@ -8,7 +8,7 @@ Os comandos do FASE usam referências de caminho agnósticas ao ambiente que sã
 
 ## Convenção de Caminhos
 
-### Arquivos Fonte (`comandos/*.md`)
+### Arquivos Fonte (`.github/commands/*.md`)
 
 Os arquivos de comando fonte usam referências de caminho universal:
 - **Workflows**: `@~/.fase/workflows/workflow-name.md`
@@ -70,7 +70,7 @@ Para OpenCode especificamente:
 - `~/.fase` → `~/.config/opencode/fase`
 - `$HOME/.fase` → `$HOME/.config/opencode/fase`
 
-### Arquivos Distribuídos (`bin/comandos/*.md`)
+### Arquivos Distribuídos (`.github/commands/*.md`)
 
 O diretório `bin/` contém arquivos de comando pré-construídos distribuídos via NPM. Esses arquivos:
 - Têm blocos `<execution_context>` **removidos** (não necessários após instalação)
@@ -88,7 +88,7 @@ Esses arquivos são instalados na localização de caminho convertido (por exemp
 
 ## Uso em Desenvolvimento
 
-Ao desenvolver localmente com arquivos de comando fonte do FASE (`comandos/*.md`), você precisa ter arquivos de workflow disponíveis em `~/.fase/` para que o Claude Code carregue via blocos `<execution_context>`. Opções:
+Ao desenvolver localmente com arquivos de comando fonte do FASE (`.github/commands/*.md`), você precisa ter arquivos de workflow disponíveis em `~/.fase/` para que o Claude Code carregue via blocos `<execution_context>`. Opções:
 
 1. **Symlink para instalação do GSD:**
    ```bash
