@@ -104,12 +104,6 @@ Gemini CLI tem suporte básico a hooks. Verifique documentação oficial para de
 # Instalar apenas para Gemini
 npx fase-ai --gemini
 
-# Instalar globalmente
-npx fase-ai --gemini --global
-
-# Instalar localmente
-npx fase-ai --gemini --local
-
 # Com diretório customizado
 npx fase-ai --gemini --config-dir /custom/path
 ```

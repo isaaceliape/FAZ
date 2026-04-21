@@ -36,7 +36,6 @@ npm run test:providers
 
 ### `integration.test.js`
 Testes de integração cobrindo:
-- Instalações globais
 - Instalações locais (de projeto)
 - Diretórios de configuração customizados
 - Múltiplas instalações de provedor
@@ -146,12 +145,12 @@ docker run --rm -v $(pwd):/app -w /app node:18-ubuntu npm test
 
 Testar instalação do Claude:
 ```bash
-docker run --rm node:18-alpine sh -c "npm install -g fase-ai && fase-ai --claude --global"
+docker run --rm node:18-alpine sh -c "npm install -g fase-ai && fase-ai --claude"
 ```
 
 Testar todos os provedores:
 ```bash
-docker run --rm node:18-alpine sh -c "npm install -g fase-ai && fase-ai --all --global"
+docker run --rm node:18-alpine sh -c "npm install -g fase-ai && fase-ai --all"
 ```
 
 ## Simulando Ambientes Limpos
@@ -173,7 +172,7 @@ Esta abordagem permite:
 ## Cobertura de Testes
 
 Cobertura atual:
-- **Métodos de Instalação**: Local, Global, Diretórios customizados
+- **Métodos de Instalação**: Diretórios customizados
 - **Provedores**: Claude Code, OpenCode, Gemini, Codex
 - **Cenários**: Instalações limpas, upgrades, desinstalações, múltiplos provedores
 - **Ambientes**: Alpine, Ubuntu, macOS, caminhos Windows

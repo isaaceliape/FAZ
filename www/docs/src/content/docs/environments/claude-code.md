@@ -247,12 +247,6 @@ Plan Mode alinha perfeitamente com filosofia FASE:
 ```bash
 # Instalar apenas para Claude Code
 npx fase-ai --claude
-
-# Instalar globalmente
-npx fase-ai --claude --global
-
-# Instalar localmente (projeto atual)
-npx fase-ai --claude --local
 ```
 
 ## Configuração Recomendada

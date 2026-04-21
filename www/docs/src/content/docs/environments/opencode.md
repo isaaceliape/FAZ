@@ -106,12 +106,6 @@ OpenCode usa XDG Base Directory specification:
 # Instalar apenas para OpenCode
 npx fase-ai --opencode
 
-# Instalar globalmente
-npx fase-ai --opencode --global
-
-# Instalar localmente
-npx fase-ai --opencode --local
-
 # Com diretório customizado
 npx fase-ai --opencode --config-dir /custom/path
 ```

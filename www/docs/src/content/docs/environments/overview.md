@@ -92,9 +92,6 @@ npx fase-ai --all
 
 # Instalar para ambientes específicos
 npx fase-ai --claude --opencode
-
-# Instalar globalmente
-npx fase-ai --claude --global
 ```
 
 ## Comandos por Ambiente

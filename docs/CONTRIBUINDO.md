@@ -181,11 +181,11 @@ Isso simula a publicação no npm e mostra:
 ### Testar Instalação
 
 ```bash
-# Instalação local (projeto atual)
-node bin/install.js --claude --local
+# Instalar para um ambiente
+node bin/install.js --claude
 
-# Instalar globalmente (seu computador)
-node bin/install.js --claude --global
+# Instalar para múltiplos ambientes
+node bin/install.js --claude --opencode
 
 # Uninstall
 node bin/install.js --uninstall

@@ -126,12 +126,6 @@ Context window varia por plano/subscription. Verifique seu plano para detalhes.
 # Instalar apenas para Codex
 npx fase-ai --codex
 
-# Instalar globalmente
-npx fase-ai --codex --global
-
-# Instalar localmente
-npx fase-ai --codex --local
-
 # Com diretório customizado
 npx fase-ai --codex --config-dir /custom/path
 ```
