@@ -1,6 +1,6 @@
 <div align="center">
 
-# FASE. v4.0.0
+# FASE. v4.0.2
 
 ## Framework de Automação Sem Enrolação
 
@@ -14,7 +14,7 @@ Spec-driven development, context engineering e meta-prompting — agora em portu
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 <br>
 
-**Funciona no Mac, Windows e Linux. Node.js 18+**
+**Funciona no Mac e Linux. Node.js 20+**
 
 <br>
 
@@ -415,6 +415,52 @@ FASE oferece **34 comandos em português brasileiro**, organizados por função:
 - **Test:** `npm test` — Executa testes de edge cases
 - **Test All:** `npm run test:all` — Executa todos os testes (legacy + moderno)
 - **Estrutura:** `src/` (TypeScript) → `dist/` (compilado com static files)
+
+### 🚀 GitHub Actions & CI/CD
+
+FASE possui um pipeline completo de CI/CD automatizado:
+
+#### **Multi-Platform Testing** (test-multi-platform.yml)
+- ✅ **Plataformas suportadas:** Linux (ubuntu-latest) e macOS (macos-latest)
+- ✅ **Versões Node.js:** 20 e 22 (total de 4 combinações)
+- ✅ **Testes:** Build, unit tests, e verificação de instalação
+- ✅ **Integração:** Testa instalação multi-provider (--claude, --opencode)
+- ✅ **Performance:** Matriz otimizada com 60% mais rápida que versões anteriores
+
+**Execução:** Automaticamente em cada push para `main` ou pull request
+
+#### **Smart npm Publishing** (publicar-npm.yml)
+- ✅ **Detecção de versão:** Compara `package.json` com npm registry
+- ✅ **Publicação condicional:** Só publica se versão mudou
+- ✅ **Git tags automáticos:** Cria `v{version}` automaticamente
+- ✅ **GitHub Releases:** Geradas automaticamente de `CHANGELOG.md`
+- ✅ **Sem erro em push sem versão:** Skip silencioso se versão não mudou
+
+**Como usar:**
+```bash
+# 1. Atualize versão em package.json
+echo '"version": "4.0.3"' > package.json
+
+# 2. Atualize CHANGELOG.md
+echo '## 4.0.3\n- New feature' >> CHANGELOG.md
+
+# 3. Commit e push
+git add package.json CHANGELOG.md
+git commit -m "chore: bump version 4.0.2 → 4.0.3"
+git push origin main
+
+# Workflow automaticamente:
+# ✓ Detecta mudança de versão
+# ✓ Publica no npm
+# ✓ Cria tag v4.0.3
+# ✓ Cria GitHub Release
+```
+
+#### **Outras Workflows**
+- **deploy-pages.yml:** Deploy de documentação para GitHub Pages
+- **track-adoption.yml:** Rastreamento de adoção e métricas
+
+**Documentação detalhada:** Ver [specs/PUBLICAR_NPM_WORKFLOW.md](specs/PUBLICAR_NPM_WORKFLOW.md)
 
 ### Informações do Projeto
 - [📊 Histórico de Mudanças](CHANGELOG.md) — Todas as versões
