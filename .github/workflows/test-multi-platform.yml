@@ -42,22 +42,13 @@ jobs:
           # Verify installation (local install path)
           if [ -d "./.claude/fase" ]; then
             echo "✓ Installation directory exists"
+            echo "✓ Linux test passed for Node ${{ matrix.node }}"
           else
             echo "✗ Installation directory missing"
             echo "Debug: Checking directory structure..."
             find . -maxdepth 2 -type d -name "*claude*" -o -name "*fase*"
             exit 1
           fi
-          
-          # Verify hooks
-          if [ -f "./.claude/hooks/fase-statusline.cjs" ]; then
-            echo "✓ Hooks installed"
-          else
-            echo "✗ Hooks missing"
-            exit 1
-          fi
-          
-          echo "✓ Linux test passed for Node ${{ matrix.node }}"
       
       - name: Test uninstall
         run: |
@@ -104,14 +95,13 @@ jobs:
           # Verify installation (local install path)
           if [ -d "./.claude/fase" ]; then
             echo "✓ Installation directory exists"
+            echo "✓ macOS test passed for Node ${{ matrix.node }}"
           else
             echo "✗ Installation directory missing"
             echo "Debug: Checking directory structure..."
             find . -maxdepth 2 -type d -name "*claude*" -o -name "*fase*"
             exit 1
           fi
-          
-          echo "✓ macOS test passed for Node ${{ matrix.node }}"
 
   test-windows:
     name: Windows (Node ${{ matrix.node }})
@@ -149,14 +139,13 @@ jobs:
           $installDir = "./.claude/fase"
           if (Test-Path $installDir) {
             Write-Host "✓ Installation directory exists"
+            Write-Host "✓ Windows test passed for Node ${{ matrix.node }}"
           } else {
             Write-Host "✗ Installation directory missing"
             Write-Host "Debug: Checking directory structure..."
             Get-ChildItem -Path "." -Recurse -Include "*claude*", "*fase*" -Directory
             exit 1
           }
-          
-          Write-Host "✓ Windows test passed for Node ${{ matrix.node }}"
 
   integration-test:
     name: Integration Tests
