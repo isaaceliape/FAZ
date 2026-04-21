@@ -110,8 +110,8 @@ npm run test:coverage
 FASE usa referências de caminho padronizadas em todos os arquivos de comando e agente:
 
 ### Caminhos Padrão
-- **Comandos**: `comandos/*.md` usam `@~/.fase/` para todas as referências de workflow
-- **Agentes**: `agentes/*.md` usam `@~/.fase/` para todas as referências de template
+- **Comandos**: `.github/commands/*.md` usam `@~/.fase/` para todas as referências de workflow
+- **Agentes**: `.github/agents/*.md` usam `@~/.fase/` para todas as referências de template
 - **Installer**: Converte `@~/.fase/` para caminhos específicos de runtime durante a instalação
 
 ### Caminhos de Instalação

@@ -246,7 +246,7 @@ Hook Example:   /Users/<user>/.codex/hooks/my-hook.js
 Comandos e agentes do FASE usam referências de caminho padronizadas e agnósticas de ambiente que são convertidas durante a instalação:
 
 ### Convenção de Arquivo Fonte
-- **Localização**: `comandos/*.md` e `agentes/*.md`
+- **Localização**: `.github/commands/*.md` e `.github/agents/*.md`
 - **Padrão de Caminho**: `@~/.fase/workflows/`, `@~/.fase/templates/`, `$HOME/.fase/`
 - **Propósito**: Referências universais que funcionam em todos os runtimes
 
