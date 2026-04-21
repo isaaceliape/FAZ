@@ -5,8 +5,8 @@
  * These tests validate that the landing page (www/index.html) displays
  * accurate information that matches the actual project state:
  * - Version from package.json
- * - Command count from comandos/ directory
- * - Agent count from agentes/ directory
+ * - Command count from .github/commands/ directory
+ * - Agent count from .github/agents/ directory
  * - Runtime count from source code
  *
  * Run with: npm run test:e2e:landing
@@ -65,9 +65,9 @@ describe('E2E: Landing Page Package Consistency', function() {
   });
 
   describe('Command Count E2E', function() {
-    it('E2E: Command count on landing page must match actual comandos/ directory', function() {
+    it('E2E: Command count on landing page must match actual .github/commands/ directory', function() {
       // Get actual command count from filesystem
-      const comandosDir = path.join(rootDir, 'comandos');
+      const comandosDir = path.join(rootDir, '.github', 'commands');
       const actualCommandCount = fs.readdirSync(comandosDir)
         .filter(f => !f.startsWith('.') && f.endsWith('.md'))
         .length;
@@ -81,12 +81,12 @@ describe('E2E: Landing Page Package Consistency', function() {
       assert.strictEqual(
         displayedCommandCount,
         actualCommandCount,
-        `Landing page shows ${displayedCommandCount} commands but comandos/ directory has ${actualCommandCount} files`
+        `Landing page shows ${displayedCommandCount} commands but .github/commands/ directory has ${actualCommandCount} files`
       );
     });
 
-    it('E2E: Command count in status badge must match comandos/ directory', function() {
-      const comandosDir = path.join(rootDir, 'comandos');
+    it('E2E: Command count in status badge must match .github/commands/ directory', function() {
+      const comandosDir = path.join(rootDir, '.github', 'commands');
       const actualCommandCount = fs.readdirSync(comandosDir)
         .filter(f => !f.startsWith('.') && f.endsWith('.md'))
         .length;
@@ -101,7 +101,7 @@ describe('E2E: Landing Page Package Consistency', function() {
       assert.strictEqual(
         totalCount,
         actualCommandCount,
-        `Status badge shows ${totalCount} total commands but comandos/ directory has ${actualCommandCount} files`
+        `Status badge shows ${totalCount} total commands but .github/commands/ directory has ${actualCommandCount} files`
       );
 
       assert.strictEqual(
@@ -113,9 +113,9 @@ describe('E2E: Landing Page Package Consistency', function() {
   });
 
   describe('Agent Count E2E', function() {
-    it('E2E: Agent count on landing page must match actual agentes/ directory', function() {
+    it('E2E: Agent count on landing page must match actual .github/agents/ directory', function() {
       // Get actual agent count from filesystem
-      const agentesDir = path.join(rootDir, 'agentes');
+      const agentesDir = path.join(rootDir, '.github', 'agents');
       const actualAgentCount = fs.readdirSync(agentesDir)
         .filter(f => !f.startsWith('.') && f.endsWith('.md'))
         .length;
@@ -129,7 +129,7 @@ describe('E2E: Landing Page Package Consistency', function() {
       assert.strictEqual(
         displayedAgentCount,
         actualAgentCount,
-        `Landing page shows ${displayedAgentCount} agents but agentes/ directory has ${actualAgentCount} files`
+        `Landing page shows ${displayedAgentCount} agents but .github/agents/ directory has ${actualAgentCount} files`
       );
     });
   });

@@ -1,7 +1,7 @@
 /**
  * Testes para o comando fase:atualizar
  *
- * Cobre a lógica descrita em bin/comandos/atualizar.md:
+ * Cobre a lógica descrita em .github/commands/atualizar.md:
  *  1. Estrutura do arquivo de comando (todas as fases presentes)
  *  2. Framework de migrações versionadas (idempotência, rastreamento)
  *  3. Mecanismo de backup (criação, preservação de conteúdo, restauração)
@@ -16,7 +16,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-const COMMAND_FILE = path.join(__dirname, '..', 'bin', 'comandos', 'atualizar.md');
+const COMMAND_FILE = path.join(__dirname, '..', '.github', 'commands', 'atualizar.md');
 
 // ─── Helpers de teste ─────────────────────────────────────────────────────────
 
@@ -139,7 +139,7 @@ describe('atualizar.md — estrutura do arquivo', () => {
     content = fs.readFileSync(COMMAND_FILE, 'utf-8');
   });
 
-  test('arquivo existe em bin/comandos/', () => {
+  test('arquivo existe em .github/commands/', () => {
     assert.ok(fs.existsSync(COMMAND_FILE));
   });
 

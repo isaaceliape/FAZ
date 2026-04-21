@@ -13,8 +13,8 @@ const assert = require('node:assert');
 const fs = require('fs');
 const path = require('path');
 
-const AGENTS_DIR = path.join(__dirname, '..', 'bin', 'agentes');
-const COMMANDS_DIR = path.join(__dirname, '..', 'bin', 'comandos');
+const AGENTS_DIR = path.join(__dirname, '..', '.github', 'agents');
+const COMMANDS_DIR = path.join(__dirname, '..', '.github', 'commands');
 
 const ALL_AGENTS = fs.readdirSync(AGENTS_DIR)
   .filter(f => f.startsWith('fase-') && f.endsWith('.md'))
@@ -120,7 +120,7 @@ describe('SPAWN: spawn type consistency', () => {
       const files = fs.readdirSync(dir).filter(f => f.endsWith('.md'));
       for (const file of files) {
         const content = fs.readFileSync(path.join(dir, file), 'utf-8');
-        const hasWorkaround = content.includes('First, read @~/.fase/agentes/fase-');
+        const hasWorkaround = content.includes('First, read @~/.fase/.github/agents/fase-');
         assert.ok(
           !hasWorkaround,
           `${file} still has "First, read agent .md" workaround — use named subagent_type instead`
