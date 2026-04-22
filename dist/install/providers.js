@@ -48,8 +48,8 @@ export function getDirName(runtime) {
         return '.gemini';
     if (runtime === 'codex')
         return '.codex';
-    if (runtime === 'github-copilot')
-        return '.github-copilot';
+    if (runtime === 'copilot')
+        return '.copilot';
     if (runtime === 'qwen')
         return '.qwen';
     return '.claude';
@@ -83,8 +83,8 @@ export function getConfigDirFromHome(runtime, isGlobal) {
         return "'.gemini'";
     if (runtime === 'codex')
         return "'.codex'";
-    if (runtime === 'github-copilot')
-        return "'.github-copilot'";
+    if (runtime === 'copilot')
+        return "'.copilot'";
     if (runtime === 'qwen')
         return "'.qwen'";
     return "'.claude'";
@@ -158,15 +158,15 @@ export function getGlobalDir(runtime, explicitDir = null) {
         }
         return path.join(os.homedir(), '.codex');
     }
-    if (runtime === 'github-copilot') {
-        // GitHub Copilot: --config-dir > GITHUB_COPILOT_CONFIG_DIR > ~/.github-copilot
+    if (runtime === 'copilot') {
+        // GitHub Copilot: --config-dir > COPILOT_CONFIG_DIR > ~/.github-copilot
         if (explicitDir) {
             return expandTilde(explicitDir);
         }
-        if (process.env.GITHUB_COPILOT_CONFIG_DIR) {
-            return expandTilde(process.env.GITHUB_COPILOT_CONFIG_DIR);
+        if (process.env.COPILOT_CONFIG_DIR) {
+            return expandTilde(process.env.COPILOT_CONFIG_DIR);
         }
-        return path.join(os.homedir(), '.github-copilot');
+        return path.join(os.homedir(), '.copilot');
     }
     if (runtime === 'qwen') {
         // Qwen Code: --config-dir > QWEN_CONFIG_DIR > ~/.qwen
@@ -200,7 +200,7 @@ export function getGlobalDir(runtime, explicitDir = null) {
  * ```
  */
 export function isValidProvider(runtime) {
-    return ['claude', 'opencode', 'gemini', 'codex', 'github-copilot', 'qwen'].includes(runtime);
+    return ['claude', 'opencode', 'gemini', 'codex', 'copilot', 'qwen'].includes(runtime);
 }
 /**
  * Get all supported providers
@@ -208,6 +208,6 @@ export function isValidProvider(runtime) {
  * @returns Array of valid provider runtime names
  */
 export function getSupportedProviders() {
-    return ['claude', 'opencode', 'gemini', 'codex', 'github-copilot', 'qwen'];
+    return ['claude', 'opencode', 'gemini', 'codex', 'copilot', 'qwen'];
 }
 //# sourceMappingURL=providers.js.map

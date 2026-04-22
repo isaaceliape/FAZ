@@ -138,7 +138,7 @@ export function uninstallFase(runtime, explicitConfigDir = null) {
     try {
         // Remove hooks from settings
         const settingsPath = path.join(configDir, runtime === 'opencode' ? 'opencode.json' :
-            runtime === 'github-copilot' ? '.copilot-settings.json' :
+            runtime === 'copilot' ? '.copilot-settings.json' :
                 'settings.json');
         if (fs.existsSync(settingsPath)) {
             result.removed.settings = removeFaseHooksFromSettings(settingsPath);
