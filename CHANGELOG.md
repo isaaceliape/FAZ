@@ -5,6 +5,16 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-br/1.0.0/),
 e este projeto adiere ao [Versionamento Semântico](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.1] - 2026-04-22
+
+### Removed
+
+- **Analytics Feature**: Completely removed the "Análise de Uso Anônima" (anonymous usage analysis) feature
+  - Deleted analytics modules (`src/lib/analytics.ts`, `src/install/analytics.ts`)
+  - Removed analytics opt-in prompt from installation flow
+  - Removed analytics preference storage and tracking calls
+  - Cleaned up all references from documentation and landing pages
+
 ## [4.0.2] - 2026-04-21
 
 ### Fixed
