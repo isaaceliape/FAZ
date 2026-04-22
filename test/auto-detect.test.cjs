@@ -214,7 +214,7 @@ describe('Auto-Detect Mode', () => {
 
     it('should include only valid runtime names', () => {
       const { detectAvailableRuntimes } = globalThis;
-      const validRuntimes = ['claude', 'opencode', 'gemini', 'codex', 'github-copilot', 'qwen'];
+      const validRuntimes = ['claude', 'opencode', 'gemini', 'codex', 'copilot', 'qwen'];
       const runtimes = detectAvailableRuntimes();
       
       runtimes.forEach(runtime => {
