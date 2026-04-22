@@ -108,6 +108,7 @@ function getDirName(runtime) {
   if (runtime === 'gemini') return '.gemini';
   if (runtime === 'codex') return '.codex';
   if (runtime === 'github-copilot') return '.github-copilot';
+  if (runtime === 'qwen') return '.qwen';
   return '.claude';
 }
 /**
@@ -130,6 +131,7 @@ function getConfigDirFromHome(runtime, isGlobal) {
   if (runtime === 'gemini') return "'.gemini'";
   if (runtime === 'codex') return "'.codex'";
   if (runtime === 'github-copilot') return "'.github-copilot'";
+  if (runtime === 'qwen') return "'.qwen'";
   return "'.claude'";
 }
 /**
