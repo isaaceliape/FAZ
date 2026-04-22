@@ -1,9 +1,9 @@
 ---
 name: fase:ajuda
-description: Mostra os comandos F.A.S.E. disponíveis e guia de uso
+description: Mostra os comandos FASE disponíveis e guia de uso
 ---
 <objective>
-Exibe a referência completa de comandos F.A.S.E.
+Exibe a referência completa de comandos FASE
 
 Apenas envie o conteúdo da referência. NÃO adicione:
 - Análise específica do projeto
@@ -14,6 +14,6 @@ Apenas envie o conteúdo da referência. NÃO adicione:
 
 
 <process>
-Exiba a referência completa de comandos F.A.S.E. de .md.
+Exiba a referência completa de comandos FASE de .md.
 Mostre o conteúdo da referência diretamente — sem adições ou modificações.
 </process>

@@ -31,7 +31,7 @@ describe('verificar-instalacao.js', function() {
       output = e.stdout || '';
     }
     
-    assert.ok(output.includes('RELATÓRIO DE VERIFICAÇÃO F.A.S.E.'), 'Deve mostrar relatório');
+    assert.ok(output.includes('RELATÓRIO DE VERIFICAÇÃO FASE'), 'Deve mostrar relatório');
     assert.ok(output.includes('INSTALAÇÃO DO PACOTE'), 'Deve verificar pacote');
     assert.ok(output.includes('RUNTIMES CONFIGURADOS'), 'Deve verificar runtimes');
     assert.ok(output.includes('WORKFLOWS FASE'), 'Deve verificar workflows');

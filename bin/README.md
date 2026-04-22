@@ -1,6 +1,6 @@
 # fase-ai
 
-**F.A.S.E. v3.3.1** — Framework de Automação Sem Enrolação
+**FASE v3.3.1** — Framework de Automação Sem Enrolação
 
 Instalador do sistema de meta-prompting, context engineering e desenvolvimento spec-driven para Claude Code, OpenCode, Gemini e Codex. Tradução brasileira do [get-shit-done-cc](https://www.npmjs.com/package/get-shit-done-cc).
 
@@ -188,7 +188,7 @@ Após instalar, verifique no seu runtime:
 
 ## 📚 Documentação
 
-Para documentação completa do F.A.S.E.:
+Para documentação completa do FASE:
 
 - [Repositório GitHub](https://github.com/isaaceliape/FASE)
 - [Guia do Usuário](https://github.com/isaaceliape/FASE/blob/main/docs/GUIA-DO-USUARIO.md)

@@ -4,7 +4,7 @@
 
 ## Visão Geral
 
-O comando `verificar-instalacao` é uma ferramenta de diagnóstico que verifica o status da instalação do F.A.S.E. no sistema e gera um relatório detalhado com problemas encontrados e ações corretivas sugeridas.
+O comando `verificar-instalacao` é uma ferramenta de diagnóstico que verifica o status da instalação do FASE no sistema e gera um relatório detalhado com problemas encontrados e ações corretivas sugeridas.
 
 ## Uso
 
@@ -68,7 +68,7 @@ O relatório é dividido em seções:
 
 ```
 ═══════════════════════════════════════════════════════════
-  RELATÓRIO DE VERIFICAÇÃO F.A.S.E. v3.0.2
+  RELATÓRIO DE VERIFICAÇÃO FASE v3.0.2
 ═══════════════════════════════════════════════════════════
 
 <i class="fa fa-box"></i> INSTALAÇÃO DO PACOTE
@@ -188,7 +188,7 @@ npx fase-ai --all
 
 ```
 ═══════════════════════════════════════════════════════════
-  RELATÓRIO DE VERIFICAÇÃO F.A.S.E. v3.0.2
+  RELATÓRIO DE VERIFICAÇÃO FASE v3.0.2
 ═══════════════════════════════════════════════════════════
 
 <i class="fa fa-box"></i> INSTALAÇÃO DO PACOTE
@@ -221,7 +221,7 @@ npx fase-ai --all
 
 ═══════════════════════════════════════════════════════════
 
-  <i class="fa fa-check-circle"></i> F.A.S.E. está instalado e configurado corretamente!
+  <i class="fa fa-check-circle"></i> FASE está instalado e configurado corretamente!
 
 ═══════════════════════════════════════════════════════════
 ```
@@ -230,7 +230,7 @@ npx fase-ai --all
 
 ```
 ═══════════════════════════════════════════════════════════
-  RELATÓRIO DE VERIFICAÇÃO F.A.S.E. v3.0.2
+  RELATÓRIO DE VERIFICAÇÃO FASE v3.0.2
 ═══════════════════════════════════════════════════════════
 
 <i class="fa fa-box"></i> INSTALAÇÃO DO PACOTE

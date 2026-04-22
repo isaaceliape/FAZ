@@ -124,7 +124,7 @@ function getNpmPrefix(): string {
 
 // Main verification logic
 console.log('\n' + cyan + '  ═══════════════════════════════════════════════════════════' + reset);
-console.log(cyan + '  RELATÓRIO DE VERIFICAÇÃO F.A.S.E. v' + pkg.version + reset);
+console.log(cyan + '  RELATÓRIO DE VERIFICAÇÃO FASE v' + pkg.version + reset);
 console.log(cyan + '  ═══════════════════════════════════════════════════════════' + reset + '\n');
 
 const issues: string[] = [];
@@ -352,7 +352,7 @@ console.log('\n');
 console.log(cyan + '═══════════════════════════════════════════════════════════' + reset);
 
 if (issues.length === 0) {
-  console.log(`\n  ${green}${bold}✅ F.A.S.E. está instalado e configurado corretamente!${reset}\n`);
+  console.log(`\n  ${green}${bold}✅ FASE está instalado e configurado corretamente!${reset}\n`);
 } else {
   console.log(`\n  ${red}${bold}⚠️  ${issues.length} PROBLEMA(S) ENCONTRADO(S):${reset}\n`);
 

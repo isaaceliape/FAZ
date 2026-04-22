@@ -5,7 +5,7 @@ description: Bem-vindo ao FASE - Framework de Automação Sem Enrolação
 
 # FASE - Framework de Automação Sem Enrolação
 
-**F.A.S.E.** é a versão em português brasileiro do **Get Shit Done (GSD)** — um sistema de meta-prompting e context engineering que faz o Claude Code funcionar de verdade.
+**FASE** é a versão em português brasileiro do **Get Shit Done (GSD)** — um sistema de meta-prompting e context engineering que faz o Claude Code funcionar de verdade.
 
 ## O que é FASE?
 

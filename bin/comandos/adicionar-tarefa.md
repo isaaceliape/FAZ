@@ -10,7 +10,7 @@ allowed-tools:
 ---
 
 <objective>
-Capturar uma ideia, task, ou issue que surge durante uma sessão F.A.S.E. como uma tarefa estruturada para trabalho posterior.
+Capturar uma ideia, task, ou issue que surge durante uma sessão FASE como uma tarefa estruturada para trabalho posterior.
 
 Roteia para o workflow add-todo que gerencia:
 - Criação de estrutura de diretório

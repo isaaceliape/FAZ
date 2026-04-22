@@ -97,7 +97,7 @@ Apresente o relatório neste formato:
 
 ```
 ═══════════════════════════════════════════════════════════
-  RELATÓRIO DE VERIFICAÇÃO F.A.S.E. v{versão}
+  RELATÓRIO DE VERIFICAÇÃO FASE v{versão}
 ═══════════════════════════════════════════════════════════
 
 <i class="fa fa-box"></i> INSTALAÇÃO DO PACOTE
@@ -219,7 +219,7 @@ Apresente o relatório formatado conforme especificado acima.
 
 Se todos os checks passaram, exiba:
 ```
-<i class="fa fa-check-circle"></i> F.A.S.E. está instalado e configurado corretamente!
+<i class="fa fa-check-circle"></i> FASE está instalado e configurado corretamente!
 ```
 
 Se problemas foram encontrados, liste em ordem de prioridade:
@@ -240,7 +240,7 @@ Exemplo de uso:
 Saída esperada (instalação saudável):
 ```
 ═══════════════════════════════════════════════════════════
-  RELATÓRIO DE VERIFICAÇÃO F.A.S.E. v3.0.2
+  RELATÓRIO DE VERIFICAÇÃO FASE v3.0.2
 ═══════════════════════════════════════════════════════════
 
 <i class="fa fa-box"></i> INSTALAÇÃO DO PACOTE
@@ -270,7 +270,7 @@ Saída esperada (instalação saudável):
   Diretório ~/.fase: EXISTS
   Workflows disponíveis: 12
 
-<i class="fa fa-check-circle"></i> F.A.S.E. está instalado e configurado corretamente!
+<i class="fa fa-check-circle"></i> FASE está instalado e configurado corretamente!
 
 ═══════════════════════════════════════════════════════════
 ```

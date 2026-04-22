@@ -1,4 +1,4 @@
-# <i class="fa fa-wrench"></i> Comandos do F.A.S.E.
+# <i class="fa fa-wrench"></i> Comandos do FASE
 
 **32 comandos em português brasileiro para Claude Code.**
 
@@ -36,7 +36,7 @@ Mostra ajuda geral e lista de comandos disponíveis.
 
 ### `/fase-novo-projeto`
 
-Inicia um novo projeto F.A.S.E. no diretório atual.
+Inicia um novo projeto FASE no diretório atual.
 
 **O que faz:**
 - Cria estrutura de pastas `.fase-ai-local/`
@@ -86,7 +86,7 @@ Executa o plano de uma fase, tarefa por tarefa.
 
 ### `/fase-configuracoes`
 
-Mostra e ajusta configurações do F.A.S.E.
+Mostra e ajusta configurações do FASE
 
 **O que faz:**
 - Lista configurações atuais
@@ -496,7 +496,7 @@ Realiza checkup de saúde do projeto.
 
 ### `/fase-atualizar`
 
-Atualiza o F.A.S.E. para a versão mais recente.
+Atualiza o FASE para a versão mais recente.
 
 **O que faz:**
 - Verifica versão instalada
