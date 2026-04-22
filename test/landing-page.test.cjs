@@ -90,7 +90,7 @@ describe('Landing Page Validation', function() {
         { name: 'OpenCode', path: '~/.config/opencode' },
         { name: 'Gemini', path: '~/.gemini' },
         { name: 'Codex', path: '~/.codex' },
-        { name: 'GitHub Copilot', path: '~/.github-copilot' },
+        { name: 'GitHub Copilot', path: '~/.copilot' },
         { name: 'Qwen Code', path: '~/.qwen' }
       ];
 
