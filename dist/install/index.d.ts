@@ -10,7 +10,6 @@ export * from './helpers.js';
 export * from './providers.js';
 export { readSettings, writeSettings, ensureSettingsDir, mergeSettings, addHook, settingsExist, validateSettings, type ProviderSettings, } from './settings.js';
 export * from './attribution.js';
-export * from './analytics.js';
 export * from './hooks.js';
 export * from './frontmatter-convert.js';
 export * from './uninstall.js';
@@ -24,7 +23,6 @@ export * from './uninstall.js';
  * Modules awaiting integration with main install.ts:
  * • providers.ts (expandTilde, getDirName, getGlobalDir, etc.)
  * • settings.ts (readSettings, writeSettings, etc.)
- * • analytics.ts (analytics handling)
  * • hooks.ts (hook management)
  * • attribution.ts (attribution handling)
  * • frontmatter-convert.ts (format conversion)

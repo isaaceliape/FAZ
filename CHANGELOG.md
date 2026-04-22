@@ -39,11 +39,10 @@ e este projeto adiere ao [Versionamento Semântico](https://semver.org/spec/v2.0
   - Log levels: debug, info, warn, error, fatal
   - File output with rotation (7 days, 10MB max)
   - Logs stored in `~/.fase-ai/logs/`
-- **Modular Architecture**: 8 new modules in `src/install/`
+- **Modular Architecture**: 7 new modules in `src/install/`
   - `providers.ts` — Provider detection and config directories
   - `settings.ts` — Settings.json management
   - `attribution.ts` — Commit attribution handling
-  - `analytics.ts` — Analytics preferences
   - `hooks.ts` — Hook file management
   - `frontmatter-convert.ts` — Frontmatter conversion between providers
   - `uninstall.ts` — Uninstallation logic
@@ -102,7 +101,6 @@ e este projeto adiere ao [Versionamento Semântico](https://semver.org/spec/v2.0
 - ✅ **Build system**: Compilação sem erros ou warnings
 - ✅ **Testes**: 155/155 passando (100% de taxa)
 - ✅ **GitHub Copilot**: 8+ testes cobrindo provider completamente
-- ✅ **Analytics persistence**: 3 testes de persistência de preferências
 - ✅ **Arrow navigation**: Navegação interativa testada em múltiplos cenários
 
 ### Detalhes Técnicos

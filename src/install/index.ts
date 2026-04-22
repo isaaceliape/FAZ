@@ -30,9 +30,6 @@ export {
 // Commit attribution handling
 export * from './attribution.js';
 
-// Analytics preferences
-export * from './analytics.js';
-
 // Hook file management
 export * from './hooks.js';
 
@@ -52,7 +49,6 @@ export * from './uninstall.js';
  * Modules awaiting integration with main install.ts:
  * • providers.ts (expandTilde, getDirName, getGlobalDir, etc.)
  * • settings.ts (readSettings, writeSettings, etc.)
- * • analytics.ts (analytics handling)
  * • hooks.ts (hook management)
  * • attribution.ts (attribution handling)
  * • frontmatter-convert.ts (format conversion)

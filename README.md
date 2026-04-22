@@ -55,7 +55,6 @@ Ele traz:
 **Suportados agora:**
 - 🤖 6 provedores de IA: Claude Code, OpenCode, Gemini, Codex, GitHub Copilot, Qwen Code
 - ⌨️ Navegação interativa com setas (↑↓) no menu
-- 💾 Preferências de análise persistentes
 - 🚪 Opção de saída graceful do instalador
 
 ---

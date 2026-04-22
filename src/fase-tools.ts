@@ -11,7 +11,6 @@ import path from 'path';
 import os from 'os';
 import { error, output } from './lib/core.js';
 import * as state from './lib/state.js';
-import { trackEvent } from './lib/analytics.js';
 import * as etapa from './lib/etapa.js';
 import * as roadmap from './lib/roadmap.js';
 import * as verify from './lib/verify.js';
@@ -82,14 +81,6 @@ async function main(): Promise<void> {
 
   if (!command) {
     error('Usage: fase-tools <command> [args] [--raw] [--cwd <path>]\nCommands: state, resolve-model, find-phase, commit, verify-summary, verify, frontmatter, template, generate-slug, current-timestamp, list-todos, verify-path-exists, config-ensure-section, init, phase, roadmap, milestone, validate, progress, todo, scaffold, websearch, history-digest, summary-extract, phase-plan-index, state-snapshot, phases, requirements, check-update');
-  }
-
-  // Track command execution for analytics (opt-in, safe to fail)
-  try {
-    const runtime = process.env.FASE_RUNTIME || 'unknown';
-    trackEvent(command, runtime);
-  } catch {
-    // Analytics failures should never break the tool
   }
 
   switch (command) {
