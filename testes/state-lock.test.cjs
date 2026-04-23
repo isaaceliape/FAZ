@@ -132,4 +132,110 @@ describe('state.ts locking mechanism', () => {
       assert.ok(state.includes('**Status:** Testing'), 'Status should be updated');
     });
   });
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Lock Acquisition and Release Tests
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  describe('lock acquisition and release', () => {
+    test('lock is released after state operation completes', () => {
+      // Create STATE.md
+      fs.mkdirSync(path.join(tmpDir, '.fase-ai'), { recursive: true });
+      fs.writeFileSync(
+        path.join(tmpDir, '.fase-ai', 'STATE.md'),
+        '# Project State\n\n**Status:** Active\n'
+      );
+
+      const lockDir = path.join(tmpDir, '.fase-ai', '.state-lock.d');
+
+      // Perform state operation that acquires and releases lock
+      const result = runGsdTools(['state', 'update', 'Status', 'Testing'], tmpDir);
+      assert.ok(result.success, 'State operation should succeed');
+
+      // Lock directory should not persist after operation completes
+      // (releaseStateLock removes both pidFile and lockDir)
+      assert.strictEqual(
+        fs.existsSync(lockDir),
+        false,
+        'Lock should be released after state operation'
+      );
+
+      // Verify the state was updated
+      const state = fs.readFileSync(path.join(tmpDir, '.fase-ai', 'STATE.md'), 'utf-8');
+      assert.ok(state.includes('**Status:** Testing'), 'Status should be updated');
+    });
+
+    test('sequential state operations work correctly', () => {
+      // Create STATE.md
+      fs.mkdirSync(path.join(tmpDir, '.fase-ai'), { recursive: true });
+      fs.writeFileSync(
+        path.join(tmpDir, '.fase-ai', 'STATE.md'),
+        '# Project State\n\n**Current Phase:** 01\n**Status:** Ready\n'
+      );
+
+      // Multiple sequential operations should each acquire/release lock
+      const result1 = runGsdTools(['state', 'update', 'Current Phase', '02'], tmpDir);
+      assert.ok(result1.success, 'First operation should succeed');
+
+      const result2 = runGsdTools(['state', 'update', 'Status', 'Active'], tmpDir);
+      assert.ok(result2.success, 'Second operation should succeed');
+
+      const result3 = runGsdTools(['state-snapshot'], tmpDir);
+      assert.ok(result3.success, 'Third operation (snapshot) should succeed');
+
+      // Verify all updates applied
+      const state = fs.readFileSync(path.join(tmpDir, '.fase-ai', 'STATE.md'), 'utf-8');
+      assert.ok(state.includes('**Current Phase:** 02'), 'Phase should be updated to 02');
+      assert.ok(state.includes('**Status:** Active'), 'Status should be Active');
+
+      // Lock should not persist after last operation
+      const lockDir = path.join(tmpDir, '.fase-ai', '.state-lock.d');
+      assert.strictEqual(fs.existsSync(lockDir), false, 'Lock should be released after all operations');
+    });
+
+    test('state-snapshot does not leave lock behind (read-only operation)', () => {
+      // Create STATE.md
+      fs.mkdirSync(path.join(tmpDir, '.fase-ai'), { recursive: true });
+      fs.writeFileSync(
+        path.join(tmpDir, '.fase-ai', 'STATE.md'),
+        '# Project State\n\n**Status:** Active\n'
+      );
+
+      const lockDir = path.join(tmpDir, '.fase-ai', '.state-lock.d');
+
+      // state-snapshot is a read operation that doesn't acquire locks
+      // (writeStateMd acquires locks, cmdStateSnapshot just reads)
+      const result = runGsdTools(['state-snapshot'], tmpDir);
+      assert.ok(result.success, 'Snapshot should succeed');
+
+      // No lock should have been created (read-only operation)
+      assert.strictEqual(
+        fs.existsSync(lockDir),
+        false,
+        'Read operations should not create locks'
+      );
+    });
+
+    test('state json does not leave lock behind (read-only operation)', () => {
+      // Create STATE.md
+      fs.mkdirSync(path.join(tmpDir, '.fase-ai'), { recursive: true });
+      fs.writeFileSync(
+        path.join(tmpDir, '.fase-ai', 'STATE.md'),
+        '# Project State\n\n**Status:** Active\n'
+      );
+
+      const lockDir = path.join(tmpDir, '.fase-ai', '.state-lock.d');
+
+      // state json is a read operation that doesn't acquire locks
+      const result = runGsdTools(['state', 'json'], tmpDir);
+      assert.ok(result.success, 'state json should succeed');
+
+      // No lock should have been created
+      assert.strictEqual(
+        fs.existsSync(lockDir),
+        false,
+        'Read operations should not create locks'
+      );
+    });
+  });
 });
