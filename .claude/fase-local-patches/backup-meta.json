@@ -1,0 +1,19 @@
+{
+  "backed_up_at": "2026-04-22T21:53:00.510Z",
+  "from_version": "4.0.0",
+  "files": [
+    "agents/fase-arquiteto.md",
+    "agents/fase-auditor-nyquist.md",
+    "agents/fase-depurador.md",
+    "agents/fase-executor.md",
+    "agents/fase-mapeador-codigo.md",
+    "agents/fase-pesquisador-fase.md",
+    "agents/fase-pesquisador-projeto.md",
+    "agents/fase-planejador.md",
+    "agents/fase-roadmapper.md",
+    "agents/fase-sintetizador-pesquisa.md",
+    "agents/fase-verificador-integracao.md",
+    "agents/fase-verificador-plano.md",
+    "agents/fase-verificador.md"
+  ]
+}

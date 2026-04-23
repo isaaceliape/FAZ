@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VERIFICAR-INSTALACAO - FASE Docs</title>
+  <style>
+    :root {
+      --primary: #00ff88;
+      --secondary: #00bfff;
+      --warning: #ffaa00;
+      --danger: #ff3366;
+      --dark-bg: #0a0e27;
+      --grid-bg: #111827;
+      --text: #e5e7eb;
+      --dim: #9ca3af;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .header {
+      background-color: var(--grid-bg);
+      border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+
+    .logo span {
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      border: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .content-wrapper {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: var(--grid-bg);
+      border-right: 1px solid rgba(0, 255, 136, 0.1);
+      padding: 20px;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .sidebar h3 {
+      color: var(--primary);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+      margin-top: 20px;
+    }
+
+    .sidebar h3:first-child {
+      margin-top: 0;
+    }
+
+    .sidebar-link {
+      display: block;
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-link:hover {
+      color: var(--primary);
+      background-color: rgba(0, 255, 136, 0.1);
+      border-left-color: var(--primary);
+    }
+
+    .sidebar-link.active {
+      color: var(--primary);
+      background-color: rgba(0, 255, 136, 0.15);
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+    }
+
+    h1 {
+      color: var(--primary);
+      font-size: 2rem;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      color: var(--secondary);
+      font-size: 1.5rem;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+
+    h3 {
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 15px;
+      color: var(--text);
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      border-bottom: 1px dotted var(--primary);
+      transition: all 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--secondary);
+      border-bottom-style: solid;
+    }
+
+    code {
+      background-color: var(--dark-bg);
+      color: var(--primary);
+      padding: 0.2rem 0.4rem;
+      border-radius: 2px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background-color: var(--dark-bg);
+      border: 1px solid var(--dim);
+      border-radius: 4px;
+      padding: 15px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+
+    pre code {
+      padding: 0;
+      background: none;
+      color: var(--primary);
+    }
+
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    blockquote {
+      border-left: 4px solid var(--primary);
+      background-color: var(--dark-bg);
+      padding: 15px;
+      margin: 15px 0;
+      color: var(--dim);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      border: 1px solid var(--dim);
+    }
+
+    th {
+      background-color: var(--dark-bg);
+      color: var(--primary);
+      padding: 12px;
+      text-align: left;
+      border-bottom: 2px solid var(--primary);
+      border-right: 1px solid var(--dim);
+      font-weight: 600;
+    }
+
+    th:last-child {
+      border-right: none;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid var(--dim);
+      border-right: 1px solid var(--dim);
+    }
+
+    td:last-child {
+      border-right: none;
+    }
+
+    tr:hover {
+      background-color: rgba(0, 255, 136, 0.05);
+    }
+
+    strong {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    em {
+      color: var(--dim);
+      font-style: italic;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--dim);
+      margin: 30px 0;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--dark-bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--secondary);
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .content-wrapper {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+        max-height: 150px;
+        overflow-x: auto;
+        display: flex;
+        gap: 10px;
+      }
+
+      .sidebar h3 {
+        display: none;
+      }
+
+      .sidebar-link {
+        white-space: nowrap;
+        margin-bottom: 0;
+      }
+
+      .main {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">fase<span>-</span>ai</div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="https://github.com/isaaceliape/FASE">GitHub</a>
+    </div>
+  </div>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <h3>📚 Documentação</h3>
+      <a href="readme.html" class="sidebar-link ">📖 README</a>
+<a href="COMANDOS.html" class="sidebar-link ">📋 Comandos</a>
+<a href="GUIA-DO-USUARIO.html" class="sidebar-link ">📘 Guia do Usuário</a>
+<a href="HOOKS.html" class="sidebar-link ">🔧 Git Hooks</a>
+<a href="NPM-REGISTRY.html" class="sidebar-link ">📦 NPM Registry</a>
+<a href="CONTEXT-MONITOR.html" class="sidebar-link ">📊 Context Monitor</a>
+    </aside>
+
+    <main class="main">
+      <h1>Verificar Instalação - Documentação</h1>
+<h2>Visão Geral</h2>
+<p>O comando <code>verificar-instalacao</code> é uma ferramenta de diagnóstico que verifica o status da instalação do FASE no sistema e gera um relatório detalhado com problemas encontrados e ações corretivas sugeridas.</p>
+<h2>Uso</h2>
+<h3>Via npm (recomendado)</h3>
+<pre><code class="language-bash">npm run verificar-instalacao
+</code></pre>
+<h3>Direto</h3>
+<pre><code class="language-bash">node bin/verificar-instalacao.js
+</code></pre>
+<h3>Dentro do FASE (após instalação)</h3>
+<pre><code class="language-bash">/fase-verificar-instalacao
+</code></pre>
+<h2>O Que É Verificado</h2>
+<h3>1. Instalação do Pacote</h3>
+<ul>
+<li>✅ Verifica se <code>fase-ai</code> está disponível via npx</li>
+<li>✅ Mostra a versão mais recente no npm registry</li>
+<li>✅ Verifica acesso ao registry oficial</li>
+</ul>
+<h3>2. Runtimes Configurados</h3>
+<p>Para cada runtime suportado:</p>
+<p><strong>Claude Code:</strong></p>
+<ul>
+<li>Diretório <code>~/.claude</code></li>
+<li>Arquivo <code>settings.json</code></li>
+<li>Comandos FASE (<code>fase-*.md</code>)</li>
+<li>Hooks FASE (<code>fase-*.js</code>)</li>
+</ul>
+<p><strong>OpenCode:</strong></p>
+<ul>
+<li>Diretório <code>~/.config/opencode</code></li>
+<li>Arquivo <code>opencode.json</code></li>
+<li>Comandos FASE (<code>fase-*.md</code>)</li>
+</ul>
+<p><strong>Gemini:</strong></p>
+<ul>
+<li>Diretório <code>~/.gemini</code></li>
+<li>Arquivo <code>settings.json</code></li>
+<li>Comandos FASE (<code>fase-*.toml</code>)</li>
+</ul>
+<p><strong>Codex:</strong></p>
+<ul>
+<li>Diretório <code>~/.codex</code></li>
+<li>Arquivo <code>config.toml</code></li>
+<li>Skills FASE (<code>fase-*/SKILL.md</code>)</li>
+</ul>
+<h3>3. Workflows FASE</h3>
+<ul>
+<li>Diretório <code>~/.fase</code></li>
+<li>Subdiretório <code>~/.fase/workflows</code></li>
+<li>Arquivos de workflow (<code>.md</code>)</li>
+</ul>
+<h2>Saída do Relatório</h2>
+<p>O relatório é dividido em seções:</p>
+<pre><code>═══════════════════════════════════════════════════════════
+  RELATÓRIO DE VERIFICAÇÃO FASE v3.0.2
+═══════════════════════════════════════════════════════════
+
+📦 INSTALAÇÃO DO PACOTE
+  Status: INSTALADO/NÃO INSTALADO
+  Versão: X.Y.Z
+  Localização: /caminho/para/pacote
+
+🔧 RUNTIMES CONFIGURADOS
+  Claude Code: CONFIGURADO/NÃO_CONFIGURADO
+    - Settings: OK/MISSING
+    - Comandos FASE: N encontrados
+    - Hooks: N encontrados
+  
+  OpenCode: CONFIGURADO/NÃO_CONFIGURADO
+    - Settings: OK/MISSING
+    - Comandos FASE: N encontrados
+  
+  Gemini: CONFIGURADO/NÃO_CONFIGURADO
+    - Settings: OK/MISSING
+    - Comandos FASE: N encontrados
+  
+  Codex: CONFIGURADO/NÃO_CONFIGURADO
+    - Config: OK/MISSING
+    - Skills FASE: N encontradas
+
+📁 WORKFLOWS FASE
+  Diretório ~/.fase: EXISTS/MISSING
+  Workflows disponíveis: N
+
+⚠️ PROBLEMAS ENCONTRADOS
+  1. Problema 1
+  2. Problema 2
+  ...
+
+💡 AÇÕES SUGERIDAS
+  1. Problema
+     Comando: comando-para-corrigir
+     Descrição
+
+═══════════════════════════════════════════════════════════
+</code></pre>
+<h2>Critérios de Saúde</h2>
+<h3>✅ Instalação Saudável</h3>
+<ul>
+<li>Pacote disponível via npx</li>
+<li>Pelo menos um runtime configurado</li>
+<li>Comandos FASE presentes no runtime configurado</li>
+<li>Workflows disponíveis</li>
+</ul>
+<h3>⚠️ Instalação Parcial</h3>
+<ul>
+<li>Pacote instalado mas nenhum runtime configurado</li>
+<li>Runtime configurado mas sem comandos FASE</li>
+<li>Workflows ausentes</li>
+</ul>
+<h3>❌ Instalação Problemática</h3>
+<ul>
+<li>Pacote não instalado</li>
+<li>Múltiplos problemas de configuração</li>
+<li>Conflitos de versão detectados</li>
+</ul>
+<h2>Ações Corretivas Comuns</h2>
+<h3>Pacote Não Disponível</h3>
+<pre><code class="language-bash"># FASE é usado via npx - sempre baixa a versão mais recente
+npx fase-ai
+</code></pre>
+<h3>Claude Code Sem Comandos</h3>
+<pre><code class="language-bash">npx fase-ai --claude
+</code></pre>
+<h3>OpenCode Sem Comandos</h3>
+<pre><code class="language-bash">npx fase-ai --opencode
+</code></pre>
+<h3>Gemini Sem Comandos</h3>
+<pre><code class="language-bash">npx fase-ai --gemini
+</code></pre>
+<h3>Codex Sem Comandos</h3>
+<pre><code class="language-bash">npx fase-ai --codex
+</code></pre>
+<h3>Workflows Ausentes</h3>
+<pre><code class="language-bash">mkdir -p ~/.fase/workflows
+# Copiar workflows do projeto ou reinstalar
+npx fase-ai
+</code></pre>
+<h3>Atualizar Versão</h3>
+<pre><code class="language-bash"># npx sempre usa a versão mais recente
+npx fase-ai@latest
+
+# Ou dentro do assistente:
+/fase-atualizar
+</code></pre>
+<h3>Reinstalação Completa</h3>
+<pre><code class="language-bash"># Limpar cache do npm
+npm cache clean --force
+
+# Reinstalar via npx
+npx fase-ai --all
+</code></pre>
+<h2>Código de Saída</h2>
+<ul>
+<li><code>0</code> - Instalação saudável, sem problemas</li>
+<li><code>1</code> - Problemas encontrados (ver relatório)</li>
+</ul>
+<h2>Exemplo de Saída</h2>
+<h3>Instalação Saudável</h3>
+<pre><code>═══════════════════════════════════════════════════════════
+  RELATÓRIO DE VERIFICAÇÃO FASE v3.0.2
+═══════════════════════════════════════════════════════════
+
+📦 INSTALAÇÃO DO PACOTE
+  ✓ Status: INSTALADO
+  ✓ Versão: 3.0.2
+  ✓ Localização: /usr/local/lib/node_modules/fase-ai
+
+🔧 RUNTIMES CONFIGURADOS
+
+  Claude Code: CONFIGURADO
+    ✓ Settings: OK
+    ✓ Comandos FASE: 32 encontrados
+    ✓ Hooks: 6 encontrados
+
+  OpenCode: NÃO_CONFIGURADO
+    - Settings: MISSING
+    - Comandos FASE: 0 encontrados
+
+  Gemini: CONFIGURADO
+    ✓ Settings: OK
+    ✓ Comandos FASE: 32 encontrados
+
+  Codex: NÃO_CONFIGURADO
+    - Config: MISSING
+    - Skills FASE: 0 encontradas
+
+📁 WORKFLOWS FASE
+  ✓ Diretório ~/.fase: EXISTS
+  ✓ Workflows disponíveis: 12
+
+═══════════════════════════════════════════════════════════
+
+  ✅ FASE está instalado e configurado corretamente!
+
+═══════════════════════════════════════════════════════════
+</code></pre>
+<h3>Instalação com Problemas</h3>
+<pre><code>═══════════════════════════════════════════════════════════
+  RELATÓRIO DE VERIFICAÇÃO FASE v3.0.2
+═══════════════════════════════════════════════════════════
+
+📦 INSTALAÇÃO DO PACOTE
+  ✗ Status: NÃO INSTALADO
+
+🔧 RUNTIMES CONFIGURADOS
+
+  Claude Code: CONFIGURADO
+    ✓ Settings: OK
+    ✗ Comandos FASE: 0 encontrados
+    ⚠ Hooks: 0 encontrados
+
+  [...]
+
+═══════════════════════════════════════════════════════════
+
+  ⚠️  6 PROBLEMA(S) ENCONTRADO(S):
+
+  1. Pacote fase-ai não disponível via npx
+  2. Claude Code: Sem comandos FASE instalados
+  3. OpenCode: Sem comandos FASE instalados
+  4. Gemini: Sem comandos FASE instalados
+  5. Codex: Sem comandos FASE instalados
+  6. Diretório ~/.fase não existe
+
+  💡 AÇÕES SUGERIDAS:
+
+  1. Pacote não disponível
+     Comando: npx fase-ai
+     Instalar FASE via npx
+
+  2. Claude Code sem comandos
+     Comando: npx fase-ai --claude
+     Instalar comandos FASE para Claude Code
+
+  [...]
+
+═══════════════════════════════════════════════════════════
+</code></pre>
+<h2>Desenvolvimento</h2>
+<h3>Estrutura do Arquivo</h3>
+<ul>
+<li><code>bin/verificar-instalacao.js</code> - Script principal</li>
+<li><code>bin/test/verificar-instalacao.test.js</code> - Testes</li>
+<li><code>comandos/verificar-instalacao.md</code> - Comando em português</li>
+<li><code>bin/comandos/check-installation.md</code> - Comando em inglês (deprecated)</li>
+</ul>
+<h3>Executar Testes</h3>
+<pre><code class="language-bash">cd bin
+npm test -- test/verificar-instalacao.test.js
+</code></pre>
+<h3>Adicionar Novas Verificações</h3>
+<ol>
+<li>Adicione a lógica de verificação em <code>verificar-instalacao.js</code></li>
+<li>Adicione entradas na lista de <code>issues</code> se problema encontrado</li>
+<li>Adicione sugestões na lista de <code>suggestions</code></li>
+<li>Atualize os testes</li>
+<li>Atualize esta documentação</li>
+</ol>
+<h2>Integração com Comandos FASE</h2>
+<p>O comando também está disponível como <code>/fase-verificar-instalacao</code> dentro dos assistentes, permitindo que o próprio FASE verifique sua instalação e sugira correções.</p>
+<h2>Troubleshooting</h2>
+<h3>Permissões de Escrita</h3>
+<p>Se receber erros de permissão, execute com <code>sudo</code>:</p>
+<pre><code class="language-bash">sudo npm run verificar-instalacao
+</code></pre>
+<h3>Caminhos Customizados</h3>
+<p>Se seus runtimes usam caminhos customizados, o comando ainda verifica os caminhos padrão. Para verificar caminhos customizados, use:</p>
+<pre><code class="language-bash">CLAUDE_CONFIG_DIR=/custom/path node bin/verificar-instalacao.js
+</code></pre>
+<h3>Falso Positivo</h3>
+<p>Às vezes o comando pode reportar 0 comandos mesmo após instalação. Isso pode acontecer se:</p>
+<ul>
+<li>Instalação foi feita em diretório customizado</li>
+<li>Permissões de arquivo estão incorretas</li>
+<li>Links simbólicos estão quebrados</li>
+</ul>
+<p>Nesses casos, verifique manualmente:</p>
+<pre><code class="language-bash">ls ~/.claude/commands/fase-*.md
+</code></pre>
+<h2>FAQ</h2>
+<p><strong>P: Por que mostra 0 comandos mesmo após instalar?</strong>
+R: Verifique se instalou para o runtime correto. Execute <code>npx fase-ai --claude</code> (ou outro runtime).</p>
+<p><strong>P: O que fazer se múltiplos runtimes têm problemas?</strong>
+R: Use <code>npx fase-ai --all</code> para instalar para todos de uma vez.</p>
+<p><strong>P: Workflows são obrigatórios?</strong>
+R: Não, mas são altamente recomendados. Muitos comandos FASE dependem deles.</p>
+<p><strong>P: Posso usar em CI/CD?</strong>
+R: Sim! O código de saída <code>0</code> ou <code>1</code> permite integração com pipelines.</p>
+<hr>
+<p><strong>Versão:</strong> 1.0.0<br><strong>Última atualização:</strong> Março 2026</p>
+
+    </main>
+  </div>
+</body>
+</html>
