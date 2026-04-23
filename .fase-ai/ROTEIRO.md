@@ -73,16 +73,18 @@ Roteiro para endereçar 27 concerns através de improvement continuo. Fases orga
 
 ---
 
-### Fase 4: Test Coverage Foundation
+### Fase 4: Test Coverage Foundation 🔄 EM PROGRESSO
 **Requisitos:** REQ-018, REQ-019
-**Tarefas:**
-- install.ts test coverage
-- state.ts lock tests
-- Test helpers/utilities
-- Mock strategies
+**Plans:** 3 plans em 3 etapas
+**Status:** EM PROGRESSO (1/3 plans complete)
+
+**Plans:**
+- [x] 04-01-PLANO.md — State.ts locking tests (REQ-019) ✅
+- [ ] 04-02-PLANO.md — install.ts core tests (REQ-018 part 1)
+- [ ] 04-03-PLANO.md — install.ts advanced tests (REQ-018 part 2)
 
 **Estimativa:** 3-4 dias
-**Dependências:** Fase 2
+**Dependências:** Fase 2 ✅ COMPLETO
 
 ---
 
