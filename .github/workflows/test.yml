@@ -1,4 +1,4 @@
-name: Multi-Platform Tests
+name: Test
 
 on:
   push:
@@ -8,9 +8,46 @@ on:
   workflow_dispatch:
 
 jobs:
+  lint:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run ESLint
+        id: eslint
+        run: npm run lint
+      
+      - name: Check Prettier formatting
+        id: prettier
+        run: npm run format:check
+      
+      - name: Help on failure
+        if: failure()
+        run: |
+          echo "::error::Lint or format check failed!"
+          echo ""
+          echo "💡 Fix locally before pushing:"
+          echo "   npm run lint          # Check ESLint issues"
+          echo "   npm run lint -- --fix # Auto-fix ESLint issues"
+          echo "   npm run format        # Format all files with Prettier"
+          echo ""
+          echo "CI requires zero ESLint warnings and all files formatted."
+
   test-linux:
     name: Linux (Node ${{ matrix.node }})
     runs-on: ubuntu-latest
+    needs: [lint]
     strategy:
       matrix:
         node: [20, 22]
@@ -34,6 +71,19 @@ jobs:
       - name: Run unit tests
         run: npm test
       
+      - name: Generate coverage report
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && matrix.node == '20'
+        run: npm run test:coverage
+        continue-on-error: true
+      
+      - name: Upload coverage artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && matrix.node == '20'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: test-results.json
+          retention-days: 7
+      
       - name: Test clean installation
         run: |
           echo "Testing clean install for Node ${{ matrix.node }}..."
@@ -49,6 +99,7 @@ jobs:
   test-macos:
     name: macOS (Node ${{ matrix.node }})
     runs-on: macos-latest
+    needs: [lint]
     strategy:
       matrix:
         node: [20, 22]
@@ -87,6 +138,7 @@ jobs:
   integration-test:
     name: Integration Tests
     runs-on: ubuntu-latest
+    needs: [lint]
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     
@@ -127,7 +179,7 @@ jobs:
   report:
     name: Generate Test Report
     runs-on: ubuntu-latest
-    needs: [test-linux, test-macos, integration-test]
+    needs: [lint, test-linux, test-macos, integration-test]
     if: always()
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -135,10 +187,13 @@ jobs:
     steps:
       - name: Generate report
         run: |
-          echo "## Multi-Platform Test Report" > test-report.md
+          echo "## Test Report" > test-report.md
           echo "" >> test-report.md
           echo "**Date:** $(date -u +%Y-%m-%d)" >> test-report.md
           echo "**Workflow:** ${{ github.run_id }}" >> test-report.md
+          echo "" >> test-report.md
+          echo "### Lint & Format Check" >> test-report.md
+          echo "Status: ${{ needs.lint.result }}" >> test-report.md
           echo "" >> test-report.md
           echo "### Results Summary" >> test-report.md
           echo "" >> test-report.md
@@ -151,7 +206,7 @@ jobs:
           echo "Status: ${{ needs.integration-test.result }}" >> test-report.md
           echo "" >> test-report.md
           echo "### Overall Status" >> test-report.md
-          echo "**${{ needs.test-linux.result == 'success' && needs.test-macos.result == 'success' && needs.integration-test.result == 'success' && '✅ ALL TESTS PASSED' || '⚠ SOME TESTS FAILED' }}**" >> test-report.md
+          echo "**${{ needs.lint.result == 'success' && needs.test-linux.result == 'success' && needs.test-macos.result == 'success' && needs.integration-test.result == 'success' && '✅ ALL TESTS PASSED' || '⚠ SOME TESTS FAILED' }}**" >> test-report.md
           
           cat test-report.md
       
