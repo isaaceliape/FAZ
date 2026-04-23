@@ -1,0 +1,9 @@
+dist/
+node_modules/
+bin/
+package-lock.json
+*.md
+test/
+testes/
+skills/
+www/
