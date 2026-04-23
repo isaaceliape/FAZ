@@ -292,13 +292,34 @@ function acquireStateLock(lockPath: string, maxAttempts = 10, baseDelayMs = 50):
           `[state:acquireLock] Can't read PID file: ${(readErr as Error).message}\n`
         );
         try {
-          fs.unlinkSync(pidFile);
+          // Check if pidFile exists before unlinking (handles missing PID file case)
+          if (fs.existsSync(pidFile)) {
+            fs.unlinkSync(pidFile);
+          }
           fs.rmdirSync(lockDir);
-          continue;
+          continue; // Retry immediately after cleanup
         } catch (cleanupErr) {
-          process.stderr.write(
-            `[state:acquireLock] Failed to cleanup stale lock: ${(cleanupErr as Error).message}\n`
-          );
+          const cleanupError = cleanupErr as NodeJS.ErrnoException;
+          // If rmdir fails because directory is not empty, force cleanup
+          if (cleanupError.code === 'ENOTEMPTY') {
+            try {
+              // Remove all files in lock directory and then remove directory
+              const files = fs.readdirSync(lockDir);
+              for (const file of files) {
+                fs.unlinkSync(path.join(lockDir, file));
+              }
+              fs.rmdirSync(lockDir);
+              continue;
+            } catch (forceCleanupErr) {
+              process.stderr.write(
+                `[state:acquireLock] Failed to force cleanup stale lock: ${(forceCleanupErr as Error).message}\n`
+              );
+            }
+          } else {
+            process.stderr.write(
+              `[state:acquireLock] Failed to cleanup stale lock: ${(cleanupErr as Error).message}\n`
+            );
+          }
         }
       }
 
