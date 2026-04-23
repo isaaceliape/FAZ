@@ -130,33 +130,8 @@ FASE/
 ## Git History
 
 ### Recent Commits (Most Recent First)
-```
-a8819eb - refactor: rename SUMARIO references to RESUMO throughout codebase
-36de649 - docs: mark Phase 6 as complete in migration plan
-ae7f7cf - fix: clean up deprecated directories from dist/ during build
-fd924cc - docs: mark Phase 5 as complete in migration plan
-61c7e34 - docs: update translation issue template to reference new folder structure
-acb2ab3 - docs: update deployment documentation to reference new folder structure
-1a3f3ef - docs: update test documentation to reference new .github/ folder structure
-b77e2d7 - docs: update VERIFICAR-INSTALACAO.md to reference new .github/commands/ folder
-58af40c - docs: add migration summary to CHANGELOG.md
-5e9f8fb - docs: update padronizacao-caminhos.md to reference new .github/commands/ folder
-1689590 - docs: update CONTRIBUINDO.md to reference new .github/commands/ folder
-61945aa - docs: update AGENTS.md to reference new .github/agents/ folder
-add7672 - docs: mark Phase 3 and 4 as complete in migration plan
-09a1de9 - test: update test files to use new .github/ folder structure
-6ead257 - fix: update package.json files array for new folder structure
-4c59881 - fix: update installer and build script to use new .github/ paths
-08f32d9 - fix: update build script to use new .github/ paths
-e85e9f5 - feat: migrate skills to .github/skills/ organized by category
-0ed4b9b - feat: migrate hooks to .github/hooks/ organized by function
-375176d - feat: migrate commands to .github/commands/
-403f401 - feat: migrate agents to .github/agents/
-67c22d8 - feat: add compatibility redirects for deprecated paths
-0131c9c - feat: create .github folder structure for copilot migration
-```
 
-**Total Commits for Migration:** 24 atomic commits
+For current project state, see git log. The GitHub Copilot folder structure migration was completed in v4.0.2 with 24 atomic commits. Compatibility layer was removed in v5.0.0.
 
 ---
 
@@ -235,10 +210,6 @@ All installers updated and tested ✅
 - ✅ No test failures
 - ✅ No build issues
 - ✅ All functionality working
-
-### Deprecated (Will be removed in v5.0.0)
-- ⚠️ Old folder paths (agentes/, comandos/, etc.) still work via compatibility layer
-- ⚠️ Old SUMARIO.md references (all updated to RESUMO.md in v4.0.2)
 
 ---
 

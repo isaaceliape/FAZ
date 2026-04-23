@@ -7,18 +7,36 @@ e este projeto adiere ao [Versionamento Semântico](https://semver.org/spec/v2.0
 
 ## [Unreleased]
 
-### Changed
+## [5.0.0] - TBD
 
-- **Folder Structure**: Migrated GitHub Copilot installation from root-level folders to `.github/` standard structure
-  - `agentes/` → `.github/agents/` (13 agent files)
-  - `comandos/` → `.github/commands/` (34+ command files)
-  - `hooks/` → `.github/hooks/` (organized by function: checks, monitors, builders)
-  - `skills/` → `.github/skills/` (organized by category: integrations, tools, frameworks)
-- **Build System**: Updated `fix-shebangs.mjs` to copy from new `.github/` directories to `dist/`
-- **Package Configuration**: Updated `package.json` and `bin/package.json` to include new folder structure in npm package
-- **Installer**: Updated `src/install.ts` to read agent, command, and hook files from new locations
-- **Documentation**: Updated all references to point to `.github/` folder structure
-- **Tests**: Updated 9 test files to use new canonical paths (all 258 tests passing)
+### Removed
+
+- **Breaking**: Removed deprecated folder path compatibility layer
+  - Old paths (`agentes/`, `comandos/`, `hooks/`, `skills/`) **no longer work**
+  - Compatibility symlinks removed: `agentes-compat`, `comandos-compat`, `hooks-compat`, `skills-compat`
+  - Deprecated directory cleanup code removed from build script
+  - Users must update any scripts, documentation, or CI/CD workflows referencing old paths
+
+### Migration Guide (v4.0.2 → v5.0.0)
+
+If your project or scripts reference deprecated paths, update them as follows:
+- `agentes/` → `.github/agents/`
+- `comandos/` → `.github/commands/`
+- `hooks/` → `.github/hooks/`
+- `skills/` → `.github/skills/`
+
+Example migration:
+```bash
+# Old (v4.0.2)
+ls agentes/
+cat comandos/atualizar.md
+
+# New (v5.0.0)
+ls .github/agents/
+cat .github/commands/atualizar.md
+```
+
+---
 
 ## [4.0.2] - 2026-04-21
 
