@@ -1,9 +1,9 @@
 /**
  * Frontmatter Conversion — Convert agent frontmatter between provider formats
- * 
+ *
  * Handles conversion of Claude Code agent format to OpenCode, Gemini, and Codex formats.
  * Includes tool name mapping, color conversion, and format-specific transformations.
- * 
+ *
  * @module install/frontmatter-convert
  */
 
@@ -74,7 +74,7 @@ export const claudeToCopilotTools: Record<string, string> = {
 
 /**
  * Convert a Claude Code tool name to OpenCode format
- * 
+ *
  * @param claudeTool - Claude Code tool name
  * @returns OpenCode tool name
  */
@@ -130,11 +130,14 @@ export function convertCopilotToolName(claudeTool: string): string | null {
 
 /**
  * Extract frontmatter and body from markdown content
- * 
+ *
  * @param content - Markdown file content
  * @returns Object with frontmatter string and body
  */
-export function extractFrontmatterAndBody(content: string): { frontmatter: string | null; body: string } {
+export function extractFrontmatterAndBody(content: string): {
+  frontmatter: string | null;
+  body: string;
+} {
   if (!content.startsWith('---')) {
     return { frontmatter: null, body: content };
   }
@@ -150,7 +153,7 @@ export function extractFrontmatterAndBody(content: string): { frontmatter: strin
 
 /**
  * Extract a specific field from frontmatter
- * 
+ *
  * @param frontmatter - Frontmatter string
  * @param fieldName - Field name to extract
  * @returns Field value or null
@@ -178,7 +181,7 @@ export function yamlQuote(value: string): string {
 
 /**
  * Convert slash commands to Codex skill mentions
- * 
+ *
  * @param content - Content with slash commands
  * @returns Content with skill mentions
  */
@@ -192,7 +195,7 @@ export function convertSlashCommandsToCodexSkillMentions(content: string): strin
 
 /**
  * Convert Claude agent content to Codex format
- * 
+ *
  * @param content - Claude agent content
  * @returns Codex agent content
  */
@@ -204,7 +207,7 @@ export function convertClaudeToCodexMarkdown(content: string): string {
 
 /**
  * Get Codex skill adapter header
- * 
+ *
  * @param skillName - Name of the skill
  * @returns Skill adapter header markdown
  */
@@ -260,7 +263,10 @@ export function convertClaudeToQwenCommand(content: string): string {
     const trimmed = line.trim();
     // Extract description field
     if (trimmed.startsWith('description:')) {
-      description = trimmed.substring(12).trim().replace(/^['"]|['"]$/g, '');
+      description = trimmed
+        .substring(12)
+        .trim()
+        .replace(/^['"]|['"]$/g, '');
     }
     // name, tools, color, skills are ignored for Qwen Commands
   }

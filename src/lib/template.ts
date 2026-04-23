@@ -4,7 +4,14 @@
 
 import fs from 'fs';
 import path from 'path';
-import { normalizeEtapaNome, findEtapaInternal, generateSlugInternal, toPosixPath, output, error } from './core.js';
+import {
+  normalizeEtapaNome,
+  findEtapaInternal,
+  generateSlugInternal,
+  toPosixPath,
+  output,
+  error,
+} from './core.js';
 import { reconstructFrontmatter, type ParsedFrontmatter } from './frontmatter.js';
 
 export function cmdTemplateSelect(cwd: string, planPath: string, raw: boolean): void {
@@ -49,7 +56,11 @@ export function cmdTemplateSelect(cwd: string, planPath: string, raw: boolean): 
     output(result, raw, template);
   } catch (e) {
     // Fallback to standard
-    output({ template: 'templates/summary-standard.md', type: 'standard', error: (e as Error).message }, raw, 'templates/summary-standard.md');
+    output(
+      { template: 'templates/summary-standard.md', type: 'standard', error: (e as Error).message },
+      raw,
+      'templates/summary-standard.md'
+    );
   }
 }
 
@@ -62,12 +73,24 @@ interface TemplateFillOptions {
   fields?: Record<string, unknown>;
 }
 
-export function cmdTemplateFill(cwd: string, templateType: string, options: TemplateFillOptions, raw: boolean): void {
-  if (!templateType) { error('tipo de modelo obrigatório: summary, plan ou verification'); }
-  if (!options.phase) { error('--phase obrigatório'); }
+export function cmdTemplateFill(
+  cwd: string,
+  templateType: string,
+  options: TemplateFillOptions,
+  raw: boolean
+): void {
+  if (!templateType) {
+    error('tipo de modelo obrigatório: summary, plan ou verification');
+  }
+  if (!options.phase) {
+    error('--phase obrigatório');
+  }
 
   const phaseInfo = findEtapaInternal(cwd, options.phase);
-  if (!phaseInfo || !phaseInfo.found) { output({ error: 'Fase não encontrada', phase: options.phase }, raw); return; }
+  if (!phaseInfo || !phaseInfo.found) {
+    output({ error: 'Fase não encontrada', phase: options.phase }, raw);
+    return;
+  }
 
   const padded = normalizeEtapaNome(options.phase);
   const today = new Date().toISOString().split('T')[0];
@@ -213,7 +236,9 @@ export function cmdTemplateFill(cwd: string, templateType: string, options: Temp
       break;
     }
     default:
-      error(`Tipo de modelo desconhecido: ${templateType}. Disponíveis: summary, plan, verification`);
+      error(
+        `Tipo de modelo desconhecido: ${templateType}. Disponíveis: summary, plan, verification`
+      );
       return;
   }
 

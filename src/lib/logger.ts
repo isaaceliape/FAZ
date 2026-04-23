@@ -1,9 +1,9 @@
 /**
  * Logger — Unified logging with pino
- * 
+ *
  * Provides structured logging with multiple levels, file output,
  * and log rotation. Replaces console.log/error throughout the codebase.
- * 
+ *
  * @module logger
  */
 
@@ -77,9 +77,10 @@ function rotateLogs(): void {
   }
 
   try {
-    const files = fs.readdirSync(currentConfig.logDir)
-      .filter(f => f.endsWith('.log'))
-      .map(f => ({
+    const files = fs
+      .readdirSync(currentConfig.logDir)
+      .filter((f) => f.endsWith('.log'))
+      .map((f) => ({
         name: f,
         path: path.join(currentConfig.logDir, f),
         time: fs.statSync(path.join(currentConfig.logDir, f)).mtime.getTime(),
@@ -119,7 +120,7 @@ function getLogFilePath(): string {
 
 /**
  * Initialize or reconfigure the logger
- * 
+ *
  * @param config - Optional configuration override
  */
 export function initLogger(config?: Partial<LoggerConfig>): void {
@@ -169,61 +170,64 @@ export function getLogger(): pino.Logger {
   }
 
   // Create logger with multiple transports
-  loggerInstance = pino({
-    level: currentConfig.level,
-    timestamp: pino.stdTimeFunctions.isoTime,
-  }, pino.multistream(transports as any));
+  loggerInstance = pino(
+    {
+      level: currentConfig.level,
+      timestamp: pino.stdTimeFunctions.isoTime,
+    },
+    pino.multistream(transports as pino.MultiStreamResOptions)
+  );
 
   return loggerInstance;
 }
 
 /**
  * Log at debug level
- * 
+ *
  * @param msg - Log message
  * @param obj - Optional object to log
  */
-export function debug(msg: string, obj?: any): void {
+export function debug(msg: string, obj?: unknown): void {
   getLogger().debug(obj, msg);
 }
 
 /**
  * Log at info level
- * 
+ *
  * @param msg - Log message
  * @param obj - Optional object to log
  */
-export function info(msg: string, obj?: any): void {
+export function info(msg: string, obj?: unknown): void {
   getLogger().info(obj, msg);
 }
 
 /**
  * Log at warn level
- * 
+ *
  * @param msg - Log message
  * @param obj - Optional object to log
  */
-export function warn(msg: string, obj?: any): void {
+export function warn(msg: string, obj?: unknown): void {
   getLogger().warn(obj, msg);
 }
 
 /**
  * Log at error level
- * 
+ *
  * @param msg - Log message
  * @param obj - Optional object to log
  */
-export function error(msg: string, obj?: any): void {
+export function error(msg: string, obj?: unknown): void {
   getLogger().error(obj, msg);
 }
 
 /**
  * Log at fatal level
- * 
+ *
  * @param msg - Log message
  * @param obj - Optional object to log
  */
-export function fatal(msg: string, obj?: any): void {
+export function fatal(msg: string, obj?: unknown): void {
   getLogger().fatal(obj, msg);
 }
 
@@ -248,9 +252,10 @@ export function getLogFiles(): string[] {
   if (!fs.existsSync(currentConfig.logDir)) {
     return [];
   }
-  
-  return fs.readdirSync(currentConfig.logDir)
-    .filter(f => f.endsWith('.log'))
+
+  return fs
+    .readdirSync(currentConfig.logDir)
+    .filter((f) => f.endsWith('.log'))
     .sort();
 }
 
@@ -261,10 +266,9 @@ export function clearLogs(): void {
   if (!fs.existsSync(currentConfig.logDir)) {
     return;
   }
-  
-  const files = fs.readdirSync(currentConfig.logDir)
-    .filter(f => f.endsWith('.log'));
-  
+
+  const files = fs.readdirSync(currentConfig.logDir).filter((f) => f.endsWith('.log'));
+
   for (const file of files) {
     fs.unlinkSync(path.join(currentConfig.logDir, file));
   }

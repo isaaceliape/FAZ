@@ -1,8 +1,8 @@
 /**
  * FASE Installer — Module Entry Point
- * 
+ *
  * Re-exports all installation modules for use in the main install.ts script.
- * 
+ *
  * @module install
  */
 
@@ -41,11 +41,11 @@ export * from './uninstall.js';
 
 /**
  * Phase 3 Refactoring Status:
- * 
+ *
  * Foundation modules created:
  * ✅ constants.ts - ANSI colors and Codex config
  * ✅ helpers.ts - Utility functions
- * 
+ *
  * Modules awaiting integration with main install.ts:
  * • providers.ts (expandTilde, getDirName, getGlobalDir, etc.)
  * • settings.ts (readSettings, writeSettings, etc.)
@@ -53,6 +53,6 @@ export * from './uninstall.js';
  * • attribution.ts (attribution handling)
  * • frontmatter-convert.ts (format conversion)
  * • uninstall.ts (uninstall logic)
- * 
+ *
  * See: specs/PHASE_3_REFACTORING_GUIDE.md for detailed roadmap
  */

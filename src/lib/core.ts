@@ -6,7 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import { execSync } from 'child_process';
-import { ConfigError, FileError, PathTraversalError, wrapError } from './errors.js';
+import { PathTraversalError } from './errors.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -83,13 +83,20 @@ export function toPosixPath(p: string): string {
 }
 
 /** Guardrail: validates that a file path is inside .fase-ai directory */
-export function ensureInsidePlanejamento(cwd: string, filePath: string, operation = 'file operation'): string {
+export function ensureInsidePlanejamento(
+  cwd: string,
+  filePath: string,
+  operation = 'file operation'
+): string {
   const fullPath = path.isAbsolute(filePath) ? filePath : path.join(cwd, filePath);
   const planejPath = path.join(cwd, '.fase-ai');
   const normalizedFull = path.normalize(fullPath);
   const normalizedPlanej = path.normalize(planejPath);
 
-  if (!normalizedFull.startsWith(normalizedPlanej + path.sep) && normalizedFull !== normalizedPlanej) {
+  if (
+    !normalizedFull.startsWith(normalizedPlanej + path.sep) &&
+    normalizedFull !== normalizedPlanej
+  ) {
     throw new PathTraversalError(
       `${operation} must be inside .fase-ai/: ${filePath}`,
       'PATH_OUTSIDE_BOUNDARY',
@@ -105,13 +112,15 @@ export function isInsidePlanejamento(cwd: string, filePath: string): boolean {
   const planejPath = path.join(cwd, '.fase-ai');
   const normalizedFull = path.normalize(fullPath);
   const normalizedPlanej = path.normalize(planejPath);
-  return normalizedFull.startsWith(normalizedPlanej + path.sep) || normalizedFull === normalizedPlanej;
+  return (
+    normalizedFull.startsWith(normalizedPlanej + path.sep) || normalizedFull === normalizedPlanej
+  );
 }
 
 /**
  * Guardrail: Validates that a user-provided path doesn't escape the project boundary (cwd).
  * Protects against path traversal attacks via ../../../etc/passwd patterns.
- * 
+ *
  * @param cwd - Project root directory (trusted base)
  * @param userPath - User-provided path (untrusted input)
  * @returns Resolved absolute path if valid
@@ -120,7 +129,7 @@ export function isInsidePlanejamento(cwd: string, filePath: string): boolean {
 export function validatePathInsideCwd(cwd: string, userPath: string): string {
   const resolved = path.resolve(cwd, userPath);
   const relative = path.relative(cwd, resolved);
-  
+
   // Check if relative path tries to escape (starts with ..) or is absolute
   if (relative.startsWith('..') || path.isAbsolute(relative)) {
     throw new PathTraversalError(
@@ -129,25 +138,25 @@ export function validatePathInsideCwd(cwd: string, userPath: string): string {
       { userPath, resolved, cwd }
     );
   }
-  
+
   return resolved;
 }
 
 // ─── Model Profile Table ──────────────────────────────────────────────────────
 
 export const MODEL_PROFILES: Record<string, ModelProfile> = {
-  'gsd-planner':              { quality: 'opus', balanced: 'opus',   budget: 'sonnet' },
-  'gsd-roadmapper':           { quality: 'opus', balanced: 'sonnet', budget: 'sonnet' },
-  'gsd-executor':             { quality: 'opus', balanced: 'sonnet', budget: 'sonnet' },
-  'gsd-phase-researcher':     { quality: 'opus', balanced: 'sonnet', budget: 'haiku' },
-  'gsd-project-researcher':   { quality: 'opus', balanced: 'sonnet', budget: 'haiku' },
+  'gsd-planner': { quality: 'opus', balanced: 'opus', budget: 'sonnet' },
+  'gsd-roadmapper': { quality: 'opus', balanced: 'sonnet', budget: 'sonnet' },
+  'gsd-executor': { quality: 'opus', balanced: 'sonnet', budget: 'sonnet' },
+  'gsd-phase-researcher': { quality: 'opus', balanced: 'sonnet', budget: 'haiku' },
+  'gsd-project-researcher': { quality: 'opus', balanced: 'sonnet', budget: 'haiku' },
   'gsd-research-synthesizer': { quality: 'sonnet', balanced: 'sonnet', budget: 'haiku' },
-  'gsd-debugger':             { quality: 'opus', balanced: 'sonnet', budget: 'sonnet' },
-  'gsd-codebase-mapper':      { quality: 'sonnet', balanced: 'haiku', budget: 'haiku' },
-  'gsd-verifier':             { quality: 'sonnet', balanced: 'sonnet', budget: 'haiku' },
-  'gsd-plan-checker':         { quality: 'sonnet', balanced: 'sonnet', budget: 'haiku' },
-  'gsd-integration-checker':  { quality: 'sonnet', balanced: 'sonnet', budget: 'haiku' },
-  'gsd-nyquist-auditor':      { quality: 'sonnet', balanced: 'sonnet', budget: 'haiku' },
+  'gsd-debugger': { quality: 'opus', balanced: 'sonnet', budget: 'sonnet' },
+  'gsd-codebase-mapper': { quality: 'sonnet', balanced: 'haiku', budget: 'haiku' },
+  'gsd-verifier': { quality: 'sonnet', balanced: 'sonnet', budget: 'haiku' },
+  'gsd-plan-checker': { quality: 'sonnet', balanced: 'sonnet', budget: 'haiku' },
+  'gsd-integration-checker': { quality: 'sonnet', balanced: 'sonnet', budget: 'haiku' },
+  'gsd-nyquist-auditor': { quality: 'sonnet', balanced: 'sonnet', budget: 'haiku' },
 };
 
 // ─── Output helpers ───────────────────────────────────────────────────────────
@@ -209,11 +218,19 @@ export function loadConfig(cwd: string): Config {
 
     // Migrate deprecated "depth" key to "granularity" with value mapping
     if ('depth' in parsed && !('granularity' in parsed)) {
-      const depthToGranularity: Record<string, string> = { quick: 'coarse', standard: 'standard', comprehensive: 'fine' };
+      const depthToGranularity: Record<string, string> = {
+        quick: 'coarse',
+        standard: 'standard',
+        comprehensive: 'fine',
+      };
       parsed['granularity'] = depthToGranularity[parsed['depth'] as string] ?? parsed['depth'];
       delete parsed['depth'];
-      try { fs.writeFileSync(configPath, JSON.stringify(parsed, null, 2), 'utf-8'); } catch (err) {
-        process.stderr.write(`[core:loadConfig] Failed to migrate config: ${(err as Error).message}\n`);
+      try {
+        fs.writeFileSync(configPath, JSON.stringify(parsed, null, 2), 'utf-8');
+      } catch (err) {
+        process.stderr.write(
+          `[core:loadConfig] Failed to migrate config: ${(err as Error).message}\n`
+        );
       }
     }
 
@@ -232,27 +249,50 @@ export function loadConfig(cwd: string): Config {
     const parallelization = (() => {
       const val = get('parallelization');
       if (typeof val === 'boolean') return val;
-      if (typeof val === 'object' && val !== null && 'enabled' in val) return (val as { enabled: boolean }).enabled;
+      if (typeof val === 'object' && val !== null && 'enabled' in val)
+        return (val as { enabled: boolean }).enabled;
       return defaults.parallelization;
     })();
 
     return {
-      model_profile:              (get('model_profile') ?? defaults.model_profile) as string,
-      commit_docs:                (get('commit_docs', { section: 'planning', field: 'commit_docs' }) ?? defaults.commit_docs) as boolean,
-      search_gitignored:          (get('search_gitignored', { section: 'planning', field: 'search_gitignored' }) ?? defaults.search_gitignored) as boolean,
-      branching_strategy:         (get('branching_strategy', { section: 'git', field: 'branching_strategy' }) ?? defaults.branching_strategy) as string,
-      etapa_branch_template:      (get('etapa_branch_template', { section: 'git', field: 'etapa_branch_template' }) ?? defaults.etapa_branch_template) as string,
-      milestone_branch_template:  (get('milestone_branch_template', { section: 'git', field: 'milestone_branch_template' }) ?? defaults.milestone_branch_template) as string,
-      research:                   (get('research', { section: 'workflow', field: 'research' }) ?? defaults.research) as boolean,
-      plan_checker:               (get('plan_checker', { section: 'workflow', field: 'plan_check' }) ?? defaults.plan_checker) as boolean,
-      verifier:                   (get('verifier', { section: 'workflow', field: 'verifier' }) ?? defaults.verifier) as boolean,
-      nyquist_validation:         (get('nyquist_validation', { section: 'workflow', field: 'nyquist_validation' }) ?? defaults.nyquist_validation) as boolean,
+      model_profile: (get('model_profile') ?? defaults.model_profile) as string,
+      commit_docs: (get('commit_docs', { section: 'planning', field: 'commit_docs' }) ??
+        defaults.commit_docs) as boolean,
+      search_gitignored: (get('search_gitignored', {
+        section: 'planning',
+        field: 'search_gitignored',
+      }) ?? defaults.search_gitignored) as boolean,
+      branching_strategy: (get('branching_strategy', {
+        section: 'git',
+        field: 'branching_strategy',
+      }) ?? defaults.branching_strategy) as string,
+      etapa_branch_template: (get('etapa_branch_template', {
+        section: 'git',
+        field: 'etapa_branch_template',
+      }) ?? defaults.etapa_branch_template) as string,
+      milestone_branch_template: (get('milestone_branch_template', {
+        section: 'git',
+        field: 'milestone_branch_template',
+      }) ?? defaults.milestone_branch_template) as string,
+      research: (get('research', { section: 'workflow', field: 'research' }) ??
+        defaults.research) as boolean,
+      plan_checker: (get('plan_checker', { section: 'workflow', field: 'plan_check' }) ??
+        defaults.plan_checker) as boolean,
+      verifier: (get('verifier', { section: 'workflow', field: 'verifier' }) ??
+        defaults.verifier) as boolean,
+      nyquist_validation: (get('nyquist_validation', {
+        section: 'workflow',
+        field: 'nyquist_validation',
+      }) ?? defaults.nyquist_validation) as boolean,
       parallelization,
-      brave_search:               (get('brave_search') ?? defaults.brave_search) as boolean,
-      model_overrides:            (parsed['model_overrides'] as Record<string, string> | null | undefined) ?? null,
+      brave_search: (get('brave_search') ?? defaults.brave_search) as boolean,
+      model_overrides:
+        (parsed['model_overrides'] as Record<string, string> | null | undefined) ?? null,
     };
   } catch (err) {
-    process.stderr.write(`[core:loadConfig] Failed to load config from ${configPath}: ${(err as Error).message}\n`);
+    process.stderr.write(
+      `[core:loadConfig] Failed to load config from ${configPath}: ${(err as Error).message}\n`
+    );
     return defaults;
   }
 }
@@ -274,7 +314,7 @@ export function isGitIgnored(cwd: string, targetPath: string): boolean {
 
 export function execGit(cwd: string, args: string[]): GitResult {
   try {
-    const escaped = args.map(a => {
+    const escaped = args.map((a) => {
       if (/^[a-zA-Z0-9._\-/=:@]+$/.test(a)) return a;
       return "'" + a.replace(/'/g, "'\\''") + "'";
     });
@@ -322,8 +362,18 @@ export function compareEtapaNum(a: string, b: string): number {
     if (!lb) return 1;
     return la < lb ? -1 : 1;
   }
-  const aDecParts = pa[3] ? pa[3].slice(1).split('.').map(p => parseInt(p, 10)) : [];
-  const bDecParts = pb[3] ? pb[3].slice(1).split('.').map(p => parseInt(p, 10)) : [];
+  const aDecParts = pa[3]
+    ? pa[3]
+        .slice(1)
+        .split('.')
+        .map((p) => parseInt(p, 10))
+    : [];
+  const bDecParts = pb[3]
+    ? pb[3]
+        .slice(1)
+        .split('.')
+        .map((p) => parseInt(p, 10))
+    : [];
   const maxLen = Math.max(aDecParts.length, bDecParts.length);
   if (aDecParts.length === 0 && bDecParts.length > 0) return -1;
   if (bDecParts.length === 0 && aDecParts.length > 0) return 1;
@@ -335,10 +385,17 @@ export function compareEtapaNum(a: string, b: string): number {
   return 0;
 }
 
-export function searchEtapaInDir(baseDir: string, relBase: string, normalized: string): EtapaInfo | null {
+export function searchEtapaInDir(
+  baseDir: string,
+  relBase: string,
+  normalized: string
+): EtapaInfo | null {
   try {
     const entries = fs.readdirSync(baseDir, { withFileTypes: true });
-    const dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name).sort((a, b) => compareEtapaNum(a, b));
+    const dirs = entries
+      .filter((e) => e.isDirectory())
+      .map((e) => e.name)
+      .sort((a, b) => compareEtapaNum(a, b));
     const match = dirs.find((d) => d.startsWith(normalized));
     if (!match) return null;
 
@@ -348,11 +405,21 @@ export function searchEtapaInDir(baseDir: string, relBase: string, normalized: s
     const phaseDir = path.join(baseDir, match);
     const phaseFiles = fs.readdirSync(phaseDir);
 
-    const plans = phaseFiles.filter((f: string) => f.endsWith('-PLAN.md') || f === 'PLAN.md').sort();
-    const summaries = phaseFiles.filter((f: string) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md').sort();
-    const hasResearch = phaseFiles.some((f: string) => f.endsWith('-RESEARCH.md') || f === 'RESEARCH.md');
-    const hasContext = phaseFiles.some((f: string) => f.endsWith('-CONTEXT.md') || f === 'CONTEXT.md');
-    const hasVerification = phaseFiles.some((f: string) => f.endsWith('-VERIFICATION.md') || f === 'VERIFICATION.md');
+    const plans = phaseFiles
+      .filter((f: string) => f.endsWith('-PLAN.md') || f === 'PLAN.md')
+      .sort();
+    const summaries = phaseFiles
+      .filter((f: string) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md')
+      .sort();
+    const hasResearch = phaseFiles.some(
+      (f: string) => f.endsWith('-RESEARCH.md') || f === 'RESEARCH.md'
+    );
+    const hasContext = phaseFiles.some(
+      (f: string) => f.endsWith('-CONTEXT.md') || f === 'CONTEXT.md'
+    );
+    const hasVerification = phaseFiles.some(
+      (f: string) => f.endsWith('-VERIFICATION.md') || f === 'VERIFICATION.md'
+    );
 
     const completedPlanIds = new Set(
       summaries.map((s: string) => s.replace('-SUMMARY.md', '').replace('SUMMARY.md', ''))
@@ -367,7 +434,12 @@ export function searchEtapaInDir(baseDir: string, relBase: string, normalized: s
       directory: toPosixPath(path.join(relBase, match)),
       phase_number: etapaNumber,
       phase_name: etapaNome,
-      phase_slug: etapaNome ? etapaNome.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') : null,
+      phase_slug: etapaNome
+        ? etapaNome
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+        : null,
       plans,
       summaries,
       incomplete_plans: incompletePlans,
@@ -376,7 +448,9 @@ export function searchEtapaInDir(baseDir: string, relBase: string, normalized: s
       has_verification: hasVerification,
     };
   } catch (err) {
-    process.stderr.write(`[core:searchEtapaInDir] Failed to search etapa directory: ${(err as Error).message}\n`);
+    process.stderr.write(
+      `[core:searchEtapaInDir] Failed to search etapa directory: ${(err as Error).message}\n`
+    );
     return null;
   }
 }
@@ -396,8 +470,8 @@ export function findEtapaInternal(cwd: string, etapa: string): EtapaInfo | null 
   try {
     const milestoneEntries = fs.readdirSync(milestonesDir, { withFileTypes: true });
     const archiveDirs = milestoneEntries
-      .filter(e => e.isDirectory() && /^v[\d.]+-phases$/.test(e.name))
-      .map(e => e.name)
+      .filter((e) => e.isDirectory() && /^v[\d.]+-phases$/.test(e.name))
+      .map((e) => e.name)
       .sort()
       .reverse();
 
@@ -413,7 +487,9 @@ export function findEtapaInternal(cwd: string, etapa: string): EtapaInfo | null 
       }
     }
   } catch (err) {
-    process.stderr.write(`[core:findEtapaInternal] Failed to search archived etapas: ${(err as Error).message}\n`);
+    process.stderr.write(
+      `[core:findEtapaInternal] Failed to search archived etapas: ${(err as Error).message}\n`
+    );
   }
 
   return null;
@@ -428,8 +504,8 @@ export function getArchivedEtapasDirs(cwd: string): ArchivedEtapaEntry[] {
   try {
     const milestoneEntries = fs.readdirSync(milestonesDir, { withFileTypes: true });
     const etapasDirs = milestoneEntries
-      .filter(e => e.isDirectory() && /^v[\d.]+-phases$/.test(e.name))
-      .map(e => e.name)
+      .filter((e) => e.isDirectory() && /^v[\d.]+-phases$/.test(e.name))
+      .map((e) => e.name)
       .sort()
       .reverse();
 
@@ -438,7 +514,10 @@ export function getArchivedEtapasDirs(cwd: string): ArchivedEtapaEntry[] {
       const version = versionMatch?.[1] ?? archiveName;
       const archivePath = path.join(milestonesDir, archiveName);
       const entries = fs.readdirSync(archivePath, { withFileTypes: true });
-      const dirs = entries.filter(e => e.isDirectory()).map(e => e.name).sort((a, b) => compareEtapaNum(a, b));
+      const dirs = entries
+        .filter((e) => e.isDirectory())
+        .map((e) => e.name)
+        .sort((a, b) => compareEtapaNum(a, b));
 
       for (const dir of dirs) {
         results.push({
@@ -450,7 +529,9 @@ export function getArchivedEtapasDirs(cwd: string): ArchivedEtapaEntry[] {
       }
     }
   } catch (err) {
-    process.stderr.write(`[core:getArchivedEtapasDirs] Failed to read archived etapas: ${(err as Error).message}\n`);
+    process.stderr.write(
+      `[core:getArchivedEtapasDirs] Failed to read archived etapas: ${(err as Error).message}\n`
+    );
   }
 
   return results;
@@ -458,7 +539,10 @@ export function getArchivedEtapasDirs(cwd: string): ArchivedEtapaEntry[] {
 
 // ─── Roadmap & model utilities ────────────────────────────────────────────────
 
-export function getRoadmapEtapaInternal(cwd: string, etapaNum: string | number): RoadmapEtapaInfo | null {
+export function getRoadmapEtapaInternal(
+  cwd: string,
+  etapaNum: string | number
+): RoadmapEtapaInfo | null {
   if (!etapaNum) return null;
   const roadmapPath = path.join(cwd, '.fase-ai', 'ROADMAP.md');
   if (!fs.existsSync(roadmapPath)) return null;
@@ -466,7 +550,10 @@ export function getRoadmapEtapaInternal(cwd: string, etapaNum: string | number):
   try {
     const content = fs.readFileSync(roadmapPath, 'utf-8');
     const escapedEtapa = escapeRegex(etapaNum.toString());
-    const phasePattern = new RegExp(`#{2,4}\\s*(?:Phase|Etapa)\\s+${escapedEtapa}:\\s*([^\\n]+)`, 'i');
+    const phasePattern = new RegExp(
+      `#{2,4}\\s*(?:Phase|Etapa)\\s+${escapedEtapa}:\\s*([^\\n]+)`,
+      'i'
+    );
     const headerMatch = content.match(phasePattern);
     if (!headerMatch) return null;
 
@@ -474,7 +561,9 @@ export function getRoadmapEtapaInternal(cwd: string, etapaNum: string | number):
     const headerIndex = headerMatch.index ?? 0;
     const restOfContent = content.slice(headerIndex);
     const nextHeaderMatch = restOfContent.match(/\n#{2,4}\s+(?:Phase|Etapa)\s+\d/i);
-    const sectionEnd = nextHeaderMatch ? headerIndex + (nextHeaderMatch.index ?? 0) : content.length;
+    const sectionEnd = nextHeaderMatch
+      ? headerIndex + (nextHeaderMatch.index ?? 0)
+      : content.length;
     const section = content.slice(headerIndex, sectionEnd).trim();
 
     const goalMatch = section.match(/\*\*Goal:\*\*\s*([^\n]+)/i);
@@ -488,7 +577,9 @@ export function getRoadmapEtapaInternal(cwd: string, etapaNum: string | number):
       section,
     };
   } catch (err) {
-    process.stderr.write(`[core:getRoadmapEtapaInternal] Failed to read roadmap: ${(err as Error).message}\n`);
+    process.stderr.write(
+      `[core:getRoadmapEtapaInternal] Failed to read roadmap: ${(err as Error).message}\n`
+    );
     return null;
   }
 }
@@ -504,7 +595,8 @@ export function resolveModelInternal(cwd: string, agentType: string): string {
   const profile = config.model_profile || 'balanced';
   const agentModels = MODEL_PROFILES[agentType];
   if (!agentModels) return 'sonnet';
-  const resolved = agentModels[profile as keyof ModelProfile] || agentModels['balanced'] || 'sonnet';
+  const resolved =
+    agentModels[profile as keyof ModelProfile] || agentModels['balanced'] || 'sonnet';
   return resolved === 'opus' ? 'inherit' : resolved;
 }
 
@@ -515,7 +607,7 @@ export function pathExistsInternal(cwd: string, targetPath: string): boolean {
   try {
     fs.statSync(fullPath);
     return true;
-  } catch (err) {
+  } catch {
     // Silently return false for non-existent paths (expected behavior)
     return false;
   }
@@ -523,7 +615,10 @@ export function pathExistsInternal(cwd: string, targetPath: string): boolean {
 
 export function generateSlugInternal(text: string | null | undefined): string | null {
   if (!text) return null;
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 export function getMilestoneInfo(cwd: string): MilestoneInfo {
@@ -552,7 +647,9 @@ export function getMilestoneInfo(cwd: string): MilestoneInfo {
       name: 'milestone',
     };
   } catch (err) {
-    process.stderr.write(`[core:getMilestoneInfo] Failed to read roadmap: ${(err as Error).message}\n`);
+    process.stderr.write(
+      `[core:getMilestoneInfo] Failed to read roadmap: ${(err as Error).message}\n`
+    );
     return { version: 'v1.0', name: 'milestone' };
   }
 }
@@ -567,17 +664,19 @@ export function getMilestoneEtapaFilter(cwd: string): MilestoneEtapaFilter {
       milestonePhaseNums.add(m[1]);
     }
   } catch (err) {
-    process.stderr.write(`[core:getMilestoneEtapaFilter] Failed to read roadmap: ${(err as Error).message}\n`);
+    process.stderr.write(
+      `[core:getMilestoneEtapaFilter] Failed to read roadmap: ${(err as Error).message}\n`
+    );
   }
 
   if (milestonePhaseNums.size === 0) {
-    const passAll = ((() => true) as unknown) as MilestoneEtapaFilter;
+    const passAll = (() => true) as unknown as MilestoneEtapaFilter;
     passAll.phaseCount = 0;
     return passAll;
   }
 
   const normalized = new Set(
-    [...milestonePhaseNums].map(n => (n.replace(/^0+/, '') || '0').toLowerCase())
+    [...milestonePhaseNums].map((n) => (n.replace(/^0+/, '') || '0').toLowerCase())
   );
 
   function isDirInMilestone(dirName: string): boolean {
@@ -596,18 +695,22 @@ export function getMilestoneEtapaFilter(cwd: string): MilestoneEtapaFilter {
  * @returns Object with valid status, missing vars, and warnings
  */
 export function validateEnvVars(): { valid: boolean; missing: string[]; warnings: string[] } {
-  const result: { valid: boolean; missing: string[]; warnings: string[] } = { valid: true, missing: [], warnings: [] };
-  
+  const result: { valid: boolean; missing: string[]; warnings: string[] } = {
+    valid: true,
+    missing: [],
+    warnings: [],
+  };
+
   // Optional but recommended
   if (!process.env.BRAVE_API_KEY) {
     result.warnings.push('BRAVE_API_KEY not set — Brave search features will be disabled');
   }
-  
+
   // Log warnings
   result.warnings.forEach((warn: string) => {
     process.stderr.write(`[env] Warning: ${warn}\n`);
   });
-  
+
   return result;
 }
 
@@ -620,7 +723,7 @@ export function validateEnvVars(): { valid: boolean; missing: string[]; warnings
 export function checkDiskSpace(targetPath: string, minBytes: number = 1024 * 1024): boolean {
   try {
     const dir = path.dirname(targetPath);
-    
+
     if (process.platform === 'win32') {
       // Windows: use fsutil
       const driveLetter = dir[0];
@@ -639,12 +742,14 @@ export function checkDiskSpace(targetPath: string, minBytes: number = 1024 * 102
         return availableKB >= minBytes;
       }
     }
-    
+
     // If we can't determine, assume OK but log warning
     process.stderr.write(`[core:checkDiskSpace] Could not verify disk space for ${targetPath}\n`);
     return true;
   } catch (err) {
-    process.stderr.write(`[core:checkDiskSpace] Error checking disk space: ${(err as Error).message}\n`);
+    process.stderr.write(
+      `[core:checkDiskSpace] Error checking disk space: ${(err as Error).message}\n`
+    );
     // If check fails, assume OK to avoid blocking operations
     return true;
   }

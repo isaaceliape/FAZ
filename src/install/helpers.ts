@@ -7,7 +7,11 @@ import os from 'os';
  * @param options - Options for error handling (exitOnError: whether to exit on failure)
  * @returns Parsed JSON object, or null if parsing fails and exitOnError is false
  */
-export function safeJsonParse(jsonStr: string, context = 'JSON', options = { exitOnError: true }): any {
+export function safeJsonParse(
+  jsonStr: string,
+  context = 'JSON',
+  options = { exitOnError: true }
+): unknown {
   try {
     return JSON.parse(jsonStr);
   } catch (err: unknown) {

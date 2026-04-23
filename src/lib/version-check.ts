@@ -31,7 +31,7 @@ export function getLatestVersion(): string | null {
       encoding: 'utf8',
       timeout: 10000,
       windowsHide: true,
-      stdio: ['ignore', 'pipe', 'ignore']
+      stdio: ['ignore', 'pipe', 'ignore'],
     });
     return result.trim();
   } catch {
@@ -66,14 +66,14 @@ export function checkForUpdate(currentVersion: string): VersionInfo {
     return {
       current: currentVersion,
       latest: null,
-      updateAvailable: false
+      updateAvailable: false,
     };
   }
 
   return {
     current: currentVersion,
     latest,
-    updateAvailable: compareVersions(currentVersion, latest) < 0
+    updateAvailable: compareVersions(currentVersion, latest) < 0,
   };
 }
 
@@ -89,18 +89,34 @@ export function promptForUpdate(versionInfo: VersionInfo): Promise<boolean> {
 
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout
+      output: process.stdout,
     });
 
     console.log('');
-    console.log(`  ${yellow}╔══════════════════════════════════════════════════════════════╗${reset}`);
-    console.log(`  ${yellow}║${reset}  ${green}Nova versão do FASE disponível!${reset}                            ${yellow}║${reset}`);
-    console.log(`  ${yellow}╠══════════════════════════════════════════════════════════════╣${reset}`);
-    console.log(`  ${yellow}║${reset}  Versão atual:      ${dim}v${versionInfo.current}${reset}                              ${yellow}║${reset}`);
-    console.log(`  ${yellow}║${reset}  Nova versão:       ${cyan}v${versionInfo.latest}${reset}                              ${yellow}║${reset}`);
-    console.log(`  ${yellow}╠══════════════════════════════════════════════════════════════╣${reset}`);
-    console.log(`  ${yellow}║${reset}  ${dim}Execute 'npx fase-ai --atualizar' para atualizar${reset}           ${yellow}║${reset}`);
-    console.log(`  ${yellow}╚══════════════════════════════════════════════════════════════╝${reset}`);
+    console.log(
+      `  ${yellow}╔══════════════════════════════════════════════════════════════╗${reset}`
+    );
+    console.log(
+      `  ${yellow}║${reset}  ${green}Nova versão do FASE disponível!${reset}                            ${yellow}║${reset}`
+    );
+    console.log(
+      `  ${yellow}╠══════════════════════════════════════════════════════════════╣${reset}`
+    );
+    console.log(
+      `  ${yellow}║${reset}  Versão atual:      ${dim}v${versionInfo.current}${reset}                              ${yellow}║${reset}`
+    );
+    console.log(
+      `  ${yellow}║${reset}  Nova versão:       ${cyan}v${versionInfo.latest}${reset}                              ${yellow}║${reset}`
+    );
+    console.log(
+      `  ${yellow}╠══════════════════════════════════════════════════════════════╣${reset}`
+    );
+    console.log(
+      `  ${yellow}║${reset}  ${dim}Execute 'npx fase-ai --atualizar' para atualizar${reset}           ${yellow}║${reset}`
+    );
+    console.log(
+      `  ${yellow}╚══════════════════════════════════════════════════════════════╝${reset}`
+    );
     console.log('');
 
     // Only prompt if we're in an interactive terminal
@@ -138,9 +154,9 @@ export function runUpdate(): void {
   try {
     execSync('npx fase-ai --atualizar', {
       stdio: 'inherit',
-      timeout: 120000
+      timeout: 120000,
     });
-  } catch (error) {
+  } catch {
     console.log(`  ${red}✗${reset} Falha ao atualizar. Tente manualmente:`);
     console.log(`     ${cyan}npx fase-ai@latest${reset}`);
     process.exit(1);
@@ -177,7 +193,7 @@ export function getCachedUpdateInfo(): VersionInfo | null {
     return {
       current: data.installed,
       latest: data.latest,
-      updateAvailable: data.update_available
+      updateAvailable: data.update_available,
     };
   } catch {
     return null;
@@ -187,7 +203,10 @@ export function getCachedUpdateInfo(): VersionInfo | null {
 /**
  * Main entry point: check for updates and optionally prompt user
  */
-export async function checkAndPromptForUpdate(currentVersion: string, forceCheck = false): Promise<void> {
+export async function checkAndPromptForUpdate(
+  currentVersion: string,
+  forceCheck = false
+): Promise<void> {
   let versionInfo: VersionInfo | null = null;
 
   // First try to use cached info from the background hook

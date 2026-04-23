@@ -155,7 +155,8 @@ function processMarkdownFile(filePath) {
 }
 
 // Main execution
-const targetDir = process.argv[2] || path.join(__dirname, '..', 'www', 'docs', 'src', 'content', 'docs');
+const targetDir =
+  process.argv[2] || path.join(__dirname, '..', 'www', 'docs', 'src', 'content', 'docs');
 
 console.log(`\nScanning for markdown files in: ${targetDir}\n`);
 

@@ -10,7 +10,9 @@ import { writeStateMd } from './state.js';
 
 export function cmdRequirementsMarkComplete(cwd: string, reqIdsRaw: string[], raw: boolean): void {
   if (!reqIdsRaw || reqIdsRaw.length === 0) {
-    error('IDs de requisitos obrigatórios. Uso: requirements mark-complete REQ-01,REQ-02 ou REQ-01 REQ-02');
+    error(
+      'IDs de requisitos obrigatórios. Uso: requirements mark-complete REQ-01,REQ-02 ou REQ-01 REQ-02'
+    );
   }
 
   // Accept comma-separated, space-separated, or bracket-wrapped: [REQ-01, REQ-02]
@@ -27,7 +29,11 @@ export function cmdRequirementsMarkComplete(cwd: string, reqIdsRaw: string[], ra
 
   const reqPath = path.join(cwd, '.fase-ai', 'REQUIREMENTS.md');
   if (!fs.existsSync(reqPath)) {
-    output({ updated: false, reason: 'REQUIREMENTS.md não encontrado', ids: reqIds }, raw, 'no requirements file');
+    output(
+      { updated: false, reason: 'REQUIREMENTS.md não encontrado', ids: reqIds },
+      raw,
+      'no requirements file'
+    );
     return;
   }
 
@@ -47,7 +53,10 @@ export function cmdRequirementsMarkComplete(cwd: string, reqIdsRaw: string[], ra
     }
 
     // Update traceability table: | REQ-ID | Etapa N | Pending | → | REQ-ID | Etapa N | Complete |
-    const tablePattern = new RegExp(`(\\|\\s*${reqEscaped}\\s*\\|[^|]+\\|)\\s*Pending\\s*(\\|)`, 'gi');
+    const tablePattern = new RegExp(
+      `(\\|\\s*${reqEscaped}\\s*\\|[^|]+\\|)\\s*Pending\\s*(\\|)`,
+      'gi'
+    );
     if (tablePattern.test(reqContent)) {
       // Re-read since test() advances lastIndex for global regex
       reqContent = reqContent.replace(
@@ -68,12 +77,16 @@ export function cmdRequirementsMarkComplete(cwd: string, reqIdsRaw: string[], ra
     fs.writeFileSync(reqPath, reqContent, 'utf-8');
   }
 
-  output({
-    updated: updated.length > 0,
-    marked_complete: updated,
-    not_found: notFound,
-    total: reqIds.length,
-  }, raw, `${updated.length}/${reqIds.length} requirements marked complete`);
+  output(
+    {
+      updated: updated.length > 0,
+      marked_complete: updated,
+      not_found: notFound,
+      total: reqIds.length,
+    },
+    raw,
+    `${updated.length}/${reqIds.length} requirements marked complete`
+  );
 }
 
 interface MilestoneCompleteOptions {
@@ -81,7 +94,12 @@ interface MilestoneCompleteOptions {
   archivePhases?: boolean;
 }
 
-export function cmdMilestoneComplete(cwd: string, version: string, options: MilestoneCompleteOptions, raw: boolean): void {
+export function cmdMilestoneComplete(
+  cwd: string,
+  version: string,
+  options: MilestoneCompleteOptions,
+  raw: boolean
+): void {
   if (!version) {
     error('versão obrigatória para completar marco (ex: v1.0)');
   }
@@ -111,7 +129,10 @@ export function cmdMilestoneComplete(cwd: string, version: string, options: Mile
 
   try {
     const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
-    const dirs = entries.filter((e: fs.Dirent) => e.isDirectory()).map((e: fs.Dirent) => e.name).sort();
+    const dirs = entries
+      .filter((e: fs.Dirent) => e.isDirectory())
+      .map((e: fs.Dirent) => e.name)
+      .sort();
 
     for (const dir of dirs) {
       if (!isDirInMilestone(dir)) continue;
@@ -119,7 +140,9 @@ export function cmdMilestoneComplete(cwd: string, version: string, options: Mile
       phaseCount++;
       const phaseFiles = fs.readdirSync(path.join(etapasDir, dir));
       const plans = phaseFiles.filter((f: string) => f.endsWith('-PLAN.md') || f === 'PLAN.md');
-      const summaries = phaseFiles.filter((f: string) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md');
+      const summaries = phaseFiles.filter(
+        (f: string) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md'
+      );
       totalPlans += plans.length;
 
       // Extract one-liners from summaries
@@ -148,7 +171,11 @@ export function cmdMilestoneComplete(cwd: string, version: string, options: Mile
   if (fs.existsSync(reqPath)) {
     const reqContent = fs.readFileSync(reqPath, 'utf-8');
     const archiveHeader = `# Arquivo de Requisitos: ${version} ${milestoneName}\n\n**Arquivado:** ${today}\n**Status:** ENTREGUE\n\nPara requisitos atuais, veja \`.fase-ai/REQUIREMENTS.md\`.\n\n---\n\n`;
-    fs.writeFileSync(path.join(archiveDir, `${version}-REQUIREMENTS.md`), archiveHeader + reqContent, 'utf-8');
+    fs.writeFileSync(
+      path.join(archiveDir, `${version}-REQUIREMENTS.md`),
+      archiveHeader + reqContent,
+      'utf-8'
+    );
   }
 
   // Archive audit file if exists
@@ -189,10 +216,7 @@ export function cmdMilestoneComplete(cwd: string, version: string, options: Mile
       /(\*\*Status:\*\*\s*).*/,
       `$1${version} milestone complete`
     );
-    stateContent = stateContent.replace(
-      /(\*\*Last Activity:\*\*\s*).*/,
-      `$1${today}`
-    );
+    stateContent = stateContent.replace(/(\*\*Last Activity:\*\*\s*).*/, `$1${today}`);
     stateContent = stateContent.replace(
       /(\*\*Last Activity Description:\*\*\s*).*/,
       `$1${version} milestone completed and archived`
@@ -208,7 +232,9 @@ export function cmdMilestoneComplete(cwd: string, version: string, options: Mile
       fs.mkdirSync(phaseArchiveDir, { recursive: true });
 
       const phaseEntries = fs.readdirSync(etapasDir, { withFileTypes: true });
-      const phaseDirNames = phaseEntries.filter((e: fs.Dirent) => e.isDirectory()).map((e: fs.Dirent) => e.name);
+      const phaseDirNames = phaseEntries
+        .filter((e: fs.Dirent) => e.isDirectory())
+        .map((e: fs.Dirent) => e.name);
       let archivedCount = 0;
       for (const dir of phaseDirNames) {
         if (!isDirInMilestone(dir)) continue;

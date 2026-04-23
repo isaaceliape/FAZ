@@ -5,11 +5,17 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import { execSync } from 'child_process';
 import {
-  loadConfig, resolveModelInternal, findEtapaInternal, getRoadmapEtapaInternal,
-  pathExistsInternal, generateSlugInternal, getMilestoneInfo, normalizeEtapaNome,
-  toPosixPath, output, error,
+  loadConfig,
+  resolveModelInternal,
+  findEtapaInternal,
+  getRoadmapEtapaInternal,
+  pathExistsInternal,
+  generateSlugInternal,
+  getMilestoneInfo,
+  toPosixPath,
+  output,
+  error,
 } from './core.js';
 
 /**
@@ -22,22 +28,22 @@ function validateCwdForShell(dir: string): void {
   if (!dir) {
     throw new Error('Directory path is empty');
   }
-  
+
   // Check for path traversal attempts
   if (dir.includes('..') || dir.includes(';') || dir.includes('|') || dir.includes('&')) {
     throw new Error(`Invalid directory path: ${dir}`);
   }
-  
+
   // Verify directory exists
   if (!fs.existsSync(dir)) {
     throw new Error(`Directory does not exist: ${dir}`);
   }
-  
+
   const stats = fs.statSync(dir);
   if (!stats.isDirectory()) {
     throw new Error(`Path is not a directory: ${dir}`);
   }
-  
+
   // Verify it's within user's home or project directories (basic trust check)
   const resolved = path.resolve(dir);
   const homeDir = os.homedir();
@@ -59,11 +65,20 @@ function validateCwdForShell(dir: string): void {
  */
 function findCodeFiles(dir: string, maxDepth: number, extensions: string[]): string[] {
   const results: string[] = [];
-  const skipDirs = ['node_modules', '.git', '.svn', '.hg', '__pycache__', 'vendor', 'dist', 'build'];
-  
+  const skipDirs = [
+    'node_modules',
+    '.git',
+    '.svn',
+    '.hg',
+    '__pycache__',
+    'vendor',
+    'dist',
+    'build',
+  ];
+
   function search(currentDir: string, depth: number) {
     if (depth > maxDepth) return;
-    
+
     try {
       const entries = fs.readdirSync(currentDir, { withFileTypes: true });
       for (const entry of entries) {
@@ -81,7 +96,7 @@ function findCodeFiles(dir: string, maxDepth: number, extensions: string[]): str
       // Skip directories we can't read
     }
   }
-  
+
   search(dir, 0);
   return results;
 }
@@ -98,19 +113,25 @@ export function cmdInitExecutePhase(cwd: string, phase: string, raw: boolean): v
   const roadmapEtapa = getRoadmapEtapaInternal(cwd, phase);
   const reqMatch = roadmapEtapa?.section?.match(/^\*\*Requirements\*\*:[^\S\n]*([^\n]*)$/m);
   const reqExtracted = reqMatch
-    ? reqMatch[1].replace(/[\[\]]/g, '').split(',').map((s: string) => s.trim()).filter(Boolean).join(', ')
+    ? reqMatch[1]
+        .replace(/[\[\]]/g, '')
+        .split(',')
+        .map((s: string) => s.trim())
+        .filter(Boolean)
+        .join(', ')
     : null;
-  const phase_req_ids = (reqExtracted && reqExtracted !== 'TBD') ? reqExtracted : null;
+  const phase_req_ids = reqExtracted && reqExtracted !== 'TBD' ? reqExtracted : null;
 
-  const branchName = config.branching_strategy === 'phase' && phaseInfo
-    ? (config.etapa_branch_template as string)
-        .replace('{phase}', phaseInfo.phase_number ?? '')
-        .replace('{slug}', phaseInfo.phase_slug || 'phase')
-    : config.branching_strategy === 'milestone'
-      ? (config.milestone_branch_template as string)
-          .replace('{milestone}', milestone.version)
-          .replace('{slug}', generateSlugInternal(milestone.name) || 'milestone')
-      : null;
+  const branchName =
+    config.branching_strategy === 'phase' && phaseInfo
+      ? (config.etapa_branch_template as string)
+          .replace('{phase}', phaseInfo.phase_number ?? '')
+          .replace('{slug}', phaseInfo.phase_slug || 'phase')
+      : config.branching_strategy === 'milestone'
+        ? (config.milestone_branch_template as string)
+            .replace('{milestone}', milestone.version)
+            .replace('{slug}', generateSlugInternal(milestone.name) || 'milestone')
+        : null;
 
   const result = {
     executor_model: resolveModelInternal(cwd, 'gsd-executor'),
@@ -194,9 +215,14 @@ export function cmdInitPlanPhase(cwd: string, phase: string, raw: boolean): void
   const roadmapEtapa = getRoadmapEtapaInternal(cwd, phase);
   const reqMatch = roadmapEtapa?.section?.match(/^\*\*Requirements\*\*:[^\S\n]*([^\n]*)$/m);
   const reqExtracted = reqMatch
-    ? reqMatch[1].replace(/[\[\]]/g, '').split(',').map((s: string) => s.trim()).filter(Boolean).join(', ')
+    ? reqMatch[1]
+        .replace(/[\[\]]/g, '')
+        .split(',')
+        .map((s: string) => s.trim())
+        .filter(Boolean)
+        .join(', ')
     : null;
-  const phase_req_ids = (reqExtracted && reqExtracted !== 'TBD') ? reqExtracted : null;
+  const phase_req_ids = reqExtracted && reqExtracted !== 'TBD' ? reqExtracted : null;
 
   const result: PlanPhaseResult = {
     researcher_model: resolveModelInternal(cwd, 'gsd-phase-researcher'),
@@ -233,12 +259,21 @@ export function cmdInitPlanPhase(cwd: string, phase: string, raw: boolean): void
     const phaseDirFull = path.join(cwd, phaseInfo.directory);
     try {
       const files = fs.readdirSync(phaseDirFull);
-      const contextFile = files.find((f: string) => f.endsWith('-CONTEXT.md') || f === 'CONTEXT.md');
-      if (contextFile) result.context_path = toPosixPath(path.join(phaseInfo.directory, contextFile));
-      const researchFile = files.find((f: string) => f.endsWith('-RESEARCH.md') || f === 'RESEARCH.md');
-      if (researchFile) result.research_path = toPosixPath(path.join(phaseInfo.directory, researchFile));
-      const verificationFile = files.find((f: string) => f.endsWith('-VERIFICATION.md') || f === 'VERIFICATION.md');
-      if (verificationFile) result.verification_path = toPosixPath(path.join(phaseInfo.directory, verificationFile));
+      const contextFile = files.find(
+        (f: string) => f.endsWith('-CONTEXT.md') || f === 'CONTEXT.md'
+      );
+      if (contextFile)
+        result.context_path = toPosixPath(path.join(phaseInfo.directory, contextFile));
+      const researchFile = files.find(
+        (f: string) => f.endsWith('-RESEARCH.md') || f === 'RESEARCH.md'
+      );
+      if (researchFile)
+        result.research_path = toPosixPath(path.join(phaseInfo.directory, researchFile));
+      const verificationFile = files.find(
+        (f: string) => f.endsWith('-VERIFICATION.md') || f === 'VERIFICATION.md'
+      );
+      if (verificationFile)
+        result.verification_path = toPosixPath(path.join(phaseInfo.directory, verificationFile));
       const uatFile = files.find((f: string) => f.endsWith('-UAT.md') || f === 'UAT.md');
       if (uatFile) result.uat_path = toPosixPath(path.join(phaseInfo.directory, uatFile));
     } catch {}
@@ -254,7 +289,7 @@ export function cmdInitNewProject(cwd: string, raw: boolean): void {
 
   let hasCode = false;
   let hasPackageFile = false;
-  
+
   // Validate cwd before use with file operations
   try {
     validateCwdForShell(cwd);
@@ -262,14 +297,17 @@ export function cmdInitNewProject(cwd: string, raw: boolean): void {
     const codeFiles = findCodeFiles(cwd, 3, codeExtensions);
     hasCode = codeFiles.length > 0;
   } catch (err) {
-    process.stderr.write(`[cmdInitNewProject] Error scanning for code files: ${(err as Error).message}\n`);
+    process.stderr.write(
+      `[cmdInitNewProject] Error scanning for code files: ${(err as Error).message}\n`
+    );
   }
 
-  hasPackageFile = pathExistsInternal(cwd, 'package.json') ||
-                   pathExistsInternal(cwd, 'requirements.txt') ||
-                   pathExistsInternal(cwd, 'Cargo.toml') ||
-                   pathExistsInternal(cwd, 'go.mod') ||
-                   pathExistsInternal(cwd, 'Package.swift');
+  hasPackageFile =
+    pathExistsInternal(cwd, 'package.json') ||
+    pathExistsInternal(cwd, 'requirements.txt') ||
+    pathExistsInternal(cwd, 'Cargo.toml') ||
+    pathExistsInternal(cwd, 'go.mod') ||
+    pathExistsInternal(cwd, 'Package.swift');
 
   const result = {
     researcher_model: resolveModelInternal(cwd, 'gsd-project-researcher'),
@@ -285,7 +323,8 @@ export function cmdInitNewProject(cwd: string, raw: boolean): void {
     has_existing_code: hasCode,
     has_package_file: hasPackageFile,
     is_brownfield: hasCode || hasPackageFile,
-    needs_codebase_map: (hasCode || hasPackageFile) && !pathExistsInternal(cwd, '.fase-ai/codebase'),
+    needs_codebase_map:
+      (hasCode || hasPackageFile) && !pathExistsInternal(cwd, '.fase-ai/codebase'),
 
     has_git: pathExistsInternal(cwd, '.git'),
 
@@ -332,7 +371,8 @@ export function cmdInitQuick(cwd: string, description: string, raw: boolean): vo
   const quickDir = path.join(cwd, '.fase-ai', 'quick');
   let nextNum = 1;
   try {
-    const existing = fs.readdirSync(quickDir)
+    const existing = fs
+      .readdirSync(quickDir)
       .filter((f: string) => /^\d+-/.test(f))
       .map((f: string) => parseInt(f.split('-')[0], 10))
       .filter((n: number) => !isNaN(n));
@@ -371,7 +411,9 @@ export function cmdInitResume(cwd: string, raw: boolean): void {
 
   let interruptedAgentId: string | null = null;
   try {
-    interruptedAgentId = fs.readFileSync(path.join(cwd, '.fase-ai', 'current-agent-id.txt'), 'utf-8').trim();
+    interruptedAgentId = fs
+      .readFileSync(path.join(cwd, '.fase-ai', 'current-agent-id.txt'), 'utf-8')
+      .trim();
   } catch {}
 
   const result = {
@@ -456,7 +498,12 @@ export function cmdInitPhaseOp(cwd: string, phase: string, raw: boolean): void {
         directory: null!,
         phase_number: roadmapEtapa.phase_number,
         phase_name: etapaNome,
-        phase_slug: etapaNome ? etapaNome.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') : null,
+        phase_slug: etapaNome
+          ? etapaNome
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/^-+|-+$/g, '')
+          : null,
         plans: [],
         summaries: [],
         incomplete_plans: [],
@@ -496,12 +543,21 @@ export function cmdInitPhaseOp(cwd: string, phase: string, raw: boolean): void {
     const phaseDirFull = path.join(cwd, phaseInfo.directory);
     try {
       const files = fs.readdirSync(phaseDirFull);
-      const contextFile = files.find((f: string) => f.endsWith('-CONTEXT.md') || f === 'CONTEXT.md');
-      if (contextFile) result.context_path = toPosixPath(path.join(phaseInfo.directory, contextFile));
-      const researchFile = files.find((f: string) => f.endsWith('-RESEARCH.md') || f === 'RESEARCH.md');
-      if (researchFile) result.research_path = toPosixPath(path.join(phaseInfo.directory, researchFile));
-      const verificationFile = files.find((f: string) => f.endsWith('-VERIFICATION.md') || f === 'VERIFICATION.md');
-      if (verificationFile) result.verification_path = toPosixPath(path.join(phaseInfo.directory, verificationFile));
+      const contextFile = files.find(
+        (f: string) => f.endsWith('-CONTEXT.md') || f === 'CONTEXT.md'
+      );
+      if (contextFile)
+        result.context_path = toPosixPath(path.join(phaseInfo.directory, contextFile));
+      const researchFile = files.find(
+        (f: string) => f.endsWith('-RESEARCH.md') || f === 'RESEARCH.md'
+      );
+      if (researchFile)
+        result.research_path = toPosixPath(path.join(phaseInfo.directory, researchFile));
+      const verificationFile = files.find(
+        (f: string) => f.endsWith('-VERIFICATION.md') || f === 'VERIFICATION.md'
+      );
+      if (verificationFile)
+        result.verification_path = toPosixPath(path.join(phaseInfo.directory, verificationFile));
       const uatFile = files.find((f: string) => f.endsWith('-UAT.md') || f === 'UAT.md');
       if (uatFile) result.uat_path = toPosixPath(path.join(phaseInfo.directory, uatFile));
     } catch {}
@@ -578,7 +634,9 @@ export function cmdInitMilestoneOp(cwd: string, raw: boolean): void {
     for (const dir of dirs) {
       try {
         const phaseFiles = fs.readdirSync(path.join(etapasDir, dir));
-        const hasSummary = phaseFiles.some((f: string) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md');
+        const hasSummary = phaseFiles.some(
+          (f: string) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md'
+        );
         if (hasSummary) completedPhases++;
       } catch {}
     }
@@ -587,7 +645,8 @@ export function cmdInitMilestoneOp(cwd: string, raw: boolean): void {
   const archiveDir = path.join(cwd, '.fase-ai', 'archive');
   let archivedMilestones: string[] = [];
   try {
-    archivedMilestones = fs.readdirSync(archiveDir, { withFileTypes: true })
+    archivedMilestones = fs
+      .readdirSync(archiveDir, { withFileTypes: true })
       .filter((e: fs.Dirent) => e.isDirectory())
       .map((e: fs.Dirent) => e.name);
   } catch {}
@@ -665,7 +724,10 @@ export function cmdInitProgress(cwd: string, raw: boolean): void {
 
   try {
     const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
-    const dirs = entries.filter((e: fs.Dirent) => e.isDirectory()).map((e: fs.Dirent) => e.name).sort();
+    const dirs = entries
+      .filter((e: fs.Dirent) => e.isDirectory())
+      .map((e: fs.Dirent) => e.name)
+      .sort();
 
     for (const dir of dirs) {
       const match = dir.match(/^(\d+(?:\.\d+)*)-?(.*)/);
@@ -676,12 +738,21 @@ export function cmdInitProgress(cwd: string, raw: boolean): void {
       const phaseFiles = fs.readdirSync(phasePath);
 
       const plans = phaseFiles.filter((f: string) => f.endsWith('-PLAN.md') || f === 'PLAN.md');
-      const summaries = phaseFiles.filter((f: string) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md');
-      const hasResearch = phaseFiles.some((f: string) => f.endsWith('-RESEARCH.md') || f === 'RESEARCH.md');
+      const summaries = phaseFiles.filter(
+        (f: string) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md'
+      );
+      const hasResearch = phaseFiles.some(
+        (f: string) => f.endsWith('-RESEARCH.md') || f === 'RESEARCH.md'
+      );
 
-      const status = summaries.length >= plans.length && plans.length > 0 ? 'complete' :
-                     plans.length > 0 ? 'in_progress' :
-                     hasResearch ? 'researched' : 'pending';
+      const status =
+        summaries.length >= plans.length && plans.length > 0
+          ? 'complete'
+          : plans.length > 0
+            ? 'in_progress'
+            : hasResearch
+              ? 'researched'
+              : 'pending';
 
       const phaseInfo: PhaseProgressInfo = {
         number: etapaNumber,

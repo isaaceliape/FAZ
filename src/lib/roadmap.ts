@@ -32,13 +32,17 @@ export function cmdRoadmapGetPhase(cwd: string, etapaNum: string, raw: boolean):
       const checklistMatch = content.match(checklistPattern);
 
       if (checklistMatch) {
-        output({
-          found: false,
-          phase_number: etapaNum,
-          phase_name: checklistMatch[1].trim(),
-          error: 'malformed_roadmap',
-          message: `Etapa ${etapaNum} exists in summary list but missing "### Etapa ${etapaNum}:" detail section. ROADMAP.md needs both formats.`
-        }, raw, '');
+        output(
+          {
+            found: false,
+            phase_number: etapaNum,
+            phase_name: checklistMatch[1].trim(),
+            error: 'malformed_roadmap',
+            message: `Etapa ${etapaNum} exists in summary list but missing "### Etapa ${etapaNum}:" detail section. ROADMAP.md needs both formats.`,
+          },
+          raw,
+          ''
+        );
         return;
       }
 
@@ -58,13 +62,26 @@ export function cmdRoadmapGetPhase(cwd: string, etapaNum: string, raw: boolean):
     const goalMatch = section.match(/\*\*Goal:\*\*\s*([^\n]+)/i);
     const goal = goalMatch ? goalMatch[1].trim() : null;
 
-    const criteriaMatch = section.match(/\*\*Success Criteria\*\*[^\n]*:\s*\n((?:\s*\d+\.\s*[^\n]+\n?)+)/i);
+    const criteriaMatch = section.match(
+      /\*\*Success Criteria\*\*[^\n]*:\s*\n((?:\s*\d+\.\s*[^\n]+\n?)+)/i
+    );
     const success_criteria = criteriaMatch
-      ? criteriaMatch[1].trim().split('\n').map(line => line.replace(/^\s*\d+\.\s*/, '').trim()).filter(Boolean)
+      ? criteriaMatch[1]
+          .trim()
+          .split('\n')
+          .map((line) => line.replace(/^\s*\d+\.\s*/, '').trim())
+          .filter(Boolean)
       : [];
 
     output(
-      { found: true, phase_number: etapaNum, phase_name: etapaNome, goal, success_criteria, section },
+      {
+        found: true,
+        phase_number: etapaNum,
+        phase_name: etapaNome,
+        goal,
+        success_criteria,
+        section,
+      },
       raw,
       section
     );
@@ -77,7 +94,10 @@ export function cmdRoadmapAnalyze(cwd: string, raw: boolean): void {
   const roadmapPath = path.join(cwd, '.fase-ai', 'ROADMAP.md');
 
   if (!fs.existsSync(roadmapPath)) {
-    output({ error: 'ROADMAP.md não encontrado', milestones: [], phases: [], current_phase: null }, raw);
+    output(
+      { error: 'ROADMAP.md não encontrado', milestones: [], phases: [], current_phase: null },
+      raw
+    );
     return;
   }
 
@@ -124,15 +144,17 @@ export function cmdRoadmapAnalyze(cwd: string, raw: boolean): void {
 
     try {
       const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
-      const dirs = entries.filter(e => e.isDirectory()).map(e => e.name);
-      const dirMatch = dirs.find(d => d.startsWith(normalized + '-') || d === normalized);
+      const dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name);
+      const dirMatch = dirs.find((d) => d.startsWith(normalized + '-') || d === normalized);
 
       if (dirMatch) {
         const phaseFiles = fs.readdirSync(path.join(etapasDir, dirMatch));
-        planCount = phaseFiles.filter(f => f.endsWith('-PLAN.md') || f === 'PLAN.md').length;
-        summaryCount = phaseFiles.filter(f => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md').length;
-        hasContext = phaseFiles.some(f => f.endsWith('-CONTEXT.md') || f === 'CONTEXT.md');
-        hasResearch = phaseFiles.some(f => f.endsWith('-RESEARCH.md') || f === 'RESEARCH.md');
+        planCount = phaseFiles.filter((f) => f.endsWith('-PLAN.md') || f === 'PLAN.md').length;
+        summaryCount = phaseFiles.filter(
+          (f) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md'
+        ).length;
+        hasContext = phaseFiles.some((f) => f.endsWith('-CONTEXT.md') || f === 'CONTEXT.md');
+        hasResearch = phaseFiles.some((f) => f.endsWith('-RESEARCH.md') || f === 'RESEARCH.md');
 
         if (summaryCount >= planCount && planCount > 0) diskStatus = 'complete';
         else if (summaryCount > 0) diskStatus = 'partial';
@@ -143,7 +165,10 @@ export function cmdRoadmapAnalyze(cwd: string, raw: boolean): void {
       }
     } catch {}
 
-    const checkboxPattern = new RegExp(`-\\s*\\[(x| )\\]\\s*.*Phase\\s+${escapeRegex(etapaNum)}`, 'i');
+    const checkboxPattern = new RegExp(
+      `-\\s*\\[(x| )\\]\\s*.*Phase\\s+${escapeRegex(etapaNum)}`,
+      'i'
+    );
     const checkboxMatch = content.match(checkboxPattern);
     const roadmapComplete = checkboxMatch ? checkboxMatch[1] === 'x' : false;
 
@@ -168,15 +193,20 @@ export function cmdRoadmapAnalyze(cwd: string, raw: boolean): void {
     milestones.push({ heading: mMatch[1].trim(), version: 'v' + mMatch[2] });
   }
 
-  const etapaAtual = phases.find(p => p.disk_status === 'planned' || p.disk_status === 'partial') ?? null;
-  const nextEtapa = phases.find(p =>
-    p.disk_status === 'empty' || p.disk_status === 'no_directory' ||
-    p.disk_status === 'discussed' || p.disk_status === 'researched'
-  ) ?? null;
+  const etapaAtual =
+    phases.find((p) => p.disk_status === 'planned' || p.disk_status === 'partial') ?? null;
+  const nextEtapa =
+    phases.find(
+      (p) =>
+        p.disk_status === 'empty' ||
+        p.disk_status === 'no_directory' ||
+        p.disk_status === 'discussed' ||
+        p.disk_status === 'researched'
+    ) ?? null;
 
   const totalPlans = phases.reduce((sum, p) => sum + p.plan_count, 0);
   const totalSummaries = phases.reduce((sum, p) => sum + p.summary_count, 0);
-  const completedPhases = phases.filter(p => p.disk_status === 'complete').length;
+  const completedPhases = phases.filter((p) => p.disk_status === 'complete').length;
 
   const checklistPattern = /-\s*\[[ x]\]\s*\*\*Phase\s+(\d+[A-Z]?(?:\.\d+)*)/gi;
   const checklistPhases = new Set<string>();
@@ -184,21 +214,25 @@ export function cmdRoadmapAnalyze(cwd: string, raw: boolean): void {
   while ((checklistMatch = checklistPattern.exec(content)) !== null) {
     checklistPhases.add(checklistMatch[1]);
   }
-  const detailPhases = new Set(phases.map(p => p.number));
-  const missingDetails = [...checklistPhases].filter(p => !detailPhases.has(p));
+  const detailPhases = new Set(phases.map((p) => p.number));
+  const missingDetails = [...checklistPhases].filter((p) => !detailPhases.has(p));
 
-  output({
-    milestones,
-    phases,
-    phase_count: phases.length,
-    completed_phases: completedPhases,
-    total_plans: totalPlans,
-    total_summaries: totalSummaries,
-    progress_percent: totalPlans > 0 ? Math.min(100, Math.round((totalSummaries / totalPlans) * 100)) : 0,
-    current_phase: etapaAtual ? etapaAtual.number : null,
-    next_phase: nextEtapa ? nextEtapa.number : null,
-    missing_phase_details: missingDetails.length > 0 ? missingDetails : null,
-  }, raw);
+  output(
+    {
+      milestones,
+      phases,
+      phase_count: phases.length,
+      completed_phases: completedPhases,
+      total_plans: totalPlans,
+      total_summaries: totalSummaries,
+      progress_percent:
+        totalPlans > 0 ? Math.min(100, Math.round((totalSummaries / totalPlans) * 100)) : 0,
+      current_phase: etapaAtual ? etapaAtual.number : null,
+      next_phase: nextEtapa ? nextEtapa.number : null,
+      missing_phase_details: missingDetails.length > 0 ? missingDetails : null,
+    },
+    raw
+  );
 }
 
 export function cmdRoadmapUpdatePlanProgress(cwd: string, etapaNum: string, raw: boolean): void {
@@ -217,7 +251,11 @@ export function cmdRoadmapUpdatePlanProgress(cwd: string, etapaNum: string, raw:
   const summaryCount = phaseInfo.summaries.length;
 
   if (planCount === 0) {
-    output({ updated: false, reason: 'No plans found', plan_count: 0, summary_count: 0 }, raw, 'no plans');
+    output(
+      { updated: false, reason: 'No plans found', plan_count: 0, summary_count: 0 },
+      raw,
+      'no plans'
+    );
     return;
   }
 
@@ -226,7 +264,16 @@ export function cmdRoadmapUpdatePlanProgress(cwd: string, etapaNum: string, raw:
   const today = new Date().toISOString().split('T')[0];
 
   if (!fs.existsSync(roadmapPath)) {
-    output({ updated: false, reason: 'ROADMAP.md not found', plan_count: planCount, summary_count: summaryCount }, raw, 'no roadmap');
+    output(
+      {
+        updated: false,
+        reason: 'ROADMAP.md not found',
+        plan_count: planCount,
+        summary_count: summaryCount,
+      },
+      raw,
+      'no roadmap'
+    );
     return;
   }
 
@@ -262,12 +309,16 @@ export function cmdRoadmapUpdatePlanProgress(cwd: string, etapaNum: string, raw:
 
   fs.writeFileSync(roadmapPath, roadmapContent, 'utf-8');
 
-  output({
-    updated: true,
-    phase: etapaNum,
-    plan_count: planCount,
-    summary_count: summaryCount,
-    status,
-    complete: isComplete,
-  }, raw, `${summaryCount}/${planCount} ${status}`);
+  output(
+    {
+      updated: true,
+      phase: etapaNum,
+      plan_count: planCount,
+      summary_count: summaryCount,
+      status,
+      complete: isComplete,
+    },
+    raw,
+    `${summaryCount}/${planCount} ${status}`
+  );
 }

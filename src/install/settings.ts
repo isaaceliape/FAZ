@@ -1,9 +1,9 @@
 /**
  * Settings — Settings.json management for AI providers
- * 
+ *
  * Handles reading, writing, and merging settings.json files
  * for Claude Code, OpenCode, Gemini, Codex, and GitHub Copilot.
- * 
+ *
  * @module install/settings
  */
 
@@ -19,17 +19,19 @@ export interface ProviderSettings {
     commit?: string;
   };
   disable_ai_attribution?: boolean;
-  hooks?: {
-    [key: string]: string;
-  } | string[];
+  hooks?:
+    | {
+        [key: string]: string;
+      }
+    | string[];
 }
 
 /**
  * Read and parse settings.json, returning empty object if it doesn't exist
- * 
+ *
  * @param settingsPath - Path to settings.json file
  * @returns Parsed settings object or empty object
- * 
+ *
  * @example
  * ```typescript
  * const settings = readSettings('~/.claude/settings.json');
@@ -49,10 +51,10 @@ export function readSettings(settingsPath: string): ProviderSettings {
 
 /**
  * Write settings.json with proper formatting (2-space indent + newline)
- * 
+ *
  * @param settingsPath - Path to settings.json file
  * @param settings - Settings object to write
- * 
+ *
  * @example
  * ```typescript
  * writeSettings('~/.claude/settings.json', { hooks: {...} });
@@ -64,9 +66,9 @@ export function writeSettings(settingsPath: string, settings: ProviderSettings):
 
 /**
  * Ensure settings directory exists
- * 
+ *
  * @param settingsPath - Path to settings.json (directory will be created)
- * 
+ *
  * @example
  * ```typescript
  * ensureSettingsDir('~/.claude/settings.json');
@@ -81,13 +83,13 @@ export function ensureSettingsDir(settingsPath: string): void {
 
 /**
  * Merge new settings with existing settings
- * 
+ *
  * @param settingsPath - Path to settings.json
  * @param newSettings - New settings to merge
  * @param options - Merge options
  * @param options.overwrite - If true, overwrite existing keys (default: false)
  * @returns Merged settings object
- * 
+ *
  * @example
  * ```typescript
  * const merged = mergeSettings('~/.claude/settings.json', { hooks: {...} });
@@ -100,37 +102,37 @@ export function mergeSettings(
 ): ProviderSettings {
   const existing = readSettings(settingsPath);
   const { overwrite = false } = options;
-  
+
   if (overwrite) {
     return { ...existing, ...newSettings };
   }
-  
+
   // Deep merge for hooks
   const merged = { ...existing };
-  
+
   if (newSettings.hooks && existing.hooks) {
     merged.hooks = { ...existing.hooks, ...newSettings.hooks };
   } else if (newSettings.hooks) {
     merged.hooks = newSettings.hooks;
   }
-  
+
   // Merge other top-level keys
   for (const [key, value] of Object.entries(newSettings)) {
     if (key !== 'hooks' && !(key in existing)) {
       merged[key] = value;
     }
   }
-  
+
   return merged;
 }
 
 /**
  * Remove a hook pattern from settings
- * 
+ *
  * @param settingsPath - Path to settings.json
  * @param hookPattern - Hook pattern to remove
  * @returns true if hook was removed, false if not found
- * 
+ *
  * @example
  * ```typescript
  * const removed = removeHook('~/.claude/settings.json', 'fase-*');
@@ -138,11 +140,11 @@ export function mergeSettings(
  */
 export function removeHook(settingsPath: string, hookPattern: string): boolean {
   const settings = readSettings(settingsPath);
-  
+
   if (!settings.hooks) {
     return false;
   }
-  
+
   if (Array.isArray(settings.hooks)) {
     const index = settings.hooks.indexOf(hookPattern);
     if (index !== -1) {
@@ -152,7 +154,7 @@ export function removeHook(settingsPath: string, hookPattern: string): boolean {
     }
     return false;
   }
-  
+
   // Object format
   for (const [key, value] of Object.entries(settings.hooks)) {
     if (value === hookPattern) {
@@ -161,33 +163,29 @@ export function removeHook(settingsPath: string, hookPattern: string): boolean {
       return true;
     }
   }
-  
+
   return false;
 }
 
 /**
  * Add a hook pattern to settings
- * 
+ *
  * @param settingsPath - Path to settings.json
  * @param hookPattern - Hook pattern to add
  * @param hookName - Optional name for the hook (for object format)
- * 
+ *
  * @example
  * ```typescript
  * addHook('~/.claude/settings.json', 'fase-*', 'fase_commands');
  * ```
  */
-export function addHook(
-  settingsPath: string,
-  hookPattern: string,
-  hookName?: string
-): void {
+export function addHook(settingsPath: string, hookPattern: string, hookName?: string): void {
   const settings = readSettings(settingsPath);
-  
+
   if (!settings.hooks) {
     settings.hooks = {};
   }
-  
+
   if (Array.isArray(settings.hooks)) {
     if (!settings.hooks.includes(hookPattern)) {
       settings.hooks.push(hookPattern);
@@ -198,13 +196,13 @@ export function addHook(
       settings.hooks[name] = hookPattern;
     }
   }
-  
+
   writeSettings(settingsPath, settings);
 }
 
 /**
  * Check if settings file exists
- * 
+ *
  * @param settingsPath - Path to settings.json
  * @returns true if file exists
  */
@@ -214,7 +212,7 @@ export function settingsExist(settingsPath: string): boolean {
 
 /**
  * Validate settings JSON structure
- * 
+ *
  * @param settingsPath - Path to settings.json
  * @returns { valid: boolean, error?: string }
  */
@@ -222,15 +220,15 @@ export function validateSettings(settingsPath: string): { valid: boolean; error?
   if (!fs.existsSync(settingsPath)) {
     return { valid: true }; // Missing is OK, will be created
   }
-  
+
   try {
     const content = fs.readFileSync(settingsPath, 'utf8');
     JSON.parse(content);
     return { valid: true };
   } catch (err) {
-    return { 
-      valid: false, 
-      error: `Invalid JSON: ${(err as Error).message}` 
+    return {
+      valid: false,
+      error: `Invalid JSON: ${(err as Error).message}`,
     };
   }
 }

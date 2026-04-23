@@ -8,7 +8,6 @@
 
 import fs from 'fs';
 import path from 'path';
-import os from 'os';
 import { error, output } from './lib/core.js';
 import * as state from './lib/state.js';
 import * as etapa from './lib/etapa.js';
@@ -20,7 +19,12 @@ import * as milestone from './lib/milestone.js';
 import * as commands from './lib/commands.js';
 import * as init from './lib/init.js';
 import * as frontmatter from './lib/frontmatter.js';
-import { checkForUpdate, promptForUpdate, runUpdate, getCachedUpdateInfo } from './lib/version-check.js';
+import {
+  checkForUpdate,
+  promptForUpdate,
+  runUpdate,
+  getCachedUpdateInfo,
+} from './lib/version-check.js';
 
 // Global handler for unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
@@ -80,7 +84,9 @@ async function main(): Promise<void> {
   const command = args[0];
 
   if (!command) {
-    error('Usage: fase-tools <command> [args] [--raw] [--cwd <path>]\nCommands: state, resolve-model, find-phase, commit, verify-summary, verify, frontmatter, template, generate-slug, current-timestamp, list-todos, verify-path-exists, config-ensure-section, init, phase, roadmap, milestone, validate, progress, todo, scaffold, websearch, history-digest, summary-extract, phase-plan-index, state-snapshot, phases, requirements, check-update');
+    error(
+      'Usage: fase-tools <command> [args] [--raw] [--cwd <path>]\nCommands: state, resolve-model, find-phase, commit, verify-summary, verify, frontmatter, template, generate-slug, current-timestamp, list-todos, verify-path-exists, config-ensure-section, init, phase, roadmap, milestone, validate, progress, todo, scaffold, websearch, history-digest, summary-extract, phase-plan-index, state-snapshot, phases, requirements, check-update'
+    );
   }
 
   switch (command) {
@@ -110,13 +116,17 @@ async function main(): Promise<void> {
         const durationIdx = args.indexOf('--duration');
         const tasksIdx = args.indexOf('--tasks');
         const filesIdx = args.indexOf('--files');
-        state.cmdStateRecordMetric(cwd, {
-          phase: phaseIdx !== -1 ? args[phaseIdx + 1] : undefined,
-          plan: planIdx !== -1 ? args[planIdx + 1] : undefined,
-          duration: durationIdx !== -1 ? args[durationIdx + 1] : undefined,
-          tasks: tasksIdx !== -1 ? args[tasksIdx + 1] : undefined,
-          files: filesIdx !== -1 ? args[filesIdx + 1] : undefined,
-        }, raw);
+        state.cmdStateRecordMetric(
+          cwd,
+          {
+            phase: phaseIdx !== -1 ? args[phaseIdx + 1] : undefined,
+            plan: planIdx !== -1 ? args[planIdx + 1] : undefined,
+            duration: durationIdx !== -1 ? args[durationIdx + 1] : undefined,
+            tasks: tasksIdx !== -1 ? args[tasksIdx + 1] : undefined,
+            files: filesIdx !== -1 ? args[filesIdx + 1] : undefined,
+          },
+          raw
+        );
       } else if (subcommand === 'update-progress') {
         state.cmdStateUpdateProgress(cwd, raw);
       } else if (subcommand === 'add-decision') {
@@ -125,30 +135,42 @@ async function main(): Promise<void> {
         const summaryFileIdx = args.indexOf('--summary-file');
         const rationaleIdx = args.indexOf('--rationale');
         const rationaleFileIdx = args.indexOf('--rationale-file');
-        state.cmdStateAddDecision(cwd, {
-          phase: phaseIdx !== -1 ? args[phaseIdx + 1] : undefined,
-          summary: summaryIdx !== -1 ? args[summaryIdx + 1] : undefined,
-          summary_file: summaryFileIdx !== -1 ? args[summaryFileIdx + 1] : undefined,
-          rationale: rationaleIdx !== -1 ? args[rationaleIdx + 1] : '',
-          rationale_file: rationaleFileIdx !== -1 ? args[rationaleFileIdx + 1] : undefined,
-        }, raw);
+        state.cmdStateAddDecision(
+          cwd,
+          {
+            phase: phaseIdx !== -1 ? args[phaseIdx + 1] : undefined,
+            summary: summaryIdx !== -1 ? args[summaryIdx + 1] : undefined,
+            summary_file: summaryFileIdx !== -1 ? args[summaryFileIdx + 1] : undefined,
+            rationale: rationaleIdx !== -1 ? args[rationaleIdx + 1] : '',
+            rationale_file: rationaleFileIdx !== -1 ? args[rationaleFileIdx + 1] : undefined,
+          },
+          raw
+        );
       } else if (subcommand === 'add-blocker') {
         const textIdx = args.indexOf('--text');
         const textFileIdx = args.indexOf('--text-file');
-        state.cmdStateAddBlocker(cwd, {
-          text: textIdx !== -1 ? args[textIdx + 1] : undefined,
-          text_file: textFileIdx !== -1 ? args[textFileIdx + 1] : undefined,
-        }, raw);
+        state.cmdStateAddBlocker(
+          cwd,
+          {
+            text: textIdx !== -1 ? args[textIdx + 1] : undefined,
+            text_file: textFileIdx !== -1 ? args[textFileIdx + 1] : undefined,
+          },
+          raw
+        );
       } else if (subcommand === 'resolve-blocker') {
         const textIdx = args.indexOf('--text');
         state.cmdStateResolveBlocker(cwd, textIdx !== -1 ? args[textIdx + 1] : undefined, raw);
       } else if (subcommand === 'record-session') {
         const stoppedIdx = args.indexOf('--stopped-at');
         const resumeIdx = args.indexOf('--resume-file');
-        state.cmdStateRecordSession(cwd, {
-          stopped_at: stoppedIdx !== -1 ? args[stoppedIdx + 1] : undefined,
-          resume_file: resumeIdx !== -1 ? args[resumeIdx + 1] : 'None',
-        }, raw);
+        state.cmdStateRecordSession(
+          cwd,
+          {
+            stopped_at: stoppedIdx !== -1 ? args[stoppedIdx + 1] : undefined,
+            resume_file: resumeIdx !== -1 ? args[resumeIdx + 1] : 'None',
+          },
+          raw
+        );
       } else {
         state.cmdStateLoad(cwd, raw);
       }
@@ -171,7 +193,10 @@ async function main(): Promise<void> {
       const endIndex = filesIndex !== -1 ? filesIndex : args.length;
       const messageArgs = args.slice(1, endIndex).filter((a: string) => !a.startsWith('--'));
       const message = messageArgs.join(' ') || '';
-      const files = filesIndex !== -1 ? args.slice(filesIndex + 1).filter((a: string) => !a.startsWith('--')) : [];
+      const files =
+        filesIndex !== -1
+          ? args.slice(filesIndex + 1).filter((a: string) => !a.startsWith('--'))
+          : [];
       commands.cmdCommit(cwd, message, files, raw, amend);
       break;
     }
@@ -195,13 +220,21 @@ async function main(): Promise<void> {
         const nameIdx = args.indexOf('--name');
         const typeIdx = args.indexOf('--type');
         const fieldsIdx = args.indexOf('--fields');
-        template.cmdTemplateFill(cwd, templateType, {
-          phase: phaseIdx !== -1 ? args[phaseIdx + 1] : '',
-          plan: planIdx !== -1 ? args[planIdx + 1] : undefined,
-          name: nameIdx !== -1 ? args[nameIdx + 1] : undefined,
-          type: typeIdx !== -1 ? args[typeIdx + 1] : 'execute',
-          fields: fieldsIdx !== -1 ? safeJsonParse<Record<string, unknown>>(args[fieldsIdx + 1], 'fields JSON') : {},
-        }, raw);
+        template.cmdTemplateFill(
+          cwd,
+          templateType,
+          {
+            phase: phaseIdx !== -1 ? args[phaseIdx + 1] : '',
+            plan: planIdx !== -1 ? args[planIdx + 1] : undefined,
+            name: nameIdx !== -1 ? args[nameIdx + 1] : undefined,
+            type: typeIdx !== -1 ? args[typeIdx + 1] : 'execute',
+            fields:
+              fieldsIdx !== -1
+                ? safeJsonParse<Record<string, unknown>>(args[fieldsIdx + 1], 'fields JSON')
+                : {},
+          },
+          raw
+        );
       } else {
         error('Unknown template subcommand. Available: select, fill');
       }
@@ -213,17 +246,38 @@ async function main(): Promise<void> {
       const file = args[2];
       if (subcommand === 'get') {
         const fieldIdx = args.indexOf('--field');
-        frontmatter.cmdFrontmatterGet(cwd, file, fieldIdx !== -1 ? args[fieldIdx + 1] : undefined, raw);
+        frontmatter.cmdFrontmatterGet(
+          cwd,
+          file,
+          fieldIdx !== -1 ? args[fieldIdx + 1] : undefined,
+          raw
+        );
       } else if (subcommand === 'set') {
         const fieldIdx = args.indexOf('--field');
         const valueIdx = args.indexOf('--value');
-        frontmatter.cmdFrontmatterSet(cwd, file, fieldIdx !== -1 ? args[fieldIdx + 1] : undefined, valueIdx !== -1 ? args[valueIdx + 1] : undefined, raw);
+        frontmatter.cmdFrontmatterSet(
+          cwd,
+          file,
+          fieldIdx !== -1 ? args[fieldIdx + 1] : undefined,
+          valueIdx !== -1 ? args[valueIdx + 1] : undefined,
+          raw
+        );
       } else if (subcommand === 'merge') {
         const dataIdx = args.indexOf('--data');
-        frontmatter.cmdFrontmatterMerge(cwd, file, dataIdx !== -1 ? args[dataIdx + 1] : undefined, raw);
+        frontmatter.cmdFrontmatterMerge(
+          cwd,
+          file,
+          dataIdx !== -1 ? args[dataIdx + 1] : undefined,
+          raw
+        );
       } else if (subcommand === 'validate') {
         const schemaIdx = args.indexOf('--schema');
-        frontmatter.cmdFrontmatterValidate(cwd, file, schemaIdx !== -1 ? args[schemaIdx + 1] : undefined, raw);
+        frontmatter.cmdFrontmatterValidate(
+          cwd,
+          file,
+          schemaIdx !== -1 ? args[schemaIdx + 1] : undefined,
+          raw
+        );
       } else {
         error('Unknown frontmatter subcommand. Available: get, set, merge, validate');
       }
@@ -245,7 +299,9 @@ async function main(): Promise<void> {
       } else if (subcommand === 'key-links') {
         verify.cmdVerifyKeyLinks(cwd, args[2], raw);
       } else {
-        error('Unknown verify subcommand. Available: plan-structure, phase-completeness, references, commits, artifacts, key-links');
+        error(
+          'Unknown verify subcommand. Available: plan-structure, phase-completeness, references, commits, artifacts, key-links'
+        );
       }
       break;
     }
@@ -452,7 +508,9 @@ async function main(): Promise<void> {
           init.cmdInitProgress(cwd, raw);
           break;
         default:
-          error(`Unknown init workflow: ${workflow}\nAvailable: execute-phase, plan-phase, new-project, new-milestone, quick, resume, verify-work, phase-op, todos, milestone-op, map-codebase, progress`);
+          error(
+            `Unknown init workflow: ${workflow}\nAvailable: execute-phase, plan-phase, new-project, new-milestone, quick, resume, verify-work, phase-op, todos, milestone-op, map-codebase, progress`
+          );
       }
       break;
     }
@@ -479,10 +537,14 @@ async function main(): Promise<void> {
       const query = args[1];
       const limitIdx = args.indexOf('--limit');
       const freshnessIdx = args.indexOf('--freshness');
-      await commands.cmdWebsearch(query, {
-        limit: limitIdx !== -1 ? parseInt(args[limitIdx + 1], 10) : 10,
-        freshness: freshnessIdx !== -1 ? args[freshnessIdx + 1] : undefined,
-      }, raw);
+      await commands.cmdWebsearch(
+        query,
+        {
+          limit: limitIdx !== -1 ? parseInt(args[limitIdx + 1], 10) : 10,
+          freshness: freshnessIdx !== -1 ? args[freshnessIdx + 1] : undefined,
+        },
+        raw
+      );
       break;
     }
 
@@ -520,7 +582,9 @@ async function main(): Promise<void> {
         } else if (!versionInfo.latest) {
           console.log(`  ${yellow}⚠${reset} Não foi possível verificar a versão no npm`);
         } else {
-          console.log(`  ${green}✓${reset} Você está na versão mais recente (${cyan}v${versionInfo.current}${reset})`);
+          console.log(
+            `  ${green}✓${reset} Você está na versão mais recente (${cyan}v${versionInfo.current}${reset})`
+          );
         }
       }
       break;

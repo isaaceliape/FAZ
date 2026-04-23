@@ -1,9 +1,9 @@
 /**
  * Hooks — Hook file generation and management
- * 
+ *
  * Handles creation, updating, and removal of hook files
  * for Claude Code, OpenCode, Gemini, and Codex.
- * 
+ *
  * @module install/hooks
  */
 
@@ -12,11 +12,11 @@ import path from 'path';
 
 /**
  * Build a hook command path using forward slashes for cross-platform compatibility
- * 
+ *
  * @param configDir - Configuration directory path
  * @param hookName - Name of the hook file (without extension)
  * @returns Command string to execute the hook
- * 
+ *
  * @example
  * ```typescript
  * buildHookCommand('/home/user/.claude', 'fase-statusline')
@@ -31,7 +31,7 @@ export function buildHookCommand(configDir: string, hookName: string): string {
 
 /**
  * Ensure hooks directory exists
- * 
+ *
  * @param configDir - Configuration directory (e.g., ~/.claude)
  * @returns Path to hooks directory
  */
@@ -45,7 +45,7 @@ export function ensureHooksDir(configDir: string): string {
 
 /**
  * Check if hooks directory exists
- * 
+ *
  * @param configDir - Configuration directory
  * @returns true if hooks directory exists
  */
@@ -55,11 +55,11 @@ export function hooksDirExists(configDir: string): boolean {
 
 /**
  * Write a hook file
- * 
+ *
  * @param configDir - Configuration directory
  * @param hookName - Name of the hook (without extension)
  * @param content - Hook file content
- * 
+ *
  * @example
  * ```typescript
  * writeHook('~/.claude', 'fase-statusline', '#!/usr/bin/env node\n...');
@@ -69,7 +69,7 @@ export function writeHook(configDir: string, hookName: string, content: string):
   const hooksDir = ensureHooksDir(configDir);
   const hookPath = path.join(hooksDir, hookName);
   fs.writeFileSync(hookPath, content, 'utf-8');
-  
+
   // Make executable on Unix-like systems
   try {
     fs.chmodSync(hookPath, 0o755);
@@ -80,7 +80,7 @@ export function writeHook(configDir: string, hookName: string, content: string):
 
 /**
  * Read a hook file
- * 
+ *
  * @param configDir - Configuration directory
  * @param hookName - Name of the hook
  * @returns Hook content or null if not found
@@ -95,7 +95,7 @@ export function readHook(configDir: string, hookName: string): string | null {
 
 /**
  * Remove a hook file
- * 
+ *
  * @param configDir - Configuration directory
  * @param hookName - Name of the hook to remove
  * @returns true if removed, false if not found
@@ -111,7 +111,7 @@ export function removeHook(configDir: string, hookName: string): boolean {
 
 /**
  * List all hook files in a directory
- * 
+ *
  * @param configDir - Configuration directory
  * @returns Array of hook file names
  */
@@ -120,9 +120,9 @@ export function listHooks(configDir: string): string[] {
   if (!fs.existsSync(hooksDir)) {
     return [];
   }
-  
+
   try {
-    return fs.readdirSync(hooksDir).filter(f => f.endsWith('.js') || f.endsWith('.cjs'));
+    return fs.readdirSync(hooksDir).filter((f) => f.endsWith('.js') || f.endsWith('.cjs'));
   } catch {
     return [];
   }
@@ -130,18 +130,18 @@ export function listHooks(configDir: string): string[] {
 
 /**
  * Count FASE hook files
- * 
+ *
  * @param configDir - Configuration directory
  * @returns Number of FASE hooks (files starting with 'fase-')
  */
 export function countFaseHooks(configDir: string): number {
   const hooks = listHooks(configDir);
-  return hooks.filter(h => h.startsWith('fase-')).length;
+  return hooks.filter((h) => h.startsWith('fase-')).length;
 }
 
 /**
  * Check if a specific hook exists
- * 
+ *
  * @param configDir - Configuration directory
  * @param hookName - Name of the hook
  * @returns true if hook exists
@@ -153,7 +153,7 @@ export function hookExists(configDir: string, hookName: string): boolean {
 
 /**
  * Get hook file path
- * 
+ *
  * @param configDir - Configuration directory
  * @param hookName - Name of the hook
  * @returns Absolute path to hook file

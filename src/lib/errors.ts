@@ -1,19 +1,19 @@
 /**
  * Error classes for FASE - Padronized error handling
- * 
+ *
  * All errors extend FaseError base class for consistent error handling
  * across the codebase. Errors should be thrown instead of calling process.exit()
  * for better testability and error recovery.
- * 
+ *
  * @module errors
  */
 
 /**
  * Base error class for all FASE errors
- * 
+ *
  * All custom errors extend this class to provide consistent error handling.
  * Includes error code for programmatic handling and context for debugging.
- * 
+ *
  * @example
  * ```typescript
  * try {
@@ -29,31 +29,27 @@
 export class FaseError extends Error {
   /** Error code for programmatic handling */
   public readonly code: string;
-  
+
   /** Additional context about the error */
   public readonly context?: Record<string, unknown>;
-  
+
   /** Timestamp when error occurred */
   public readonly timestamp: number;
 
   /**
    * Create a new FaseError
-   * 
+   *
    * @param message - Human-readable error message (in Portuguese for user-facing errors)
    * @param code - Machine-readable error code (e.g., 'CONFIG_NOT_FOUND')
    * @param context - Optional context object with additional error details
    */
-  constructor(
-    message: string,
-    code: string,
-    context?: Record<string, unknown>
-  ) {
+  constructor(message: string, code: string, context?: Record<string, unknown>) {
     super(message);
     this.name = 'FaseError';
     this.code = code;
     this.context = context;
     this.timestamp = Date.now();
-    
+
     // Capture stack trace, excluding constructor call
     Error.captureStackTrace(this, this.constructor);
   }
@@ -75,9 +71,9 @@ export class FaseError extends Error {
 
 /**
  * Configuration-related errors
- * 
+ *
  * Thrown when there are issues with .fase-ai/config.json or other configuration files.
- * 
+ *
  * @example
  * ```typescript
  * if (!fs.existsSync(configPath)) {
@@ -90,11 +86,7 @@ export class FaseError extends Error {
  * ```
  */
 export class ConfigError extends FaseError {
-  constructor(
-    message: string,
-    code: string,
-    context?: Record<string, unknown>
-  ) {
+  constructor(message: string, code: string, context?: Record<string, unknown>) {
     super(message, `CONFIG_${code}`, context);
     this.name = 'ConfigError';
   }
@@ -102,9 +94,9 @@ export class ConfigError extends FaseError {
 
 /**
  * File operation errors
- * 
+ *
  * Thrown when file read/write operations fail.
- * 
+ *
  * @example
  * ```typescript
  * try {
@@ -119,11 +111,7 @@ export class ConfigError extends FaseError {
  * ```
  */
 export class FileError extends FaseError {
-  constructor(
-    message: string,
-    code: string,
-    context?: Record<string, unknown>
-  ) {
+  constructor(message: string, code: string, context?: Record<string, unknown>) {
     super(message, `FILE_${code}`, context);
     this.name = 'FileError';
   }
@@ -131,9 +119,9 @@ export class FileError extends FaseError {
 
 /**
  * Input validation errors
- * 
+ *
  * Thrown when user input fails validation checks.
- * 
+ *
  * @example
  * ```typescript
  * if (keyPath.split('.').length > MAX_DEPTH) {
@@ -146,11 +134,7 @@ export class FileError extends FaseError {
  * ```
  */
 export class ValidationError extends FaseError {
-  constructor(
-    message: string,
-    code: string,
-    context?: Record<string, unknown>
-  ) {
+  constructor(message: string, code: string, context?: Record<string, unknown>) {
     super(message, `VALIDATION_${code}`, context);
     this.name = 'ValidationError';
   }
@@ -158,9 +142,9 @@ export class ValidationError extends FaseError {
 
 /**
  * Path traversal security errors
- * 
+ *
  * Thrown when path validation detects attempted directory escape.
- * 
+ *
  * @example
  * ```typescript
  * if (!normalizedFull.startsWith(normalizedPlanej + path.sep)) {
@@ -173,11 +157,7 @@ export class ValidationError extends FaseError {
  * ```
  */
 export class PathTraversalError extends FaseError {
-  constructor(
-    message: string,
-    code: string,
-    context?: Record<string, unknown>
-  ) {
+  constructor(message: string, code: string, context?: Record<string, unknown>) {
     super(message, `SECURITY_${code}`, context);
     this.name = 'PathTraversalError';
   }
@@ -185,9 +165,9 @@ export class PathTraversalError extends FaseError {
 
 /**
  * Provider-related errors
- * 
+ *
  * Thrown when there are issues with AI provider configuration or detection.
- * 
+ *
  * @example
  * ```typescript
  * if (!supportedProviders.includes(provider)) {
@@ -200,11 +180,7 @@ export class PathTraversalError extends FaseError {
  * ```
  */
 export class ProviderError extends FaseError {
-  constructor(
-    message: string,
-    code: string,
-    context?: Record<string, unknown>
-  ) {
+  constructor(message: string, code: string, context?: Record<string, unknown>) {
     super(message, `PROVIDER_${code}`, context);
     this.name = 'ProviderError';
   }
@@ -212,9 +188,9 @@ export class ProviderError extends FaseError {
 
 /**
  * Hook-related errors
- * 
+ *
  * Thrown when hook file operations fail.
- * 
+ *
  * @example
  * ```typescript
  * if (!fs.existsSync(hooksDir)) {
@@ -227,11 +203,7 @@ export class ProviderError extends FaseError {
  * ```
  */
 export class HookError extends FaseError {
-  constructor(
-    message: string,
-    code: string,
-    context?: Record<string, unknown>
-  ) {
+  constructor(message: string, code: string, context?: Record<string, unknown>) {
     super(message, `HOOK_${code}`, context);
     this.name = 'HookError';
   }
@@ -239,9 +211,9 @@ export class HookError extends FaseError {
 
 /**
  * Installation-related errors
- * 
+ *
  * Thrown when installation or uninstallation operations fail.
- * 
+ *
  * @example
  * ```typescript
  * if (!canWrite) {
@@ -254,11 +226,7 @@ export class HookError extends FaseError {
  * ```
  */
 export class InstallationError extends FaseError {
-  constructor(
-    message: string,
-    code: string,
-    context?: Record<string, unknown>
-  ) {
+  constructor(message: string, code: string, context?: Record<string, unknown>) {
     super(message, `INSTALL_${code}`, context);
     this.name = 'InstallationError';
   }
@@ -266,9 +234,9 @@ export class InstallationError extends FaseError {
 
 /**
  * Template-related errors
- * 
+ *
  * Thrown when template rendering or file operations fail.
- * 
+ *
  * @example
  * ```typescript
  * if (!templateExists(templateName)) {
@@ -281,11 +249,7 @@ export class InstallationError extends FaseError {
  * ```
  */
 export class TemplateError extends FaseError {
-  constructor(
-    message: string,
-    code: string,
-    context?: Record<string, unknown>
-  ) {
+  constructor(message: string, code: string, context?: Record<string, unknown>) {
     super(message, `TEMPLATE_${code}`, context);
     this.name = 'TemplateError';
   }
@@ -293,12 +257,12 @@ export class TemplateError extends FaseError {
 
 /**
  * Utility function to wrap unknown errors with FaseError
- * 
+ *
  * @param error - The caught error (could be Error or unknown)
  * @param defaultMessage - Default message if error is not an Error instance
  * @param defaultCode - Default error code
  * @returns A FaseError instance
- * 
+ *
  * @example
  * ```typescript
  * try {
@@ -317,28 +281,23 @@ export function wrapError(
   if (error instanceof FaseError) {
     return error;
   }
-  
+
   if (error instanceof Error) {
-    return new FaseError(
-      error.message || defaultMessage,
-      defaultCode,
-      { ...context, originalError: error.name }
-    );
+    return new FaseError(error.message || defaultMessage, defaultCode, {
+      ...context,
+      originalError: error.name,
+    });
   }
-  
-  return new FaseError(
-    defaultMessage,
-    defaultCode,
-    { ...context, originalError: String(error) }
-  );
+
+  return new FaseError(defaultMessage, defaultCode, { ...context, originalError: String(error) });
 }
 
 /**
  * Type guard to check if an error is a FaseError
- * 
+ *
  * @param error - The error to check
  * @returns true if error is a FaseError instance
- * 
+ *
  * @example
  * ```typescript
  * try {

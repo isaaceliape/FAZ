@@ -1,13 +1,13 @@
 /**
  * Providers — Provider detection and configuration directory management
- * 
+ *
  * Handles config directory paths for all supported AI providers:
  * - Claude Code (~/.claude)
  * - OpenCode (~/.config/opencode)
  * - Gemini (~/.gemini)
  * - Codex (~/.codex)
  * - GitHub Copilot (~/.github-copilot)
- * 
+ *
  * @module install/providers
  */
 
@@ -21,10 +21,10 @@ export type ProviderRuntime = 'claude' | 'opencode' | 'gemini' | 'codex' | 'copi
 
 /**
  * Expand ~ to home directory (shell doesn't expand in env vars passed to node)
- * 
+ *
  * @param filePath - Path that may start with ~/
  * @returns Expanded path with full home directory
- * 
+ *
  * @example
  * ```typescript
  * expandTilde('~/.claude') // => '/home/user/.claude'
@@ -39,10 +39,10 @@ export function expandTilde(filePath: string): string {
 
 /**
  * Get directory name for a runtime (used for local/project installs)
- * 
+ *
  * @param runtime - Provider runtime name
  * @returns Directory name for the runtime
- * 
+ *
  * @example
  * ```typescript
  * getDirName('claude') // => '.claude'
@@ -61,11 +61,11 @@ export function getDirName(runtime: ProviderRuntime): string {
 /**
  * Get the config directory path relative to home directory for a runtime
  * Used for templating hooks that use path.join(homeDir, '<configDir>', ...)
- * 
+ *
  * @param runtime - Provider runtime name
  * @param isGlobal - Whether this is a global install
  * @returns String representation for path.join() replacement
- * 
+ *
  * @example
  * ```typescript
  * getConfigDirFromHome('claude', false) // => "'.claude'"
@@ -77,7 +77,7 @@ export function getConfigDirFromHome(runtime: ProviderRuntime, isGlobal: boolean
     // Local installs use the same dir name pattern
     return `'${getDirName(runtime)}'`;
   }
-  
+
   // Global installs - OpenCode uses XDG path structure
   if (runtime === 'opencode') {
     // OpenCode: ~/.config/opencode -> '.config', 'opencode'
@@ -94,13 +94,13 @@ export function getConfigDirFromHome(runtime: ProviderRuntime, isGlobal: boolean
 /**
  * Get the global config directory for OpenCode
  * OpenCode follows XDG Base Directory spec and uses ~/.config/opencode/
- * 
+ *
  * Priority:
  * 1. OPENCODE_CONFIG_DIR env var
  * 2. dirname(OPENCODE_CONFIG) env var
  * 3. XDG_CONFIG_HOME/opencode
  * 4. ~/.config/opencode (default)
- * 
+ *
  * @returns Absolute path to OpenCode config directory
  */
 export function getOpencodeGlobalDir(): string {
@@ -108,28 +108,28 @@ export function getOpencodeGlobalDir(): string {
   if (process.env.OPENCODE_CONFIG_DIR) {
     return expandTilde(process.env.OPENCODE_CONFIG_DIR);
   }
-  
+
   // 2. OPENCODE_CONFIG env var (use its directory)
   if (process.env.OPENCODE_CONFIG) {
     return path.dirname(expandTilde(process.env.OPENCODE_CONFIG));
   }
-  
+
   // 3. XDG_CONFIG_HOME/opencode
   if (process.env.XDG_CONFIG_HOME) {
     return path.join(expandTilde(process.env.XDG_CONFIG_HOME), 'opencode');
   }
-  
+
   // 4. Default: ~/.config/opencode (XDG default)
   return path.join(os.homedir(), '.config', 'opencode');
 }
 
 /**
  * Get the global config directory for a runtime
- * 
+ *
  * @param runtime - Provider runtime name
  * @param explicitDir - Explicit directory from --config-dir flag (optional)
  * @returns Absolute path to config directory
- * 
+ *
  * @example
  * ```typescript
  * getGlobalDir('claude', null) // => '/home/user/.claude'
@@ -144,7 +144,7 @@ export function getGlobalDir(runtime: ProviderRuntime, explicitDir: string | nul
     }
     return getOpencodeGlobalDir();
   }
-  
+
   if (runtime === 'gemini') {
     // Gemini: --config-dir > GEMINI_CONFIG_DIR > ~/.gemini
     if (explicitDir) {
@@ -155,7 +155,7 @@ export function getGlobalDir(runtime: ProviderRuntime, explicitDir: string | nul
     }
     return path.join(os.homedir(), '.gemini');
   }
-  
+
   if (runtime === 'codex') {
     // Codex: --config-dir > CODEX_HOME > ~/.codex
     if (explicitDir) {
@@ -166,7 +166,7 @@ export function getGlobalDir(runtime: ProviderRuntime, explicitDir: string | nul
     }
     return path.join(os.homedir(), '.codex');
   }
-  
+
   if (runtime === 'copilot') {
     // GitHub Copilot: --config-dir > COPILOT_CONFIG_DIR > ~/.github-copilot
     if (explicitDir) {
@@ -201,10 +201,10 @@ export function getGlobalDir(runtime: ProviderRuntime, explicitDir: string | nul
 
 /**
  * Check if a runtime is valid/supported
- * 
+ *
  * @param runtime - String to validate
  * @returns true if runtime is a valid provider
- * 
+ *
  * @example
  * ```typescript
  * isValidProvider('claude') // => true
@@ -217,7 +217,7 @@ export function isValidProvider(runtime: string): runtime is ProviderRuntime {
 
 /**
  * Get all supported providers
- * 
+ *
  * @returns Array of valid provider runtime names
  */
 export function getSupportedProviders(): ProviderRuntime[] {

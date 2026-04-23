@@ -9,7 +9,16 @@
  * 3. Copies static directories (comandos, agentes, fase-shared, docs) to dist/
  */
 
-import { readFileSync, writeFileSync, chmodSync, existsSync, readdirSync, mkdirSync, copyFileSync, statSync } from 'fs';
+import {
+  readFileSync,
+  writeFileSync,
+  chmodSync,
+  existsSync,
+  readdirSync,
+  mkdirSync,
+  copyFileSync,
+  statSync,
+} from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 

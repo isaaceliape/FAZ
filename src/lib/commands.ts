@@ -4,9 +4,20 @@
 import fs from 'fs';
 import path from 'path';
 import {
-  safeReadFile, loadConfig, isGitIgnored, execGit, normalizeEtapaNome, compareEtapaNum,
-  getArchivedEtapasDirs, generateSlugInternal, getMilestoneInfo, resolveModelInternal,
-  MODEL_PROFILES, toPosixPath, output, error, findEtapaInternal,
+  loadConfig,
+  isGitIgnored,
+  execGit,
+  normalizeEtapaNome,
+  compareEtapaNum,
+  getArchivedEtapasDirs,
+  generateSlugInternal,
+  getMilestoneInfo,
+  resolveModelInternal,
+  MODEL_PROFILES,
+  toPosixPath,
+  output,
+  error,
+  findEtapaInternal,
 } from './core.js';
 import { extractFrontmatter, type ParsedFrontmatter } from './frontmatter.js';
 
@@ -21,24 +32,24 @@ import { extractFrontmatter, type ParsedFrontmatter } from './frontmatter.js';
 export function validatePathInsideCwd(cwd: string, userPath: string): string {
   const resolved = path.resolve(cwd, userPath);
   const normalizedCwd = path.resolve(cwd) + path.sep;
-  
+
   // Check logical path first
   if (resolved !== path.resolve(cwd) && !resolved.startsWith(normalizedCwd)) {
     error(`Path traversal detected: "${userPath}" escapes project boundary`);
   }
-  
+
   // Resolve symlinks and check physical path
   try {
     const realPath = fs.realpathSync(resolved);
     const realCwd = fs.realpathSync(cwd);
     const normalizedRealCwd = realCwd + path.sep;
-    
+
     if (realPath !== realCwd && !realPath.startsWith(normalizedRealCwd)) {
       error(`Path traversal detected via symlink: "${userPath}" resolves outside project boundary`);
     }
-    
+
     return realPath;
-  } catch (err) {
+  } catch {
     // File doesn't exist yet - that's OK for write operations
     // Just return the resolved logical path
     return resolved;
@@ -122,12 +133,16 @@ export function cmdListTodos(cwd: string, area: string, raw: boolean): void {
         });
       } catch (err) {
         // Skip malformed todo files but log for debugging
-        process.stderr.write(`[cmdListTodos] Skipping malformed file ${file}: ${(err as Error).message}\n`);
+        process.stderr.write(
+          `[cmdListTodos] Skipping malformed file ${file}: ${(err as Error).message}\n`
+        );
       }
     }
   } catch (err) {
     // Log directory read errors but don't fail
-    process.stderr.write(`[cmdListTodos] Error reading todos directory: ${(err as Error).message}\n`);
+    process.stderr.write(
+      `[cmdListTodos] Error reading todos directory: ${(err as Error).message}\n`
+    );
   }
 
   output({ count, todos }, raw, count.toString());
@@ -196,7 +211,8 @@ export function cmdHistoryDigest(cwd: string, raw: boolean): void {
   // Add current phases
   if (fs.existsSync(etapasDir)) {
     try {
-      const currentDirs = fs.readdirSync(etapasDir, { withFileTypes: true })
+      const currentDirs = fs
+        .readdirSync(etapasDir, { withFileTypes: true })
         .filter((e: fs.Dirent) => e.isDirectory())
         .map((e: fs.Dirent) => e.name)
         .sort();
@@ -204,7 +220,9 @@ export function cmdHistoryDigest(cwd: string, raw: boolean): void {
         allPhaseDirs.push({ name: dir, fullPath: path.join(etapasDir, dir), milestone: null });
       }
     } catch (err) {
-      process.stderr.write(`[cmdHistoryDigest] Error reading phases directory: ${(err as Error).message}\n`);
+      process.stderr.write(
+        `[cmdHistoryDigest] Error reading phases directory: ${(err as Error).message}\n`
+      );
     }
   }
 
@@ -216,7 +234,9 @@ export function cmdHistoryDigest(cwd: string, raw: boolean): void {
 
   try {
     for (const { name: dir, fullPath: dirPath } of allPhaseDirs) {
-      const summaries = fs.readdirSync(dirPath).filter((f: string) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md');
+      const summaries = fs
+        .readdirSync(dirPath)
+        .filter((f: string) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md');
 
       for (const summary of summaries) {
         try {
@@ -227,7 +247,10 @@ export function cmdHistoryDigest(cwd: string, raw: boolean): void {
 
           if (!(digest.phases as Record<string, PhaseAccum>)[etapaNum]) {
             (digest.phases as Record<string, PhaseAccum>)[etapaNum] = {
-              name: (fm['name'] as string | undefined) || dir.split('-').slice(1).join(' ') || 'Unknown',
+              name:
+                (fm['name'] as string | undefined) ||
+                dir.split('-').slice(1).join(' ') ||
+                'Unknown',
               provides: new Set<string>(),
               affects: new Set<string>(),
               patterns: new Set<string>(),
@@ -268,10 +291,11 @@ export function cmdHistoryDigest(cwd: string, raw: boolean): void {
               (digest.tech_stack as Set<string>).add(typeof t === 'string' ? t : t.name);
             });
           }
-
         } catch (err) {
           // Skip malformed summaries but log for debugging
-          process.stderr.write(`[cmdHistoryDigest] Skipping malformed summary: ${(err as Error).message}\n`);
+          process.stderr.write(
+            `[cmdHistoryDigest] Skipping malformed summary: ${(err as Error).message}\n`
+          );
         }
       }
     }
@@ -304,13 +328,17 @@ export function cmdResolveModel(cwd: string, agentType: string, raw: boolean): v
   const model = resolveModelInternal(cwd, agentType);
 
   const agentModels = MODEL_PROFILES[agentType];
-  const result = agentModels
-    ? { model, profile }
-    : { model, profile, unknown_agent: true };
+  const result = agentModels ? { model, profile } : { model, profile, unknown_agent: true };
   output(result, raw, model);
 }
 
-export function cmdCommit(cwd: string, message: string, files: string[], raw: boolean, amend: boolean): void {
+export function cmdCommit(
+  cwd: string,
+  message: string,
+  files: string[],
+  raw: boolean,
+  amend: boolean
+): void {
   if (!message && !amend) {
     error('mensagem de commit obrigatória ou --amend');
   }
@@ -339,11 +367,18 @@ export function cmdCommit(cwd: string, message: string, files: string[], raw: bo
   const commitArgs = amend ? ['commit', '--amend', '--no-edit'] : ['commit', '-m', message];
   const commitResult = execGit(cwd, commitArgs);
   if (commitResult.exitCode !== 0) {
-    if (commitResult.stdout.includes('nothing to commit') || commitResult.stderr.includes('nothing to commit')) {
+    if (
+      commitResult.stdout.includes('nothing to commit') ||
+      commitResult.stderr.includes('nothing to commit')
+    ) {
       output({ committed: false, hash: null, reason: 'nothing_to_commit' }, raw, 'nothing');
       return;
     }
-    output({ committed: false, hash: null, reason: 'nothing_to_commit', error: commitResult.stderr }, raw, 'nothing');
+    output(
+      { committed: false, hash: null, reason: 'nothing_to_commit', error: commitResult.stderr },
+      raw,
+      'nothing'
+    );
     return;
   }
 
@@ -372,7 +407,12 @@ function parseDecisions(decisionsList: unknown): SummaryExtractDecision[] {
   });
 }
 
-export function cmdSummaryExtract(cwd: string, summaryPath: string, fields: string[], raw: boolean): void {
+export function cmdSummaryExtract(
+  cwd: string,
+  summaryPath: string,
+  fields: string[],
+  raw: boolean
+): void {
   if (!summaryPath) {
     error('caminho-do-resumo obrigatório');
   }
@@ -393,7 +433,7 @@ export function cmdSummaryExtract(cwd: string, summaryPath: string, fields: stri
     path: summaryPath,
     one_liner: fm['one-liner'] || null,
     key_files: fm['key-files'] || [],
-    tech_added: (techStack?.added) || [],
+    tech_added: techStack?.added || [],
     patterns: fm['patterns-established'] || [],
     decisions: parseDecisions(fm['key-decisions']),
     requirements_completed: fm['requirements-completed'] || [],
@@ -437,7 +477,11 @@ interface BraveApiResponse {
   };
 }
 
-export async function cmdWebsearch(query: string, options: WebsearchOptions, raw: boolean): Promise<void> {
+export async function cmdWebsearch(
+  query: string,
+  options: WebsearchOptions,
+  raw: boolean
+): Promise<void> {
   const apiKey = process.env['BRAVE_API_KEY'];
 
   if (!apiKey) {
@@ -464,22 +508,19 @@ export async function cmdWebsearch(query: string, options: WebsearchOptions, raw
   }
 
   try {
-    const response = await fetch(
-      `https://api.search.brave.com/res/v1/web/search?${params}`,
-      {
-        headers: {
-          'Accept': 'application/json',
-          'X-Subscription-Token': apiKey,
-        },
-      }
-    );
+    const response = await fetch(`https://api.search.brave.com/res/v1/web/search?${params}`, {
+      headers: {
+        Accept: 'application/json',
+        'X-Subscription-Token': apiKey,
+      },
+    });
 
     if (!response.ok) {
       output({ available: false, error: `Erro da API: ${response.status}` }, raw, '');
       return;
     }
 
-    const data = await response.json() as BraveApiResponse;
+    const data = (await response.json()) as BraveApiResponse;
 
     const results: SearchResult[] = (data.web?.results || []).map((r) => ({
       title: r.title,
@@ -488,12 +529,16 @@ export async function cmdWebsearch(query: string, options: WebsearchOptions, raw
       age: r.age || null,
     }));
 
-    output({
-      available: true,
-      query,
-      count: results.length,
-      results,
-    }, raw, results.map((r: SearchResult) => `${r.title}\n${r.url}\n${r.description}`).join('\n\n'));
+    output(
+      {
+        available: true,
+        query,
+        count: results.length,
+        results,
+      },
+      raw,
+      results.map((r: SearchResult) => `${r.title}\n${r.url}\n${r.description}`).join('\n\n')
+    );
   } catch (err) {
     output({ available: false, error: (err as Error).message }, raw, '');
   }
@@ -503,21 +548,34 @@ export function cmdProgressRender(cwd: string, format: string, raw: boolean): vo
   const etapasDir = path.join(cwd, '.fase-ai', 'etapas');
   const milestone = getMilestoneInfo(cwd);
 
-  const phases: { number: string; name: string; plans: number; summaries: number; status: string }[] = [];
+  const phases: {
+    number: string;
+    name: string;
+    plans: number;
+    summaries: number;
+    status: string;
+  }[] = [];
   let totalPlans = 0;
   let totalSummaries = 0;
 
   try {
     const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
-    const dirs = entries.filter((e: fs.Dirent) => e.isDirectory()).map((e: fs.Dirent) => e.name).sort((a: string, b: string) => compareEtapaNum(a, b));
+    const dirs = entries
+      .filter((e: fs.Dirent) => e.isDirectory())
+      .map((e: fs.Dirent) => e.name)
+      .sort((a: string, b: string) => compareEtapaNum(a, b));
 
     for (const dir of dirs) {
       const dm = dir.match(/^(\d+(?:\.\d+)*)-?(.*)/);
       const etapaNum = dm ? dm[1] : dir;
       const etapaNome = dm && dm[2] ? dm[2].replace(/-/g, ' ') : '';
       const phaseFiles = fs.readdirSync(path.join(etapasDir, dir));
-      const plans = phaseFiles.filter((f: string) => f.endsWith('-PLAN.md') || f === 'PLAN.md').length;
-      const summaries = phaseFiles.filter((f: string) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md').length;
+      const plans = phaseFiles.filter(
+        (f: string) => f.endsWith('-PLAN.md') || f === 'PLAN.md'
+      ).length;
+      const summaries = phaseFiles.filter(
+        (f: string) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md'
+      ).length;
 
       totalPlans += plans;
       totalSummaries += summaries;
@@ -534,7 +592,8 @@ export function cmdProgressRender(cwd: string, format: string, raw: boolean): vo
     process.stderr.write(`[cmdProgressRender] Error reading phases: ${(err as Error).message}\n`);
   }
 
-  const percent = totalPlans > 0 ? Math.min(100, Math.round((totalSummaries / totalPlans) * 100)) : 0;
+  const percent =
+    totalPlans > 0 ? Math.min(100, Math.round((totalSummaries / totalPlans) * 100)) : 0;
 
   if (format === 'table') {
     const barWidth = 10;
@@ -555,14 +614,17 @@ export function cmdProgressRender(cwd: string, format: string, raw: boolean): vo
     const text = `[${bar}] ${totalSummaries}/${totalPlans} planos (${percent}%)`;
     output({ bar: text, percent, completed: totalSummaries, total: totalPlans }, raw, text);
   } else {
-    output({
-      milestone_version: milestone.version,
-      milestone_name: milestone.name,
-      phases,
-      total_plans: totalPlans,
-      total_summaries: totalSummaries,
-      percent,
-    }, raw);
+    output(
+      {
+        milestone_version: milestone.version,
+        milestone_name: milestone.name,
+        phases,
+        total_plans: totalPlans,
+        total_summaries: totalSummaries,
+        percent,
+      },
+      raw
+    );
   }
 }
 
@@ -572,7 +634,7 @@ export function cmdTodoComplete(cwd: string, filename: string, raw: boolean): vo
   }
 
   const safeFilename = sanitizeFilename(filename);
-  
+
   const pendingDir = path.join(cwd, '.fase-ai', 'todos', 'pending');
   const completedDir = path.join(cwd, '.fase-ai', 'todos', 'completed');
   const sourcePath = path.join(pendingDir, safeFilename);
@@ -625,25 +687,30 @@ interface ScaffoldOptions {
   name?: string;
 }
 
-export function cmdScaffold(cwd: string, type: string, options: ScaffoldOptions, raw: boolean): void {
+export function cmdScaffold(
+  cwd: string,
+  type: string,
+  options: ScaffoldOptions,
+  raw: boolean
+): void {
   const { phase, name } = options;
-  
+
   // Validate scaffold type against allowlist
   const allowedTypes = ['context', 'uat', 'verification', 'phase-dir'];
   if (!allowedTypes.includes(type)) {
     error(`Tipo de scaffold desconhecido: ${type}. Tipos disponíveis: ${allowedTypes.join(', ')}`);
   }
-  
+
   // Validate phase name format if provided (alphanumeric, dashes, dots allowed)
   if (phase && !/^[\d.\-a-zA-Z]+$/.test(phase)) {
     error(`Formato de fase inválido: "${phase}". Use apenas letras, números, pontos e traços.`);
   }
-  
+
   // Validate name if provided (alphanumeric, spaces, dashes allowed)
   if (name && !/^[\s\-a-zA-Z0-9]+$/.test(name)) {
     error(`Formato de nome inválido: "${name}". Use apenas letras, números, espaços e traços.`);
   }
-  
+
   const padded = phase ? normalizeEtapaNome(phase) : '00';
   const today = new Date().toISOString().split('T')[0];
 
@@ -686,11 +753,17 @@ export function cmdScaffold(cwd: string, type: string, options: ScaffoldOptions,
       fs.mkdirSync(phasesParent, { recursive: true });
       const dirPath = path.join(phasesParent, dirName);
       fs.mkdirSync(dirPath, { recursive: true });
-      output({ created: true, directory: `.fase-ai/phases/${dirName}`, path: dirPath }, raw, dirPath);
+      output(
+        { created: true, directory: `.fase-ai/phases/${dirName}`, path: dirPath },
+        raw,
+        dirPath
+      );
       return;
     }
     default:
-      error(`Tipo de scaffold desconhecido: ${type}. Tipos disponíveis: context, uat, verification, phase-dir`);
+      error(
+        `Tipo de scaffold desconhecido: ${type}. Tipos disponíveis: context, uat, verification, phase-dir`
+      );
       return;
   }
 

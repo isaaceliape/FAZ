@@ -26,7 +26,7 @@ console.log(`📦 Syncing version: v${version}`);
 // Files to update
 const filesToUpdate = [
   { path: join(rootDir, 'www', 'index.html'), name: 'Landing page (www/index.html)' },
-  { path: join(rootDir, 'docs', 'index.html'), name: 'Documentation (docs/index.html)' }
+  { path: join(rootDir, 'docs', 'index.html'), name: 'Documentation (docs/index.html)' },
 ];
 
 let updatedCount = 0;
@@ -47,22 +47,13 @@ for (const file of filesToUpdate) {
   );
 
   // Pattern 2: Installer ASCII art version (e.g., "Instalador Interativo v2.5.0")
-  content = content.replace(
-    /(Instalador Interativo\s+v)\d+\.\d+\.\d+/,
-    `$1${version}`
-  );
+  content = content.replace(/(Instalador Interativo\s+v)\d+\.\d+\.\d+/, `$1${version}`);
 
   // Pattern 3: Version badge in docs (e.g., "📦 Versão 3.5.3 ✓ Testes Passando")
-  content = content.replace(
-    /(📦\s+Versão\s+)\d+\.\d+\.\d+/,
-    `$1${version}`
-  );
+  content = content.replace(/(📦\s+Versão\s+)\d+\.\d+\.\d+/, `$1${version}`);
 
   // Pattern 4: Version badge text with date (e.g., "Versão: 3.5.3 | Última atualização")
-  content = content.replace(
-    /(<strong>Versão<\/strong>:\s*)\d+\.\d+\.\d+/,
-    `$1${version}`
-  );
+  content = content.replace(/(<strong>Versão<\/strong>:\s*)\d+\.\d+\.\d+/, `$1${version}`);
 
   if (content !== originalContent) {
     writeFileSync(file.path, content, 'utf-8');

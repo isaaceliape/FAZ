@@ -5,11 +5,17 @@
 import fs from 'fs';
 import path from 'path';
 import { safeReadFile, output, ensureInsidePlanejamento } from './core.js';
-import { ValidationError, FileError } from './errors.js';
+import { ValidationError } from './errors.js';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export type FrontmatterValue = string | string[] | boolean | number | Record<string, unknown> | null;
+export type FrontmatterValue =
+  | string
+  | string[]
+  | boolean
+  | number
+  | Record<string, unknown>
+  | null;
 export type ParsedFrontmatter = Record<string, FrontmatterValue>;
 
 export interface FrontmatterSchema {
@@ -34,7 +40,9 @@ export function extractFrontmatter(content: string): ParsedFrontmatter {
     indent: number;
   }
 
-  const stack: StackFrame[] = [{ obj: frontmatter as Record<string, unknown>, key: null, indent: -1 }];
+  const stack: StackFrame[] = [
+    { obj: frontmatter as Record<string, unknown>, key: null, indent: -1 },
+  ];
 
   for (const line of lines) {
     if (line.trim() === '') continue;
@@ -62,7 +70,7 @@ export function extractFrontmatter(content: string): ParsedFrontmatter {
         (current.obj as Record<string, unknown>)[key] = value
           .slice(1, -1)
           .split(',')
-          .map(s => s.trim().replace(/^["']|["']$/g, ''))
+          .map((s) => s.trim().replace(/^["']|["']$/g, ''))
           .filter(Boolean);
         current.key = null;
       } else {
@@ -70,9 +78,16 @@ export function extractFrontmatter(content: string): ParsedFrontmatter {
         current.key = null;
       }
     } else if (line.trim().startsWith('- ')) {
-      const itemValue = line.trim().slice(2).replace(/^["']|["']$/g, '');
+      const itemValue = line
+        .trim()
+        .slice(2)
+        .replace(/^["']|["']$/g, '');
 
-      if (typeof current.obj === 'object' && !Array.isArray(current.obj) && Object.keys(current.obj).length === 0) {
+      if (
+        typeof current.obj === 'object' &&
+        !Array.isArray(current.obj) &&
+        Object.keys(current.obj).length === 0
+      ) {
         const parent = stack.length > 1 ? stack[stack.length - 2] : null;
         if (parent) {
           for (const k of Object.keys(parent.obj as Record<string, unknown>)) {
@@ -100,12 +115,18 @@ export function reconstructFrontmatter(obj: ParsedFrontmatter): string {
     if (Array.isArray(value)) {
       if (value.length === 0) {
         lines.push(`${key}: []`);
-      } else if (value.every(v => typeof v === 'string') && value.length <= 3 && (value as string[]).join(', ').length < 60) {
+      } else if (
+        value.every((v) => typeof v === 'string') &&
+        value.length <= 3 &&
+        (value as string[]).join(', ').length < 60
+      ) {
         lines.push(`${key}: [${(value as string[]).join(', ')}]`);
       } else {
         lines.push(`${key}:`);
         for (const item of value) {
-          lines.push(`  - ${typeof item === 'string' && (item.includes(':') || item.includes('#')) ? `"${item}"` : item}`);
+          lines.push(
+            `  - ${typeof item === 'string' && (item.includes(':') || item.includes('#')) ? `"${item}"` : item}`
+          );
         }
       }
     } else if (typeof value === 'object') {
@@ -115,12 +136,18 @@ export function reconstructFrontmatter(obj: ParsedFrontmatter): string {
         if (Array.isArray(subval)) {
           if (subval.length === 0) {
             lines.push(`  ${subkey}: []`);
-          } else if (subval.every(v => typeof v === 'string') && subval.length <= 3 && (subval as string[]).join(', ').length < 60) {
+          } else if (
+            subval.every((v) => typeof v === 'string') &&
+            subval.length <= 3 &&
+            (subval as string[]).join(', ').length < 60
+          ) {
             lines.push(`  ${subkey}: [${(subval as string[]).join(', ')}]`);
           } else {
             lines.push(`  ${subkey}:`);
             for (const item of subval) {
-              lines.push(`    - ${typeof item === 'string' && (item.includes(':') || item.includes('#')) ? `"${item}"` : item}`);
+              lines.push(
+                `    - ${typeof item === 'string' && (item.includes(':') || item.includes('#')) ? `"${item}"` : item}`
+              );
             }
           }
         } else if (typeof subval === 'object') {
@@ -225,39 +252,74 @@ export function parseMustHavesBlock(content: string, blockName: string): MustHav
 // ─── Frontmatter CRUD commands ────────────────────────────────────────────────
 
 export const FRONTMATTER_SCHEMAS: Record<string, FrontmatterSchema> = {
-  plan:         { required: ['etapa', 'plan', 'type', 'etapa', 'depends_on', 'files_modified', 'autonomous', 'must_haves'] },
-  summary:      { required: ['etapa', 'plan', 'subsystem', 'tags', 'duration', 'completed'] },
+  plan: {
+    required: [
+      'etapa',
+      'plan',
+      'type',
+      'etapa',
+      'depends_on',
+      'files_modified',
+      'autonomous',
+      'must_haves',
+    ],
+  },
+  summary: { required: ['etapa', 'plan', 'subsystem', 'tags', 'duration', 'completed'] },
   verification: { required: ['etapa', 'verified', 'status', 'score'] },
 };
 
-export function cmdFrontmatterGet(cwd: string, filePath: string, field: string | undefined, raw: boolean): void {
+export function cmdFrontmatterGet(
+  cwd: string,
+  filePath: string,
+  field: string | undefined,
+  raw: boolean
+): void {
   if (!filePath) {
     throw new ValidationError('caminho do arquivo obrigatório', 'MISSING_FILE_PATH');
   }
   const fullPath = path.isAbsolute(filePath) ? filePath : path.join(cwd, filePath);
   const content = safeReadFile(fullPath);
-  if (!content) { output({ error: 'Arquivo não encontrado', path: filePath }, raw); return; }
+  if (!content) {
+    output({ error: 'Arquivo não encontrado', path: filePath }, raw);
+    return;
+  }
   const fm = extractFrontmatter(content);
   if (field) {
     const value = fm[field];
-    if (value === undefined) { output({ error: 'Campo não encontrado', field }, raw); return; }
+    if (value === undefined) {
+      output({ error: 'Campo não encontrado', field }, raw);
+      return;
+    }
     output({ [field]: value }, raw, JSON.stringify(value));
   } else {
     output(fm, raw);
   }
 }
 
-export function cmdFrontmatterSet(cwd: string, filePath: string, field: string | undefined, value: string | undefined, raw: boolean): void {
+export function cmdFrontmatterSet(
+  cwd: string,
+  filePath: string,
+  field: string | undefined,
+  value: string | undefined,
+  raw: boolean
+): void {
   if (!filePath || !field || value === undefined) {
     throw new ValidationError('arquivo, campo e valor obrigatórios', 'MISSING_REQUIRED_PARAMS');
   }
   try {
     const fullPath = ensureInsidePlanejamento(cwd, filePath, 'frontmatter set');
-    if (!fs.existsSync(fullPath)) { output({ error: 'Arquivo não encontrado', path: filePath }, raw); return; }
+    if (!fs.existsSync(fullPath)) {
+      output({ error: 'Arquivo não encontrado', path: filePath }, raw);
+      return;
+    }
     const content = fs.readFileSync(fullPath, 'utf-8');
     const fm = extractFrontmatter(content);
     let parsedValue: unknown;
-    try { parsedValue = JSON.parse(value); } catch { parsedValue = value; }
+    try {
+      parsedValue = JSON.parse(value);
+    } catch {
+      parsedValue = value;
+    }
     fm[field] = parsedValue as FrontmatterValue;
     const newContent = spliceFrontmatter(content, fm);
     fs.writeFileSync(fullPath, newContent, 'utf-8');
@@ -267,17 +329,27 @@ export function cmdFrontmatterSet(cwd: string, filePath: string, field: string |
   }
 }
 
-export function cmdFrontmatterMerge(cwd: string, filePath: string, data: string | undefined, raw: boolean): void {
+export function cmdFrontmatterMerge(
+  cwd: string,
+  filePath: string,
+  data: string | undefined,
+  raw: boolean
+): void {
   if (!filePath || !data) {
     throw new ValidationError('arquivo e dados obrigatórios', 'MISSING_REQUIRED_PARAMS');
   }
   try {
     const fullPath = ensureInsidePlanejamento(cwd, filePath, 'frontmatter merge');
-    if (!fs.existsSync(fullPath)) { output({ error: 'Arquivo não encontrado', path: filePath }, raw); return; }
+    if (!fs.existsSync(fullPath)) {
+      output({ error: 'Arquivo não encontrado', path: filePath }, raw);
+      return;
+    }
     const content = fs.readFileSync(fullPath, 'utf-8');
     const fm = extractFrontmatter(content);
     let mergeData: ParsedFrontmatter;
-    try { mergeData = JSON.parse(data) as ParsedFrontmatter; } catch {
+    try {
+      mergeData = JSON.parse(data) as ParsedFrontmatter;
+    } catch {
       throw new ValidationError('JSON inválido para --data', 'INVALID_JSON');
     }
     Object.assign(fm, mergeData);
@@ -289,7 +361,12 @@ export function cmdFrontmatterMerge(cwd: string, filePath: string, data: string 
   }
 }
 
-export function cmdFrontmatterValidate(cwd: string, filePath: string, schemaName: string | undefined, raw: boolean): void {
+export function cmdFrontmatterValidate(
+  cwd: string,
+  filePath: string,
+  schemaName: string | undefined,
+  raw: boolean
+): void {
   if (!filePath || !schemaName) {
     throw new ValidationError('arquivo e esquema obrigatórios', 'MISSING_REQUIRED_PARAMS');
   }
@@ -303,11 +380,18 @@ export function cmdFrontmatterValidate(cwd: string, filePath: string, schemaName
   try {
     const fullPath = ensureInsidePlanejamento(cwd, filePath, 'frontmatter validate');
     const content = safeReadFile(fullPath);
-    if (!content) { output({ error: 'Arquivo não encontrado', path: filePath }, raw); return; }
+    if (!content) {
+      output({ error: 'Arquivo não encontrado', path: filePath }, raw);
+      return;
+    }
     const fm = extractFrontmatter(content);
-    const missing = schema.required.filter(f => fm[f] === undefined);
-    const present = schema.required.filter(f => fm[f] !== undefined);
-    output({ valid: missing.length === 0, missing, present, schema: schemaName }, raw, missing.length === 0 ? 'valid' : 'invalid');
+    const missing = schema.required.filter((f) => fm[f] === undefined);
+    const present = schema.required.filter((f) => fm[f] !== undefined);
+    output(
+      { valid: missing.length === 0, missing, present, schema: schemaName },
+      raw,
+      missing.length === 0 ? 'valid' : 'invalid'
+    );
   } catch (err) {
     output({ error: (err as Error).message }, raw);
   }
