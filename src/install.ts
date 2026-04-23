@@ -60,7 +60,7 @@ const CODEX_AGENT_SANDBOX = {
 };
 // Get version from package.json
 const pkgPath = path.join(__dirname, '..', 'package.json');
-const pkg = safeJsonParse(fs.readFileSync(pkgPath, 'utf-8'), 'package.json');
+const pkg = safeJsonParse<{ version: string }>(fs.readFileSync(pkgPath, 'utf-8'), 'package.json')!;
 // FASE is now project-local only - no global shared directories
 // Parse args
 const args = process.argv.slice(2);
@@ -96,7 +96,7 @@ if (hasAll) {
  * $HOME-relative form for replacing $HOME/.claude/ references in bash code blocks.
  * Preserves $HOME as a shell variable so paths remain portable across machines.
  */
-function toHomePrefix(pathPrefix) {
+function toHomePrefix(pathPrefix: string): string {
   const home = os.homedir().replace(/\\/g, '/');
   const normalized = pathPrefix.replace(/\\/g, '/');
   if (normalized.startsWith(home)) {
@@ -106,7 +106,7 @@ function toHomePrefix(pathPrefix) {
   return normalized;
 }
 // Helper to get directory name for a runtime (used for local/project installs)
-function getDirName(runtime) {
+function getDirName(runtime: string): string {
   if (runtime === 'opencode') return '.opencode';
   if (runtime === 'gemini') return '.gemini';
   if (runtime === 'codex') return '.codex';
@@ -117,10 +117,10 @@ function getDirName(runtime) {
 /**
  * Get the config directory path relative to home directory for a runtime
  * Used for templating hooks that use path.join(homeDir, '<configDir>', ...)
- * @param {string} runtime - 'claude', 'opencode', 'gemini', 'codex', or 'copilot'
- * @param {boolean} isGlobal - Whether this is a global install
+ * @param runtime - 'claude', 'opencode', 'gemini', 'codex', or 'copilot'
+ * @param isGlobal - Whether this is a global install
  */
-function getConfigDirFromHome(runtime, isGlobal) {
+function getConfigDirFromHome(runtime: string, isGlobal: boolean): string {
   if (!isGlobal) {
     // Local installs use the same dir name pattern
     return `'${getDirName(runtime)}'`;
@@ -160,10 +160,10 @@ function getOpencodeGlobalDir() {
 }
 /**
  * Get the global config directory for a runtime
- * @param {string} runtime - 'claude', 'opencode', 'gemini', 'codex', or 'copilot'
- * @param {string|null} explicitDir - Explicit directory from --config-dir flag
+ * @param runtime - 'claude', 'opencode', 'gemini', 'codex', or 'copilot'
+ * @param explicitDir - Explicit directory from --config-dir flag
  */
-function getGlobalDir(runtime, explicitDir = null) {
+function getGlobalDir(runtime: string, explicitDir: string | null = null): string {
   if (runtime === 'opencode') {
     // For OpenCode, --config-dir overrides env vars
     if (explicitDir) {
@@ -294,7 +294,7 @@ if (hasHelp) {
 /**
  * Expand ~ to home directory (shell doesn't expand in env vars passed to node)
  */
-function expandTilde(filePath) {
+function expandTilde(filePath: string): string {
   if (filePath && filePath.startsWith('~/')) {
     return path.join(os.homedir(), filePath.slice(2));
   }
@@ -304,7 +304,7 @@ function expandTilde(filePath) {
  * Build a hook command path using forward slashes for cross-platform compatibility.
  * On Windows, $HOME is not expanded by cmd.exe/PowerShell, so we use the actual path.
  */
-function buildHookCommand(configDir, hookName) {
+function buildHookCommand(configDir: string, hookName: string): string {
   // Use forward slashes for Node.js compatibility on all platforms
   const hooksPath = configDir.replace(/\\/g, '/') + '/hooks/' + hookName;
   return `node "${hooksPath}"`;
@@ -312,7 +312,7 @@ function buildHookCommand(configDir, hookName) {
 /**
  * Read and parse settings.json, returning empty object if it doesn't exist
  */
-function readSettings(settingsPath) {
+function readSettings(settingsPath: string): Record<string, unknown> {
   if (fs.existsSync(settingsPath)) {
     try {
       return JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
@@ -325,7 +325,7 @@ function readSettings(settingsPath) {
 /**
  * Write settings.json with proper formatting
  */
-function writeSettings(settingsPath, settings) {
+function writeSettings(settingsPath: string, settings: Record<string, unknown>): void {
   fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + '\n');
 }
 /**
@@ -385,13 +385,13 @@ function detectAvailableRuntimes() {
   return detected.length > 0 ? detected : ['claude'];
 }
 // Cache for attribution settings (populated once per runtime during install)
-const attributionCache = new Map();
+const attributionCache = new Map<string, null | undefined | string>();
 /**
  * Get the local (project-level) config directory path for a runtime
- * @param {string} runtime - 'claude', 'opencode', 'gemini', 'codex', 'copilot', or 'qwen'
- * @returns {string} Path to local config directory
+ * @param runtime - 'claude', 'opencode', 'gemini', 'codex', 'copilot', or 'qwen'
+ * @returns Path to local config directory
  */
-function getLocalDir(runtime) {
+function getLocalDir(runtime: string): string {
   if (runtime === 'opencode') return path.join(process.cwd(), '.opencode');
   if (runtime === 'gemini') return path.join(process.cwd(), '.gemini');
   if (runtime === 'codex') return path.join(process.cwd(), '.codex');
@@ -402,10 +402,10 @@ function getLocalDir(runtime) {
 /**
  * Get commit attribution setting for a runtime
  * Checks project-local config first, then falls back to global config
- * @param {string} runtime - 'claude', 'opencode', 'gemini', 'codex', or 'copilot'
- * @returns {null|undefined|string} null = remove, undefined = keep default, string = custom
+ * @param runtime - 'claude', 'opencode', 'gemini', 'codex', 'copilot', or 'qwen'
+ * @returns null = remove, undefined = keep default, string = custom
  */
-function getCommitAttribution(runtime) {
+function getCommitAttribution(runtime: string): null | undefined | string {
   // Return cached value if available
   if (attributionCache.has(runtime)) {
     return attributionCache.get(runtime);
@@ -510,11 +510,11 @@ function getCommitAttribution(runtime) {
 }
 /**
  * Process Co-Authored-By lines based on attribution setting
- * @param {string} content - File content to process
- * @param {null|undefined|string} attribution - null=remove, undefined=keep, string=replace
- * @returns {string} Processed content
+ * @param content - File content to process
+ * @param attribution - null=remove, undefined=keep, string=replace
+ * @returns Processed content
  */
-function processAttribution(content, attribution) {
+function processAttribution(content: string, attribution: null | undefined | string): string {
   if (attribution === null) {
     // Remove Co-Authored-By lines and the preceding blank line
     return content.replace(/(\r?\n){2}Co-Authored-By:.*$/gim, '');
@@ -576,7 +576,7 @@ const claudeToGeminiTools = {
  * - Applies special mappings (AskUserQuestion -> question, etc.)
  * - Converts to lowercase (except MCP tools which keep their format)
  */
-function convertToolName(claudeTool) {
+function convertToolName(claudeTool: string): string {
   // Check for special mapping first
   if (claudeToOpencodeTools[claudeTool]) {
     return claudeToOpencodeTools[claudeTool];
@@ -593,9 +593,9 @@ function convertToolName(claudeTool) {
  * - Applies Claude→Gemini mapping (Read→read_file, Bash→run_shell_command, etc.)
  * - Filters out MCP tools (mcp__*) — they are auto-discovered at runtime in Gemini
  * - Filters out Task — agents are auto-registered as tools in Gemini
- * @returns {string|null} Gemini tool name, or null if tool should be excluded
+ * @returns Gemini tool name, or null if tool should be excluded
  */
-function convertGeminiToolName(claudeTool) {
+function convertGeminiToolName(claudeTool: string): string | null {
   // MCP tools: exclude — auto-discovered from mcpServers config at runtime
   if (claudeTool.startsWith('mcp__')) {
     return null;
@@ -611,13 +611,13 @@ function convertGeminiToolName(claudeTool) {
   // Default: lowercase
   return claudeTool.toLowerCase();
 }
-function toSingleLine(value) {
+function toSingleLine(value: string): string {
   return value.replace(/\s+/g, ' ').trim();
 }
-function yamlQuote(value) {
+function yamlQuote(value: string): string {
   return JSON.stringify(value);
 }
-function extractFrontmatterAndBody(content) {
+function extractFrontmatterAndBody(content: string): { frontmatter: string | null; body: string } {
   if (!content.startsWith('---')) {
     return { frontmatter: null, body: content };
   }
@@ -630,14 +630,14 @@ function extractFrontmatterAndBody(content) {
     body: content.substring(endIndex + 3),
   };
 }
-function extractFrontmatterField(frontmatter, fieldName) {
+function extractFrontmatterField(frontmatter: string, fieldName: string): string | null {
   const regex = new RegExp(`^${fieldName}:\\s*(.+)$`, 'm');
   const match = frontmatter.match(regex);
   if (!match) return null;
   return match[1].trim().replace(/^['"]|['"]$/g, '');
 }
-function convertSlashCommandsToCodexSkillMentions(content) {
-  let converted = content.replace(/\/fase-([a-z0-9-]+)/gi, (_, commandName) => {
+function convertSlashCommandsToCodexSkillMentions(content: string): string {
+  let converted = content.replace(/\/fase-([a-z0-9-]+)/gi, (_, commandName: string) => {
     return `$fase-${String(commandName).toLowerCase()}`;
   });
   converted = converted.replace(/\/fase-help\b/g, '$fase-help');
