@@ -7,7 +7,7 @@
  */
 export declare function safeJsonParse(jsonStr: string, context?: string, options?: {
     exitOnError: boolean;
-}): any;
+}): unknown;
 /**
  * Convert a pathPrefix (which uses absolute paths for global installs) to a
  * $HOME-relative form for replacing $HOME/.claude/ references in bash code blocks.

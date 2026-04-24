@@ -106,3 +106,14 @@ export declare function getCodexSkillAdapterHeader(skillName: string): string;
  * @returns Qwen command content
  */
 export declare function convertClaudeToQwenCommand(content: string): string;
+/**
+ * Convert Claude Code agent content to GitHub Copilot command format
+ * Copilot commands use:
+ * - snake_case tool names (read_file, write_file, bash, etc.)
+ * - lowercase field names (description, agent, tools)
+ * - tools as boolean flags instead of allowed-tools array
+ *
+ * @param content - Claude agent content
+ * @returns Copilot command content
+ */
+export declare function convertClaudeToCopilotCommand(content: string): string;

@@ -47,7 +47,16 @@ function validateCwdForShell(dir) {
  */
 function findCodeFiles(dir, maxDepth, extensions) {
     const results = [];
-    const skipDirs = ['node_modules', '.git', '.svn', '.hg', '__pycache__', 'vendor', 'dist', 'build'];
+    const skipDirs = [
+        'node_modules',
+        '.git',
+        '.svn',
+        '.hg',
+        '__pycache__',
+        'vendor',
+        'dist',
+        'build',
+    ];
     function search(currentDir, depth) {
         if (depth > maxDepth)
             return;
@@ -84,9 +93,14 @@ export function cmdInitExecutePhase(cwd, phase, raw) {
     const roadmapEtapa = getRoadmapEtapaInternal(cwd, phase);
     const reqMatch = roadmapEtapa?.section?.match(/^\*\*Requirements\*\*:[^\S\n]*([^\n]*)$/m);
     const reqExtracted = reqMatch
-        ? reqMatch[1].replace(/[\[\]]/g, '').split(',').map((s) => s.trim()).filter(Boolean).join(', ')
+        ? reqMatch[1]
+            .replace(/[\[\]]/g, '')
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean)
+            .join(', ')
         : null;
-    const phase_req_ids = (reqExtracted && reqExtracted !== 'TBD') ? reqExtracted : null;
+    const phase_req_ids = reqExtracted && reqExtracted !== 'TBD' ? reqExtracted : null;
     const branchName = config.branching_strategy === 'phase' && phaseInfo
         ? config.etapa_branch_template
             .replace('{phase}', phaseInfo.phase_number ?? '')
@@ -138,9 +152,14 @@ export function cmdInitPlanPhase(cwd, phase, raw) {
     const roadmapEtapa = getRoadmapEtapaInternal(cwd, phase);
     const reqMatch = roadmapEtapa?.section?.match(/^\*\*Requirements\*\*:[^\S\n]*([^\n]*)$/m);
     const reqExtracted = reqMatch
-        ? reqMatch[1].replace(/[\[\]]/g, '').split(',').map((s) => s.trim()).filter(Boolean).join(', ')
+        ? reqMatch[1]
+            .replace(/[\[\]]/g, '')
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean)
+            .join(', ')
         : null;
-    const phase_req_ids = (reqExtracted && reqExtracted !== 'TBD') ? reqExtracted : null;
+    const phase_req_ids = reqExtracted && reqExtracted !== 'TBD' ? reqExtracted : null;
     const result = {
         researcher_model: resolveModelInternal(cwd, 'gsd-phase-researcher'),
         planner_model: resolveModelInternal(cwd, 'gsd-planner'),
@@ -202,11 +221,12 @@ export function cmdInitNewProject(cwd, raw) {
     catch (err) {
         process.stderr.write(`[cmdInitNewProject] Error scanning for code files: ${err.message}\n`);
     }
-    hasPackageFile = pathExistsInternal(cwd, 'package.json') ||
-        pathExistsInternal(cwd, 'requirements.txt') ||
-        pathExistsInternal(cwd, 'Cargo.toml') ||
-        pathExistsInternal(cwd, 'go.mod') ||
-        pathExistsInternal(cwd, 'Package.swift');
+    hasPackageFile =
+        pathExistsInternal(cwd, 'package.json') ||
+            pathExistsInternal(cwd, 'requirements.txt') ||
+            pathExistsInternal(cwd, 'Cargo.toml') ||
+            pathExistsInternal(cwd, 'go.mod') ||
+            pathExistsInternal(cwd, 'Package.swift');
     const result = {
         researcher_model: resolveModelInternal(cwd, 'gsd-project-researcher'),
         synthesizer_model: resolveModelInternal(cwd, 'gsd-research-synthesizer'),
@@ -252,7 +272,8 @@ export function cmdInitQuick(cwd, description, raw) {
     const quickDir = path.join(cwd, '.fase-ai', 'quick');
     let nextNum = 1;
     try {
-        const existing = fs.readdirSync(quickDir)
+        const existing = fs
+            .readdirSync(quickDir)
             .filter((f) => /^\d+-/.test(f))
             .map((f) => parseInt(f.split('-')[0], 10))
             .filter((n) => !isNaN(n));
@@ -283,7 +304,9 @@ export function cmdInitResume(cwd, raw) {
     const config = loadConfig(cwd);
     let interruptedAgentId = null;
     try {
-        interruptedAgentId = fs.readFileSync(path.join(cwd, '.fase-ai', 'current-agent-id.txt'), 'utf-8').trim();
+        interruptedAgentId = fs
+            .readFileSync(path.join(cwd, '.fase-ai', 'current-agent-id.txt'), 'utf-8')
+            .trim();
     }
     catch { }
     const result = {
@@ -330,7 +353,12 @@ export function cmdInitPhaseOp(cwd, phase, raw) {
                 directory: null,
                 phase_number: roadmapEtapa.phase_number,
                 phase_name: etapaNome,
-                phase_slug: etapaNome ? etapaNome.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') : null,
+                phase_slug: etapaNome
+                    ? etapaNome
+                        .toLowerCase()
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/^-+|-+$/g, '')
+                    : null,
                 plans: [],
                 summaries: [],
                 incomplete_plans: [],
@@ -450,7 +478,8 @@ export function cmdInitMilestoneOp(cwd, raw) {
     const archiveDir = path.join(cwd, '.fase-ai', 'archive');
     let archivedMilestones = [];
     try {
-        archivedMilestones = fs.readdirSync(archiveDir, { withFileTypes: true })
+        archivedMilestones = fs
+            .readdirSync(archiveDir, { withFileTypes: true })
             .filter((e) => e.isDirectory())
             .map((e) => e.name);
     }
@@ -503,7 +532,10 @@ export function cmdInitProgress(cwd, raw) {
     let nextEtapa = null;
     try {
         const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
-        const dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name).sort();
+        const dirs = entries
+            .filter((e) => e.isDirectory())
+            .map((e) => e.name)
+            .sort();
         for (const dir of dirs) {
             const match = dir.match(/^(\d+(?:\.\d+)*)-?(.*)/);
             const etapaNumber = match ? match[1] : dir;
@@ -513,9 +545,13 @@ export function cmdInitProgress(cwd, raw) {
             const plans = phaseFiles.filter((f) => f.endsWith('-PLAN.md') || f === 'PLAN.md');
             const summaries = phaseFiles.filter((f) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md');
             const hasResearch = phaseFiles.some((f) => f.endsWith('-RESEARCH.md') || f === 'RESEARCH.md');
-            const status = summaries.length >= plans.length && plans.length > 0 ? 'complete' :
-                plans.length > 0 ? 'in_progress' :
-                    hasResearch ? 'researched' : 'pending';
+            const status = summaries.length >= plans.length && plans.length > 0
+                ? 'complete'
+                : plans.length > 0
+                    ? 'in_progress'
+                    : hasResearch
+                        ? 'researched'
+                        : 'pending';
             const phaseInfo = {
                 number: etapaNumber,
                 name: etapaNome,

@@ -4,7 +4,7 @@
 import fs from 'fs';
 import path from 'path';
 import { escapeRegex, loadConfig, getMilestoneInfo, getMilestoneEtapaFilter, output, error, ensureInsidePlanejamento, checkDiskSpace, } from './core.js';
-import { extractFrontmatter, reconstructFrontmatter } from './frontmatter.js';
+import { extractFrontmatter, reconstructFrontmatter, } from './frontmatter.js';
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 export function stateExtractField(content, fieldName) {
     const escaped = escapeRegex(fieldName);
@@ -70,8 +70,10 @@ function buildStateFrontmatter(bodyContent, cwd) {
             const etapasDir = path.join(cwd, '.fase-ai', 'etapas');
             if (fs.existsSync(etapasDir)) {
                 const isDirInMilestone = getMilestoneEtapaFilter(cwd);
-                const etapasDirs = fs.readdirSync(etapasDir, { withFileTypes: true })
-                    .filter((e) => e.isDirectory()).map((e) => e.name)
+                const etapasDirs = fs
+                    .readdirSync(etapasDir, { withFileTypes: true })
+                    .filter((e) => e.isDirectory())
+                    .map((e) => e.name)
                     .filter(isDirInMilestone);
                 let diskTotalPlans = 0;
                 let diskTotalSummaries = 0;
@@ -85,9 +87,10 @@ function buildStateFrontmatter(bodyContent, cwd) {
                     if (plans > 0 && summaries >= plans)
                         diskCompletedPhases++;
                 }
-                totalEtapas = isDirInMilestone.phaseCount > 0
-                    ? Math.max(etapasDirs.length, isDirInMilestone.phaseCount)
-                    : etapasDirs.length;
+                totalEtapas =
+                    isDirInMilestone.phaseCount > 0
+                        ? Math.max(etapasDirs.length, isDirInMilestone.phaseCount)
+                        : etapasDirs.length;
                 completedPhases = diskCompletedPhases;
                 totalPlans = diskTotalPlans;
                 completedPlans = diskTotalSummaries;
@@ -212,7 +215,7 @@ function acquireStateLock(lockPath, maxAttempts = 10, baseDelayMs = 50) {
                         process.kill(pidNum, 0);
                         // Process is running, wait and retry
                     }
-                    catch (killErr) {
+                    catch {
                         // Process is dead, remove stale lock
                         try {
                             fs.unlinkSync(pidFile);
@@ -240,18 +243,41 @@ function acquireStateLock(lockPath, maxAttempts = 10, baseDelayMs = 50) {
                 // Can't read PID file, treat as stale
                 process.stderr.write(`[state:acquireLock] Can't read PID file: ${readErr.message}\n`);
                 try {
-                    fs.unlinkSync(pidFile);
+                    // Check if pidFile exists before unlinking (handles missing PID file case)
+                    if (fs.existsSync(pidFile)) {
+                        fs.unlinkSync(pidFile);
+                    }
                     fs.rmdirSync(lockDir);
-                    continue;
+                    continue; // Retry immediately after cleanup
                 }
                 catch (cleanupErr) {
-                    process.stderr.write(`[state:acquireLock] Failed to cleanup stale lock: ${cleanupErr.message}\n`);
+                    const cleanupError = cleanupErr;
+                    // If rmdir fails because directory is not empty, force cleanup
+                    if (cleanupError.code === 'ENOTEMPTY') {
+                        try {
+                            // Remove all files in lock directory and then remove directory
+                            const files = fs.readdirSync(lockDir);
+                            for (const file of files) {
+                                fs.unlinkSync(path.join(lockDir, file));
+                            }
+                            fs.rmdirSync(lockDir);
+                            continue;
+                        }
+                        catch (forceCleanupErr) {
+                            process.stderr.write(`[state:acquireLock] Failed to force cleanup stale lock: ${forceCleanupErr.message}\n`);
+                        }
+                    }
+                    else {
+                        process.stderr.write(`[state:acquireLock] Failed to cleanup stale lock: ${cleanupErr.message}\n`);
+                    }
                 }
             }
             // Exponential backoff
             const delay = baseDelayMs * Math.pow(2, i);
             const deadline = Date.now() + delay;
-            while (Date.now() < deadline) { /* spin */ }
+            while (Date.now() < deadline) {
+                /* spin */
+            }
         }
     }
     throw new Error(`state.cjs: não foi possível adquirir lock após ${maxAttempts} tentativas`);
@@ -274,7 +300,8 @@ function releaseStateLock(lockPath) {
 export function writeStateMd(statePath, content, cwd) {
     ensureInsidePlanejamento(cwd, statePath, 'STATE.md write');
     // Check disk space before acquiring lock
-    if (!checkDiskSpace(statePath, 1024 * 1024)) { // 1MB minimum
+    if (!checkDiskSpace(statePath, 1024 * 1024)) {
+        // 1MB minimum
         error('Espaço em disco insuficiente para salvar STATE.md');
     }
     const lockPath = path.join(path.dirname(statePath), '.state-lock');
@@ -321,7 +348,13 @@ export function cmdStateLoad(cwd, raw) {
         process.stdout.write(lines.join('\n'));
         process.exit(0);
     }
-    output({ config, state_raw: stateRaw, state_exists: stateExists, roadmap_exists: roadmapExists, config_exists: configExists });
+    output({
+        config,
+        state_raw: stateRaw,
+        state_exists: stateExists,
+        roadmap_exists: roadmapExists,
+        config_exists: configExists,
+    });
 }
 export function cmdStateGet(cwd, section, raw) {
     const statePath = path.join(cwd, '.fase-ai', 'STATE.md');
@@ -429,10 +462,17 @@ export function cmdStateAdvancePlan(cwd, raw) {
         return;
     }
     if (currentPlan >= totalPlans) {
-        content = stateReplaceField(content, 'Status', 'Fase completa — pronta para verificação') ?? content;
+        content =
+            stateReplaceField(content, 'Status', 'Fase completa — pronta para verificação') ?? content;
         content = stateReplaceField(content, 'Last Activity', today) ?? content;
         writeStateMd(statePath, content, cwd);
-        output({ advanced: false, reason: 'last_plan', current_plan: currentPlan, total_plans: totalPlans, status: 'ready_for_verification' }, raw, 'false');
+        output({
+            advanced: false,
+            reason: 'last_plan',
+            current_plan: currentPlan,
+            total_plans: totalPlans,
+            status: 'ready_for_verification',
+        }, raw, 'false');
     }
     else {
         const newPlan = currentPlan + 1;
@@ -440,7 +480,12 @@ export function cmdStateAdvancePlan(cwd, raw) {
         content = stateReplaceField(content, 'Status', 'Pronto para executar') ?? content;
         content = stateReplaceField(content, 'Last Activity', today) ?? content;
         writeStateMd(statePath, content, cwd);
-        output({ advanced: true, previous_plan: currentPlan, current_plan: newPlan, total_plans: totalPlans }, raw, 'true');
+        output({
+            advanced: true,
+            previous_plan: currentPlan,
+            current_plan: newPlan,
+            total_plans: totalPlans,
+        }, raw, 'true');
     }
 }
 export function cmdStateRecordMetric(cwd, options, raw) {
@@ -485,17 +530,19 @@ export function cmdStateUpdateProgress(cwd, raw) {
     let totalPlans = 0;
     let totalSummaries = 0;
     if (fs.existsSync(etapasDir)) {
-        const etapasDirs = fs.readdirSync(etapasDir, { withFileTypes: true })
-            .filter((e) => e.isDirectory()).map((e) => e.name);
+        const etapasDirs = fs
+            .readdirSync(etapasDir, { withFileTypes: true })
+            .filter((e) => e.isDirectory())
+            .map((e) => e.name);
         for (const dir of etapasDirs) {
             const files = fs.readdirSync(path.join(etapasDir, dir));
             totalPlans += files.filter((f) => f.match(/-PLAN\.md$/i)).length;
             totalSummaries += files.filter((f) => f.match(/-SUMMARY\.md$/i)).length;
         }
     }
-    const percent = totalPlans > 0 ? Math.min(100, Math.round(totalSummaries / totalPlans * 100)) : 0;
+    const percent = totalPlans > 0 ? Math.min(100, Math.round((totalSummaries / totalPlans) * 100)) : 0;
     const barWidth = 10;
-    const filled = Math.round(percent / 100 * barWidth);
+    const filled = Math.round((percent / 100) * barWidth);
     const bar = '\u2588'.repeat(filled) + '\u2591'.repeat(barWidth - filled);
     const progressStr = `[${bar}] ${percent}%`;
     const boldProgressPattern = /(\*\*Progresso:\*\*\s*).*/i;
@@ -541,7 +588,9 @@ export function cmdStateAddDecision(cwd, options, raw) {
     const match = content.match(sectionPattern);
     if (match) {
         let sectionBody = match[2];
-        sectionBody = sectionBody.replace(/Nenhuma ainda\.?\s*\n?/gi, '').replace(/Nenhuma decisão ainda\.?\s*\n?/gi, '');
+        sectionBody = sectionBody
+            .replace(/Nenhuma ainda\.?\s*\n?/gi, '')
+            .replace(/Nenhuma decisão ainda\.?\s*\n?/gi, '');
         sectionBody = sectionBody.trimEnd() + '\n' + entry + '\n';
         content = content.replace(sectionPattern, (_match, header) => `${header}${sectionBody}`);
         writeStateMd(statePath, content, cwd);
@@ -576,7 +625,9 @@ export function cmdStateAddBlocker(cwd, text, raw) {
     const match = content.match(sectionPattern);
     if (match) {
         let sectionBody = match[2];
-        sectionBody = sectionBody.replace(/Nenhum\.?\s*\n?/gi, '').replace(/Nenhum ainda\.?\s*\n?/gi, '');
+        sectionBody = sectionBody
+            .replace(/Nenhum\.?\s*\n?/gi, '')
+            .replace(/Nenhum ainda\.?\s*\n?/gi, '');
         sectionBody = sectionBody.trimEnd() + '\n' + entry + '\n';
         content = content.replace(sectionPattern, (_match, header) => `${header}${sectionBody}`);
         writeStateMd(statePath, content, cwd);
@@ -685,9 +736,15 @@ export function cmdStateSnapshot(cwd, raw) {
     const decisions = [];
     const decisionsMatch = content.match(/##\s*(?:Decisões Tomadas|Decisions Made)[\s\S]*?\n\|[^\n]+\n\|[-|\s]+\n([\s\S]*?)(?=\n##|\n$|$)/i);
     if (decisionsMatch) {
-        const rows = decisionsMatch[1].trim().split('\n').filter((r) => r.includes('|'));
+        const rows = decisionsMatch[1]
+            .trim()
+            .split('\n')
+            .filter((r) => r.includes('|'));
         for (const row of rows) {
-            const cells = row.split('|').map((c) => c.trim()).filter(Boolean);
+            const cells = row
+                .split('|')
+                .map((c) => c.trim())
+                .filter(Boolean);
             if (cells.length >= 3)
                 decisions.push({ phase: cells[0], summary: cells[1], rationale: cells[2] });
         }
@@ -700,14 +757,19 @@ export function cmdStateSnapshot(cwd, raw) {
             blockers.push(item.replace(/^-\s+/, '').trim());
     }
     const session = {
-        last_date: null, stopped_at: null, resume_file: null,
+        last_date: null,
+        stopped_at: null,
+        resume_file: null,
     };
     const sessionMatch = content.match(/##\s*(?:Sessão|Session)\s*\n([\s\S]*?)(?=\n##|$)/i);
     if (sessionMatch) {
         const s = sessionMatch[1];
-        const lastDateMatch = s.match(/\*\*(?:Última Data|Last Date):\*\*\s*(.+)/i) ?? s.match(/^(?:Última Data|Last Date):\s*(.+)/im);
-        const stoppedAtMatch = s.match(/\*\*(?:Parado Em|Stopped At):\*\*\s*(.+)/i) ?? s.match(/^(?:Parado Em|Stopped At):\s*(.+)/im);
-        const resumeFileMatch = s.match(/\*\*(?:Arquivo para Retomar|Resume File):\*\*\s*(.+)/i) ?? s.match(/^(?:Arquivo para Retomar|Resume File):\s*(.+)/im);
+        const lastDateMatch = s.match(/\*\*(?:Última Data|Last Date):\*\*\s*(.+)/i) ??
+            s.match(/^(?:Última Data|Last Date):\s*(.+)/im);
+        const stoppedAtMatch = s.match(/\*\*(?:Parado Em|Stopped At):\*\*\s*(.+)/i) ??
+            s.match(/^(?:Parado Em|Stopped At):\s*(.+)/im);
+        const resumeFileMatch = s.match(/\*\*(?:Arquivo para Retomar|Resume File):\*\*\s*(.+)/i) ??
+            s.match(/^(?:Arquivo para Retomar|Resume File):\s*(.+)/im);
         if (lastDateMatch)
             session.last_date = lastDateMatch[1].trim();
         if (stoppedAtMatch)

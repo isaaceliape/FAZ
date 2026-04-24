@@ -13,7 +13,9 @@ export function extractFrontmatter(content) {
         return frontmatter;
     const yaml = match[1];
     const lines = yaml.split('\n');
-    const stack = [{ obj: frontmatter, key: null, indent: -1 }];
+    const stack = [
+        { obj: frontmatter, key: null, indent: -1 },
+    ];
     for (const line of lines) {
         if (line.trim() === '')
             continue;
@@ -37,7 +39,7 @@ export function extractFrontmatter(content) {
                 current.obj[key] = value
                     .slice(1, -1)
                     .split(',')
-                    .map(s => s.trim().replace(/^["']|["']$/g, ''))
+                    .map((s) => s.trim().replace(/^["']|["']$/g, ''))
                     .filter(Boolean);
                 current.key = null;
             }
@@ -47,8 +49,13 @@ export function extractFrontmatter(content) {
             }
         }
         else if (line.trim().startsWith('- ')) {
-            const itemValue = line.trim().slice(2).replace(/^["']|["']$/g, '');
-            if (typeof current.obj === 'object' && !Array.isArray(current.obj) && Object.keys(current.obj).length === 0) {
+            const itemValue = line
+                .trim()
+                .slice(2)
+                .replace(/^["']|["']$/g, '');
+            if (typeof current.obj === 'object' &&
+                !Array.isArray(current.obj) &&
+                Object.keys(current.obj).length === 0) {
                 const parent = stack.length > 1 ? stack[stack.length - 2] : null;
                 if (parent) {
                     for (const k of Object.keys(parent.obj)) {
@@ -77,7 +84,9 @@ export function reconstructFrontmatter(obj) {
             if (value.length === 0) {
                 lines.push(`${key}: []`);
             }
-            else if (value.every(v => typeof v === 'string') && value.length <= 3 && value.join(', ').length < 60) {
+            else if (value.every((v) => typeof v === 'string') &&
+                value.length <= 3 &&
+                value.join(', ').length < 60) {
                 lines.push(`${key}: [${value.join(', ')}]`);
             }
             else {
@@ -96,7 +105,9 @@ export function reconstructFrontmatter(obj) {
                     if (subval.length === 0) {
                         lines.push(`  ${subkey}: []`);
                     }
-                    else if (subval.every(v => typeof v === 'string') && subval.length <= 3 && subval.join(', ').length < 60) {
+                    else if (subval.every((v) => typeof v === 'string') &&
+                        subval.length <= 3 &&
+                        subval.join(', ').length < 60) {
                         lines.push(`  ${subkey}: [${subval.join(', ')}]`);
                     }
                     else {
@@ -213,7 +224,18 @@ export function parseMustHavesBlock(content, blockName) {
 }
 // ─── Frontmatter CRUD commands ────────────────────────────────────────────────
 export const FRONTMATTER_SCHEMAS = {
-    plan: { required: ['etapa', 'plan', 'type', 'etapa', 'depends_on', 'files_modified', 'autonomous', 'must_haves'] },
+    plan: {
+        required: [
+            'etapa',
+            'plan',
+            'type',
+            'etapa',
+            'depends_on',
+            'files_modified',
+            'autonomous',
+            'must_haves',
+        ],
+    },
     summary: { required: ['etapa', 'plan', 'subsystem', 'tags', 'duration', 'completed'] },
     verification: { required: ['etapa', 'verified', 'status', 'score'] },
 };
@@ -312,8 +334,8 @@ export function cmdFrontmatterValidate(cwd, filePath, schemaName, raw) {
             return;
         }
         const fm = extractFrontmatter(content);
-        const missing = schema.required.filter(f => fm[f] === undefined);
-        const present = schema.required.filter(f => fm[f] !== undefined);
+        const missing = schema.required.filter((f) => fm[f] === undefined);
+        const present = schema.required.filter((f) => fm[f] !== undefined);
         output({ valid: missing.length === 0, missing, present, schema: schemaName }, raw, missing.length === 0 ? 'valid' : 'invalid');
     }
     catch (err) {

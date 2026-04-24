@@ -72,7 +72,8 @@ function verifySlashCommands(sessionName, runtime, testDir, timeout = 15000) {
     'qwen': 'qwen',
     'opencode': 'opencode',
     'gemini': 'gemini',
-    'codex': 'codex'
+    'codex': 'codex',
+    'copilot': 'gh'
   };
   
   const cli = cliCommands[runtime];
@@ -104,10 +105,11 @@ function verifySlashCommands(sessionName, runtime, testDir, timeout = 15000) {
   // Config directory mappings
   const configDirs = {
     'claude': '.claude',
-    'qwen': '.claude',
+    'qwen': '.qwen',
     'opencode': '.opencode',
     'gemini': '.gemini',
-    'codex': '.codex'
+    'codex': '.codex',
+    'copilot': '.copilot'
   };
   
   const configDir = path.join(testDir, configDirs[runtime]);
@@ -120,7 +122,8 @@ function verifySlashCommands(sessionName, runtime, testDir, timeout = 15000) {
       'qwen': path.join(configDir, 'commands'),
       'opencode': path.join(configDir, 'command'),
       'gemini': path.join(configDir, 'commands', 'fase'),
-      'codex': path.join(configDir, 'skills')
+      'codex': path.join(configDir, 'skills'),
+      'copilot': path.join(configDir, 'commands')
     };
     
     const commandPath = commandPaths[runtime];
@@ -406,6 +409,8 @@ function verifyFASEInstallation(configDir, runtime) {
     expectedDirs.push(path.join(configDir, 'commands', 'fase'));
   } else if (runtime === 'codex') {
     expectedDirs.push(path.join(configDir, 'skills'));
+  } else if (runtime === 'copilot') {
+    expectedDirs.push(path.join(configDir, 'commands'));
   }
   
   // Check directories
@@ -427,6 +432,8 @@ function verifyFASEInstallation(configDir, runtime) {
     commandExtension = '.toml';  // Gemini uses TOML for commands
   } else if (runtime === 'codex') {
     commandsDir = path.join(configDir, 'skills');
+  } else if (runtime === 'copilot') {
+    commandsDir = path.join(configDir, 'commands');
   }
   
   if (commandsDir && fs.existsSync(commandsDir)) {
@@ -488,11 +495,12 @@ async function runInstallTest({
     // Clean any existing FASE directories (ensure fresh state)
     const cleanupDirs = {
       'claude': ['.claude'],
-      'qwen': ['.claude'],
+      'qwen': ['.qwen'],
       'opencode': ['.opencode'],
       'gemini': ['.gemini'],
       'codex': ['.codex'],
-      'all': ['.claude', '.opencode', '.gemini', '.codex']
+      'copilot': ['.copilot'],
+      'all': ['.claude', '.opencode', '.gemini', '.codex', '.copilot', '.qwen']
     };
     
     const dirsToClean = cleanupDirs[runtime] || [`.${runtime}`];
@@ -524,15 +532,16 @@ async function runInstallTest({
     // Verify installation
     const runtimeDirs = {
       'claude': '.claude',
-      'qwen': '.claude',
+      'qwen': '.qwen',
       'opencode': '.opencode',
       'gemini': '.gemini',
-      'codex': '.codex'
+      'codex': '.codex',
+      'copilot': '.copilot'
     };
     
     // For --all, just check that at least one provider was installed
     if (runtime === 'all') {
-      const installed = ['claude', 'opencode', 'gemini', 'codex'].some(r => {
+      const installed = ['claude', 'opencode', 'gemini', 'codex', 'copilot', 'qwen'].some(r => {
         const dir = path.join(testDir, runtimeDirs[r]);
         return fs.existsSync(dir);
       });

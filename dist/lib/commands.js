@@ -30,7 +30,7 @@ export function validatePathInsideCwd(cwd, userPath) {
         }
         return realPath;
     }
-    catch (err) {
+    catch {
         // File doesn't exist yet - that's OK for write operations
         // Just return the resolved logical path
         return resolved;
@@ -151,7 +151,8 @@ export function cmdHistoryDigest(cwd, raw) {
     // Add current phases
     if (fs.existsSync(etapasDir)) {
         try {
-            const currentDirs = fs.readdirSync(etapasDir, { withFileTypes: true })
+            const currentDirs = fs
+                .readdirSync(etapasDir, { withFileTypes: true })
                 .filter((e) => e.isDirectory())
                 .map((e) => e.name)
                 .sort();
@@ -170,7 +171,9 @@ export function cmdHistoryDigest(cwd, raw) {
     }
     try {
         for (const { name: dir, fullPath: dirPath } of allPhaseDirs) {
-            const summaries = fs.readdirSync(dirPath).filter((f) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md');
+            const summaries = fs
+                .readdirSync(dirPath)
+                .filter((f) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md');
             for (const summary of summaries) {
                 try {
                     const content = fs.readFileSync(path.join(dirPath, summary), 'utf-8');
@@ -178,7 +181,9 @@ export function cmdHistoryDigest(cwd, raw) {
                     const etapaNum = fm['etapa'] || dir.split('-')[0];
                     if (!digest.phases[etapaNum]) {
                         digest.phases[etapaNum] = {
-                            name: fm['name'] || dir.split('-').slice(1).join(' ') || 'Unknown',
+                            name: fm['name'] ||
+                                dir.split('-').slice(1).join(' ') ||
+                                'Unknown',
                             provides: new Set(),
                             affects: new Set(),
                             patterns: new Set(),
@@ -246,9 +251,7 @@ export function cmdResolveModel(cwd, agentType, raw) {
     const profile = config.model_profile || 'balanced';
     const model = resolveModelInternal(cwd, agentType);
     const agentModels = MODEL_PROFILES[agentType];
-    const result = agentModels
-        ? { model, profile }
-        : { model, profile, unknown_agent: true };
+    const result = agentModels ? { model, profile } : { model, profile, unknown_agent: true };
     output(result, raw, model);
 }
 export function cmdCommit(cwd, message, files, raw, amend) {
@@ -275,7 +278,8 @@ export function cmdCommit(cwd, message, files, raw, amend) {
     const commitArgs = amend ? ['commit', '--amend', '--no-edit'] : ['commit', '-m', message];
     const commitResult = execGit(cwd, commitArgs);
     if (commitResult.exitCode !== 0) {
-        if (commitResult.stdout.includes('nothing to commit') || commitResult.stderr.includes('nothing to commit')) {
+        if (commitResult.stdout.includes('nothing to commit') ||
+            commitResult.stderr.includes('nothing to commit')) {
             output({ committed: false, hash: null, reason: 'nothing_to_commit' }, raw, 'nothing');
             return;
         }
@@ -317,7 +321,7 @@ export function cmdSummaryExtract(cwd, summaryPath, fields, raw) {
         path: summaryPath,
         one_liner: fm['one-liner'] || null,
         key_files: fm['key-files'] || [],
-        tech_added: (techStack?.added) || [],
+        tech_added: techStack?.added || [],
         patterns: fm['patterns-established'] || [],
         decisions: parseDecisions(fm['key-decisions']),
         requirements_completed: fm['requirements-completed'] || [],
@@ -359,7 +363,7 @@ export async function cmdWebsearch(query, options, raw) {
     try {
         const response = await fetch(`https://api.search.brave.com/res/v1/web/search?${params}`, {
             headers: {
-                'Accept': 'application/json',
+                Accept: 'application/json',
                 'X-Subscription-Token': apiKey,
             },
         });
@@ -367,7 +371,7 @@ export async function cmdWebsearch(query, options, raw) {
             output({ available: false, error: `Erro da API: ${response.status}` }, raw, '');
             return;
         }
-        const data = await response.json();
+        const data = (await response.json());
         const results = (data.web?.results || []).map((r) => ({
             title: r.title,
             url: r.url,
@@ -393,7 +397,10 @@ export function cmdProgressRender(cwd, format, raw) {
     let totalSummaries = 0;
     try {
         const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
-        const dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name).sort((a, b) => compareEtapaNum(a, b));
+        const dirs = entries
+            .filter((e) => e.isDirectory())
+            .map((e) => e.name)
+            .sort((a, b) => compareEtapaNum(a, b));
         for (const dir of dirs) {
             const dm = dir.match(/^(\d+(?:\.\d+)*)-?(.*)/);
             const etapaNum = dm ? dm[1] : dir;

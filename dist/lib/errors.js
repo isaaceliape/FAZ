@@ -256,7 +256,10 @@ export function wrapError(error, defaultMessage = 'An unexpected error occurred'
         return error;
     }
     if (error instanceof Error) {
-        return new FaseError(error.message || defaultMessage, defaultCode, { ...context, originalError: error.name });
+        return new FaseError(error.message || defaultMessage, defaultCode, {
+            ...context,
+            originalError: error.name,
+        });
     }
     return new FaseError(defaultMessage, defaultCode, { ...context, originalError: String(error) });
 }

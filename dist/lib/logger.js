@@ -54,9 +54,10 @@ function rotateLogs() {
         return;
     }
     try {
-        const files = fs.readdirSync(currentConfig.logDir)
-            .filter(f => f.endsWith('.log'))
-            .map(f => ({
+        const files = fs
+            .readdirSync(currentConfig.logDir)
+            .filter((f) => f.endsWith('.log'))
+            .map((f) => ({
             name: f,
             path: path.join(currentConfig.logDir, f),
             time: fs.statSync(path.join(currentConfig.logDir, f)).mtime.getTime(),
@@ -135,11 +136,14 @@ export function getLogger() {
             },
         });
     }
-    // Create logger with multiple transports
+    // Create logger with multiple transports via transport option
     loggerInstance = pino({
         level: currentConfig.level,
         timestamp: pino.stdTimeFunctions.isoTime,
-    }, pino.multistream(transports));
+        transport: {
+            targets: transports,
+        },
+    });
     return loggerInstance;
 }
 /**
@@ -206,8 +210,9 @@ export function getLogFiles() {
     if (!fs.existsSync(currentConfig.logDir)) {
         return [];
     }
-    return fs.readdirSync(currentConfig.logDir)
-        .filter(f => f.endsWith('.log'))
+    return fs
+        .readdirSync(currentConfig.logDir)
+        .filter((f) => f.endsWith('.log'))
         .sort();
 }
 /**
@@ -217,8 +222,7 @@ export function clearLogs() {
     if (!fs.existsSync(currentConfig.logDir)) {
         return;
     }
-    const files = fs.readdirSync(currentConfig.logDir)
-        .filter(f => f.endsWith('.log'));
+    const files = fs.readdirSync(currentConfig.logDir).filter((f) => f.endsWith('.log'));
     for (const file of files) {
         fs.unlinkSync(path.join(currentConfig.logDir, file));
     }

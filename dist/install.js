@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-// @ts-nocheck
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
@@ -8,7 +7,7 @@ import crypto from 'crypto';
 import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { checkAndPromptForUpdate } from './lib/version-check.js';
-import { convertClaudeToQwenCommand } from './install/frontmatter-convert.js';
+import { convertClaudeToQwenCommand, convertClaudeToCopilotCommand } from './install/frontmatter-convert.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 /**
@@ -23,7 +22,8 @@ function safeJsonParse(jsonStr, context = 'JSON', options = { exitOnError: true 
         return JSON.parse(jsonStr);
     }
     catch (err) {
-        console.error(`Invalid ${context}: ${err.message}`);
+        const error = err;
+        console.error(`Invalid ${context}: ${error.message}`);
         if (options.exitOnError) {
             process.exit(1);
         }
@@ -34,6 +34,7 @@ function safeJsonParse(jsonStr, context = 'JSON', options = { exitOnError: true 
 const cyan = '\x1b[36m';
 const green = '\x1b[32m';
 const yellow = '\x1b[33m';
+const red = '\x1b[31m';
 const dim = '\x1b[2m';
 const reset = '\x1b[0m';
 // Codex config.toml constants
@@ -126,8 +127,8 @@ function getDirName(runtime) {
 /**
  * Get the config directory path relative to home directory for a runtime
  * Used for templating hooks that use path.join(homeDir, '<configDir>', ...)
- * @param {string} runtime - 'claude', 'opencode', 'gemini', 'codex', or 'copilot'
- * @param {boolean} isGlobal - Whether this is a global install
+ * @param runtime - 'claude', 'opencode', 'gemini', 'codex', or 'copilot'
+ * @param isGlobal - Whether this is a global install
  */
 function getConfigDirFromHome(runtime, isGlobal) {
     if (!isGlobal) {
@@ -173,8 +174,8 @@ function getOpencodeGlobalDir() {
 }
 /**
  * Get the global config directory for a runtime
- * @param {string} runtime - 'claude', 'opencode', 'gemini', 'codex', or 'copilot'
- * @param {string|null} explicitDir - Explicit directory from --config-dir flag
+ * @param runtime - 'claude', 'opencode', 'gemini', 'codex', or 'copilot'
+ * @param explicitDir - Explicit directory from --config-dir flag
  */
 function getGlobalDir(runtime, explicitDir = null) {
     if (runtime === 'opencode') {
@@ -234,20 +235,28 @@ function getGlobalDir(runtime, explicitDir = null) {
     return path.join(os.homedir(), '.claude');
 }
 const banner = '\n' +
-    cyan + '  ███████╗  █████╗ ███████╗███████╗\n' +
+    cyan +
+    '  ███████╗  █████╗ ███████╗███████╗\n' +
     '  ██╔════╝ ██╔══██╗██╔════╝██╔════╝\n' +
     '  █████╗   ███████║███████╗█████╗  \n' +
     '  ██╔══╝   ██╔══██║╚════██║██╔══╝  \n' +
     '  ██║      ██║  ██║███████║███████╗\n' +
-    '  ╚═╝      ╚═╝  ╚═╝╚══════╝╚══════╝' + reset + '\n' +
+    '  ╚═╝      ╚═╝  ╚═╝╚══════╝╚══════╝' +
+    reset +
     '\n' +
-    '  FASE ' + dim + 'v' + pkg.version + reset + '\n' +
+    '\n' +
+    '  FASE ' +
+    dim +
+    'v' +
+    pkg.version +
+    reset +
+    '\n' +
     '  Framework de Automação Sem Enrolação\n' +
     '  Sistema de meta-prompting, context engineering e\n' +
     '  desenvolvimento spec-driven para Claude Code, OpenCode, Gemini, Codex e GitHub Copilot.\n';
 // Parse --config-dir argument
 function parseConfigDirArg() {
-    const configDirIndex = args.findIndex(arg => arg === '--config-dir' || arg === '-c');
+    const configDirIndex = args.findIndex((arg) => arg === '--config-dir' || arg === '-c');
     if (configDirIndex !== -1) {
         const nextArg = args[configDirIndex + 1];
         // Error if --config-dir is provided without a value or next arg is another flag
@@ -258,7 +267,7 @@ function parseConfigDirArg() {
         return nextArg;
     }
     // Also handle --config-dir=value format
-    const configDirArg = args.find(arg => arg.startsWith('--config-dir=') || arg.startsWith('-c='));
+    const configDirArg = args.find((arg) => arg.startsWith('--config-dir=') || arg.startsWith('-c='));
     if (configDirArg) {
         const value = configDirArg.split('=')[1];
         if (!value) {
@@ -321,7 +330,7 @@ function readSettings(settingsPath) {
         try {
             return JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
         }
-        catch (e) {
+        catch {
             return {};
         }
     }
@@ -338,8 +347,7 @@ function writeSettings(settingsPath, settings) {
  * Checks npm lifecycle environment variables
  */
 function isRunningAsPostinstall() {
-    return process.env.npm_lifecycle_event === 'postinstall' ||
-        process.env.INIT_CWD !== undefined;
+    return process.env.npm_lifecycle_event === 'postinstall' || process.env.INIT_CWD !== undefined;
 }
 /**
  * Read project-level FASE configuration from .fase-ai/config.json
@@ -350,14 +358,14 @@ function readProjectConfig() {
     const defaults = {
         runtimes: ['claude'],
         auto_install: true,
-        skip_confirmation: true
+        skip_confirmation: true,
     };
     if (fs.existsSync(configPath)) {
         try {
             const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
             return { ...defaults, ...config };
         }
-        catch (e) {
+        catch {
             // Ignore parsing errors, use defaults
         }
     }
@@ -375,7 +383,7 @@ function detectAvailableRuntimes() {
         { runtime: 'gemini', command: 'gemini' },
         { runtime: 'codex', command: 'codex' },
         { runtime: 'copilot', command: 'gh' },
-        { runtime: 'qwen', command: 'qwen' }
+        { runtime: 'qwen', command: 'qwen' },
     ];
     for (const check of checks) {
         try {
@@ -393,8 +401,8 @@ function detectAvailableRuntimes() {
 const attributionCache = new Map();
 /**
  * Get the local (project-level) config directory path for a runtime
- * @param {string} runtime - 'claude', 'opencode', 'gemini', 'codex', 'copilot', or 'qwen'
- * @returns {string} Path to local config directory
+ * @param runtime - 'claude', 'opencode', 'gemini', 'codex', 'copilot', or 'qwen'
+ * @returns Path to local config directory
  */
 function getLocalDir(runtime) {
     if (runtime === 'opencode')
@@ -412,8 +420,8 @@ function getLocalDir(runtime) {
 /**
  * Get commit attribution setting for a runtime
  * Checks project-local config first, then falls back to global config
- * @param {string} runtime - 'claude', 'opencode', 'gemini', 'codex', or 'copilot'
- * @returns {null|undefined|string} null = remove, undefined = keep default, string = custom
+ * @param runtime - 'claude', 'opencode', 'gemini', 'codex', 'copilot', or 'qwen'
+ * @returns null = remove, undefined = keep default, string = custom
  */
 function getCommitAttribution(runtime) {
     // Return cached value if available
@@ -437,20 +445,22 @@ function getCommitAttribution(runtime) {
         // Gemini: check gemini settings.json for attribution config
         // Check local config first
         const localSettings = readSettings(path.join(getLocalDir('gemini'), 'settings.json'));
-        if (localSettings.attribution && localSettings.attribution.commit !== undefined) {
-            result = localSettings.attribution.commit === '' ? null : localSettings.attribution.commit;
+        const localAttribution = localSettings.attribution;
+        if (localAttribution && localAttribution.commit !== undefined) {
+            result = localAttribution.commit === '' ? null : localAttribution.commit;
         }
         else {
             // Fall back to global config
             const globalSettings = readSettings(path.join(getGlobalDir('gemini', explicitConfigDir), 'settings.json'));
-            if (!globalSettings.attribution || globalSettings.attribution.commit === undefined) {
+            const globalAttribution = globalSettings.attribution;
+            if (!globalAttribution || globalAttribution.commit === undefined) {
                 result = undefined;
             }
-            else if (globalSettings.attribution.commit === '') {
+            else if (globalAttribution.commit === '') {
                 result = null;
             }
             else {
-                result = globalSettings.attribution.commit;
+                result = globalAttribution.commit;
             }
         }
     }
@@ -458,20 +468,22 @@ function getCommitAttribution(runtime) {
         // Claude Code
         // Check local config first
         const localSettings = readSettings(path.join(getLocalDir('claude'), 'settings.json'));
-        if (localSettings.attribution && localSettings.attribution.commit !== undefined) {
-            result = localSettings.attribution.commit === '' ? null : localSettings.attribution.commit;
+        const localAttribution = localSettings.attribution;
+        if (localAttribution && localAttribution.commit !== undefined) {
+            result = localAttribution.commit === '' ? null : localAttribution.commit;
         }
         else {
             // Fall back to global config
             const globalSettings = readSettings(path.join(getGlobalDir('claude', explicitConfigDir), 'settings.json'));
-            if (!globalSettings.attribution || globalSettings.attribution.commit === undefined) {
+            const globalAttribution = globalSettings.attribution;
+            if (!globalAttribution || globalAttribution.commit === undefined) {
                 result = undefined;
             }
-            else if (globalSettings.attribution.commit === '') {
+            else if (globalAttribution.commit === '') {
                 result = null;
             }
             else {
-                result = globalSettings.attribution.commit;
+                result = globalAttribution.commit;
             }
         }
     }
@@ -479,20 +491,22 @@ function getCommitAttribution(runtime) {
         // GitHub Copilot: check .copilot-settings.json for attribution config
         // Check local config first
         const localSettings = readSettings(path.join(getLocalDir('copilot'), '.copilot-settings.json'));
-        if (localSettings.attribution && localSettings.attribution.commit !== undefined) {
-            result = localSettings.attribution.commit === '' ? null : localSettings.attribution.commit;
+        const localAttribution = localSettings.attribution;
+        if (localAttribution && localAttribution.commit !== undefined) {
+            result = localAttribution.commit === '' ? null : localAttribution.commit;
         }
         else {
             // Fall back to global config
             const globalSettings = readSettings(path.join(getGlobalDir('copilot', explicitConfigDir), '.copilot-settings.json'));
-            if (!globalSettings.attribution || globalSettings.attribution.commit === undefined) {
+            const globalAttribution = globalSettings.attribution;
+            if (!globalAttribution || globalAttribution.commit === undefined) {
                 result = undefined;
             }
-            else if (globalSettings.attribution.commit === '') {
+            else if (globalAttribution.commit === '') {
                 result = null;
             }
             else {
-                result = globalSettings.attribution.commit;
+                result = globalAttribution.commit;
             }
         }
     }
@@ -501,7 +515,10 @@ function getCommitAttribution(runtime) {
         // Check local config first
         const localSettings = readSettings(path.join(getLocalDir('qwen'), 'settings.json'));
         if (localSettings.gitCoAuthor !== undefined) {
-            result = localSettings.gitCoAuthor === '' || localSettings.gitCoAuthor === null ? null : localSettings.gitCoAuthor;
+            result =
+                localSettings.gitCoAuthor === '' || localSettings.gitCoAuthor === null
+                    ? null
+                    : localSettings.gitCoAuthor;
         }
         else {
             // Fall back to global config
@@ -527,9 +544,9 @@ function getCommitAttribution(runtime) {
 }
 /**
  * Process Co-Authored-By lines based on attribution setting
- * @param {string} content - File content to process
- * @param {null|undefined|string} attribution - null=remove, undefined=keep, string=replace
- * @returns {string} Processed content
+ * @param content - File content to process
+ * @param attribution - null=remove, undefined=keep, string=replace
+ * @returns Processed content
  */
 function processAttribution(content, attribution) {
     if (attribution === null) {
@@ -610,7 +627,7 @@ function convertToolName(claudeTool) {
  * - Applies Claude→Gemini mapping (Read→read_file, Bash→run_shell_command, etc.)
  * - Filters out MCP tools (mcp__*) — they are auto-discovered at runtime in Gemini
  * - Filters out Task — agents are auto-registered as tools in Gemini
- * @returns {string|null} Gemini tool name, or null if tool should be excluded
+ * @returns Gemini tool name, or null if tool should be excluded
  */
 function convertGeminiToolName(claudeTool) {
     // MCP tools: exclude — auto-discovered from mcpServers config at runtime
@@ -720,7 +737,7 @@ function convertClaudeCommandToCodexSkill(content, skillName) {
  * and cleans up frontmatter (removes tools/color fields).
  */
 function convertClaudeAgentToCodexAgent(content) {
-    let converted = convertClaudeToCodexMarkdown(content);
+    const converted = convertClaudeToCodexMarkdown(content);
     const { frontmatter, body } = extractFrontmatterAndBody(converted);
     if (!frontmatter)
         return converted;
@@ -895,7 +912,9 @@ function installCodexConfig(targetDir, agentsSrc) {
     const configPath = path.join(targetDir, 'config.toml');
     const agentsTomlDir = path.join(targetDir, 'agents');
     fs.mkdirSync(agentsTomlDir, { recursive: true });
-    const agentEntries = fs.readdirSync(agentsSrc).filter(f => f.startsWith('fase-') && f.endsWith('.md'));
+    const agentEntries = fs
+        .readdirSync(agentsSrc)
+        .filter((f) => f.startsWith('fase-') && f.endsWith('.md'));
     const agents = [];
     // Compute the Codex pathPrefix for replacing .claude paths
     const codexPathPrefix = `${targetDir.replace(/\\/g, '/')}/`;
@@ -905,8 +924,9 @@ function installCodexConfig(targetDir, agentsSrc) {
         content = content.replace(/~\/\.claude\//g, codexPathPrefix);
         content = content.replace(/\$HOME\/\.claude\//g, toHomePrefix(codexPathPrefix));
         const { frontmatter } = extractFrontmatterAndBody(content);
-        const name = extractFrontmatterField(frontmatter, 'name') || file.replace('.md', '');
-        const description = extractFrontmatterField(frontmatter, 'description') || '';
+        const name = (extractFrontmatterField(frontmatter || '', 'name') ||
+            file.replace('.md', ''));
+        const description = (extractFrontmatterField(frontmatter || '', 'description') || '');
         agents.push({ name, description: toSingleLine(description) });
         const tomlContent = generateCodexAgentToml(name, content);
         fs.writeFileSync(path.join(agentsTomlDir, `${name}.toml`), tomlContent);
@@ -981,7 +1001,10 @@ function convertClaudeToGeminiAgent(content) {
         if (trimmed.startsWith('tools:')) {
             const toolsValue = trimmed.substring(6).trim();
             if (toolsValue) {
-                const parsed = toolsValue.split(',').map(t => t.trim()).filter(t => t);
+                const parsed = toolsValue
+                    .split(',')
+                    .map((t) => t.trim())
+                    .filter((t) => t);
                 for (const t of parsed) {
                     const mapped = convertGeminiToolName(t);
                     if (mapped)
@@ -1074,7 +1097,10 @@ function convertClaudeToOpencodeFrontmatter(content) {
             const toolsValue = trimmed.substring(6).trim();
             if (toolsValue) {
                 // Parse comma-separated tools
-                const tools = toolsValue.split(',').map(t => t.trim()).filter(t => t);
+                const tools = toolsValue
+                    .split(',')
+                    .map((t) => t.trim())
+                    .filter((t) => t);
                 allowedTools.push(...tools);
             }
             continue;
@@ -1220,6 +1246,9 @@ function copyFlattenedCommands(srcDir, destDir, prefix, pathPrefix, runtime) {
             if (runtime === 'qwen') {
                 content = convertClaudeToQwenCommand(content);
             }
+            else if (runtime === 'copilot') {
+                content = convertClaudeToCopilotCommand(content);
+            }
             else {
                 content = convertClaudeToOpencodeFrontmatter(content);
             }
@@ -1232,9 +1261,9 @@ function listCodexSkillNames(skillsDir, prefix = 'fase-') {
         return [];
     const entries = fs.readdirSync(skillsDir, { withFileTypes: true });
     return entries
-        .filter(entry => entry.isDirectory() && entry.name.startsWith(prefix))
-        .filter(entry => fs.existsSync(path.join(skillsDir, entry.name, 'SKILL.md')))
-        .map(entry => entry.name)
+        .filter((entry) => entry.isDirectory() && entry.name.startsWith(prefix))
+        .filter((entry) => fs.existsSync(path.join(skillsDir, entry.name, 'SKILL.md')))
+        .map((entry) => entry.name)
         .sort();
 }
 function copyCommandsAsCodexSkills(srcDir, skillsDir, prefix, pathPrefix, runtime) {
@@ -1324,9 +1353,13 @@ function copyWithPathReplacement(srcDir, destDir, pathPrefix, runtime, isCommand
             content = content.replace(globalFaseRegex, pathPrefix);
             content = content.replace(globalFaseHomeRegex, sharedHomePath);
             content = processAttribution(content, getCommitAttribution(runtime));
-            // Convert frontmatter for opencode compatibility
+            // Convert frontmatter for runtime compatibility
             if (isOpencode) {
                 content = convertClaudeToOpencodeFrontmatter(content);
+                fs.writeFileSync(destPath, content);
+            }
+            else if (runtime === 'copilot') {
+                content = convertClaudeToCopilotCommand(content);
                 fs.writeFileSync(destPath, content);
             }
             else if (runtime === 'gemini') {
@@ -1382,7 +1415,7 @@ function cleanupOrphanedFiles(configDir) {
                     fs.rmSync(dirPath, { recursive: true });
                     console.log(`  ${green}✓${reset} Removido ${dirName} obsoleto de fase/ (agora em ~/.fase-ai/)`);
                 }
-                catch (e) {
+                catch {
                     // Silently ignore if already deleted or permission issues
                 }
             }
@@ -1406,14 +1439,22 @@ function cleanupOrphanedHooks(settings) {
     let cleanedHooks = false;
     // Check all hook event types (Stop, SessionStart, etc.)
     if (settings.hooks) {
-        for (const eventType of Object.keys(settings.hooks)) {
-            const hookEntries = settings.hooks[eventType];
+        const hooks = settings.hooks;
+        for (const eventType of Object.keys(hooks)) {
+            const hookEntries = hooks[eventType];
             if (Array.isArray(hookEntries)) {
                 // Filter out entries that contain orphaned hooks
-                const filtered = hookEntries.filter(entry => {
-                    if (entry.hooks && Array.isArray(entry.hooks)) {
+                const filtered = hookEntries.filter((entry) => {
+                    const entryObj = entry;
+                    if (entryObj.hooks && Array.isArray(entryObj.hooks)) {
                         // Check if any hook in this entry matches orphaned patterns
-                        const hasOrphaned = entry.hooks.some(h => h.command && orphanedHookPatterns.some(pattern => h.command.includes(pattern)));
+                        const hasOrphaned = entryObj.hooks.some((h) => {
+                            const hObj = h;
+                            const cmd = hObj.command;
+                            return (cmd &&
+                                typeof cmd === 'string' &&
+                                orphanedHookPatterns.some((pattern) => cmd.includes(pattern)));
+                        });
                         if (hasOrphaned) {
                             cleanedHooks = true;
                             return false; // Remove this entry
@@ -1421,7 +1462,7 @@ function cleanupOrphanedHooks(settings) {
                     }
                     return true; // Keep this entry
                 });
-                settings.hooks[eventType] = filtered;
+                hooks[eventType] = filtered;
             }
         }
     }
@@ -1431,9 +1472,12 @@ function cleanupOrphanedHooks(settings) {
     // Fix #330: Update statusLine if it points to old FASE statusline.js path
     // Only match the specific old FASE path pattern (hooks/statusline.js),
     // not third-party statusline scripts that happen to contain 'statusline.js'
-    if (settings.statusLine && settings.statusLine.command &&
-        /hooks[\/\\]statusline\.js/.test(settings.statusLine.command)) {
-        settings.statusLine.command = settings.statusLine.command.replace(/hooks([\/\\])statusline\.js/, 'hooks$1fase-statusline.js');
+    const statusLine = settings.statusLine;
+    if (statusLine &&
+        statusLine.command &&
+        typeof statusLine.command === 'string' &&
+        /hooks[\/\\]statusline\.js/.test(statusLine.command)) {
+        statusLine.command = statusLine.command.replace(/hooks([\/\\])statusline\.js/, 'hooks$1fase-statusline.js');
         console.log(`  ${green}✓${reset} Atualizado caminho da statusline (hooks/statusline.js → hooks/fase-statusline.js)`);
     }
     return settings;
@@ -1571,7 +1615,12 @@ function uninstall(isGlobal, runtime = 'claude') {
     // 4. Remove FASE hooks
     const hooksDir = path.join(targetDir, 'hooks');
     if (fs.existsSync(hooksDir)) {
-        const faseHooks = ['fase-statusline.js', 'fase-check-update.js', 'fase-check-update.sh', 'fase-context-monitor.js'];
+        const faseHooks = [
+            'fase-statusline.js',
+            'fase-check-update.js',
+            'fase-check-update.sh',
+            'fase-context-monitor.js',
+        ];
         let hookCount = 0;
         for (const hook of faseHooks) {
             const hookPath = path.join(hooksDir, hook);
@@ -1597,59 +1646,78 @@ function uninstall(isGlobal, runtime = 'claude') {
                 console.log(`  ${green}✓${reset} Removido package.json do FASE`);
             }
         }
-        catch (e) {
+        catch {
             // Ignore read errors
         }
     }
     // 6. Clean up settings.json (remove FASE hooks and statusline)
     const settingsPath = path.join(targetDir, 'settings.json');
     if (fs.existsSync(settingsPath)) {
-        let settings = readSettings(settingsPath);
+        const settings = readSettings(settingsPath);
         let settingsModified = false;
         // Remove FASE statusline if it references our hook
-        if (settings.statusLine && settings.statusLine.command &&
-            settings.statusLine.command.includes('fase-statusline')) {
+        const statusLine = settings.statusLine;
+        if (statusLine &&
+            statusLine.command &&
+            typeof statusLine.command === 'string' &&
+            statusLine.command.includes('fase-statusline')) {
             delete settings.statusLine;
             settingsModified = true;
             console.log(`  ${green}✓${reset} Removida statusline do FASE das configurações`);
         }
         // Remove FASE hooks from SessionStart
-        if (settings.hooks && settings.hooks.SessionStart) {
-            const before = settings.hooks.SessionStart.length;
-            settings.hooks.SessionStart = settings.hooks.SessionStart.filter(entry => {
-                if (entry.hooks && Array.isArray(entry.hooks)) {
+        const hooks = settings.hooks;
+        if (hooks && hooks.SessionStart) {
+            const sessionStartHooks = hooks.SessionStart;
+            const before = sessionStartHooks.length;
+            hooks.SessionStart = sessionStartHooks.filter((entry) => {
+                const entryObj = entry;
+                if (entryObj.hooks && Array.isArray(entryObj.hooks)) {
                     // Filter out FASE hooks
-                    const hasGsdHook = entry.hooks.some(h => h.command && (h.command.includes('fase-check-update') || h.command.includes('fase-statusline')));
+                    const hasGsdHook = entryObj.hooks.some((h) => {
+                        const hObj = h;
+                        return (hObj.command &&
+                            typeof hObj.command === 'string' &&
+                            (hObj.command.includes('fase-check-update') ||
+                                hObj.command.includes('fase-statusline')));
+                    });
                     return !hasGsdHook;
                 }
                 return true;
             });
-            if (settings.hooks.SessionStart.length < before) {
+            if (hooks.SessionStart.length < before) {
                 settingsModified = true;
                 console.log(`  ${green}✓${reset} Removidos hooks FASE das configurações`);
             }
             // Clean up empty array
-            if (settings.hooks.SessionStart.length === 0) {
-                delete settings.hooks.SessionStart;
+            if (hooks.SessionStart.length === 0) {
+                delete hooks.SessionStart;
             }
         }
         // Remove FASE hooks from PostToolUse and AfterTool (Gemini uses AfterTool)
         for (const eventName of ['PostToolUse', 'AfterTool']) {
-            if (settings.hooks && settings.hooks[eventName]) {
-                const before = settings.hooks[eventName].length;
-                settings.hooks[eventName] = settings.hooks[eventName].filter(entry => {
-                    if (entry.hooks && Array.isArray(entry.hooks)) {
-                        const hasGsdHook = entry.hooks.some(h => h.command && h.command.includes('fase-context-monitor'));
+            if (hooks && hooks[eventName]) {
+                const eventHooks = hooks[eventName];
+                const before = eventHooks.length;
+                hooks[eventName] = eventHooks.filter((entry) => {
+                    const entryObj = entry;
+                    if (entryObj.hooks && Array.isArray(entryObj.hooks)) {
+                        const hasGsdHook = entryObj.hooks.some((h) => {
+                            const hObj = h;
+                            return (hObj.command &&
+                                typeof hObj.command === 'string' &&
+                                hObj.command.includes('fase-context-monitor'));
+                        });
                         return !hasGsdHook;
                     }
                     return true;
                 });
-                if (settings.hooks[eventName].length < before) {
+                if (hooks[eventName].length < before) {
                     settingsModified = true;
                     console.log(`  ${green}✓${reset} Removido hook do monitor de contexto das configurações`);
                 }
-                if (settings.hooks[eventName].length === 0) {
-                    delete settings.hooks[eventName];
+                if (hooks[eventName].length === 0) {
+                    delete hooks[eventName];
                 }
             }
         }
@@ -1670,7 +1738,7 @@ function uninstall(isGlobal, runtime = 'claude') {
             removedCount++;
             console.log(`  ${green}✓${reset} Removido fase-file-manifest.json`);
         }
-        catch (e) {
+        catch {
             // Ignore deletion errors
         }
     }
@@ -1684,28 +1752,32 @@ function uninstall(isGlobal, runtime = 'claude') {
         const configPath = path.join(opencodeConfigDir, 'opencode.json');
         if (fs.existsSync(configPath)) {
             try {
-                const config = safeJsonParse(fs.readFileSync(configPath, 'utf8'), 'opencode.json', { exitOnError: false });
+                const config = safeJsonParse(fs.readFileSync(configPath, 'utf8'), 'opencode.json', {
+                    exitOnError: false,
+                });
                 if (!config)
                     return; // Skip if JSON is invalid
                 let modified = false;
                 // Remove FASE permission entries
-                if (config.permission) {
+                const permission = config.permission;
+                if (permission) {
                     for (const permType of ['read', 'external_directory']) {
-                        if (config.permission[permType]) {
-                            const keys = Object.keys(config.permission[permType]);
+                        const permObj = permission[permType];
+                        if (permObj) {
+                            const keys = Object.keys(permObj);
                             for (const key of keys) {
                                 if (key.includes('fase-ai')) {
-                                    delete config.permission[permType][key];
+                                    delete permObj[key];
                                     modified = true;
                                 }
                             }
                             // Clean up empty objects
-                            if (Object.keys(config.permission[permType]).length === 0) {
-                                delete config.permission[permType];
+                            if (Object.keys(permObj).length === 0) {
+                                delete permission[permType];
                             }
                         }
                     }
-                    if (Object.keys(config.permission).length === 0) {
+                    if (Object.keys(permission).length === 0) {
                         delete config.permission;
                     }
                 }
@@ -1715,7 +1787,7 @@ function uninstall(isGlobal, runtime = 'claude') {
                     console.log(`  ${green}✓${reset} Removidas permissões FASE do opencode.json`);
                 }
             }
-            catch (e) {
+            catch {
                 // Ignore JSON parse errors
             }
         }
@@ -1730,7 +1802,7 @@ function uninstall(isGlobal, runtime = 'claude') {
         console.log();
         const rl = readline.createInterface({
             input: process.stdin,
-            output: process.stdout
+            output: process.stdout,
         });
         let answered = false;
         rl.on('close', () => {
@@ -1763,7 +1835,7 @@ function uninstall(isGlobal, runtime = 'claude') {
  */
 function parseJsonc(content) {
     // Strip BOM if present
-    if (content.charCodeAt(0) === 0xFEFF) {
+    if (content.charCodeAt(0) === 0xfeff) {
         content = content.slice(1);
     }
     // Remove single-line and block comments while preserving strings
@@ -1818,7 +1890,8 @@ function parseJsonc(content) {
         return JSON.parse(result);
     }
     catch (err) {
-        console.error(`Invalid JSON after stripping comments: ${err.message}`);
+        const error = err;
+        console.error(`Invalid JSON after stripping comments: ${error.message}`);
         return {};
     }
 }
@@ -1844,17 +1917,20 @@ function configureOpencodePermissions(isGlobal = true) {
             config = parseJsonc(content);
         }
         catch (e) {
+            const error = e;
             // Cannot parse - DO NOT overwrite user's config
             console.log(`  ${yellow}⚠${reset} Não foi possível analisar opencode.json - ignorando configuração de permissões`);
-            console.log(`    ${dim}Motivo: ${e.message}${reset}`);
+            console.log(`    ${dim}Motivo: ${error.message}${reset}`);
             console.log(`    ${dim}Sua configuração NÃO foi modificada. Corrija a sintaxe manualmente se necessário.${reset}`);
             return;
         }
     }
     // Ensure permission structure exists
-    if (!config.permission) {
+    const permission = config.permission;
+    if (!permission) {
         config.permission = {};
     }
+    const permObj = config.permission || {};
     // Build the FASE path using the actual config directory
     // Use ~ shorthand if it's in the default location, otherwise use full path
     const defaultConfigDir = path.join(os.homedir(), '.config', 'opencode');
@@ -1863,31 +1939,33 @@ function configureOpencodePermissions(isGlobal = true) {
         : `${opencodeConfigDir.replace(/\\/g, '/')}/fase-ai/*`;
     let modified = false;
     // Configure read permission
-    if (!config.permission.read || typeof config.permission.read !== 'object') {
-        config.permission.read = {};
+    if (!permObj.read || typeof permObj.read !== 'object') {
+        permObj.read = {};
     }
-    if (config.permission.read[fasePath] !== 'allow') {
-        config.permission.read[fasePath] = 'allow';
+    const readPerm = permObj.read;
+    if (readPerm[fasePath] !== 'allow') {
+        readPerm[fasePath] = 'allow';
         modified = true;
     }
     // Configure external_directory permission (the safety guard for paths outside project)
-    if (!config.permission.external_directory || typeof config.permission.external_directory !== 'object') {
-        config.permission.external_directory = {};
+    if (!permObj.external_directory || typeof permObj.external_directory !== 'object') {
+        permObj.external_directory = {};
     }
+    const externalPerm = permObj.external_directory;
     // For local installs, also configure permissions for the command/ directory so OpenCode can discover commands
     if (!isGlobal) {
         const commandPath = `${opencodeConfigDir.replace(/\\/g, '/')}/command/*`;
-        if (config.permission.read[commandPath] !== 'allow') {
-            config.permission.read[commandPath] = 'allow';
+        if (readPerm[commandPath] !== 'allow') {
+            readPerm[commandPath] = 'allow';
             modified = true;
         }
-        if (config.permission.external_directory[commandPath] !== 'allow') {
-            config.permission.external_directory[commandPath] = 'allow';
+        if (externalPerm[commandPath] !== 'allow') {
+            externalPerm[commandPath] = 'allow';
             modified = true;
         }
     }
-    if (!config.permission.external_directory[fasePath]) {
-        config.permission.external_directory[fasePath] = 'allow';
+    if (!externalPerm[fasePath]) {
+        externalPerm[fasePath] = 'allow';
         modified = true;
     }
     if (!modified) {
@@ -1913,17 +1991,8 @@ function verifyInstalled(dirPath, description) {
         }
     }
     catch (e) {
-        console.error(`  ${yellow}✗${reset} Falha ao instalar ${description}: ${e.message}`);
-        return false;
-    }
-    return true;
-}
-/**
- * Verify a file exists
- */
-function verifyFileInstalled(filePath, description) {
-    if (!fs.existsSync(filePath)) {
-        console.error(`  ${yellow}✗${reset} Falha ao instalar ${description}: arquivo não foi criado`);
+        const error = e;
+        console.error(`  ${yellow}✗${reset} Falha ao instalar ${description}: ${error.message}`);
         return false;
     }
     return true;
@@ -1978,7 +2047,11 @@ function writeManifest(configDir, runtime = 'claude') {
     const opencodeCommandDir = path.join(configDir, 'command');
     const codexSkillsDir = path.join(configDir, 'skills');
     const agentsDir = path.join(configDir, 'agents');
-    const manifest = { version: pkg.version, timestamp: new Date().toISOString(), files: {} };
+    const manifest = {
+        version: pkg.version,
+        timestamp: new Date().toISOString(),
+        files: {},
+    };
     const faseHashes = generateManifest(faseDir);
     for (const [rel, hash] of Object.entries(faseHashes)) {
         manifest.files['fase-ai/' + rel] = hash;
@@ -2048,10 +2121,18 @@ function saveLocalPatches(configDir) {
         const meta = {
             backed_up_at: new Date().toISOString(),
             from_version: manifest.version,
-            files: modified
+            files: modified,
         };
         fs.writeFileSync(path.join(patchesDir, 'backup-meta.json'), JSON.stringify(meta, null, 2));
-        console.log('  ' + yellow + 'i' + reset + '  Encontrado(s) ' + modified.length + ' arquivo(s) FASE modificado(s) localmente — salvo(s) em ' + PATCHES_DIR_NAME + '/');
+        console.log('  ' +
+            yellow +
+            'i' +
+            reset +
+            '  Encontrado(s) ' +
+            modified.length +
+            ' arquivo(s) FASE modificado(s) localmente — salvo(s) em ' +
+            PATCHES_DIR_NAME +
+            '/');
         for (const f of modified) {
             console.log('     ' + dim + f + reset);
         }
@@ -2093,27 +2174,6 @@ function reportLocalPatches(configDir, runtime = 'claude') {
     return meta.files || [];
 }
 /**
- * Recursively copy directory (helper for shared content)
- */
-function copyDir(src, dest) {
-    if (!fs.existsSync(src))
-        return;
-    if (!fs.existsSync(dest)) {
-        fs.mkdirSync(dest, { recursive: true });
-    }
-    const entries = fs.readdirSync(src, { withFileTypes: true });
-    for (const entry of entries) {
-        const srcPath = path.join(src, entry.name);
-        const destPath = path.join(dest, entry.name);
-        if (entry.isDirectory()) {
-            copyDir(srcPath, destPath);
-        }
-        else {
-            fs.copyFileSync(srcPath, destPath);
-        }
-    }
-}
-/**
  * Install shared FASE content to ~/.fase-ai/ (v3.2.0+)
  * Templates, references, and VERSION/CHANGELOG shared across all runtimes
  */
@@ -2121,6 +2181,7 @@ function install(isGlobal, runtime = 'claude') {
     const isOpencode = runtime === 'opencode';
     const isGemini = runtime === 'gemini';
     const isCodex = runtime === 'codex';
+    const isCopilot = runtime === 'copilot';
     const isQwen = runtime === 'qwen';
     const dirName = getDirName(runtime);
     const src = __dirname;
@@ -2134,9 +2195,7 @@ function install(isGlobal, runtime = 'claude') {
     // Path prefix for file references in markdown content
     // For global installs: use full path
     // For local installs: use relative
-    const pathPrefix = isGlobal
-        ? `${targetDir.replace(/\\/g, '/')}/`
-        : `./${dirName}/`;
+    const pathPrefix = isGlobal ? `${targetDir.replace(/\\/g, '/')}/` : `./${dirName}/`;
     let runtimeLabel = 'Claude Code';
     if (isOpencode)
         runtimeLabel = 'OpenCode';
@@ -2144,6 +2203,8 @@ function install(isGlobal, runtime = 'claude') {
         runtimeLabel = 'Gemini';
     if (isCodex)
         runtimeLabel = 'Codex';
+    if (isCopilot)
+        runtimeLabel = 'GitHub Copilot';
     if (isQwen)
         runtimeLabel = 'Qwen Code';
     console.log(`  Instalando para ${cyan}${runtimeLabel}${reset} em ${cyan}${locationLabel}${reset}\n`);
@@ -2153,7 +2214,7 @@ function install(isGlobal, runtime = 'claude') {
     saveLocalPatches(targetDir);
     // Clean up orphaned files from previous versions
     cleanupOrphanedFiles(targetDir);
-    // OpenCode uses command/ (flat), Codex uses skills/, Claude/Gemini use commands/fase/
+    // OpenCode uses command/ (flat), Codex uses skills/, Qwen/Copilot use commands/, Claude/Gemini use commands/fase/
     if (isOpencode) {
         // OpenCode: flat structure in command/ directory
         const commandDir = path.join(targetDir, 'command');
@@ -2162,7 +2223,7 @@ function install(isGlobal, runtime = 'claude') {
         const faseSrc = path.join(src, 'comandos');
         copyFlattenedCommands(faseSrc, commandDir, 'fase', pathPrefix, runtime);
         if (verifyInstalled(commandDir, 'command/fase-*')) {
-            const count = fs.readdirSync(commandDir).filter(f => f.startsWith('fase-')).length;
+            const count = fs.readdirSync(commandDir).filter((f) => f.startsWith('fase-')).length;
             console.log(`  ${green}✓${reset} Instalados ${count} comandos em command/`);
         }
         else {
@@ -2188,7 +2249,21 @@ function install(isGlobal, runtime = 'claude') {
         const faseSrc = path.join(src, 'comandos');
         copyFlattenedCommands(faseSrc, commandsDir, 'fase', pathPrefix, runtime);
         if (verifyInstalled(commandsDir, 'commands/fase-*')) {
-            const count = fs.readdirSync(commandsDir).filter(f => f.startsWith('fase-')).length;
+            const count = fs.readdirSync(commandsDir).filter((f) => f.startsWith('fase-')).length;
+            console.log(`  ${green}✓${reset} Instalados ${count} comandos em commands/`);
+        }
+        else {
+            failures.push('commands/fase-*');
+        }
+    }
+    else if (isCopilot) {
+        // GitHub Copilot: flat structure in commands/ directory
+        const commandsDir = path.join(targetDir, 'commands');
+        fs.mkdirSync(commandsDir, { recursive: true });
+        const faseSrc = path.join(src, 'comandos');
+        copyFlattenedCommands(faseSrc, commandsDir, 'fase', pathPrefix, runtime);
+        if (verifyInstalled(commandsDir, 'commands/fase-*')) {
+            const count = fs.readdirSync(commandsDir).filter((f) => f.startsWith('fase-')).length;
             console.log(`  ${green}✓${reset} Instalados ${count} comandos em commands/`);
         }
         else {
@@ -2254,6 +2329,9 @@ function install(isGlobal, runtime = 'claude') {
                 if (isOpencode) {
                     content = convertClaudeToOpencodeFrontmatter(content);
                 }
+                else if (isCopilot) {
+                    content = convertClaudeToCopilotCommand(content);
+                }
                 else if (isGemini) {
                     content = convertClaudeToGeminiAgent(content);
                 }
@@ -2289,7 +2367,7 @@ function install(isGlobal, runtime = 'claude') {
             fs.writeFileSync(pkgJsonDest, '{"type":"commonjs"}\n');
             console.log(`  ${green}✓${reset} Gravado package.json (modo CommonJS)`);
         }
-        catch (err) {
+        catch {
             console.error(`  ${red}✗${reset} Erro ao gravar package.json em ${pkgJsonDest}`);
             console.error(`    ${dim}Verifique permissões de escrita: ${targetDir}${reset}`);
             failures.push('package.json');
@@ -2328,7 +2406,7 @@ function install(isGlobal, runtime = 'claude') {
                     failures.push('hooks');
                 }
             }
-            catch (err) {
+            catch {
                 console.error(`  ${red}✗${reset} Erro ao instalar hooks`);
                 console.error(`    ${dim}Verifique permissões de escrita: ${targetDir}/hooks${reset}`);
                 failures.push('hooks');
@@ -2356,11 +2434,15 @@ function install(isGlobal, runtime = 'claude') {
                 if (entry.isDirectory()) {
                     scanForLeakedPaths(fullPath);
                 }
-                else if ((entry.name.endsWith('.md') || entry.name.endsWith('.toml')) && entry.name !== 'CHANGELOG.md') {
+                else if ((entry.name.endsWith('.md') || entry.name.endsWith('.toml')) &&
+                    entry.name !== 'CHANGELOG.md') {
                     const content = fs.readFileSync(fullPath, 'utf8');
                     const matches = content.match(/(?:~|\$HOME)\/\.claude\b/g);
                     if (matches) {
-                        leakedPaths.push({ file: fullPath.replace(targetDir + '/', ''), count: matches.length });
+                        leakedPaths.push({
+                            file: fullPath.replace(targetDir + '/', ''),
+                            count: matches.length,
+                        });
                     }
                 }
             }
@@ -2393,58 +2475,90 @@ function install(isGlobal, runtime = 'claude') {
     // Check if hooks directory actually exists before building hook commands
     const hooksDest = path.join(targetDir, 'hooks');
     const hooksExist = fs.existsSync(hooksDest);
-    const statuslineCommand = hooksExist ? (isGlobal
-        ? buildHookCommand(targetDir, 'fase-statusline.js')
-        : 'node ' + dirName + '/hooks/fase-statusline.js') : null;
-    const updateCheckCommand = hooksExist ? (isGlobal
-        ? buildHookCommand(targetDir, 'fase-check-update.js')
-        : 'node ' + dirName + '/hooks/fase-check-update.js') : null;
-    const contextMonitorCommand = hooksExist ? (isGlobal
-        ? buildHookCommand(targetDir, 'fase-context-monitor.js')
-        : 'node ' + dirName + '/hooks/fase-context-monitor.js') : null;
+    const statuslineCommand = hooksExist
+        ? isGlobal
+            ? buildHookCommand(targetDir, 'fase-statusline.js')
+            : 'node ' + dirName + '/hooks/fase-statusline.js'
+        : null;
+    const updateCheckCommand = hooksExist
+        ? isGlobal
+            ? buildHookCommand(targetDir, 'fase-check-update.js')
+            : 'node ' + dirName + '/hooks/fase-check-update.js'
+        : null;
+    const contextMonitorCommand = hooksExist
+        ? isGlobal
+            ? buildHookCommand(targetDir, 'fase-context-monitor.js')
+            : 'node ' + dirName + '/hooks/fase-context-monitor.js'
+        : null;
     // Enable experimental agents for Gemini CLI (required for custom sub-agents)
     if (isGemini) {
-        if (!settings.experimental) {
+        const experimental = settings.experimental;
+        if (!experimental) {
             settings.experimental = {};
         }
-        if (!settings.experimental.enableAgents) {
-            settings.experimental.enableAgents = true;
+        const expObj = settings.experimental;
+        if (!expObj.enableAgents) {
+            expObj.enableAgents = true;
             console.log(`  ${green}✓${reset} Agentes experimentais habilitados`);
         }
     }
     // Configure SessionStart hook for update checking (skip for opencode and if hooks don't exist)
     if (!isOpencode && hooksExist && updateCheckCommand) {
-        if (!settings.hooks) {
+        const hooks = settings.hooks;
+        if (!hooks) {
             settings.hooks = {};
         }
-        if (!settings.hooks.SessionStart) {
-            settings.hooks.SessionStart = [];
+        const hooksObj = settings.hooks;
+        if (!hooksObj.SessionStart) {
+            hooksObj.SessionStart = [];
         }
-        const hasGsdUpdateHook = settings.hooks.SessionStart.some(entry => entry.hooks && entry.hooks.some(h => h.command && h.command.includes('fase-check-update')));
+        const sessionStartHooks = hooksObj.SessionStart;
+        const hasGsdUpdateHook = sessionStartHooks.some((entry) => {
+            const entryObj = entry;
+            const entryHooks = entryObj.hooks;
+            return (entryHooks &&
+                entryHooks.some((h) => {
+                    const hObj = h;
+                    return (hObj.command &&
+                        typeof hObj.command === 'string' &&
+                        hObj.command.includes('fase-check-update'));
+                }));
+        });
         if (!hasGsdUpdateHook) {
-            settings.hooks.SessionStart.push({
+            sessionStartHooks.push({
                 hooks: [
                     {
                         type: 'command',
-                        command: updateCheckCommand
-                    }
-                ]
+                        command: updateCheckCommand,
+                    },
+                ],
             });
             console.log(`  ${green}✓${reset} Hook de verificação de atualização configurado`);
         }
         // Configure post-tool hook for context window monitoring
-        if (!settings.hooks[postToolEvent]) {
-            settings.hooks[postToolEvent] = [];
+        if (!hooksObj[postToolEvent]) {
+            hooksObj[postToolEvent] = [];
         }
-        const hasContextMonitorHook = settings.hooks[postToolEvent].some(entry => entry.hooks && entry.hooks.some(h => h.command && h.command.includes('fase-context-monitor')));
+        const postToolHooks = hooksObj[postToolEvent];
+        const hasContextMonitorHook = postToolHooks.some((entry) => {
+            const entryObj = entry;
+            const entryHooks = entryObj.hooks;
+            return (entryHooks &&
+                entryHooks.some((h) => {
+                    const hObj = h;
+                    return (hObj.command &&
+                        typeof hObj.command === 'string' &&
+                        hObj.command.includes('fase-context-monitor'));
+                }));
+        });
         if (!hasContextMonitorHook && contextMonitorCommand) {
-            settings.hooks[postToolEvent].push({
+            postToolHooks.push({
                 hooks: [
                     {
                         type: 'command',
-                        command: contextMonitorCommand
-                    }
-                ]
+                        command: contextMonitorCommand,
+                    },
+                ],
             });
             console.log(`  ${green}✓${reset} Hook de monitor de janela de contexto configurado`);
         }
@@ -2457,15 +2571,15 @@ function install(isGlobal, runtime = 'claude') {
 function finishInstall(settingsPath, settings, statuslineCommand, shouldInstallStatusline, runtime = 'claude', isGlobal = true) {
     const isOpencode = runtime === 'opencode';
     const isCodex = runtime === 'codex';
-    if (shouldInstallStatusline && !isOpencode && !isCodex && statuslineCommand) {
+    if (shouldInstallStatusline && !isOpencode && !isCodex && statuslineCommand && settings) {
         settings.statusLine = {
             type: 'command',
-            command: statuslineCommand
+            command: statuslineCommand,
         };
         console.log(`  ${green}✓${reset} Statusline configurada`);
     }
     // Write settings when runtime supports settings.json
-    if (!isCodex) {
+    if (!isCodex && settingsPath && settings) {
         writeSettings(settingsPath, settings);
     }
     // Configure OpenCode permissions
@@ -2479,9 +2593,15 @@ function finishInstall(settingsPath, settings, statuslineCommand, shouldInstallS
         program = 'Gemini';
     if (runtime === 'codex')
         program = 'Codex';
+    if (runtime === 'copilot')
+        program = 'GitHub Copilot';
+    if (runtime === 'qwen')
+        program = 'Qwen Code';
     let command = '/fase-novo-projeto';
     if (runtime === 'codex')
         command = '$fase-novo-projeto';
+    if (runtime === 'copilot')
+        command = '/fase-novo-projeto';
     console.log(`
   ${green}Pronto!${reset} Abra um diretório em branco no ${program} e execute ${cyan}${command}${reset}.
 `);
@@ -2505,10 +2625,11 @@ function handleStatusline(settings, isInteractive, callback) {
         callback(false);
         return;
     }
-    const existingCmd = settings.statusLine.command || settings.statusLine.url || '(custom)';
+    const statusLine = settings.statusLine;
+    const existingCmd = (statusLine?.command || statusLine?.url || '(custom)');
     const rl = readline.createInterface({
         input: process.stdin,
-        output: process.stdout
+        output: process.stdout,
     });
     console.log(`
   ${yellow}⚠${reset} Statusline existente detectada\n
@@ -2625,7 +2746,7 @@ function promptRuntime(callback) {
         { label: 'Qwen Code', description: `${dim}- IA da Alibaba Cloud${reset}` },
         { label: 'Todos', description: `${dim}- instalar todos os runtimes${reset}` },
         { label: 'Desinstalar', description: `${dim}- remover FASE${reset}` },
-        { label: 'Sair', description: `${dim}- sair sem instalar${reset}` }
+        { label: 'Sair', description: `${dim}- sair sem instalar${reset}` },
     ];
     promptInteractiveMenu(options, (selectedIndex) => {
         const runtimeMap = [
@@ -2637,7 +2758,7 @@ function promptRuntime(callback) {
             ['qwen'],
             ['claude', 'opencode', 'gemini', 'codex', 'copilot', 'qwen'],
             'uninstall',
-            'exit'
+            'exit',
         ];
         const action = runtimeMap[selectedIndex];
         if (action === 'exit') {
@@ -2660,7 +2781,7 @@ function promptLocation(runtimes) {
 function promptUninstallLocation(runtimes) {
     const rl = readline.createInterface({
         input: process.stdin,
-        output: process.stdout
+        output: process.stdout,
     });
     let answered = false;
     rl.on('close', () => {
@@ -2670,11 +2791,7 @@ function promptUninstallLocation(runtimes) {
             process.exit(0);
         }
     });
-    const pathExamples = runtimes.map(r => {
-        const globalDir = getGlobalDir(r, null);
-        return globalDir.replace(os.homedir(), '~');
-    }).join(', ');
-    const localExamples = runtimes.map(r => `./${getDirName(r)}`).join(', ');
+    const localExamples = runtimes.map((r) => `./${getDirName(r)}`).join(', ');
     console.log(`  ${yellow}Onde deseja desinstalar o FASE?${reset}\n\n  ${cyan}1${reset}) Local  ${dim}(${localExamples})${reset} - remove deste projeto
    ${cyan}2${reset}) Cancelar
 `);
@@ -2695,7 +2812,7 @@ function promptUninstallLocation(runtimes) {
 function promptUninstallConfirmation(runtimes, isGlobal) {
     const rl = readline.createInterface({
         input: process.stdin,
-        output: process.stdout
+        output: process.stdout,
     });
     let answered = false;
     rl.on('close', () => {
@@ -2706,7 +2823,8 @@ function promptUninstallConfirmation(runtimes, isGlobal) {
         }
     });
     const locationLabel = isGlobal ? 'globalmente' : 'localmente';
-    const runtimeList = runtimes.map(r => {
+    const runtimeList = runtimes
+        .map((r) => {
         if (r === 'claude')
             return 'Claude Code';
         if (r === 'opencode')
@@ -2716,7 +2834,8 @@ function promptUninstallConfirmation(runtimes, isGlobal) {
         if (r === 'codex')
             return 'Codex';
         return r;
-    }).join(', ');
+    })
+        .join(', ');
     console.log(`\n  ${yellow}Atenção!${reset} Isto irá remover o FASE ${locationLabel} de: ${cyan}${runtimeList}${reset}
   ${dim}Você pode reinstalar a qualquer momento executando ${cyan}npx fase-ai${reset}${dim}.${reset}
 `);
@@ -2749,7 +2868,9 @@ function detectInstalledRuntimes() {
         // Primary: check for FASE agent files
         const agentsDir = path.join(dir, 'agents');
         if (fs.existsSync(agentsDir)) {
-            const hasFaseAgent = fs.readdirSync(agentsDir).some(f => f.startsWith('fase-') && (f.endsWith('.md') || f.endsWith('.toml')));
+            const hasFaseAgent = fs
+                .readdirSync(agentsDir)
+                .some((f) => f.startsWith('fase-') && (f.endsWith('.md') || f.endsWith('.toml')));
             if (hasFaseAgent) {
                 detected.push(runtime);
                 continue;
@@ -2759,7 +2880,7 @@ function detectInstalledRuntimes() {
         if (runtime === 'codex') {
             const skillsDir = path.join(dir, 'skills');
             if (fs.existsSync(skillsDir)) {
-                const hasFaseSkill = fs.readdirSync(skillsDir).some(f => f.startsWith('fase-'));
+                const hasFaseSkill = fs.readdirSync(skillsDir).some((f) => f.startsWith('fase-'));
                 if (hasFaseSkill) {
                     detected.push(runtime);
                     continue;
@@ -2770,7 +2891,9 @@ function detectInstalledRuntimes() {
         if (runtime === 'opencode') {
             const commandDir = path.join(dir, 'command');
             if (fs.existsSync(commandDir)) {
-                const hasFaseCmd = fs.readdirSync(commandDir).some(f => f.startsWith('fase-') && f.endsWith('.md'));
+                const hasFaseCmd = fs
+                    .readdirSync(commandDir)
+                    .some((f) => f.startsWith('fase-') && f.endsWith('.md'));
                 if (hasFaseCmd) {
                     detected.push(runtime);
                     continue;
@@ -2786,13 +2909,16 @@ function detectInstalledRuntimes() {
  * @param {string[]} runtimesArg - runtimes to update (empty = auto-detect)
  */
 function atualizar(runtimesArg) {
-    const { execSync } = require('child_process');
+    // execSync already imported at top of file
     // --- 1. Version check ---
     let latestVersion = null;
     try {
-        latestVersion = execSync('npm view fase-ai version', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+        latestVersion = execSync('npm view fase-ai version', {
+            encoding: 'utf8',
+            stdio: ['ignore', 'pipe', 'ignore'],
+        }).trim();
     }
-    catch (_) {
+    catch {
         // offline or npm unavailable — continue anyway
     }
     const currentVersion = pkg.version;
@@ -2818,8 +2944,13 @@ function atualizar(runtimesArg) {
         console.log(`  Execute ${cyan}npx fase-ai${reset} para instalar.\n`);
         process.exit(0);
     }
-    const runtimeLabels = { claude: 'Claude Code', opencode: 'OpenCode', gemini: 'Gemini', codex: 'Codex' };
-    const labels = runtimes.map(r => runtimeLabels[r] || r).join(', ');
+    const runtimeLabels = {
+        claude: 'Claude Code',
+        opencode: 'OpenCode',
+        gemini: 'Gemini',
+        codex: 'Codex',
+    };
+    const labels = runtimes.map((r) => runtimeLabels[r] || r).join(', ');
     console.log(`  Atualizando: ${cyan}${labels}${reset}\n`);
     // --- 3. Reinstall ---
     installAllRuntimes(runtimes, false, false);
@@ -2829,7 +2960,7 @@ function atualizar(runtimesArg) {
         const scriptPath = path.join(__dirname, 'verificar-instalacao.js');
         execSync(`node "${scriptPath}"`, { stdio: 'inherit' });
     }
-    catch (_) {
+    catch {
         // verificar-instalacao already printed its own errors
     }
     console.log(`\n  ${yellow}Lembrete:${reset} Reinicie o runtime (${labels}) para carregar os novos comandos e agentes.\n`);
@@ -2844,14 +2975,14 @@ function installAllRuntimes(runtimes, isGlobal, isInteractive) {
         results.push(result);
     }
     const statuslineRuntimes = ['claude', 'gemini'];
-    const primaryStatuslineResult = results.find(r => statuslineRuntimes.includes(r.runtime));
+    const primaryStatuslineResult = results.find((r) => statuslineRuntimes.includes(r.runtime));
     const finalize = (shouldInstallStatusline) => {
         for (const result of results) {
             const useStatusline = statuslineRuntimes.includes(result.runtime) && shouldInstallStatusline;
             finishInstall(result.settingsPath, result.settings, result.statuslineCommand, useStatusline, result.runtime, isGlobal);
         }
     };
-    if (primaryStatuslineResult) {
+    if (primaryStatuslineResult && primaryStatuslineResult.settings) {
         handleStatusline(primaryStatuslineResult.settings, isInteractive, finalize);
     }
     else {
@@ -2946,7 +3077,7 @@ else {
                         promptUninstallLocation(['claude', 'opencode', 'gemini', 'codex', 'copilot', 'qwen']);
                     }
                     else {
-                        promptLocation(runtimes);
+                        promptLocation(Array.isArray(runtimes) ? runtimes : [runtimes]);
                     }
                 });
             }

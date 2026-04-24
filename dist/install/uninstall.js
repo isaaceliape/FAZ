@@ -25,7 +25,7 @@ export function removeFaseHooksFromSettings(settingsPath) {
     const hooks = settings.hooks;
     if (Array.isArray(hooks)) {
         const originalLength = hooks.length;
-        settings.hooks = hooks.filter(h => !String(h).startsWith('fase-'));
+        settings.hooks = hooks.filter((h) => !String(h).startsWith('fase-'));
         changed = settings.hooks.length !== originalLength;
     }
     else {
@@ -57,7 +57,7 @@ export function removeFaseHooksDir(configDir) {
     }
     try {
         const files = fs.readdirSync(hooksDir);
-        const faseFiles = files.filter(f => f.startsWith('fase-'));
+        const faseFiles = files.filter((f) => f.startsWith('fase-'));
         for (const file of faseFiles) {
             fs.unlinkSync(path.join(hooksDir, file));
         }
@@ -137,9 +137,11 @@ export function uninstallFase(runtime, explicitConfigDir = null) {
     const configDir = getGlobalDir(runtime, explicitConfigDir);
     try {
         // Remove hooks from settings
-        const settingsPath = path.join(configDir, runtime === 'opencode' ? 'opencode.json' :
-            runtime === 'copilot' ? '.copilot-settings.json' :
-                'settings.json');
+        const settingsPath = path.join(configDir, runtime === 'opencode'
+            ? 'opencode.json'
+            : runtime === 'copilot'
+                ? '.copilot-settings.json'
+                : 'settings.json');
         if (fs.existsSync(settingsPath)) {
             result.removed.settings = removeFaseHooksFromSettings(settingsPath);
         }

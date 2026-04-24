@@ -190,7 +190,7 @@ export function validateSettings(settingsPath) {
     catch (err) {
         return {
             valid: false,
-            error: `Invalid JSON: ${err.message}`
+            error: `Invalid JSON: ${err.message}`,
         };
     }
 }

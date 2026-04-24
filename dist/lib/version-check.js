@@ -22,7 +22,7 @@ export function getLatestVersion() {
             encoding: 'utf8',
             timeout: 10000,
             windowsHide: true,
-            stdio: ['ignore', 'pipe', 'ignore']
+            stdio: ['ignore', 'pipe', 'ignore'],
         });
         return result.trim();
     }
@@ -56,13 +56,13 @@ export function checkForUpdate(currentVersion) {
         return {
             current: currentVersion,
             latest: null,
-            updateAvailable: false
+            updateAvailable: false,
         };
     }
     return {
         current: currentVersion,
         latest,
-        updateAvailable: compareVersions(currentVersion, latest) < 0
+        updateAvailable: compareVersions(currentVersion, latest) < 0,
     };
 }
 /**
@@ -76,7 +76,7 @@ export function promptForUpdate(versionInfo) {
         }
         const rl = readline.createInterface({
             input: process.stdin,
-            output: process.stdout
+            output: process.stdout,
         });
         console.log('');
         console.log(`  ${yellow}╔══════════════════════════════════════════════════════════════╗${reset}`);
@@ -118,10 +118,10 @@ export function runUpdate() {
     try {
         execSync('npx fase-ai --atualizar', {
             stdio: 'inherit',
-            timeout: 120000
+            timeout: 120000,
         });
     }
-    catch (error) {
+    catch {
         console.log(`  ${red}✗${reset} Falha ao atualizar. Tente manualmente:`);
         console.log(`     ${cyan}npx fase-ai@latest${reset}`);
         process.exit(1);
@@ -152,7 +152,7 @@ export function getCachedUpdateInfo() {
         return {
             current: data.installed,
             latest: data.latest,
-            updateAvailable: data.update_available
+            updateAvailable: data.update_available,
         };
     }
     catch {

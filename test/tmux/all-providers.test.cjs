@@ -6,6 +6,7 @@
  * - OpenCode
  * - Gemini
  * - Codex
+ * - GitHub Copilot
  * - Qwen Code
  */
 

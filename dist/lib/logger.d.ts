@@ -37,35 +37,35 @@ export declare function getLogger(): pino.Logger;
  * @param msg - Log message
  * @param obj - Optional object to log
  */
-export declare function debug(msg: string, obj?: any): void;
+export declare function debug(msg: string, obj?: unknown): void;
 /**
  * Log at info level
  *
  * @param msg - Log message
  * @param obj - Optional object to log
  */
-export declare function info(msg: string, obj?: any): void;
+export declare function info(msg: string, obj?: unknown): void;
 /**
  * Log at warn level
  *
  * @param msg - Log message
  * @param obj - Optional object to log
  */
-export declare function warn(msg: string, obj?: any): void;
+export declare function warn(msg: string, obj?: unknown): void;
 /**
  * Log at error level
  *
  * @param msg - Log message
  * @param obj - Optional object to log
  */
-export declare function error(msg: string, obj?: any): void;
+export declare function error(msg: string, obj?: unknown): void;
 /**
  * Log at fatal level
  *
  * @param msg - Log message
  * @param obj - Optional object to log
  */
-export declare function fatal(msg: string, obj?: any): void;
+export declare function fatal(msg: string, obj?: unknown): void;
 /**
  * Get current logger configuration
  */

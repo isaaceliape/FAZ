@@ -211,6 +211,7 @@ async function runAllTests() {
     .addInstallTest('OpenCode Installation', 'opencode')
     .addInstallTest('Gemini Installation', 'gemini')
     .addInstallTest('Codex Installation', 'codex')
+    .addInstallTest('GitHub Copilot Installation', 'copilot')
     .addInstallTest('Qwen Code Installation', 'qwen')
     
     // Multi-provider test

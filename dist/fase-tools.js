@@ -17,7 +17,7 @@ import * as milestone from './lib/milestone.js';
 import * as commands from './lib/commands.js';
 import * as init from './lib/init.js';
 import * as frontmatter from './lib/frontmatter.js';
-import { checkForUpdate, promptForUpdate, runUpdate, getCachedUpdateInfo } from './lib/version-check.js';
+import { checkForUpdate, promptForUpdate, runUpdate, getCachedUpdateInfo, } from './lib/version-check.js';
 // Global handler for unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
     process.stderr.write(`[FASE] Unhandled Promise Rejection at: ${promise}\n`);
@@ -171,7 +171,9 @@ async function main() {
             const endIndex = filesIndex !== -1 ? filesIndex : args.length;
             const messageArgs = args.slice(1, endIndex).filter((a) => !a.startsWith('--'));
             const message = messageArgs.join(' ') || '';
-            const files = filesIndex !== -1 ? args.slice(filesIndex + 1).filter((a) => !a.startsWith('--')) : [];
+            const files = filesIndex !== -1
+                ? args.slice(filesIndex + 1).filter((a) => !a.startsWith('--'))
+                : [];
             commands.cmdCommit(cwd, message, files, raw, amend);
             break;
         }
@@ -199,7 +201,9 @@ async function main() {
                     plan: planIdx !== -1 ? args[planIdx + 1] : undefined,
                     name: nameIdx !== -1 ? args[nameIdx + 1] : undefined,
                     type: typeIdx !== -1 ? args[typeIdx + 1] : 'execute',
-                    fields: fieldsIdx !== -1 ? safeJsonParse(args[fieldsIdx + 1], 'fields JSON') : {},
+                    fields: fieldsIdx !== -1
+                        ? safeJsonParse(args[fieldsIdx + 1], 'fields JSON')
+                        : {},
                 }, raw);
             }
             else {

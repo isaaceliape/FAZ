@@ -86,7 +86,10 @@ export function cmdMilestoneComplete(cwd, version, options, raw) {
     const accomplishments = [];
     try {
         const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
-        const dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name).sort();
+        const dirs = entries
+            .filter((e) => e.isDirectory())
+            .map((e) => e.name)
+            .sort();
         for (const dir of dirs) {
             if (!isDirInMilestone(dir))
                 continue;
@@ -169,7 +172,9 @@ export function cmdMilestoneComplete(cwd, version, options, raw) {
             const phaseArchiveDir = path.join(archiveDir, `${version}-phases`);
             fs.mkdirSync(phaseArchiveDir, { recursive: true });
             const phaseEntries = fs.readdirSync(etapasDir, { withFileTypes: true });
-            const phaseDirNames = phaseEntries.filter((e) => e.isDirectory()).map((e) => e.name);
+            const phaseDirNames = phaseEntries
+                .filter((e) => e.isDirectory())
+                .map((e) => e.name);
             let archivedCount = 0;
             for (const dir of phaseDirNames) {
                 if (!isDirInMilestone(dir))

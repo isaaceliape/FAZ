@@ -3,7 +3,7 @@
  */
 import fs from 'fs';
 import path from 'path';
-import { normalizeEtapaNome, findEtapaInternal, generateSlugInternal, toPosixPath, output, error } from './core.js';
+import { normalizeEtapaNome, findEtapaInternal, generateSlugInternal, toPosixPath, output, error, } from './core.js';
 import { reconstructFrontmatter } from './frontmatter.js';
 export function cmdTemplateSelect(cwd, planPath, raw) {
     if (!planPath) {

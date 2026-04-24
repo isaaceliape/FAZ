@@ -6,7 +6,10 @@ import crypto from 'crypto';
 import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { checkAndPromptForUpdate } from './lib/version-check.js';
-import { convertClaudeToQwenCommand } from './install/frontmatter-convert.js';
+import {
+  convertClaudeToQwenCommand,
+  convertClaudeToCopilotCommand,
+} from './install/frontmatter-convert.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -1213,6 +1216,8 @@ function copyFlattenedCommands(
       // Convert frontmatter based on runtime
       if (runtime === 'qwen') {
         content = convertClaudeToQwenCommand(content);
+      } else if (runtime === 'copilot') {
+        content = convertClaudeToCopilotCommand(content);
       } else {
         content = convertClaudeToOpencodeFrontmatter(content);
       }
@@ -1327,9 +1332,12 @@ function copyWithPathReplacement(
       content = content.replace(globalFaseRegex, pathPrefix);
       content = content.replace(globalFaseHomeRegex, sharedHomePath);
       content = processAttribution(content, getCommitAttribution(runtime));
-      // Convert frontmatter for opencode compatibility
+      // Convert frontmatter for runtime compatibility
       if (isOpencode) {
         content = convertClaudeToOpencodeFrontmatter(content);
+        fs.writeFileSync(destPath, content);
+      } else if (runtime === 'copilot') {
+        content = convertClaudeToCopilotCommand(content);
         fs.writeFileSync(destPath, content);
       } else if (runtime === 'gemini') {
         if (isCommand) {
@@ -2163,6 +2171,7 @@ function install(
   const isOpencode = runtime === 'opencode';
   const isGemini = runtime === 'gemini';
   const isCodex = runtime === 'codex';
+  const isCopilot = runtime === 'copilot';
   const isQwen = runtime === 'qwen';
   const dirName = getDirName(runtime);
   const src = __dirname;
@@ -2181,6 +2190,7 @@ function install(
   if (isOpencode) runtimeLabel = 'OpenCode';
   if (isGemini) runtimeLabel = 'Gemini';
   if (isCodex) runtimeLabel = 'Codex';
+  if (isCopilot) runtimeLabel = 'GitHub Copilot';
   if (isQwen) runtimeLabel = 'Qwen Code';
   console.log(
     `  Instalando para ${cyan}${runtimeLabel}${reset} em ${cyan}${locationLabel}${reset}\n`
@@ -2191,7 +2201,7 @@ function install(
   saveLocalPatches(targetDir);
   // Clean up orphaned files from previous versions
   cleanupOrphanedFiles(targetDir);
-  // OpenCode uses command/ (flat), Codex uses skills/, Claude/Gemini use commands/fase/
+  // OpenCode uses command/ (flat), Codex uses skills/, Qwen/Copilot use commands/, Claude/Gemini use commands/fase/
   if (isOpencode) {
     // OpenCode: flat structure in command/ directory
     const commandDir = path.join(targetDir, 'command');
@@ -2217,6 +2227,18 @@ function install(
     }
   } else if (isQwen) {
     // Qwen Code: flat structure in commands/ directory (no fase/ subdirectory)
+    const commandsDir = path.join(targetDir, 'commands');
+    fs.mkdirSync(commandsDir, { recursive: true });
+    const faseSrc = path.join(src, 'comandos');
+    copyFlattenedCommands(faseSrc, commandsDir, 'fase', pathPrefix, runtime);
+    if (verifyInstalled(commandsDir, 'commands/fase-*')) {
+      const count = fs.readdirSync(commandsDir).filter((f) => f.startsWith('fase-')).length;
+      console.log(`  ${green}✓${reset} Instalados ${count} comandos em commands/`);
+    } else {
+      failures.push('commands/fase-*');
+    }
+  } else if (isCopilot) {
+    // GitHub Copilot: flat structure in commands/ directory
     const commandsDir = path.join(targetDir, 'commands');
     fs.mkdirSync(commandsDir, { recursive: true });
     const faseSrc = path.join(src, 'comandos');
@@ -2283,6 +2305,8 @@ function install(
         // Convert frontmatter for runtime compatibility
         if (isOpencode) {
           content = convertClaudeToOpencodeFrontmatter(content);
+        } else if (isCopilot) {
+          content = convertClaudeToCopilotCommand(content);
         } else if (isGemini) {
           content = convertClaudeToGeminiAgent(content);
         } else if (isCodex) {
@@ -2556,8 +2580,11 @@ function finishInstall(
   if (runtime === 'opencode') program = 'OpenCode';
   if (runtime === 'gemini') program = 'Gemini';
   if (runtime === 'codex') program = 'Codex';
+  if (runtime === 'copilot') program = 'GitHub Copilot';
+  if (runtime === 'qwen') program = 'Qwen Code';
   let command = '/fase-novo-projeto';
   if (runtime === 'codex') command = '$fase-novo-projeto';
+  if (runtime === 'copilot') command = '/fase-novo-projeto';
   console.log(`
   ${green}Pronto!${reset} Abra um diretório em branco no ${program} e execute ${cyan}${command}${reset}.
 `);

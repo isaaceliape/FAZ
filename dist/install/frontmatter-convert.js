@@ -241,12 +241,128 @@ export function convertClaudeToQwenCommand(content) {
         const trimmed = line.trim();
         // Extract description field
         if (trimmed.startsWith('description:')) {
-            description = trimmed.substring(12).trim().replace(/^['"]|['"]$/g, '');
+            description = trimmed
+                .substring(12)
+                .trim()
+                .replace(/^['"]|['"]$/g, '');
         }
         // name, tools, color, skills are ignored for Qwen Commands
     }
     // Build new frontmatter (only description if present)
     const newFrontmatter = description ? `---\ndescription: ${JSON.stringify(description)}\n---` : '';
     return newFrontmatter ? `${newFrontmatter}\n${body}` : body;
+}
+/**
+ * Convert Claude Code agent content to GitHub Copilot command format
+ * Copilot commands use:
+ * - snake_case tool names (read_file, write_file, bash, etc.)
+ * - lowercase field names (description, agent, tools)
+ * - tools as boolean flags instead of allowed-tools array
+ *
+ * @param content - Claude agent content
+ * @returns Copilot command content
+ */
+export function convertClaudeToCopilotCommand(content) {
+    // Replace tool name references in content
+    let convertedContent = content;
+    convertedContent = convertedContent.replace(/\bAskUserQuestion\b/g, 'ask_user');
+    convertedContent = convertedContent.replace(/\bSlashCommand\b/g, 'skill');
+    convertedContent = convertedContent.replace(/\bTodoWrite\b/g, 'write_todos');
+    // Replace /fase:command with /fase-command for copilot (flat command structure)
+    convertedContent = convertedContent.replace(/\/fase:/g, '/fase-');
+    // Replace ~/.claude and $HOME/.claude with Copilot's config location
+    convertedContent = convertedContent.replace(/~\/\.claude\b/g, '~/.copilot');
+    convertedContent = convertedContent.replace(/\$HOME\/\.claude\b/g, '$HOME/.copilot');
+    // Replace ~/.fase and $HOME/.fase with Copilot's config location
+    convertedContent = convertedContent.replace(/~\/\.fase\b/g, '~/.copilot');
+    convertedContent = convertedContent.replace(/\$HOME\/\.fase\b/g, '$HOME/.copilot');
+    // Replace general-purpose subagent type with Copilot's equivalent "general"
+    convertedContent = convertedContent.replace(/subagent_type="general-purpose"/g, 'subagent_type="general"');
+    // Check if content has frontmatter
+    if (!convertedContent.startsWith('---')) {
+        return convertedContent;
+    }
+    // Find the end of frontmatter
+    const endIndex = convertedContent.indexOf('---', 3);
+    if (endIndex === -1) {
+        return convertedContent;
+    }
+    const frontmatter = convertedContent.substring(3, endIndex).trim();
+    const body = convertedContent.substring(endIndex + 3);
+    // Parse frontmatter line by line
+    const lines = frontmatter.split('\n');
+    const newLines = [];
+    let inAllowedTools = false;
+    const allowedTools = [];
+    for (const line of lines) {
+        const trimmed = line.trim();
+        // Detect start of allowed-tools array
+        if (trimmed.startsWith('allowed-tools:')) {
+            inAllowedTools = true;
+            continue;
+        }
+        // Detect inline tools: field (comma-separated string)
+        if (trimmed.startsWith('tools:')) {
+            const toolsValue = trimmed.substring(6).trim();
+            if (toolsValue) {
+                const tools = toolsValue
+                    .split(',')
+                    .map((t) => t.trim())
+                    .filter((t) => t);
+                allowedTools.push(...tools);
+            }
+            continue;
+        }
+        // Remove name: field - copilot uses filename for command name
+        if (trimmed.startsWith('name:')) {
+            continue;
+        }
+        // Skip color: field - copilot doesn't use colors
+        if (trimmed.startsWith('color:')) {
+            continue;
+        }
+        // Skip skills: field - copilot doesn't use this
+        if (trimmed.startsWith('skills:')) {
+            continue;
+        }
+        // Collect allowed-tools items
+        if (inAllowedTools) {
+            if (trimmed.startsWith('- ')) {
+                allowedTools.push(trimmed.substring(2).trim());
+                continue;
+            }
+            else if (trimmed && !trimmed.startsWith('-')) {
+                inAllowedTools = false;
+                newLines.push(line);
+                continue;
+            }
+            // Skip tool list items
+            continue;
+        }
+        // Keep other fields as-is (description, agent, argument-hint, etc.)
+        newLines.push(line);
+    }
+    // Convert allowed tools to boolean flags in frontmatter
+    const toolsMap = {};
+    for (const tool of allowedTools) {
+        const copilotTool = convertCopilotToolName(tool);
+        if (copilotTool) {
+            toolsMap[copilotTool] = true;
+        }
+    }
+    // Build new frontmatter
+    let newFrontmatter = '---\n';
+    newFrontmatter += newLines.map((line) => line || '').join('\n').trim();
+    // Add tools section if there are any
+    if (Object.keys(toolsMap).length > 0) {
+        // Remove trailing whitespace from frontmatter
+        newFrontmatter = newFrontmatter.replace(/\s+$/, '');
+        newFrontmatter += '\ntools:\n';
+        for (const [toolName, value] of Object.entries(toolsMap)) {
+            newFrontmatter += `  ${toolName}: ${value}\n`;
+        }
+    }
+    newFrontmatter += '---';
+    return `${newFrontmatter}\n${body}`;
 }
 //# sourceMappingURL=frontmatter-convert.js.map

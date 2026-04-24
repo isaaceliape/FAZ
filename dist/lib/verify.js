@@ -3,7 +3,7 @@
  */
 import fs from 'fs';
 import path from 'path';
-import { safeReadFile, normalizeEtapaNome, execGit, findEtapaInternal, getMilestoneInfo, output, error } from './core.js';
+import { safeReadFile, normalizeEtapaNome, execGit, findEtapaInternal, getMilestoneInfo, output, error, } from './core.js';
 import { extractFrontmatter, parseMustHavesBlock } from './frontmatter.js';
 import { writeStateMd } from './state.js';
 export function cmdVerifySummary(cwd, summaryPath, checkFileCount, raw) {
@@ -81,7 +81,11 @@ export function cmdVerifySummary(cwd, summaryPath, checkFileCount, raw) {
         errors.push('Seção de auto-verificação indica falha');
     const checks = {
         summary_exists: true,
-        files_created: { checked: filesToCheck.length, found: filesToCheck.length - missing.length, missing },
+        files_created: {
+            checked: filesToCheck.length,
+            found: filesToCheck.length - missing.length,
+            missing,
+        },
         commits_exist: commitsExist,
         self_check: selfCheck,
     };
@@ -101,7 +105,16 @@ export function cmdVerifyPlanStructure(cwd, filePath, raw) {
     const fm = extractFrontmatter(content);
     const errors = [];
     const warnings = [];
-    const required = ['etapa', 'plan', 'type', 'etapa', 'depends_on', 'files_modified', 'autonomous', 'must_haves'];
+    const required = [
+        'etapa',
+        'plan',
+        'type',
+        'etapa',
+        'depends_on',
+        'files_modified',
+        'autonomous',
+        'must_haves',
+    ];
     for (const field of required) {
         if (fm[field] === undefined)
             errors.push(`Campo de frontmatter obrigatório ausente: ${field}`);
@@ -131,7 +144,9 @@ export function cmdVerifyPlanStructure(cwd, filePath, raw) {
     }
     if (tasks.length === 0)
         warnings.push('Nenhum elemento <task> encontrado');
-    if (fm['etapa'] && parseInt(String(fm['etapa']), 10) > 1 && (!fm['depends_on'] || (Array.isArray(fm['depends_on']) && fm['depends_on'].length === 0))) {
+    if (fm['etapa'] &&
+        parseInt(String(fm['etapa']), 10) > 1 &&
+        (!fm['depends_on'] || (Array.isArray(fm['depends_on']) && fm['depends_on'].length === 0))) {
         warnings.push('Etapa > 1 mas depends_on está vazio');
     }
     const hasCheckpoints = /<task\s+type=["']?checkpoint/.test(content);
@@ -336,7 +351,13 @@ export function cmdVerifyKeyLinks(cwd, planFilePath, raw) {
         if (typeof linkRaw === 'string')
             continue;
         const link = linkRaw;
-        const check = { from: link.from, to: link.to, via: link.via || '', verified: false, detail: '' };
+        const check = {
+            from: link.from,
+            to: link.to,
+            via: link.via || '',
+            verified: false,
+            detail: '',
+        };
         const sourceContent = safeReadFile(path.join(cwd, link.from || ''));
         if (!sourceContent) {
             check.detail = 'Arquivo de origem não encontrado';
@@ -432,14 +453,19 @@ export function cmdValidateConsistency(cwd, raw) {
     }
     try {
         const entries = fs.readdirSync(etapasDir, { withFileTypes: true });
-        const dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name).sort();
+        const dirs = entries
+            .filter((e) => e.isDirectory())
+            .map((e) => e.name)
+            .sort();
         for (const dir of dirs) {
             const phaseFiles = fs.readdirSync(path.join(etapasDir, dir));
             const plans = phaseFiles.filter((f) => f.endsWith('-PLAN.md')).sort();
-            const planNums = plans.map((p) => {
+            const planNums = plans
+                .map((p) => {
                 const pm = p.match(/-(\d{2})-PLAN\.md$/);
                 return pm ? parseInt(pm[1], 10) : null;
-            }).filter((n) => n !== null);
+            })
+                .filter((n) => n !== null);
             for (let i = 1; i < planNums.length; i++) {
                 if (planNums[i] !== planNums[i - 1] + 1) {
                     warnings.push(`Lacuna na numeração de planos em ${dir}: plano ${planNums[i - 1]} → ${planNums[i]}`);
@@ -536,7 +562,9 @@ export function cmdValidateHealth(cwd, options, raw) {
         catch { }
         for (const ref of phaseRefs) {
             const normalizedRef = String(parseInt(ref, 10)).padStart(2, '0');
-            if (!diskPhases.has(ref) && !diskPhases.has(normalizedRef) && !diskPhases.has(String(parseInt(ref, 10)))) {
+            if (!diskPhases.has(ref) &&
+                !diskPhases.has(normalizedRef) &&
+                !diskPhases.has(String(parseInt(ref, 10)))) {
                 if (diskPhases.size > 0) {
                     addIssue('warning', 'W002', `STATE.md referencia fase ${ref}, mas apenas fases ${[...diskPhases].sort().join(', ')} existem`, 'Execute /gsd:saude --repair para regenerar STATE.md', true);
                     if (!repairs.includes('regenerateState'))
@@ -567,7 +595,8 @@ export function cmdValidateHealth(cwd, options, raw) {
         try {
             const configRaw = fs.readFileSync(configPath, 'utf-8');
             const configParsed = JSON.parse(configRaw);
-            if (configParsed['workflow'] && configParsed['workflow']['nyquist_validation'] === undefined) {
+            if (configParsed['workflow'] &&
+                configParsed['workflow']['nyquist_validation'] === undefined) {
                 addIssue('warning', 'W008', 'config.json: workflow.nyquist_validation ausente (padrão ativado mas agentes podem pular)', 'Execute /gsd:saude --repair para adicionar chave', true);
                 if (!repairs.includes('addNyquistKey'))
                     repairs.push('addNyquistKey');
@@ -711,7 +740,11 @@ export function cmdValidateHealth(cwd, options, raw) {
                                 repairActions.push({ action: repair, success: true, path: 'config.json' });
                             }
                             catch (err) {
-                                repairActions.push({ action: repair, success: false, error: err.message });
+                                repairActions.push({
+                                    action: repair,
+                                    success: false,
+                                    error: err.message,
+                                });
                             }
                         }
                         break;

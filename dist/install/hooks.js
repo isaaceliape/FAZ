@@ -113,7 +113,7 @@ export function listHooks(configDir) {
         return [];
     }
     try {
-        return fs.readdirSync(hooksDir).filter(f => f.endsWith('.js') || f.endsWith('.cjs'));
+        return fs.readdirSync(hooksDir).filter((f) => f.endsWith('.js') || f.endsWith('.cjs'));
     }
     catch {
         return [];
@@ -127,7 +127,7 @@ export function listHooks(configDir) {
  */
 export function countFaseHooks(configDir) {
     const hooks = listHooks(configDir);
-    return hooks.filter(h => h.startsWith('fase-')).length;
+    return hooks.filter((h) => h.startsWith('fase-')).length;
 }
 /**
  * Check if a specific hook exists

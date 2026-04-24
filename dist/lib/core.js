@@ -17,7 +17,8 @@ export function ensureInsidePlanejamento(cwd, filePath, operation = 'file operat
     const planejPath = path.join(cwd, '.fase-ai');
     const normalizedFull = path.normalize(fullPath);
     const normalizedPlanej = path.normalize(planejPath);
-    if (!normalizedFull.startsWith(normalizedPlanej + path.sep) && normalizedFull !== normalizedPlanej) {
+    if (!normalizedFull.startsWith(normalizedPlanej + path.sep) &&
+        normalizedFull !== normalizedPlanej) {
         throw new PathTraversalError(`${operation} must be inside .fase-ai/: ${filePath}`, 'PATH_OUTSIDE_BOUNDARY', { path: filePath, boundary: '.fase-ai', operation });
     }
     return fullPath;
@@ -28,7 +29,7 @@ export function isInsidePlanejamento(cwd, filePath) {
     const planejPath = path.join(cwd, '.fase-ai');
     const normalizedFull = path.normalize(fullPath);
     const normalizedPlanej = path.normalize(planejPath);
-    return normalizedFull.startsWith(normalizedPlanej + path.sep) || normalizedFull === normalizedPlanej;
+    return (normalizedFull.startsWith(normalizedPlanej + path.sep) || normalizedFull === normalizedPlanej);
 }
 /**
  * Guardrail: Validates that a user-provided path doesn't escape the project boundary (cwd).
@@ -118,7 +119,11 @@ export function loadConfig(cwd) {
         const parsed = JSON.parse(raw);
         // Migrate deprecated "depth" key to "granularity" with value mapping
         if ('depth' in parsed && !('granularity' in parsed)) {
-            const depthToGranularity = { quick: 'coarse', standard: 'standard', comprehensive: 'fine' };
+            const depthToGranularity = {
+                quick: 'coarse',
+                standard: 'standard',
+                comprehensive: 'fine',
+            };
             parsed['granularity'] = depthToGranularity[parsed['depth']] ?? parsed['depth'];
             delete parsed['depth'];
             try {
@@ -151,15 +156,34 @@ export function loadConfig(cwd) {
         })();
         return {
             model_profile: (get('model_profile') ?? defaults.model_profile),
-            commit_docs: (get('commit_docs', { section: 'planning', field: 'commit_docs' }) ?? defaults.commit_docs),
-            search_gitignored: (get('search_gitignored', { section: 'planning', field: 'search_gitignored' }) ?? defaults.search_gitignored),
-            branching_strategy: (get('branching_strategy', { section: 'git', field: 'branching_strategy' }) ?? defaults.branching_strategy),
-            etapa_branch_template: (get('etapa_branch_template', { section: 'git', field: 'etapa_branch_template' }) ?? defaults.etapa_branch_template),
-            milestone_branch_template: (get('milestone_branch_template', { section: 'git', field: 'milestone_branch_template' }) ?? defaults.milestone_branch_template),
-            research: (get('research', { section: 'workflow', field: 'research' }) ?? defaults.research),
-            plan_checker: (get('plan_checker', { section: 'workflow', field: 'plan_check' }) ?? defaults.plan_checker),
-            verifier: (get('verifier', { section: 'workflow', field: 'verifier' }) ?? defaults.verifier),
-            nyquist_validation: (get('nyquist_validation', { section: 'workflow', field: 'nyquist_validation' }) ?? defaults.nyquist_validation),
+            commit_docs: (get('commit_docs', { section: 'planning', field: 'commit_docs' }) ??
+                defaults.commit_docs),
+            search_gitignored: (get('search_gitignored', {
+                section: 'planning',
+                field: 'search_gitignored',
+            }) ?? defaults.search_gitignored),
+            branching_strategy: (get('branching_strategy', {
+                section: 'git',
+                field: 'branching_strategy',
+            }) ?? defaults.branching_strategy),
+            etapa_branch_template: (get('etapa_branch_template', {
+                section: 'git',
+                field: 'etapa_branch_template',
+            }) ?? defaults.etapa_branch_template),
+            milestone_branch_template: (get('milestone_branch_template', {
+                section: 'git',
+                field: 'milestone_branch_template',
+            }) ?? defaults.milestone_branch_template),
+            research: (get('research', { section: 'workflow', field: 'research' }) ??
+                defaults.research),
+            plan_checker: (get('plan_checker', { section: 'workflow', field: 'plan_check' }) ??
+                defaults.plan_checker),
+            verifier: (get('verifier', { section: 'workflow', field: 'verifier' }) ??
+                defaults.verifier),
+            nyquist_validation: (get('nyquist_validation', {
+                section: 'workflow',
+                field: 'nyquist_validation',
+            }) ?? defaults.nyquist_validation),
             parallelization,
             brave_search: (get('brave_search') ?? defaults.brave_search),
             model_overrides: parsed['model_overrides'] ?? null,
@@ -186,7 +210,7 @@ export function isGitIgnored(cwd, targetPath) {
 }
 export function execGit(cwd, args) {
     try {
-        const escaped = args.map(a => {
+        const escaped = args.map((a) => {
             if (/^[a-zA-Z0-9._\-/=:@]+$/.test(a))
                 return a;
             return "'" + a.replace(/'/g, "'\\''") + "'";
@@ -237,8 +261,18 @@ export function compareEtapaNum(a, b) {
             return 1;
         return la < lb ? -1 : 1;
     }
-    const aDecParts = pa[3] ? pa[3].slice(1).split('.').map(p => parseInt(p, 10)) : [];
-    const bDecParts = pb[3] ? pb[3].slice(1).split('.').map(p => parseInt(p, 10)) : [];
+    const aDecParts = pa[3]
+        ? pa[3]
+            .slice(1)
+            .split('.')
+            .map((p) => parseInt(p, 10))
+        : [];
+    const bDecParts = pb[3]
+        ? pb[3]
+            .slice(1)
+            .split('.')
+            .map((p) => parseInt(p, 10))
+        : [];
     const maxLen = Math.max(aDecParts.length, bDecParts.length);
     if (aDecParts.length === 0 && bDecParts.length > 0)
         return -1;
@@ -255,7 +289,10 @@ export function compareEtapaNum(a, b) {
 export function searchEtapaInDir(baseDir, relBase, normalized) {
     try {
         const entries = fs.readdirSync(baseDir, { withFileTypes: true });
-        const dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name).sort((a, b) => compareEtapaNum(a, b));
+        const dirs = entries
+            .filter((e) => e.isDirectory())
+            .map((e) => e.name)
+            .sort((a, b) => compareEtapaNum(a, b));
         const match = dirs.find((d) => d.startsWith(normalized));
         if (!match)
             return null;
@@ -264,8 +301,12 @@ export function searchEtapaInDir(baseDir, relBase, normalized) {
         const etapaNome = dirMatch?.[2] ?? null;
         const phaseDir = path.join(baseDir, match);
         const phaseFiles = fs.readdirSync(phaseDir);
-        const plans = phaseFiles.filter((f) => f.endsWith('-PLAN.md') || f === 'PLAN.md').sort();
-        const summaries = phaseFiles.filter((f) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md').sort();
+        const plans = phaseFiles
+            .filter((f) => f.endsWith('-PLAN.md') || f === 'PLAN.md')
+            .sort();
+        const summaries = phaseFiles
+            .filter((f) => f.endsWith('-SUMMARY.md') || f === 'SUMMARY.md')
+            .sort();
         const hasResearch = phaseFiles.some((f) => f.endsWith('-RESEARCH.md') || f === 'RESEARCH.md');
         const hasContext = phaseFiles.some((f) => f.endsWith('-CONTEXT.md') || f === 'CONTEXT.md');
         const hasVerification = phaseFiles.some((f) => f.endsWith('-VERIFICATION.md') || f === 'VERIFICATION.md');
@@ -279,7 +320,12 @@ export function searchEtapaInDir(baseDir, relBase, normalized) {
             directory: toPosixPath(path.join(relBase, match)),
             phase_number: etapaNumber,
             phase_name: etapaNome,
-            phase_slug: etapaNome ? etapaNome.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') : null,
+            phase_slug: etapaNome
+                ? etapaNome
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '')
+                : null,
             plans,
             summaries,
             incomplete_plans: incompletePlans,
@@ -307,8 +353,8 @@ export function findEtapaInternal(cwd, etapa) {
     try {
         const milestoneEntries = fs.readdirSync(milestonesDir, { withFileTypes: true });
         const archiveDirs = milestoneEntries
-            .filter(e => e.isDirectory() && /^v[\d.]+-phases$/.test(e.name))
-            .map(e => e.name)
+            .filter((e) => e.isDirectory() && /^v[\d.]+-phases$/.test(e.name))
+            .map((e) => e.name)
             .sort()
             .reverse();
         for (const archiveName of archiveDirs) {
@@ -336,8 +382,8 @@ export function getArchivedEtapasDirs(cwd) {
     try {
         const milestoneEntries = fs.readdirSync(milestonesDir, { withFileTypes: true });
         const etapasDirs = milestoneEntries
-            .filter(e => e.isDirectory() && /^v[\d.]+-phases$/.test(e.name))
-            .map(e => e.name)
+            .filter((e) => e.isDirectory() && /^v[\d.]+-phases$/.test(e.name))
+            .map((e) => e.name)
             .sort()
             .reverse();
         for (const archiveName of etapasDirs) {
@@ -345,7 +391,10 @@ export function getArchivedEtapasDirs(cwd) {
             const version = versionMatch?.[1] ?? archiveName;
             const archivePath = path.join(milestonesDir, archiveName);
             const entries = fs.readdirSync(archivePath, { withFileTypes: true });
-            const dirs = entries.filter(e => e.isDirectory()).map(e => e.name).sort((a, b) => compareEtapaNum(a, b));
+            const dirs = entries
+                .filter((e) => e.isDirectory())
+                .map((e) => e.name)
+                .sort((a, b) => compareEtapaNum(a, b));
             for (const dir of dirs) {
                 results.push({
                     name: dir,
@@ -379,7 +428,9 @@ export function getRoadmapEtapaInternal(cwd, etapaNum) {
         const headerIndex = headerMatch.index ?? 0;
         const restOfContent = content.slice(headerIndex);
         const nextHeaderMatch = restOfContent.match(/\n#{2,4}\s+(?:Phase|Etapa)\s+\d/i);
-        const sectionEnd = nextHeaderMatch ? headerIndex + (nextHeaderMatch.index ?? 0) : content.length;
+        const sectionEnd = nextHeaderMatch
+            ? headerIndex + (nextHeaderMatch.index ?? 0)
+            : content.length;
         const section = content.slice(headerIndex, sectionEnd).trim();
         const goalMatch = section.match(/\*\*Goal:\*\*\s*([^\n]+)/i);
         const goal = goalMatch ? goalMatch[1].trim() : null;
@@ -416,7 +467,7 @@ export function pathExistsInternal(cwd, targetPath) {
         fs.statSync(fullPath);
         return true;
     }
-    catch (err) {
+    catch {
         // Silently return false for non-existent paths (expected behavior)
         return false;
     }
@@ -424,7 +475,10 @@ export function pathExistsInternal(cwd, targetPath) {
 export function generateSlugInternal(text) {
     if (!text)
         return null;
-    return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    return text
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
 }
 export function getMilestoneInfo(cwd) {
     try {
@@ -473,7 +527,7 @@ export function getMilestoneEtapaFilter(cwd) {
         passAll.phaseCount = 0;
         return passAll;
     }
-    const normalized = new Set([...milestonePhaseNums].map(n => (n.replace(/^0+/, '') || '0').toLowerCase()));
+    const normalized = new Set([...milestonePhaseNums].map((n) => (n.replace(/^0+/, '') || '0').toLowerCase()));
     function isDirInMilestone(dirName) {
         const m = dirName.match(/^0*(\d+[A-Za-z]?(?:\.\d+)*)/);
         if (!m)
@@ -489,7 +543,11 @@ export function getMilestoneEtapaFilter(cwd) {
  * @returns Object with valid status, missing vars, and warnings
  */
 export function validateEnvVars() {
-    const result = { valid: true, missing: [], warnings: [] };
+    const result = {
+        valid: true,
+        missing: [],
+        warnings: [],
+    };
     // Optional but recommended
     if (!process.env.BRAVE_API_KEY) {
         result.warnings.push('BRAVE_API_KEY not set — Brave search features will be disabled');

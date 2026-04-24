@@ -55,6 +55,7 @@
     "test:tmux": "./test/tmux/run-all-tests.sh",
     "test:tmux:smoke": "node test/tmux-runner.cjs --smoke",
     "test:tmux:all": "node test/tmux-runner.cjs --all",
+    "test:tmux:interaction": "mocha test/tmux/tui-interaction.test.cjs --timeout 60000",
     "test:all": "npm run test:unit && npm run test:integration",
     "test:coverage": "mocha test/unit/*.test.cjs test/integration/*.test.cjs --reporter json > test-results.json",
     "test:watch": "mocha test/unit/*.test.cjs --watch",

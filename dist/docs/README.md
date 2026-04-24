@@ -1,6 +1,6 @@
 # 📚 Documentação do FASE
 
-> **Versão**: 4.0.0 ✅ | Última atualização: 2026-04-20 | Status: Todos os testes passando (34/34 comandos, 6/6 runtimes)
+> **Versão**: 5.0.1 ✅ | Última atualização: 2026-04-24 | Status: Todos os testes passando (9/9 install, 11/11 TUI interaction, 6/6 providers)
 
 Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que precisa para instalar, usar e contribuir ao projeto.
 
@@ -20,6 +20,7 @@ Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que prec
 | Documento | Descrição |
 |-----------|-----------|
 | [**Guia de Contribuição**](CONTRIBUINDO.html) | Como contribuir para o FASE (bugs, features, traduções) |
+| [**Guia de Testes**](TESTING.html) | Estrutura de testes, cobertura de providers, TUI interaction |
 | [**Git Hooks**](HOOKS.html) | Git hooks e verificações de segurança |
 | [**Padronização de Caminhos**](technical/padronizacao-caminhos.html) | Mecanismo de padronização de caminhos |
 
@@ -50,6 +51,7 @@ docs/
 ├── guia-do-usuario.md     # Guia para usuários
 ├── COMANDOS.md            # Lista de comandos
 ├── CONTRIBUINDO.md        # Guia de contribuição
+├── TESTING.md             # Guia de testes (novo!)
 ├── HOOKS.md               # Git hooks documentation
 ├── NPM-REGISTRY.md        # Configuração npm
 ├── technical/
@@ -78,6 +80,35 @@ docs/
 - **Sugestão**: Use template `feature_request.md`
 
 ## <i class="fa fa-chart-line"></i> Melhorias Documentadas
+
+### v5.0.1 (Abril 2026)
+
+**Testes de Interação com TUI para Todos os 6 Providers**
+- <i class="fa fa-check-circle"></i> Novo framework de testes `test/tmux/tui-interaction.test.cjs` para validar comandos em cada provider
+- <i class="fa fa-check-circle"></i> Testes automatizados usando tmux para simular interação do usuário
+- <i class="fa fa-check-circle"></i> Cobertura completa: Claude, OpenCode, Gemini, Codex, GitHub Copilot, Qwen
+- <i class="fa fa-check-circle"></i> 11 novos testes mocha validando: launch, command input, instalação local, padrões
+- <i class="fa fa-check-circle"></i> Qwen provider demonstra captura bem-sucedida de comandos FASE em TUI
+- <i class="fa fa-check-circle"></i> Suite instalação expandida: agora 9/9 testes de install/uninstall com todos os providers
+- <i class="fa fa-check-circle"></i> Documentação atualizada: [Guia de Testes](TESTING.html)
+
+**Correções:**
+- <i class="fa fa-check-circle"></i> Fixed: Qwen config path em tmux-test-helper (era `.claude`, agora `.qwen`)
+- <i class="fa fa-check-circle"></i> Fixed: Path resolution em `test/tmux/run-all-tests.sh`
+- <i class="fa fa-check-circle"></i> Added: GitHub Copilot provider ao test matrix
+
+**Como executar:**
+```bash
+npm run test:tmux              # 9 testes de instalação (97s)
+npm run test:tmux:interaction  # 11 testes de TUI (60s)
+```
+
+### v5.0.0 (Abril 2026)
+
+**Multi-Provider Architecture Completa**
+- <i class="fa fa-check-circle"></i> Suporte nativo para 6 code assistants: Claude, OpenCode, Gemini, Codex, GitHub Copilot, Qwen
+- <i class="fa fa-check-circle"></i> Cada provider com sua própria estrutura de diretórios padronizada
+- <i class="fa fa-check-circle"></i> 34 comandos FASE disponíveis em todos os providers
 
 ### v3.3.0 (Abril 2026)
 

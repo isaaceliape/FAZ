@@ -14,7 +14,10 @@ export function cmdConfigEnsureSection(cwd, raw) {
         }
     }
     catch (err) {
-        throw new FileError('Falha ao criar diretório .fase-ai', 'MKDIR_FAILED', { path: planejamentoDir, error: err.message });
+        throw new FileError('Falha ao criar diretório .fase-ai', 'MKDIR_FAILED', {
+            path: planejamentoDir,
+            error: err.message,
+        });
     }
     if (fs.existsSync(configPath)) {
         output({ created: false, reason: 'already_exists' }, raw, 'exists');
@@ -41,14 +44,20 @@ export function cmdConfigEnsureSection(cwd, raw) {
     const defaults = {
         ...hardcoded,
         ...userDefaults,
-        workflow: { ...hardcoded.workflow, ...(userDefaults['workflow'] ?? {}) },
+        workflow: {
+            ...hardcoded.workflow,
+            ...(userDefaults['workflow'] ?? {}),
+        },
     };
     try {
         fs.writeFileSync(configPath, JSON.stringify(defaults, null, 2), 'utf-8');
         output({ created: true, path: '.fase-ai/config.json' }, raw, 'created');
     }
     catch (err) {
-        throw new FileError('Falha ao criar config.json', 'WRITE_FAILED', { path: configPath, error: err.message });
+        throw new FileError('Falha ao criar config.json', 'WRITE_FAILED', {
+            path: configPath,
+            error: err.message,
+        });
     }
 }
 export function cmdConfigSet(cwd, keyPath, value, raw) {
@@ -70,7 +79,10 @@ export function cmdConfigSet(cwd, keyPath, value, raw) {
         }
     }
     catch (err) {
-        throw new ConfigError('Falha ao ler config.json', 'READ_FAILED', { path: configPath, error: err.message });
+        throw new ConfigError('Falha ao ler config.json', 'READ_FAILED', {
+            path: configPath,
+            error: err.message,
+        });
     }
     const keys = keyPath.split('.');
     let current = config;
@@ -87,7 +99,10 @@ export function cmdConfigSet(cwd, keyPath, value, raw) {
         output({ updated: true, key: keyPath, value: parsedValue }, raw, `${keyPath}=${parsedValue}`);
     }
     catch (err) {
-        throw new FileError('Falha ao escrever config.json', 'WRITE_FAILED', { path: configPath, error: err.message });
+        throw new FileError('Falha ao escrever config.json', 'WRITE_FAILED', {
+            path: configPath,
+            error: err.message,
+        });
     }
 }
 export function cmdConfigGet(cwd, keyPath, raw) {
@@ -101,19 +116,27 @@ export function cmdConfigGet(cwd, keyPath, raw) {
             config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
         }
         else {
-            throw new ConfigError('Nenhum config.json encontrado', 'FILE_NOT_FOUND', { path: configPath });
+            throw new ConfigError('Nenhum config.json encontrado', 'FILE_NOT_FOUND', {
+                path: configPath,
+            });
         }
     }
     catch (err) {
         if (err instanceof ConfigError)
             throw err;
-        throw new ConfigError('Falha ao ler config.json', 'READ_FAILED', { path: configPath, error: err.message });
+        throw new ConfigError('Falha ao ler config.json', 'READ_FAILED', {
+            path: configPath,
+            error: err.message,
+        });
     }
     const keys = keyPath.split('.');
     let current = config;
     for (const key of keys) {
         if (current === undefined || current === null || typeof current !== 'object') {
-            throw new ValidationError(`Chave não encontrada: ${keyPath}`, 'KEY_NOT_FOUND', { keyPath, key });
+            throw new ValidationError(`Chave não encontrada: ${keyPath}`, 'KEY_NOT_FOUND', {
+                keyPath,
+                key,
+            });
         }
         current = current[key];
     }

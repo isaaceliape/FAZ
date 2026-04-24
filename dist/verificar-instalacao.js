@@ -125,7 +125,7 @@ else {
         priority: 1,
         issue: 'Pacote não instalado',
         command: 'npm install -g fase-ai@latest',
-        description: 'Instalar FASE globalmente'
+        description: 'Instalar FASE globalmente',
     });
 }
 console.log();
@@ -140,7 +140,7 @@ const runtimes = [
         hooksDir: path.join(os.homedir(), '.claude', 'hooks'),
         commandPattern: /^fase-.*\.md$/,
         hookPattern: /^fase-.*\.js$/,
-        installFlag: '--claude'
+        installFlag: '--claude',
     },
     {
         name: 'OpenCode',
@@ -148,7 +148,7 @@ const runtimes = [
         settingsFile: path.join(os.homedir(), '.config', 'opencode', 'opencode.json'),
         commandsDir: path.join(os.homedir(), '.config', 'opencode', 'command'),
         commandPattern: /^fase-.*\.md$/,
-        installFlag: '--opencode'
+        installFlag: '--opencode',
     },
     {
         name: 'Gemini',
@@ -156,7 +156,7 @@ const runtimes = [
         settingsFile: path.join(os.homedir(), '.gemini', 'settings.json'),
         commandsDir: path.join(os.homedir(), '.gemini', 'commands'),
         commandPattern: /^fase-.*\.toml$/,
-        installFlag: '--gemini'
+        installFlag: '--gemini',
     },
     {
         name: 'Codex',
@@ -164,7 +164,7 @@ const runtimes = [
         configFile: path.join(os.homedir(), '.codex', 'config.toml'),
         skillsDir: path.join(os.homedir(), '.codex', 'skills'),
         skillPattern: /^fase-/,
-        installFlag: '--codex'
+        installFlag: '--codex',
     },
     {
         name: 'GitHub Copilot',
@@ -174,8 +174,8 @@ const runtimes = [
         hooksDir: path.join(os.homedir(), '.copilot', 'hooks'),
         commandPattern: /^fase-.*\.md$/,
         hookPattern: /^fase-.*\.js$/,
-        installFlag: '--copilot'
-    }
+        installFlag: '--copilot',
+    },
 ];
 for (const runtime of runtimes) {
     const isConfigured = dirExists(runtime.configDir);
@@ -203,16 +203,17 @@ for (const runtime of runtimes) {
                 priority: 2,
                 issue: `${runtime.name} sem configuração`,
                 command: `npx fase-ai ${runtime.installFlag}`,
-                description: `Configurar FASE para ${runtime.name}`
+                description: `Configurar FASE para ${runtime.name}`,
             });
         }
         // Check commands/skills
         let commandCount = 0;
         let commandLabel = 'Comandos FASE';
         if (runtime.name === 'Codex') {
-            commandCount = runtime.skillsDir !== undefined && runtime.skillPattern !== undefined
-                ? countFilesRecursive(runtime.skillsDir, runtime.skillPattern)
-                : 0;
+            commandCount =
+                runtime.skillsDir !== undefined && runtime.skillPattern !== undefined
+                    ? countFilesRecursive(runtime.skillsDir, runtime.skillPattern)
+                    : 0;
             commandLabel = 'Skills FASE';
         }
         else if (runtime.commandsDir && runtime.commandPattern) {
@@ -228,7 +229,7 @@ for (const runtime of runtimes) {
                 priority: 2,
                 issue: `${runtime.name} sem comandos`,
                 command: `npx fase-ai ${runtime.installFlag}`,
-                description: `Instalar comandos FASE para ${runtime.name}`
+                description: `Instalar comandos FASE para ${runtime.name}`,
             });
         }
         // Check hooks (Claude Code only)
