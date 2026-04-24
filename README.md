@@ -253,39 +253,6 @@ Padronização completa de tratamento de erros em toda a codebase:
 
 ---
 
-## Novidades em v3.3.0
-
-### Verificação Automática de Versão
-O FASE agora verifica automaticamente por atualizações:
-- **Hook SessionStart**: Verifica silenciosamente no npm registry
-- **Notificação visível**: Caixa estilizada mostra versão atual e disponível
-- **Prompt interativo**: Pergunta se deseja atualizar automaticamente
-- **Statusline integrada**: Mostra ` /fase:atualizar` quando há atualização
-
-### Path Standardization
-Todos os comandos e agentes agora usam um padrão universal `@~/.fase/` que é convertido automaticamente para caminhos específicos de cada runtime durante a instalação:
-
-- **Claude Code**: `~/.claude/fase/`
-- **OpenCode**: `~/.config/opencode/fase/`
-- **Gemini**: `~/.gemini/fase/`
-- **Codex**: `~/.codex/fase/`
-
-Isso garante que FASE funciona identicamente em todos os 4 runtimes, sem duplicação de código.
-### Melhorias de Testes
-
-- 41 testes de edge cases (test/edge-cases.test.cjs)
-- 17 arquivos de testes legacy (testes/)
-- Testes para path standardization em todos os runtimes
-- Validação de segurança (path traversal, race conditions, timeout)
-- Documentação expandida de testes (docs/TESTING.md)
-
-### Documentação Melhorada
-- Novos documentos explicando path standardization
-- Documentação expandida em test/ com rastreamento detalhado
-- Seções expandidas em guias de testes
-
----
-
 ## Arquitetura
 
 FASE é organizado em **4 camadas principais**:
