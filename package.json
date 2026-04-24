@@ -1,6 +1,6 @@
 {
   "name": "fase-ai",
-  "version": "5.0.1",
+  "version": "5.1.0",
   "description": "FASE. - Framework de Automação Sem Enrolação. Brazilian Portuguese translation of get-shit-done for AI coding assistants",
   "type": "module",
   "bin": {
