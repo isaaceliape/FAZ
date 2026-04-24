@@ -4,7 +4,7 @@
 
 ## Framework de Automação Sem Enrolação
 
-**🇧🇷 Tradução brasileira do [get-shit-done](https://github.com/gsd-build/get-shit-done) para Claude Code, OpenCode, Gemini, Codex e Qwen Code.**
+**(BR) Tradução brasileira do [get-shit-done](https://github.com/gsd-build/get-shit-done) para Claude Code, OpenCode, Gemini, Codex e Qwen Code.**
 
 Spec-driven development, context engineering e meta-prompting — agora em português brasileiro.
 
@@ -20,9 +20,9 @@ Spec-driven development, context engineering e meta-prompting — agora em portu
 
 > *"Chega de enrolação. Descreve o que quer e FASE acontecer."*
 
-**[🌐 Visite a Landing Page](https://isaaceliape.github.io/FASE/)** — Conheça o projeto de forma visual
+**[(web) Visite a Landing Page](https://isaaceliape.github.io/FASE/)** — Conheça o projeto de forma visual
 
-**[📖 Documentação Completa](https://isaaceliape.github.io/FASE/docs/)** — Guias, referência e exemplos
+**[(doc) Documentação Completa](https://isaaceliape.github.io/FASE/docs/)** — Guias, referência e exemplos
 
 <br>
 
@@ -30,36 +30,36 @@ Spec-driven development, context engineering e meta-prompting — agora em portu
 
 ---
 
-## 🤔 O Que É Isso?
+## (?) O Que É Isso?
 
 O **FASE.** é a versão em português brasileiro do **Get Shit Done (GSD)** — um sistema de meta-prompting e context engineering que faz os assistentes de IA (Claude Code, OpenCode, Gemini, Codex, Qwen Code) funcionarem de verdade em projetos de software.
 
 Ele traz:
-- 🎯 **Spec-driven development** — descreva o que quer, o AI constrói
-- 🧠 **Context engineering avançado** — organize prompts para máximo proveito
-- 🔄 **Meta-prompting** — direcione o AI com precisão
-- 📊 **Workflow estruturado** — 13 agentes especializados
-- 💬 **34 comandos** em português brasileiro para um fluxo contínuo
+- (target) **Spec-driven development** — descreva o que quer, o AI constrói
+- (brain) **Context engineering avançado** — organize prompts para máximo proveito
+- (cycle) **Meta-prompting** — direcione o AI com precisão
+- (data) **Workflow estruturado** — 13 agentes especializados
+- (cmd) **34 comandos** em português brasileiro para um fluxo contínuo
 
 **Traduzimos:**
-- ✅ 13 agentes de prompt (pesquisadores, verificadores, planejadores, executores)
-- ✅ 34 comandos interativos
-- ✅ Documentação completa
-- ✅ Mensagens e outputs
+- [OK] 13 agentes de prompt (pesquisadores, verificadores, planejadores, executores)
+- [OK] 34 comandos interativos
+- [OK] Documentação completa
+- [OK] Mensagens e outputs
 
 **Mantivemos em inglês:**
-- 🔧 Termos técnicos consolidados (ex: "context window", "checkpoint", "hooks")
-- 💻 Comandos de terminal e código-fonte
-- 📦 Nomes de pacotes npm e APIs
+- (tool) Termos técnicos consolidados (ex: "context window", "checkpoint", "hooks")
+- (code) Comandos de terminal e código-fonte
+- (pkg) Nomes de pacotes npm e APIs
 
 **Suportados agora:**
-- 🤖 6 provedores de IA: Claude Code, OpenCode, Gemini, Codex, GitHub Copilot, Qwen Code
-- ⌨️ Navegação interativa com setas (↑↓) no menu
-- 🚪 Opção de saída graceful do instalador
+- (bot) 6 provedores de IA: Claude Code, OpenCode, Gemini, Codex, GitHub Copilot, Qwen Code
+- (key) Navegação interativa com setas (^v) no menu
+- (door) Opção de saída graceful do instalador
 
 ---
 
-## 🚀 Instalação Rápida
+## (>>) Instalação Rápida
 
 ### Instalação Interativa (Recomendado)
 
@@ -118,10 +118,10 @@ O FASE será instalado automaticamente via `postinstall` após o `npm install`. 
 ```
 
 **Benefícios:**
-- ✅ **Versão fixa** no `package.json` — todo time usa a mesma versão
-- ✅ **Funciona offline** após instalação inicial
-- ✅ **CI/CD friendly** — instalação automática no pipeline
-- ✅ **Sem conflitos** — cada projeto pode usar versão diferente
+- [OK] **Versão fixa** no `package.json` — todo time usa a mesma versão
+- [OK] **Funciona offline** após instalação inicial
+- [OK] **CI/CD friendly** — instalação automática no pipeline
+- [OK] **Sem conflitos** — cada projeto pode usar versão diferente
 
 ### Verificar Instalação
 
@@ -135,7 +135,7 @@ Após instalar, teste o comando de ajuda:
 $fase-ajuda
 ```
 
-Se vir a mensagem de boas-vindas, FASE foi instalado com sucesso! ✅
+Se vir a mensagem de boas-vindas, FASE foi instalado com sucesso! [OK]
 
 ### Desinstalação
 
@@ -173,7 +173,7 @@ node ~/.claude/fase-ai/hooks/fase-check-update.js
 
 ---
 
-## 📚 Exemplos de Uso
+## (lib) Exemplos de Uso
 
 Quer ver FASE em ação? Temos **3 exemplos reais** mostrando diferentes níveis de complexidade:
 
@@ -186,7 +186,7 @@ Refatorar um script grande em partes menores e testáveis.
 ### 🔴 Advanced: [JWT Authentication Feature](./examples/03-full-feature/)
 Implementar uma feature completa com testes, documentação e múltiplas dependências.
 
-👉 **[Explorar todos os exemplos →](./examples/)**
+👉 **[Explorar todos os exemplos ->](./examples/)**
 
 ---
 
@@ -233,7 +233,7 @@ asciinema rec assets/demo-workflow.cast
 
 ---
 
-## ✨ Novidades em v3.3.0
+## (*) Novidades em v3.3.0
 
 ### 🔔 Verificação Automática de Versão
 O FASE agora verifica automaticamente por atualizações:
@@ -242,7 +242,7 @@ O FASE agora verifica automaticamente por atualizações:
 - **Prompt interativo**: Pergunta se deseja atualizar automaticamente
 - **Statusline integrada**: Mostra `⬆ /fase:atualizar` quando há atualização
 
-### 🎯 Path Standardization
+### (target) Path Standardization
 Todos os comandos e agentes agora usam um padrão universal `@~/.fase/` que é convertido automaticamente para caminhos específicos de cada runtime durante a instalação:
 
 - **Claude Code**: `~/.claude/fase/`
@@ -253,16 +253,16 @@ Todos os comandos e agentes agora usam um padrão universal `@~/.fase/` que é c
 Isso garante que FASE funciona identicamente em todos os 4 runtimes, sem duplicação de código.
 ### 📈 Melhorias de Testes
 
-- ✅ 41 testes de edge cases (test/edge-cases.test.cjs)
-- ✅ 17 arquivos de testes legacy (testes/)
-- ✅ Testes para path standardization em todos os runtimes
-- ✅ Validação de segurança (path traversal, race conditions, timeout)
-- ✅ Documentação expandida de testes (docs/TESTING.md)
+- [OK] 41 testes de edge cases (test/edge-cases.test.cjs)
+- [OK] 17 arquivos de testes legacy (testes/)
+- [OK] Testes para path standardization em todos os runtimes
+- [OK] Validação de segurança (path traversal, race conditions, timeout)
+- [OK] Documentação expandida de testes (docs/TESTING.md)
 
-### 📚 Documentação Melhorada
-- ✅ Novos documentos explicando path standardization
-- ✅ Documentação expandida em test/ com rastreamento detalhado
-- ✅ Seções expandidas em guias de testes
+### (lib) Documentação Melhorada
+- [OK] Novos documentos explicando path standardization
+- [OK] Documentação expandida em test/ com rastreamento detalhado
+- [OK] Seções expandidas em guias de testes
 
 ---
 
@@ -288,7 +288,7 @@ Context monitoring para gerenciar estado e histórico automaticamente via integr
 ### 4. **Instalador Universal**
 Suporta múltiplos runtimes (Claude Code, OpenCode, Gemini, Codex, Qwen Code) com detecção automática
 
-## 📖 Por Que "FASE."?
+## (doc) Por Que "FASE."?
 
 **FASE.** = **Framework de Automação Sem Enrolação**
 
@@ -298,15 +298,15 @@ A filosofia:
 - 🚫 Sem teatro enterprise (reunião que podia ser email)
 - 🚫 Sem burocracia desnecessária
 - 🚫 Sem story points, sprint ceremonies, retrospectives
-- ✅ Só você, sua visão, e o assistente de IA construindo
+- [OK] Só você, sua visão, e o assistente de IA construindo
 
 ---
 
-## 📋 Comandos Disponíveis
+## (list) Comandos Disponíveis
 
 FASE oferece **34 comandos em português brasileiro**, organizados por função:
 
-### 🎯 Core / Inicialização
+### (target) Core / Inicialização
 ```bash
 /fase-ajuda              # Mostra ajuda completa
 /fase-novo-projeto       # Inicializa novo projeto com FASE
@@ -324,7 +324,7 @@ FASE oferece **34 comandos em português brasileiro**, organizados por função:
 /fase-roadmapper         # Cria roadmap visual (via agente)
 ```
 
-### 🔍 Research & Analysis
+### (search) Research & Analysis
 ```bash
 /fase-pesquisar-etapa     # Pesquisa contexto para uma fase
 /fase-mapear-codigo      # Mapeia codebase existente
@@ -332,7 +332,7 @@ FASE oferece **34 comandos em português brasileiro**, organizados por função:
 /fase-planejar-lacunas   # Identifica gaps no plano
 ```
 
-### ✅ Verification & Validation
+### [OK] Verification & Validation
 ```bash
 /fase-verificar-trabalho # Valida código executado
 /fase-validar-etapa       # Verifica completude de fase
@@ -340,7 +340,7 @@ FASE oferece **34 comandos em português brasileiro**, organizados por função:
 /fase-checar-tarefas     # Revisa task list
 ```
 
-### 🔧 Execution & Development
+### (tool) Execution & Development
 ```bash
 /fase-executar-etapa      # Executa uma fase completa
 /fase-rapido             # Modo fast-track para tarefas simples
@@ -355,7 +355,7 @@ FASE oferece **34 comandos em português brasileiro**, organizados por função:
 /fase-discutir-etapa      # Abre discussão estruturada
 ```
 
-### 🛠️ Maintenance & Administration
+### (tools) Maintenance & Administration
 ```bash
 /fase-pausar-trabalho    # Pausa execução
 /fase-retomar-trabalho   # Continua de onde parou
@@ -368,11 +368,11 @@ FASE oferece **34 comandos em português brasileiro**, organizados por função:
 /fase-verificar-instalacao  # Verifica instalação e sugere correções
 ```
 
-**→ Documentação completa:** [📚 COMANDOS.md](docs/COMANDOS.md)
+**-> Documentação completa:** [(lib) COMANDOS.md](docs/COMANDOS.md)
 
 ---
 
-## 🎯 Pra Quem É Isso?
+## (target) Pra Quem É Isso?
 
 ### Perfil Ideal
 - **Solo devs** que não querem fingir que são uma empresa de 50 pessoas
@@ -381,12 +381,12 @@ FASE oferece **34 comandos em português brasileiro**, organizados por função:
 - **Quem cansou** de descrever algo e receber respostas inconsistentes do AI
 
 ### Casos de Uso
-✅ Projetos pessoais com requisitos bem definidos
-✅ MVPs que precisam ir para produção rápido
-✅ Refatorações estruturadas de legacies
-✅ Automation scripts e ferramentas internas
-✅ Prototipagem rápida de ideias
-✅ Aprendizado de novas tecnologias/linguagens
+[OK] Projetos pessoais com requisitos bem definidos
+[OK] MVPs que precisam ir para produção rápido
+[OK] Refatorações estruturadas de legacies
+[OK] Automation scripts e ferramentas internas
+[OK] Prototipagem rápida de ideias
+[OK] Aprendizado de novas tecnologias/linguagens
 
 ### O Que FASE Não É
 ❌ Substituto para design de sistema em time
@@ -396,44 +396,44 @@ FASE oferece **34 comandos em português brasileiro**, organizados por função:
 
 ---
 
-## 📚 Documentação Completa
+## (lib) Documentação Completa
 
 ### Guias Essenciais
-- [📖 Guia do Usuário](docs/GUIA-DO-USUARIO.md) — Como usar FASE passo-a-passo
-- [🔧 Todos os Comandos](docs/COMANDOS.md) — Referência completa com exemplos
+- [(doc) Guia do Usuário](docs/GUIA-DO-USUARIO.md) — Como usar FASE passo-a-passo
+- [(tool) Todos os Comandos](docs/COMANDOS.md) — Referência completa com exemplos
 - [🔌 System Hooks](docs/HOOKS.md) — Como adicionar automações
 
 ### Para Contribuidores
 - [🤝 Como Contribuir](CONTRIBUTING.md) — Instruções para contribuições
-- [🔧 Path Standardization](docs/technical/COMMAND_PATHS.md) — Como comandos funcionam em diferentes runtimes
-- [📚 Testes](docs/TESTING.md) — Guia de testes, como rodar e contribuir
-- [✅ Resultados de Testes](TEST_RESULTS.md) — Últimos resultados de validação
+- [(tool) Path Standardization](docs/technical/COMMAND_PATHS.md) — Como comandos funcionam em diferentes runtimes
+- [(lib) Testes](docs/TESTING.md) — Guia de testes, como rodar e contribuir
+- [[OK] Resultados de Testes](TEST_RESULTS.md) — Últimos resultados de validação
 
 ### Build & Development
 - **Build:** `npm run build` — Compila TypeScript e copia static files
 - **Test:** `npm test` — Executa testes de edge cases
 - **Test All:** `npm run test:all` — Executa todos os testes (legacy + moderno)
-- **Estrutura:** `src/` (TypeScript) → `dist/` (compilado com static files)
+- **Estrutura:** `src/` (TypeScript) -> `dist/` (compilado com static files)
 
-### 🚀 GitHub Actions & CI/CD
+### (>>) GitHub Actions & CI/CD
 
 FASE possui um pipeline completo de CI/CD automatizado:
 
 #### **Multi-Platform Testing** (test-multi-platform.yml)
-- ✅ **Plataformas suportadas:** Linux (ubuntu-latest) e macOS (macos-latest)
-- ✅ **Versões Node.js:** 20 e 22 (total de 4 combinações)
-- ✅ **Testes:** Build, unit tests, e verificação de instalação
-- ✅ **Integração:** Testa instalação multi-provider (--claude, --opencode)
-- ✅ **Performance:** Matriz otimizada com 60% mais rápida que versões anteriores
+- [OK] **Plataformas suportadas:** Linux (ubuntu-latest) e macOS (macos-latest)
+- [OK] **Versões Node.js:** 20 e 22 (total de 4 combinações)
+- [OK] **Testes:** Build, unit tests, e verificação de instalação
+- [OK] **Integração:** Testa instalação multi-provider (--claude, --opencode)
+- [OK] **Performance:** Matriz otimizada com 60% mais rápida que versões anteriores
 
 **Execução:** Automaticamente em cada push para `main` ou pull request
 
 #### **Smart npm Publishing** (publicar-npm.yml)
-- ✅ **Detecção de versão:** Compara `package.json` com npm registry
-- ✅ **Publicação condicional:** Só publica se versão mudou
-- ✅ **Git tags automáticos:** Cria `v{version}` automaticamente
-- ✅ **GitHub Releases:** Geradas automaticamente de `CHANGELOG.md`
-- ✅ **Sem erro em push sem versão:** Skip silencioso se versão não mudou
+- [OK] **Detecção de versão:** Compara `package.json` com npm registry
+- [OK] **Publicação condicional:** Só publica se versão mudou
+- [OK] **Git tags automáticos:** Cria `v{version}` automaticamente
+- [OK] **GitHub Releases:** Geradas automaticamente de `CHANGELOG.md`
+- [OK] **Sem erro em push sem versão:** Skip silencioso se versão não mudou
 
 **Como usar:**
 ```bash
@@ -445,7 +445,7 @@ echo '## 4.0.3\n- New feature' >> CHANGELOG.md
 
 # 3. Commit e push
 git add package.json CHANGELOG.md
-git commit -m "chore: bump version 4.0.2 → 4.0.3"
+git commit -m "chore: bump version 4.0.2 -> 4.0.3"
 git push origin main
 
 # Workflow automaticamente:
@@ -462,25 +462,25 @@ git push origin main
 **Documentação detalhada:** Ver [specs/PUBLICAR_NPM_WORKFLOW.md](specs/PUBLICAR_NPM_WORKFLOW.md)
 
 ### Informações do Projeto
-- [📊 Histórico de Mudanças](CHANGELOG.md) — Todas as versões
+- [(data) Histórico de Mudanças](CHANGELOG.md) — Todas as versões
 - [👥 Maintainers](docs/maintainers/MAINTAINERS.md) — Quem cuida do projeto
 
 ---
 
-## ✨ Recursos Principais
+## (*) Recursos Principais
 
-### 🎯 Spec-Driven Development
+### (target) Spec-Driven Development
 Trabalhe com especificações claras e deixe o AI transformar em código funcional. Cada fase é uma entrega concreta.
 
-### 🧠 Context Engineering
+### (brain) Context Engineering
 FASE organiza automaticamente o contexto da sua sessão para que o AI sempre tenha as informações certas no local certo.
 
-### 🔄 Ciclo de Vida Estruturado
-**Pesquisa → Planejamento → Execução → Verificação → Iteração**
+### (cycle) Ciclo de Vida Estruturado
+**Pesquisa -> Planejamento -> Execução -> Verificação -> Iteração**
 
 Cada etapa tem seu agente especializado.
 
-### 📋 Rastreamento de Estado
+### (list) Rastreamento de Estado
 Histórico automático de fases, tarefas e checkpoints. Retome trabalho de onde parou, semanas depois.
 
 ### 🔌 Extensível
@@ -547,7 +547,7 @@ Quer ajudar a traduzir ou melhorar o FASE.?
    /fase-verificar-trabalho
    ```
 
-Para mais detalhes, veja [📖 Guia do Usuário](docs/GUIA-DO-USUARIO.md).
+Para mais detalhes, veja [(doc) Guia do Usuário](docs/GUIA-DO-USUARIO.md).
 
 ---
 
@@ -555,25 +555,25 @@ Para mais detalhes, veja [📖 Guia do Usuário](docs/GUIA-DO-USUARIO.md).
 
 ### Reportar Issues
 - 🐛 [Bugs](https://github.com/isaaceliape/FASE/issues/new?labels=bug)
-- ✨ [Sugestões](https://github.com/isaaceliape/FASE/issues/new?labels=enhancement)
-- 🌐 [Traduções](https://github.com/isaaceliape/FASE/issues/new?labels=traducao)
+- (*) [Sugestões](https://github.com/isaaceliape/FASE/issues/new?labels=enhancement)
+- (web) [Traduções](https://github.com/isaaceliape/FASE/issues/new?labels=traducao)
 
 ### Discussões
-- 💬 [Discussions no GitHub](https://github.com/isaaceliape/FASE/discussions)
+- (cmd) [Discussions no GitHub](https://github.com/isaaceliape/FASE/discussions)
 - 🎓 Compartilhe workflows, dicas e best practices
 
 ---
 
 <div align="center">
 
-### 💡 Filosofia FASE
+### (idea) Filosofia FASE
 
 **"Se você sabe claramente o que quer, isso VAI construir pra você. Sem burocracia, sem enrolação."**
 
 ---
 
-Feito com 🇧🇷 e 💙 para a comunidade brasileira de devs.
+Feito com (BR) e 💙 para a comunidade brasileira de devs.
 
-[⭐ Dê uma star se FASE foi útil!](https://github.com/isaaceliape/FASE)
+[(*) Dê uma star se FASE foi útil!](https://github.com/isaaceliape/FASE)
 
 </div>
