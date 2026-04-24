@@ -3,13 +3,14 @@
  *
  * Handles complete removal of FASE from a provider,
  * including settings, hooks, and configuration files.
+ * Uninstalls from project-local configuration directories only.
  *
  * @module install/uninstall
  */
 import fs from 'fs';
 import path from 'path';
 import { readSettings, writeSettings } from './settings.js';
-import { getGlobalDir } from './providers.js';
+import { getDirName } from './providers.js';
 /**
  * Remove FASE hooks from settings
  *
@@ -120,10 +121,9 @@ export function removeFaseDir(configDir) {
  * Completely uninstall FASE from a provider
  *
  * @param runtime - Provider runtime
- * @param explicitConfigDir - Optional explicit config directory
  * @returns Uninstall result with details
  */
-export function uninstallFase(runtime, explicitConfigDir = null) {
+export function uninstallFase(runtime) {
     const result = {
         success: true,
         removed: {
@@ -134,7 +134,7 @@ export function uninstallFase(runtime, explicitConfigDir = null) {
         },
         errors: [],
     };
-    const configDir = getGlobalDir(runtime, explicitConfigDir);
+    const configDir = path.join(process.cwd(), getDirName(runtime));
     try {
         // Remove hooks from settings
         const settingsPath = path.join(configDir, runtime === 'opencode'
@@ -162,11 +162,10 @@ export function uninstallFase(runtime, explicitConfigDir = null) {
  * Check if FASE is installed for a provider
  *
  * @param runtime - Provider runtime
- * @param explicitConfigDir - Optional explicit config directory
  * @returns true if FASE is installed
  */
-export function isFaseInstalled(runtime, explicitConfigDir = null) {
-    const configDir = getGlobalDir(runtime, explicitConfigDir);
+export function isFaseInstalled(runtime) {
+    const configDir = path.join(process.cwd(), getDirName(runtime));
     const versionPath = path.join(configDir, 'fase-ai', 'VERSION');
     return fs.existsSync(versionPath);
 }

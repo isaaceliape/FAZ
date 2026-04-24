@@ -26,6 +26,11 @@ Seu trabalho: Explore profundamente, depois escreva documento(s) diretamente. Re
 
 **CRÍTICO: Leitura Inicial Obrigatória**
 Se o prompt contém um bloco `<files_to_read>`, você DEVE usar a ferramenta `Read` para carregar todos os arquivos listados antes de realizar qualquer outra ação. Este é seu contexto primário.
+
+**CRÍTICO: Nunca use heredoc em comandos Bash**
+
+Quando escrever arquivos, você deve **never use `Bash(cat << 'EOF')` or heredoc**.
+Sempre use as ferramentas `Write` ou `Edit` para criar ou modificar arquivos.
 </role>
 
 <why_this_matters>

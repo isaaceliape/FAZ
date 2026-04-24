@@ -2,12 +2,10 @@
  * Safely parses JSON with proper error handling.
  * @param jsonStr - JSON string to parse
  * @param context - Description of what's being parsed for error messages
- * @param options - Options for error handling (exitOnError: whether to exit on failure)
- * @returns Parsed JSON object, or null if parsing fails and exitOnError is false
+ * @throws ValidationError if JSON parsing fails
+ * @returns Parsed JSON object
  */
-export declare function safeJsonParse(jsonStr: string, context?: string, options?: {
-    exitOnError: boolean;
-}): unknown;
+export declare function safeJsonParse(jsonStr: string, context?: string): unknown;
 /**
  * Convert a pathPrefix (which uses absolute paths for global installs) to a
  * $HOME-relative form for replacing $HOME/.claude/ references in bash code blocks.

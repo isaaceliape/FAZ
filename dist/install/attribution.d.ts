@@ -3,6 +3,7 @@
  *
  * Manages Co-Authored-By lines in git commits based on provider settings.
  * Supports removing, keeping, or customizing attribution.
+ * Uses project-local configuration directories only.
  *
  * @module install/attribution
  */
@@ -17,15 +18,14 @@ export type AttributionSetting = null | undefined | string;
 /**
  * Get commit attribution setting for a runtime
  *
- * Checks provider-specific settings files:
- * - Claude Code: ~/.claude/settings.json
- * - OpenCode: ~/.config/opencode/opencode.json (disable_ai_attribution)
- * - Gemini: ~/.gemini/settings.json
- * - GitHub Copilot: ~/.github-copilot/.copilot-settings.json
+ * Checks provider-specific settings files in project-local directories:
+ * - Claude Code: ./.claude/settings.json
+ * - OpenCode: ./.opencode/opencode.json (disable_ai_attribution)
+ * - Gemini: ./.gemini/settings.json
+ * - GitHub Copilot: ./.copilot/.copilot-settings.json
  * - Codex: no attribution setting (returns undefined)
  *
  * @param runtime - Provider runtime name
- * @param explicitConfigDir - Optional explicit config directory
  * @returns Attribution setting (null=remove, undefined=keep, string=custom)
  *
  * @example
@@ -34,7 +34,7 @@ export type AttributionSetting = null | undefined | string;
  * if (attr === null) { /* Remove attribution *\/ }
  * ```
  */
-export declare function getCommitAttribution(runtime: ProviderRuntime, explicitConfigDir?: string | null): AttributionSetting;
+export declare function getCommitAttribution(runtime: ProviderRuntime): AttributionSetting;
 /**
  * Process Co-Authored-By lines based on attribution setting
  *

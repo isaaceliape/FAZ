@@ -271,11 +271,11 @@ export function convertClaudeToCopilotCommand(content) {
     // Replace /fase:command with /fase-command for copilot (flat command structure)
     convertedContent = convertedContent.replace(/\/fase:/g, '/fase-');
     // Replace ~/.claude and $HOME/.claude with Copilot's config location
-    convertedContent = convertedContent.replace(/~\/\.claude\b/g, '~/.copilot');
-    convertedContent = convertedContent.replace(/\$HOME\/\.claude\b/g, '$HOME/.copilot');
+    convertedContent = convertedContent.replace(/~\/\.claude\b/g, '~/.github-copilot');
+    convertedContent = convertedContent.replace(/\$HOME\/\.claude\b/g, '$HOME/.github-copilot');
     // Replace ~/.fase and $HOME/.fase with Copilot's config location
-    convertedContent = convertedContent.replace(/~\/\.fase\b/g, '~/.copilot');
-    convertedContent = convertedContent.replace(/\$HOME\/\.fase\b/g, '$HOME/.copilot');
+    convertedContent = convertedContent.replace(/~\/\.fase\b/g, '~/.github-copilot');
+    convertedContent = convertedContent.replace(/\$HOME\/\.fase\b/g, '$HOME/.github-copilot');
     // Replace general-purpose subagent type with Copilot's equivalent "general"
     convertedContent = convertedContent.replace(/subagent_type="general-purpose"/g, 'subagent_type="general"');
     // Check if content has frontmatter
@@ -352,7 +352,10 @@ export function convertClaudeToCopilotCommand(content) {
     }
     // Build new frontmatter
     let newFrontmatter = '---\n';
-    newFrontmatter += newLines.map((line) => line || '').join('\n').trim();
+    newFrontmatter += newLines
+        .map((line) => line || '')
+        .join('\n')
+        .trim();
     // Add tools section if there are any
     if (Object.keys(toolsMap).length > 0) {
         // Remove trailing whitespace from frontmatter

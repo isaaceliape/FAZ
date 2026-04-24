@@ -7,25 +7,19 @@ import crypto from 'crypto';
 import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { checkAndPromptForUpdate } from './lib/version-check.js';
-import { convertClaudeToQwenCommand, convertClaudeToCopilotCommand } from './install/frontmatter-convert.js';
+import { safeJsonParse as helperSafeJsonParse } from './install/helpers.js';
+import { convertClaudeToQwenCommand, convertClaudeToCopilotCommand, } from './install/frontmatter-convert.js';
+import { ValidationError, InstallationError, isFaseError } from './lib/errors.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-/**
- * Safely parses JSON with proper error handling.
- * @param jsonStr - JSON string to parse
- * @param context - Description of what's being parsed for error messages
- * @param options - Options for error handling (exitOnError: whether to exit on failure)
- * @returns Parsed JSON object, or null if parsing fails and exitOnError is false
- */
+// Wrapper to handle JSON parsing with optional error recovery
 function safeJsonParse(jsonStr, context = 'JSON', options = { exitOnError: true }) {
     try {
-        return JSON.parse(jsonStr);
+        return helperSafeJsonParse(jsonStr, context);
     }
     catch (err) {
-        const error = err;
-        console.error(`Invalid ${context}: ${error.message}`);
         if (options.exitOnError) {
-            process.exit(1);
+            throw err;
         }
         return null;
     }
@@ -126,21 +120,14 @@ function getDirName(runtime) {
 }
 /**
  * Get the config directory path relative to home directory for a runtime
- * Used for templating hooks that use path.join(homeDir, '<configDir>', ...)
- * @param runtime - 'claude', 'opencode', 'gemini', 'codex', or 'copilot'
- * @param isGlobal - Whether this is a global install
+ * Local project-based installs only.
+ *
+ * @param runtime - Provider runtime name
+ * @returns String representation for path.join() replacement
  */
-function getConfigDirFromHome(runtime, isGlobal) {
-    if (!isGlobal) {
-        // Local installs use the same dir name pattern
-        return `'${getDirName(runtime)}'`;
-    }
-    // Global installs - OpenCode uses XDG path structure
-    if (runtime === 'opencode') {
-        // OpenCode: ~/.config/opencode -> '.config', 'opencode'
-        // Return as comma-separated for path.join() replacement
-        return "'.config', 'opencode'";
-    }
+function getConfigDirFromHome(runtime) {
+    if (runtime === 'opencode')
+        return "'.opencode'";
     if (runtime === 'gemini')
         return "'.gemini'";
     if (runtime === 'codex')
@@ -150,89 +137,6 @@ function getConfigDirFromHome(runtime, isGlobal) {
     if (runtime === 'qwen')
         return "'.qwen'";
     return "'.claude'";
-}
-/**
- * Get the global config directory for OpenCode
- * OpenCode follows XDG Base Directory spec and uses ~/.config/opencode/
- * Priority: OPENCODE_CONFIG_DIR > dirname(OPENCODE_CONFIG) > XDG_CONFIG_HOME/opencode > ~/.config/opencode
- */
-function getOpencodeGlobalDir() {
-    // 1. Explicit OPENCODE_CONFIG_DIR env var
-    if (process.env.OPENCODE_CONFIG_DIR) {
-        return expandTilde(process.env.OPENCODE_CONFIG_DIR);
-    }
-    // 2. OPENCODE_CONFIG env var (use its directory)
-    if (process.env.OPENCODE_CONFIG) {
-        return path.dirname(expandTilde(process.env.OPENCODE_CONFIG));
-    }
-    // 3. XDG_CONFIG_HOME/opencode
-    if (process.env.XDG_CONFIG_HOME) {
-        return path.join(expandTilde(process.env.XDG_CONFIG_HOME), 'opencode');
-    }
-    // 4. Default: ~/.config/opencode (XDG default)
-    return path.join(os.homedir(), '.config', 'opencode');
-}
-/**
- * Get the global config directory for a runtime
- * @param runtime - 'claude', 'opencode', 'gemini', 'codex', or 'copilot'
- * @param explicitDir - Explicit directory from --config-dir flag
- */
-function getGlobalDir(runtime, explicitDir = null) {
-    if (runtime === 'opencode') {
-        // For OpenCode, --config-dir overrides env vars
-        if (explicitDir) {
-            return expandTilde(explicitDir);
-        }
-        return getOpencodeGlobalDir();
-    }
-    if (runtime === 'gemini') {
-        // Gemini: --config-dir > GEMINI_CONFIG_DIR > ~/.gemini
-        if (explicitDir) {
-            return expandTilde(explicitDir);
-        }
-        if (process.env.GEMINI_CONFIG_DIR) {
-            return expandTilde(process.env.GEMINI_CONFIG_DIR);
-        }
-        return path.join(os.homedir(), '.gemini');
-    }
-    if (runtime === 'codex') {
-        // Codex: --config-dir > CODEX_HOME > ~/.codex
-        if (explicitDir) {
-            return expandTilde(explicitDir);
-        }
-        if (process.env.CODEX_HOME) {
-            return expandTilde(process.env.CODEX_HOME);
-        }
-        return path.join(os.homedir(), '.codex');
-    }
-    if (runtime === 'copilot') {
-        // GitHub Copilot: --config-dir > COPILOT_CONFIG_DIR > ~/.github-copilot
-        if (explicitDir) {
-            return expandTilde(explicitDir);
-        }
-        if (process.env.COPILOT_CONFIG_DIR) {
-            return expandTilde(process.env.COPILOT_CONFIG_DIR);
-        }
-        return path.join(os.homedir(), '.copilot');
-    }
-    if (runtime === 'qwen') {
-        // Qwen Code: --config-dir > QWEN_CONFIG_DIR > ~/.qwen
-        if (explicitDir) {
-            return expandTilde(explicitDir);
-        }
-        if (process.env.QWEN_CONFIG_DIR) {
-            return expandTilde(process.env.QWEN_CONFIG_DIR);
-        }
-        return path.join(os.homedir(), '.qwen');
-    }
-    // Claude Code: --config-dir > CLAUDE_CONFIG_DIR > ~/.claude
-    if (explicitDir) {
-        return expandTilde(explicitDir);
-    }
-    if (process.env.CLAUDE_CONFIG_DIR) {
-        return expandTilde(process.env.CLAUDE_CONFIG_DIR);
-    }
-    return path.join(os.homedir(), '.claude');
 }
 const banner = '\n' +
     cyan +
@@ -261,8 +165,7 @@ function parseConfigDirArg() {
         const nextArg = args[configDirIndex + 1];
         // Error if --config-dir is provided without a value or next arg is another flag
         if (!nextArg || nextArg.startsWith('-')) {
-            console.error(`  ${yellow}--config-dir requer um argumento de caminho${reset}`);
-            process.exit(1);
+            throw new ValidationError(`${yellow}--config-dir requer um argumento de caminho${reset}`, 'CONFIG_DIR_NO_ARGUMENT');
         }
         return nextArg;
     }
@@ -271,14 +174,25 @@ function parseConfigDirArg() {
     if (configDirArg) {
         const value = configDirArg.split('=')[1];
         if (!value) {
-            console.error(`  ${yellow}--config-dir requer um caminho não vazio${reset}`);
-            process.exit(1);
+            throw new ValidationError(`${yellow}--config-dir requer um caminho não vazio${reset}`, 'CONFIG_DIR_EMPTY_VALUE');
         }
         return value;
     }
     return null;
 }
-const explicitConfigDir = parseConfigDirArg();
+let explicitConfigDir = null;
+try {
+    explicitConfigDir = parseConfigDirArg();
+}
+catch (err) {
+    if (isFaseError(err)) {
+        console.error(`  ${err.message}`);
+    }
+    else {
+        console.error('Erro ao processar argumentos:', err);
+    }
+    process.exit(1);
+}
 const hasHelp = args.includes('--help') || args.includes('-h');
 const forceStatusline = args.includes('--force-statusline');
 console.log(banner);
@@ -312,15 +226,6 @@ function expandTilde(filePath) {
         return path.join(os.homedir(), filePath.slice(2));
     }
     return filePath;
-}
-/**
- * Build a hook command path using forward slashes for cross-platform compatibility.
- * On Windows, $HOME is not expanded by cmd.exe/PowerShell, so we use the actual path.
- */
-function buildHookCommand(configDir, hookName) {
-    // Use forward slashes for Node.js compatibility on all platforms
-    const hooksPath = configDir.replace(/\\/g, '/') + '/hooks/' + hookName;
-    return `node "${hooksPath}"`;
 }
 /**
  * Read and parse settings.json, returning empty object if it doesn't exist
@@ -419,7 +324,7 @@ function getLocalDir(runtime) {
 }
 /**
  * Get commit attribution setting for a runtime
- * Checks project-local config first, then falls back to global config
+ * Checks project-local config only
  * @param runtime - 'claude', 'opencode', 'gemini', 'codex', 'copilot', or 'qwen'
  * @returns null = remove, undefined = keep default, string = custom
  */
@@ -430,89 +335,45 @@ function getCommitAttribution(runtime) {
     }
     let result;
     if (runtime === 'opencode') {
-        // Check local config first
+        // Check local config
         const localConfig = readSettings(path.join(getLocalDir('opencode'), 'opencode.json'));
-        if (localConfig.disable_ai_attribution !== undefined) {
-            result = localConfig.disable_ai_attribution === true ? null : undefined;
-        }
-        else {
-            // Fall back to global config
-            const globalConfig = readSettings(path.join(getGlobalDir('opencode', null), 'opencode.json'));
-            result = globalConfig.disable_ai_attribution === true ? null : undefined;
-        }
+        result = localConfig.disable_ai_attribution === true ? null : undefined;
     }
     else if (runtime === 'gemini') {
         // Gemini: check gemini settings.json for attribution config
-        // Check local config first
         const localSettings = readSettings(path.join(getLocalDir('gemini'), 'settings.json'));
         const localAttribution = localSettings.attribution;
         if (localAttribution && localAttribution.commit !== undefined) {
             result = localAttribution.commit === '' ? null : localAttribution.commit;
         }
         else {
-            // Fall back to global config
-            const globalSettings = readSettings(path.join(getGlobalDir('gemini', explicitConfigDir), 'settings.json'));
-            const globalAttribution = globalSettings.attribution;
-            if (!globalAttribution || globalAttribution.commit === undefined) {
-                result = undefined;
-            }
-            else if (globalAttribution.commit === '') {
-                result = null;
-            }
-            else {
-                result = globalAttribution.commit;
-            }
+            result = undefined;
         }
     }
     else if (runtime === 'claude') {
         // Claude Code
-        // Check local config first
         const localSettings = readSettings(path.join(getLocalDir('claude'), 'settings.json'));
         const localAttribution = localSettings.attribution;
         if (localAttribution && localAttribution.commit !== undefined) {
             result = localAttribution.commit === '' ? null : localAttribution.commit;
         }
         else {
-            // Fall back to global config
-            const globalSettings = readSettings(path.join(getGlobalDir('claude', explicitConfigDir), 'settings.json'));
-            const globalAttribution = globalSettings.attribution;
-            if (!globalAttribution || globalAttribution.commit === undefined) {
-                result = undefined;
-            }
-            else if (globalAttribution.commit === '') {
-                result = null;
-            }
-            else {
-                result = globalAttribution.commit;
-            }
+            result = undefined;
         }
     }
     else if (runtime === 'copilot') {
         // GitHub Copilot: check .copilot-settings.json for attribution config
-        // Check local config first
         const localSettings = readSettings(path.join(getLocalDir('copilot'), '.copilot-settings.json'));
         const localAttribution = localSettings.attribution;
         if (localAttribution && localAttribution.commit !== undefined) {
             result = localAttribution.commit === '' ? null : localAttribution.commit;
         }
         else {
-            // Fall back to global config
-            const globalSettings = readSettings(path.join(getGlobalDir('copilot', explicitConfigDir), '.copilot-settings.json'));
-            const globalAttribution = globalSettings.attribution;
-            if (!globalAttribution || globalAttribution.commit === undefined) {
-                result = undefined;
-            }
-            else if (globalAttribution.commit === '') {
-                result = null;
-            }
-            else {
-                result = globalAttribution.commit;
-            }
+            result = undefined;
         }
     }
     else if (runtime === 'qwen') {
         // Qwen Code: check settings.json for gitCoAuthor config
-        // Check local config first
         const localSettings = readSettings(path.join(getLocalDir('qwen'), 'settings.json'));
         if (localSettings.gitCoAuthor !== undefined) {
             result =
@@ -521,17 +382,7 @@ function getCommitAttribution(runtime) {
                     : localSettings.gitCoAuthor;
         }
         else {
-            // Fall back to global config
-            const globalSettings = readSettings(path.join(getGlobalDir('qwen', explicitConfigDir), 'settings.json'));
-            if (globalSettings.gitCoAuthor === undefined) {
-                result = undefined;
-            }
-            else if (globalSettings.gitCoAuthor === '' || globalSettings.gitCoAuthor === null) {
-                result = null;
-            }
-            else {
-                result = globalSettings.gitCoAuthor;
-            }
+            result = undefined;
         }
     }
     else {
@@ -1483,22 +1334,17 @@ function cleanupOrphanedHooks(settings) {
     return settings;
 }
 /**
- * Uninstall FASE from the specified directory for a specific runtime
+ * Uninstall FASE from the local project directory for a specific runtime
  * Removes only FASE-specific files/directories, preserves user content
- * @param {boolean} isGlobal - Whether to uninstall from global or local
  * @param {string} runtime - Target runtime ('claude', 'opencode', 'gemini', 'codex')
  */
-function uninstall(isGlobal, runtime = 'claude') {
+function uninstall(runtime = 'claude') {
     const isOpencode = runtime === 'opencode';
     const isCodex = runtime === 'codex';
     const dirName = getDirName(runtime);
-    // Get the target directory based on runtime and install type
-    const targetDir = isGlobal
-        ? getGlobalDir(runtime, explicitConfigDir)
-        : path.join(process.cwd(), dirName);
-    const locationLabel = isGlobal
-        ? targetDir.replace(os.homedir(), '~')
-        : targetDir.replace(process.cwd(), '.');
+    // Get the target directory (always local)
+    const targetDir = path.join(process.cwd(), dirName);
+    const locationLabel = targetDir.replace(process.cwd(), '.');
     let runtimeLabel = 'Claude Code';
     if (runtime === 'opencode')
         runtimeLabel = 'OpenCode';
@@ -1745,10 +1591,7 @@ function uninstall(isGlobal, runtime = 'claude') {
     // 8. For OpenCode, clean up permissions from opencode.json
     if (isOpencode) {
         // For local uninstalls, clean up ./.opencode/opencode.json
-        // For global uninstalls, clean up ~/.config/opencode/opencode.json
-        const opencodeConfigDir = isGlobal
-            ? getOpencodeGlobalDir()
-            : path.join(process.cwd(), '.opencode');
+        const opencodeConfigDir = path.join(process.cwd(), '.opencode');
         const configPath = path.join(opencodeConfigDir, 'opencode.json');
         if (fs.existsSync(configPath)) {
             try {
@@ -1898,14 +1741,11 @@ function parseJsonc(content) {
 /**
  * Configure OpenCode permissions to allow reading FASE reference docs
  * This prevents permission prompts when FASE accesses the fase-ai directory
- * @param {boolean} isGlobal - Whether this is a global or local install
+ * Project-local installations only.
  */
-function configureOpencodePermissions(isGlobal = true) {
-    // For local installs, use ./.opencode/opencode.json
-    // For global installs, use ~/.config/opencode/opencode.json
-    const opencodeConfigDir = isGlobal
-        ? getOpencodeGlobalDir()
-        : path.join(process.cwd(), '.opencode');
+function configureOpencodePermissions() {
+    // Local installs use ./.opencode/opencode.json
+    const opencodeConfigDir = path.join(process.cwd(), '.opencode');
     const configPath = path.join(opencodeConfigDir, 'opencode.json');
     // Ensure config directory exists
     fs.mkdirSync(opencodeConfigDir, { recursive: true });
@@ -1932,11 +1772,7 @@ function configureOpencodePermissions(isGlobal = true) {
     }
     const permObj = config.permission || {};
     // Build the FASE path using the actual config directory
-    // Use ~ shorthand if it's in the default location, otherwise use full path
-    const defaultConfigDir = path.join(os.homedir(), '.config', 'opencode');
-    const fasePath = opencodeConfigDir === defaultConfigDir
-        ? '~/.config/opencode/fase-ai/*'
-        : `${opencodeConfigDir.replace(/\\/g, '/')}/fase-ai/*`;
+    const fasePath = `${opencodeConfigDir.replace(/\\/g, '/')}/fase-ai/*`;
     let modified = false;
     // Configure read permission
     if (!permObj.read || typeof permObj.read !== 'object') {
@@ -1952,17 +1788,15 @@ function configureOpencodePermissions(isGlobal = true) {
         permObj.external_directory = {};
     }
     const externalPerm = permObj.external_directory;
-    // For local installs, also configure permissions for the command/ directory so OpenCode can discover commands
-    if (!isGlobal) {
-        const commandPath = `${opencodeConfigDir.replace(/\\/g, '/')}/command/*`;
-        if (readPerm[commandPath] !== 'allow') {
-            readPerm[commandPath] = 'allow';
-            modified = true;
-        }
-        if (externalPerm[commandPath] !== 'allow') {
-            externalPerm[commandPath] = 'allow';
-            modified = true;
-        }
+    // Configure permissions for the command/ directory so OpenCode can discover commands
+    const commandPath = `${opencodeConfigDir.replace(/\\/g, '/')}/command/*`;
+    if (readPerm[commandPath] !== 'allow') {
+        readPerm[commandPath] = 'allow';
+        modified = true;
+    }
+    if (externalPerm[commandPath] !== 'allow') {
+        externalPerm[commandPath] = 'allow';
+        modified = true;
     }
     if (!externalPerm[fasePath]) {
         externalPerm[fasePath] = 'allow';
@@ -1998,8 +1832,7 @@ function verifyInstalled(dirPath, description) {
     return true;
 }
 /**
- * Install to the specified directory for a specific runtime
- * @param {boolean} isGlobal - Whether to install globally or locally
+ * Install to the local project directory for a specific runtime
  * @param {string} runtime - Target runtime ('claude', 'opencode', 'gemini', 'codex')
  */
 // ──────────────────────────────────────────────────────
@@ -2174,10 +2007,10 @@ function reportLocalPatches(configDir, runtime = 'claude') {
     return meta.files || [];
 }
 /**
- * Install shared FASE content to ~/.fase-ai/ (v3.2.0+)
- * Templates, references, and VERSION/CHANGELOG shared across all runtimes
+ * Install FASE to the local project directory (v3.2.0+)
+ * Agents, commands, docs, and shared FASE content
  */
-function install(isGlobal, runtime = 'claude') {
+function install(runtime = 'claude') {
     const isOpencode = runtime === 'opencode';
     const isGemini = runtime === 'gemini';
     const isCodex = runtime === 'codex';
@@ -2185,17 +2018,11 @@ function install(isGlobal, runtime = 'claude') {
     const isQwen = runtime === 'qwen';
     const dirName = getDirName(runtime);
     const src = __dirname;
-    // Get the target directory based on runtime and install type
-    const targetDir = isGlobal
-        ? getGlobalDir(runtime, explicitConfigDir)
-        : path.join(process.cwd(), dirName);
-    const locationLabel = isGlobal
-        ? targetDir.replace(os.homedir(), '~')
-        : targetDir.replace(process.cwd(), '.');
-    // Path prefix for file references in markdown content
-    // For global installs: use full path
-    // For local installs: use relative
-    const pathPrefix = isGlobal ? `${targetDir.replace(/\\/g, '/')}/` : `./${dirName}/`;
+    // Get the target directory (always local, project-based)
+    const targetDir = path.join(process.cwd(), dirName);
+    const locationLabel = targetDir.replace(process.cwd(), '.');
+    // Path prefix for file references in markdown content (local paths)
+    const pathPrefix = `./${dirName}/`;
     let runtimeLabel = 'Claude Code';
     if (isOpencode)
         runtimeLabel = 'OpenCode';
@@ -2383,7 +2210,7 @@ function install(isGlobal, runtime = 'claude') {
                 }
                 fs.accessSync(hooksDest, fs.constants.W_OK);
                 const hookEntries = fs.readdirSync(hooksSrc);
-                const configDirReplacement = getConfigDirFromHome(runtime, isGlobal);
+                const configDirReplacement = getConfigDirFromHome(runtime);
                 for (const entry of hookEntries) {
                     const srcFile = path.join(hooksSrc, entry);
                     if (fs.statSync(srcFile).isFile()) {
@@ -2414,8 +2241,7 @@ function install(isGlobal, runtime = 'claude') {
         }
     }
     if (failures.length > 0) {
-        console.error(`\n  ${yellow}Instalação incompleta!${reset} Falhou: ${failures.join(', ')}`);
-        process.exit(1);
+        throw new InstallationError(`Instalação incompleta! Falhou: ${failures.join(', ')}`, 'INSTALL_INCOMPLETE', { failures });
     }
     // Write file manifest for future modification detection
     writeManifest(targetDir, runtime);
@@ -2476,19 +2302,13 @@ function install(isGlobal, runtime = 'claude') {
     const hooksDest = path.join(targetDir, 'hooks');
     const hooksExist = fs.existsSync(hooksDest);
     const statuslineCommand = hooksExist
-        ? isGlobal
-            ? buildHookCommand(targetDir, 'fase-statusline.js')
-            : 'node ' + dirName + '/hooks/fase-statusline.js'
+        ? 'node ' + dirName + '/hooks/fase-statusline.js'
         : null;
     const updateCheckCommand = hooksExist
-        ? isGlobal
-            ? buildHookCommand(targetDir, 'fase-check-update.js')
-            : 'node ' + dirName + '/hooks/fase-check-update.js'
+        ? 'node ' + dirName + '/hooks/fase-check-update.js'
         : null;
     const contextMonitorCommand = hooksExist
-        ? isGlobal
-            ? buildHookCommand(targetDir, 'fase-context-monitor.js')
-            : 'node ' + dirName + '/hooks/fase-context-monitor.js'
+        ? 'node ' + dirName + '/hooks/fase-context-monitor.js'
         : null;
     // Enable experimental agents for Gemini CLI (required for custom sub-agents)
     if (isGemini) {
@@ -2568,7 +2388,7 @@ function install(isGlobal, runtime = 'claude') {
 /**
  * Apply statusline config, then print completion message
  */
-function finishInstall(settingsPath, settings, statuslineCommand, shouldInstallStatusline, runtime = 'claude', isGlobal = true) {
+function finishInstall(settingsPath, settings, statuslineCommand, shouldInstallStatusline, runtime = 'claude') {
     const isOpencode = runtime === 'opencode';
     const isCodex = runtime === 'codex';
     if (shouldInstallStatusline && !isOpencode && !isCodex && statuslineCommand && settings) {
@@ -2584,7 +2404,7 @@ function finishInstall(settingsPath, settings, statuslineCommand, shouldInstallS
     }
     // Configure OpenCode permissions
     if (isOpencode) {
-        configureOpencodePermissions(isGlobal);
+        configureOpencodePermissions();
     }
     let program = 'Claude Code';
     if (runtime === 'opencode')
@@ -2772,8 +2592,8 @@ function promptRuntime(callback) {
  * Prompt for install location
  */
 function promptLocation(runtimes) {
-    // Always install locally now
-    installAllRuntimes(runtimes, false, true);
+    // Always install locally
+    installAllRuntimes(runtimes, true);
 }
 /**
  * Prompt for uninstall location (global or local)
@@ -2803,13 +2623,13 @@ function promptUninstallLocation(runtimes) {
             console.log(`\n  ${yellow}Desinstalação cancelada${reset}\n`);
             process.exit(0);
         }
-        promptUninstallConfirmation(runtimes, false);
+        promptUninstallConfirmation(runtimes);
     });
 }
 /**
  * Prompt for confirmation before uninstalling
  */
-function promptUninstallConfirmation(runtimes, isGlobal) {
+function promptUninstallConfirmation(runtimes) {
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
@@ -2822,7 +2642,7 @@ function promptUninstallConfirmation(runtimes, isGlobal) {
             process.exit(0);
         }
     });
-    const locationLabel = isGlobal ? 'globalmente' : 'localmente';
+    const locationLabel = 'localmente';
     const runtimeList = runtimes
         .map((r) => {
         if (r === 'claude')
@@ -2846,7 +2666,7 @@ function promptUninstallConfirmation(runtimes, isGlobal) {
         if (confirm === 's' || confirm === 'sim' || confirm === 'y' || confirm === 'yes') {
             console.log();
             for (const runtime of runtimes) {
-                uninstall(isGlobal, runtime);
+                uninstall(runtime);
             }
             console.log(`\n  ${green}✓${reset} FASE foi desinstalado com sucesso\n`);
         }
@@ -2953,7 +2773,7 @@ function atualizar(runtimesArg) {
     const labels = runtimes.map((r) => runtimeLabels[r] || r).join(', ');
     console.log(`  Atualizando: ${cyan}${labels}${reset}\n`);
     // --- 3. Reinstall ---
-    installAllRuntimes(runtimes, false, false);
+    installAllRuntimes(runtimes, false);
     // --- 4. Post-update verification ---
     console.log(`\n  ${cyan}Verificando instalação pós-atualização...${reset}\n`);
     try {
@@ -2966,20 +2786,34 @@ function atualizar(runtimesArg) {
     console.log(`\n  ${yellow}Lembrete:${reset} Reinicie o runtime (${labels}) para carregar os novos comandos e agentes.\n`);
 }
 /**
- * Install FASE for all selected runtimes
+ * Install FASE for all selected runtimes (local projects only)
  */
-function installAllRuntimes(runtimes, isGlobal, isInteractive) {
+function installAllRuntimes(runtimes, isInteractive) {
     const results = [];
     for (const runtime of runtimes) {
-        const result = install(isGlobal, runtime);
-        results.push(result);
+        try {
+            const result = install(runtime);
+            results.push(result);
+        }
+        catch (err) {
+            if (isFaseError(err)) {
+                console.error(`\n  ${yellow}${err.message}${reset}`);
+            }
+            else if (err instanceof Error) {
+                console.error(`\n  ${yellow}Erro ao instalar ${runtime}:${reset} ${err.message}`);
+            }
+            else {
+                console.error(`\n  ${yellow}Erro ao instalar ${runtime}${reset}`);
+            }
+            process.exit(1);
+        }
     }
     const statuslineRuntimes = ['claude', 'gemini'];
     const primaryStatuslineResult = results.find((r) => statuslineRuntimes.includes(r.runtime));
     const finalize = (shouldInstallStatusline) => {
         for (const result of results) {
             const useStatusline = statuslineRuntimes.includes(result.runtime) && shouldInstallStatusline;
-            finishInstall(result.settingsPath, result.settings, result.statuslineCommand, useStatusline, result.runtime, isGlobal);
+            finishInstall(result.settingsPath, result.settings, result.statuslineCommand, useStatusline, result.runtime);
         }
     };
     if (primaryStatuslineResult && primaryStatuslineResult.settings) {
@@ -3039,7 +2873,7 @@ else {
             }
             console.log(`  ${cyan}FASE${reset} ${dim}v${pkg.version}${reset} — Instalação automática detectada\n`);
             console.log(`  Runtimes: ${runtimesToInstall.join(', ')}\n`);
-            installAllRuntimes(runtimesToInstall, false, false);
+            installAllRuntimes(runtimesToInstall, false);
             return;
         }
         // Check for updates at session start (unless we're already updating)
@@ -3056,20 +2890,20 @@ else {
         else if (hasUninstall) {
             if (selectedRuntimes.length > 0) {
                 const runtimes = selectedRuntimes;
-                promptUninstallConfirmation(runtimes, false);
+                promptUninstallConfirmation(runtimes);
             }
             else {
                 promptUninstallLocation(['claude', 'opencode', 'gemini', 'codex', 'copilot', 'qwen']);
             }
         }
         else if (selectedRuntimes.length > 0) {
-            installAllRuntimes(selectedRuntimes, false, false);
+            installAllRuntimes(selectedRuntimes, false);
         }
         else {
             // Interactive - always local now
             if (!process.stdin.isTTY) {
                 console.log(`  ${yellow}Terminal não interativo detectado, usando instalação local do Claude Code por padrão${reset}\n`);
-                installAllRuntimes(['claude'], false, false);
+                installAllRuntimes(['claude'], false);
             }
             else {
                 promptRuntime((runtimes) => {

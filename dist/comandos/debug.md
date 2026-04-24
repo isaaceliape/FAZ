@@ -93,7 +93,7 @@ Criar: .fase-ai/debug/{slug}.md
 ```
 Task(
   prompt=filled_prompt,
-  subagent_type="faz-debugger",
+  subagent_type="fase-depurador",
   model="{debugger_model}",
   description="Debug {slug}"
 )

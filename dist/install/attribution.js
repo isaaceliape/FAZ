@@ -3,12 +3,13 @@
  *
  * Manages Co-Authored-By lines in git commits based on provider settings.
  * Supports removing, keeping, or customizing attribution.
+ * Uses project-local configuration directories only.
  *
  * @module install/attribution
  */
 import path from 'path';
 import { readSettings } from './settings.js';
-import { getGlobalDir } from './providers.js';
+import { getDirName } from './providers.js';
 /**
  * Cache for attribution settings (populated once per runtime during install)
  */
@@ -16,15 +17,14 @@ const attributionCache = new Map();
 /**
  * Get commit attribution setting for a runtime
  *
- * Checks provider-specific settings files:
- * - Claude Code: ~/.claude/settings.json
- * - OpenCode: ~/.config/opencode/opencode.json (disable_ai_attribution)
- * - Gemini: ~/.gemini/settings.json
- * - GitHub Copilot: ~/.github-copilot/.copilot-settings.json
+ * Checks provider-specific settings files in project-local directories:
+ * - Claude Code: ./.claude/settings.json
+ * - OpenCode: ./.opencode/opencode.json (disable_ai_attribution)
+ * - Gemini: ./.gemini/settings.json
+ * - GitHub Copilot: ./.copilot/.copilot-settings.json
  * - Codex: no attribution setting (returns undefined)
  *
  * @param runtime - Provider runtime name
- * @param explicitConfigDir - Optional explicit config directory
  * @returns Attribution setting (null=remove, undefined=keep, string=custom)
  *
  * @example
@@ -33,18 +33,19 @@ const attributionCache = new Map();
  * if (attr === null) { /* Remove attribution *\/ }
  * ```
  */
-export function getCommitAttribution(runtime, explicitConfigDir = null) {
+export function getCommitAttribution(runtime) {
     // Return cached value if available
     if (attributionCache.has(runtime)) {
         return attributionCache.get(runtime);
     }
     let result;
+    const configDir = path.join(process.cwd(), getDirName(runtime));
     if (runtime === 'opencode') {
-        const config = readSettings(path.join(getGlobalDir('opencode', null), 'opencode.json'));
+        const config = readSettings(path.join(configDir, 'opencode.json'));
         result = config.disable_ai_attribution === true ? null : undefined;
     }
     else if (runtime === 'gemini') {
-        const settings = readSettings(path.join(getGlobalDir('gemini', explicitConfigDir), 'settings.json'));
+        const settings = readSettings(path.join(configDir, 'settings.json'));
         if (!settings.attribution || settings.attribution.commit === undefined) {
             result = undefined;
         }
@@ -56,7 +57,7 @@ export function getCommitAttribution(runtime, explicitConfigDir = null) {
         }
     }
     else if (runtime === 'claude') {
-        const settings = readSettings(path.join(getGlobalDir('claude', explicitConfigDir), 'settings.json'));
+        const settings = readSettings(path.join(configDir, 'settings.json'));
         if (!settings.attribution || settings.attribution.commit === undefined) {
             result = undefined;
         }
@@ -68,7 +69,7 @@ export function getCommitAttribution(runtime, explicitConfigDir = null) {
         }
     }
     else if (runtime === 'copilot') {
-        const settings = readSettings(path.join(getGlobalDir('copilot', explicitConfigDir), '.copilot-settings.json'));
+        const settings = readSettings(path.join(configDir, '.copilot-settings.json'));
         if (!settings.attribution || settings.attribution.commit === undefined) {
             result = undefined;
         }

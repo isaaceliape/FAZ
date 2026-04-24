@@ -21,7 +21,7 @@ export * from './uninstall.js';
  * ✅ helpers.ts - Utility functions
  *
  * Modules awaiting integration with main install.ts:
- * • providers.ts (expandTilde, getDirName, getGlobalDir, etc.)
+ * • providers.ts (expandTilde, getDirName, etc.)
  * • settings.ts (readSettings, writeSettings, etc.)
  * • hooks.ts (hook management)
  * • attribution.ts (attribution handling)

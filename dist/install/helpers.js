@@ -1,22 +1,22 @@
 import os from 'os';
+import { ValidationError } from '../lib/errors.js';
 /**
  * Safely parses JSON with proper error handling.
  * @param jsonStr - JSON string to parse
  * @param context - Description of what's being parsed for error messages
- * @param options - Options for error handling (exitOnError: whether to exit on failure)
- * @returns Parsed JSON object, or null if parsing fails and exitOnError is false
+ * @throws ValidationError if JSON parsing fails
+ * @returns Parsed JSON object
  */
-export function safeJsonParse(jsonStr, context = 'JSON', options = { exitOnError: true }) {
+export function safeJsonParse(jsonStr, context = 'JSON') {
     try {
         return JSON.parse(jsonStr);
     }
     catch (err) {
         const message = err instanceof Error ? err.message : String(err);
-        console.error(`Invalid ${context}: ${message}`);
-        if (options.exitOnError) {
-            process.exit(1);
-        }
-        return null;
+        throw new ValidationError(`Inválido ${context}: ${message}`, 'JSON_PARSE_FAILED', {
+            context,
+            originalMessage: message,
+        });
     }
 }
 /**

@@ -296,11 +296,11 @@ export function convertClaudeToCopilotCommand(content: string): string {
   // Replace /fase:command with /fase-command for copilot (flat command structure)
   convertedContent = convertedContent.replace(/\/fase:/g, '/fase-');
   // Replace ~/.claude and $HOME/.claude with Copilot's config location
-  convertedContent = convertedContent.replace(/~\/\.claude\b/g, '~/.copilot');
-  convertedContent = convertedContent.replace(/\$HOME\/\.claude\b/g, '$HOME/.copilot');
+  convertedContent = convertedContent.replace(/~\/\.claude\b/g, '~/.github-copilot');
+  convertedContent = convertedContent.replace(/\$HOME\/\.claude\b/g, '$HOME/.github-copilot');
   // Replace ~/.fase and $HOME/.fase with Copilot's config location
-  convertedContent = convertedContent.replace(/~\/\.fase\b/g, '~/.copilot');
-  convertedContent = convertedContent.replace(/\$HOME\/\.fase\b/g, '$HOME/.copilot');
+  convertedContent = convertedContent.replace(/~\/\.fase\b/g, '~/.github-copilot');
+  convertedContent = convertedContent.replace(/\$HOME\/\.fase\b/g, '$HOME/.github-copilot');
   // Replace general-purpose subagent type with Copilot's equivalent "general"
   convertedContent = convertedContent.replace(
     /subagent_type="general-purpose"/g,

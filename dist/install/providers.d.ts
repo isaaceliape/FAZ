@@ -1,12 +1,13 @@
 /**
  * Providers — Provider detection and configuration directory management
  *
- * Handles config directory paths for all supported AI providers:
- * - Claude Code (~/.claude)
- * - OpenCode (~/.config/opencode)
- * - Gemini (~/.gemini)
- * - Codex (~/.codex)
- * - GitHub Copilot (~/.github-copilot)
+ * Handles config directory paths for all supported AI providers (project-local only):
+ * - Claude Code (./.claude)
+ * - OpenCode (./.opencode)
+ * - Gemini (./.gemini)
+ * - Codex (./.codex)
+ * - GitHub Copilot (./.copilot)
+ * - Qwen (./.qwen)
  *
  * @module install/providers
  */
@@ -42,45 +43,18 @@ export declare function getDirName(runtime: ProviderRuntime): string;
 /**
  * Get the config directory path relative to home directory for a runtime
  * Used for templating hooks that use path.join(homeDir, '<configDir>', ...)
+ * Local project-based installs only.
  *
  * @param runtime - Provider runtime name
- * @param isGlobal - Whether this is a global install
  * @returns String representation for path.join() replacement
  *
  * @example
  * ```typescript
- * getConfigDirFromHome('claude', false) // => "'.claude'"
- * getConfigDirFromHome('opencode', true) // => "'.config', 'opencode'"
+ * getConfigDirFromHome('claude') // => "'.claude'"
+ * getConfigDirFromHome('opencode') // => "'.opencode'"
  * ```
  */
-export declare function getConfigDirFromHome(runtime: ProviderRuntime, isGlobal: boolean): string;
-/**
- * Get the global config directory for OpenCode
- * OpenCode follows XDG Base Directory spec and uses ~/.config/opencode/
- *
- * Priority:
- * 1. OPENCODE_CONFIG_DIR env var
- * 2. dirname(OPENCODE_CONFIG) env var
- * 3. XDG_CONFIG_HOME/opencode
- * 4. ~/.config/opencode (default)
- *
- * @returns Absolute path to OpenCode config directory
- */
-export declare function getOpencodeGlobalDir(): string;
-/**
- * Get the global config directory for a runtime
- *
- * @param runtime - Provider runtime name
- * @param explicitDir - Explicit directory from --config-dir flag (optional)
- * @returns Absolute path to config directory
- *
- * @example
- * ```typescript
- * getGlobalDir('claude', null) // => '/home/user/.claude'
- * getGlobalDir('opencode', '/custom/path') // => '/custom/path'
- * ```
- */
-export declare function getGlobalDir(runtime: ProviderRuntime, explicitDir?: string | null): string;
+export declare function getConfigDirFromHome(runtime: ProviderRuntime): string;
 /**
  * Check if a runtime is valid/supported
  *

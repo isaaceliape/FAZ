@@ -1,0 +1,19 @@
+{
+  "version": "5.0.1",
+  "timestamp": "2026-04-24T13:26:22.927Z",
+  "files": {
+    "agents/fase-arquiteto.md": "c6c645eddb0ef33de99d4a01c139ebd0ab4e3ba0b1f6d861381c4e7e2fa9509a",
+    "agents/fase-auditor-nyquist.md": "c771b9fa7b653b30aa360507b29d199c759cd45931ba752edd9fe4c53b57d361",
+    "agents/fase-depurador.md": "709da2c9fb0118f61af97707bf409d8d58da888af1efd167b30733501a254edb",
+    "agents/fase-executor.md": "9eec79c282f4231fbde5f9f98f522bb3d128eed8f5775c26309d8c02649d6562",
+    "agents/fase-mapeador-codigo.md": "9c5916b13de751e36056bafd5df8321521908e7e8ba71e2a1afc3e086c5da328",
+    "agents/fase-pesquisador-fase.md": "f5b561c32f2389e175ba90b5e851a8eadf03c347bfd7248f4055ca57f2adb523",
+    "agents/fase-pesquisador-projeto.md": "7ba115679e00b8055c61ab1467c6ebaee1ba58f7b98d70283cd2dce85de68010",
+    "agents/fase-planejador.md": "4510d1270391a5691721003b751150db081694b43eca97647cc2d5b2c4ef786a",
+    "agents/fase-roadmapper.md": "1436043d57606f50d5f05d107e48f53decf666cc7841361b3d6085d282c6b78a",
+    "agents/fase-sintetizador-pesquisa.md": "d815325416b3a048083d98183fc72e7e70f3c0863bb421e7bb13a63ff0414b34",
+    "agents/fase-verificador-integracao.md": "14ec81fc9132bda3310eaab824697f3dd80b7d84a5cf5802f7abf81c5e4bf675",
+    "agents/fase-verificador-plano.md": "80a000fa64f72cf9c303cd55b534a05fb6f3b3ed265db721697e9f3293d076cd",
+    "agents/fase-verificador.md": "022da5bd68e39bfddb7d7185e56489a83c6376973cd1b15d0fa9b62a04855a3c"
+  }
+}

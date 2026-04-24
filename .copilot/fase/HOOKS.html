@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>HOOKS - FASE Docs</title>
+  <style>
+    :root {
+      --primary: #00ff88;
+      --secondary: #00bfff;
+      --warning: #ffaa00;
+      --danger: #ff3366;
+      --dark-bg: #0a0e27;
+      --grid-bg: #111827;
+      --text: #e5e7eb;
+      --dim: #9ca3af;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .header {
+      background-color: var(--grid-bg);
+      border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+      transition: color 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .logo:hover {
+      color: var(--primary);
+    }
+
+    .logo span {
+      color: var(--primary);
+    }
+
+    .logo:hover span {
+      color: var(--secondary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      border: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .content-wrapper {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: var(--grid-bg);
+      border-right: 1px solid rgba(0, 255, 136, 0.1);
+      padding: 20px;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .sidebar h3 {
+      color: var(--primary);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+      margin-top: 20px;
+    }
+
+    .sidebar h3:first-child {
+      margin-top: 0;
+    }
+
+    .sidebar-link {
+      display: block;
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-link:hover {
+      color: var(--primary);
+      background-color: rgba(0, 255, 136, 0.1);
+      border-left-color: var(--primary);
+    }
+
+    .sidebar-link.active {
+      color: var(--primary);
+      background-color: rgba(0, 255, 136, 0.15);
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+    }
+
+    h1 {
+      color: var(--primary);
+      font-size: 2rem;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      color: var(--secondary);
+      font-size: 1.5rem;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+
+    h3 {
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 15px;
+      color: var(--text);
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      border-bottom: 1px dotted var(--primary);
+      transition: all 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--secondary);
+      border-bottom-style: solid;
+    }
+
+    code {
+      background-color: var(--dark-bg);
+      color: var(--primary);
+      padding: 0.2rem 0.4rem;
+      border-radius: 2px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background-color: var(--dark-bg);
+      border: 1px solid var(--dim);
+      border-radius: 4px;
+      padding: 15px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+
+    pre code {
+      padding: 0;
+      background: none;
+      color: var(--primary);
+    }
+
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    blockquote {
+      border-left: 4px solid var(--primary);
+      background-color: var(--dark-bg);
+      padding: 15px;
+      margin: 15px 0;
+      color: var(--dim);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      border: 1px solid var(--dim);
+    }
+
+    th {
+      background-color: var(--dark-bg);
+      color: var(--primary);
+      padding: 12px;
+      text-align: left;
+      border-bottom: 2px solid var(--primary);
+      border-right: 1px solid var(--dim);
+      font-weight: 600;
+    }
+
+    th:last-child {
+      border-right: none;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid var(--dim);
+      border-right: 1px solid var(--dim);
+    }
+
+    td:last-child {
+      border-right: none;
+    }
+
+    tr:hover {
+      background-color: rgba(0, 255, 136, 0.05);
+    }
+
+    strong {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    em {
+      color: var(--dim);
+      font-style: italic;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--dim);
+      margin: 30px 0;
+    }
+
+    .version-badge {
+      display: inline-block;
+      background-color: rgba(0, 255, 136, 0.15);
+      color: var(--primary);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: 1px solid var(--primary);
+      margin-bottom: 20px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--dark-bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--secondary);
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .content-wrapper {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+        max-height: 150px;
+        overflow-x: auto;
+        display: flex;
+        gap: 10px;
+      }
+
+      .sidebar h3 {
+        display: none;
+      }
+
+      .sidebar-link {
+        white-space: nowrap;
+        margin-bottom: 0;
+      }
+
+      .main {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="index.html" class="logo">fase<span>-</span>ai</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="https://github.com/isaaceliape/FASE">GitHub</a>
+    </div>
+  </div>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <h3>📚 Documentação</h3>
+      <a href="index.html" class="sidebar-link ">📖 README</a>
+<a href="COMANDOS.html" class="sidebar-link ">📋 Comandos</a>
+<a href="GUIA-DO-USUARIO.html" class="sidebar-link ">📘 Guia do Usuário</a>
+<a href="CONTRIBUINDO.html" class="sidebar-link ">🤝 Guia de Contribuição</a>
+<a href="HOOKS.html" class="sidebar-link active">🔧 Git Hooks</a>
+<a href="NPM-REGISTRY.html" class="sidebar-link ">📦 NPM Registry</a>
+<a href="technical/padronizacao-caminhos.html" class="sidebar-link ">🛣️ Padronização de Caminhos</a>
+<a href="maintainers/MANTENEDORES.html" class="sidebar-link ">👨‍💼 Guia de Maintainers</a>
+<a href="CONTEXT-MONITOR.html" class="sidebar-link ">📊 Monitor de Contexto</a>
+    </aside>
+
+    <main class="main">
+      <div class="version-badge">📦 Versão 3.5.0</div>
+      <h1>Hooks do FASE - Monitoramento e Status</h1>
+<blockquote>
+<p><strong>Versão</strong>: 3.5.0 | Última atualização: 2026-04-10</p>
+</blockquote>
+<p>O FASE utiliza hooks para monitoramento de contexto, statusline e verificação de atualizações.</p>
+<h2>🔐 Segurança e Limites</h2>
+<h3>Timeout de Input</h3>
+<ul>
+<li><strong>Timeout</strong>: 10 segundos (3s antes da v3.4.0)</li>
+<li><strong>Motivo</strong>: Prevenir deadlocks em sistemas lentos ou com problemas de pipe</li>
+<li><strong>Comportamento</strong>: Hook sai com log <code>[fase-*] stdin timeout, exiting</code></li>
+</ul>
+<h3>Limite de Tamanho de Input</h3>
+<ul>
+<li><strong>Limite</strong>: 10MB</li>
+<li><strong>Motivo</strong>: Prevenir problemas de memória com inputs grandes</li>
+<li><strong>Comportamento</strong>: Hook truncar input e log <code>[fase-*] Input size exceeds 10MB limit, truncating</code></li>
+</ul>
+<h2>📊 Hooks Disponíveis</h2>
+<h3>fase-context-monitor</h3>
+<p>Monitora uso do contexto e exibe avisos quando está baixo.</p>
+<p><strong>Gatilho</strong>: <code>PostToolUse</code> / <code>AfterTool</code></p>
+<p><strong>Saída</strong>: Adiciona contexto adicional com avisos de uso do contexto</p>
+<h3>fase-statusline</h3>
+<p>Exibe modelo, tarefa atual, diretório e uso do contexto na statusline.</p>
+<p><strong>Gatilho</strong>: <code>SessionStart</code></p>
+<p><strong>Formato</strong>: <code>modelo | tarefa | diretório | contexto%</code></p>
+<h3>fase-check-update</h3>
+<p>Verifica silenciosamente por atualizações no npm registry.</p>
+<p><strong>Gatilho</strong>: <code>SessionStart</code></p>
+<p><strong>Cache</strong>: 5 minutos em <code>~/.claude/cache/fase-update-check.json</code></p>
+<h2>🚀 Configuração</h2>
+<p>Os hooks são configurados automaticamente durante a instalação do FASE. Para personalizar:</p>
+<h3>Claude Code</h3>
+<p>Edite <code>~/.claude/settings.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;hooks&quot;: {
+    &quot;SessionStart&quot;: [{
+      &quot;type&quot;: &quot;command&quot;,
+      &quot;command&quot;: &quot;node /caminho/para/FASE/hooks/fase-statusline.cjs&quot;
+    }],
+    &quot;PostToolUse&quot;: [{
+      &quot;type&quot;: &quot;command&quot;,
+      &quot;command&quot;: &quot;node /caminho/para/FASE/hooks/fase-context-monitor.cjs&quot;
+    }]
+  }
+}
+</code></pre>
+<h3>OpenCode</h3>
+<p>Edite <code>~/.config/opencode/opencode.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;hooks&quot;: {
+    &quot;SessionStart&quot;: [&quot;node /caminho/para/FASE/hooks/fase-statusline.cjs&quot;],
+    &quot;AfterTool&quot;: [&quot;node /caminho/para/FASE/hooks/fase-context-monitor.cjs&quot;]
+  }
+}
+</code></pre>
+<h2>🆘 Troubleshooting</h2>
+<h3>Hook não aparece na saída</h3>
+<p>Verifique se o caminho está correto no settings.json e se o arquivo tem permissão de execução:</p>
+<pre><code class="language-bash">chmod +x ~/.fase-ai/hooks/*.cjs
+</code></pre>
+<h3>Timeout frequente</h3>
+<p>Se hooks estão expirando frequentemente em sistemas lentos:</p>
+<ul>
+<li>Verifique se há processos consumindo CPU</li>
+<li>Considere aumentar o timeout (editar arquivo do hook)</li>
+<li>O timeout de 10s é suficiente para a maioria dos casos</li>
+</ul>
+<h3>Logs de erro</h3>
+<p>Hooks logam erros para stderr. Para debug:</p>
+<pre><code class="language-bash"># Executar hook manualmente
+node ~/.fase-ai/hooks/fase-context-monitor.cjs &lt; input.json
+</code></pre>
+<h2>📚 Referência</h2>
+<ul>
+<li><a href="https://docs.anthropic.com/claude-code/hooks">Claude Code Hooks</a></li>
+<li><a href="https://docs.opencode.ai/hooks">OpenCode Hooks</a></li>
+</ul>
+
+    </main>
+  </div>
+</body>
+</html>

@@ -3,6 +3,7 @@
  *
  * Handles complete removal of FASE from a provider,
  * including settings, hooks, and configuration files.
+ * Uninstalls from project-local configuration directories only.
  *
  * @module install/uninstall
  */
@@ -52,15 +53,13 @@ export declare function removeFaseDir(configDir: string): boolean;
  * Completely uninstall FASE from a provider
  *
  * @param runtime - Provider runtime
- * @param explicitConfigDir - Optional explicit config directory
  * @returns Uninstall result with details
  */
-export declare function uninstallFase(runtime: ProviderRuntime, explicitConfigDir?: string | null): UninstallResult;
+export declare function uninstallFase(runtime: ProviderRuntime): UninstallResult;
 /**
  * Check if FASE is installed for a provider
  *
  * @param runtime - Provider runtime
- * @param explicitConfigDir - Optional explicit config directory
  * @returns true if FASE is installed
  */
-export declare function isFaseInstalled(runtime: ProviderRuntime, explicitConfigDir?: string | null): boolean;
+export declare function isFaseInstalled(runtime: ProviderRuntime): boolean;
