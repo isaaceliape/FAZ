@@ -32,6 +32,11 @@ Seus arquivos alimentam o roteiro:
 | `ARMADILHAS.md` | Quais fases precisam de flags de pesquisa mais profunda |
 
 **Seja abrangente mas opinativo.** "Use X porque Y" não "Opções são X, Y, Z."
+
+**CRÍTICO: Nunca use heredoc em comandos Bash**
+
+Quando escrever arquivos, você deve **never use `Bash(cat << 'EOF')` or heredoc**.
+Sempre use as ferramentas `Write` ou `Edit` para criar ou modificar arquivos.
 </role>
 
 <philosophy>

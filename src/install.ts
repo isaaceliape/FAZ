@@ -6,32 +6,27 @@ import crypto from 'crypto';
 import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { checkAndPromptForUpdate } from './lib/version-check.js';
+import { safeJsonParse as helperSafeJsonParse } from './install/helpers.js';
 import {
   convertClaudeToQwenCommand,
   convertClaudeToCopilotCommand,
 } from './install/frontmatter-convert.js';
+import { ValidationError, InstallationError, isFaseError } from './lib/errors.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/**
- * Safely parses JSON with proper error handling.
- * @param jsonStr - JSON string to parse
- * @param context - Description of what's being parsed for error messages
- * @param options - Options for error handling (exitOnError: whether to exit on failure)
- * @returns Parsed JSON object, or null if parsing fails and exitOnError is false
- */
+// Wrapper to handle JSON parsing with optional error recovery
 function safeJsonParse<T = unknown>(
   jsonStr: string,
   context: string = 'JSON',
   options: { exitOnError: boolean } = { exitOnError: true }
 ): T | null {
   try {
-    return JSON.parse(jsonStr) as T;
+    return helperSafeJsonParse(jsonStr, context) as T;
   } catch (err) {
-    const error = err as Error;
-    console.error(`Invalid ${context}: ${error.message}`);
     if (options.exitOnError) {
-      process.exit(1);
+      throw err;
     }
     return null;
   }
@@ -253,8 +248,10 @@ function parseConfigDirArg() {
     const nextArg = args[configDirIndex + 1];
     // Error if --config-dir is provided without a value or next arg is another flag
     if (!nextArg || nextArg.startsWith('-')) {
-      console.error(`  ${yellow}--config-dir requer um argumento de caminho${reset}`);
-      process.exit(1);
+      throw new ValidationError(
+        `${yellow}--config-dir requer um argumento de caminho${reset}`,
+        'CONFIG_DIR_NO_ARGUMENT'
+      );
     }
     return nextArg;
   }
@@ -263,14 +260,26 @@ function parseConfigDirArg() {
   if (configDirArg) {
     const value = configDirArg.split('=')[1];
     if (!value) {
-      console.error(`  ${yellow}--config-dir requer um caminho não vazio${reset}`);
-      process.exit(1);
+      throw new ValidationError(
+        `${yellow}--config-dir requer um caminho não vazio${reset}`,
+        'CONFIG_DIR_EMPTY_VALUE'
+      );
     }
     return value;
   }
   return null;
 }
-const explicitConfigDir = parseConfigDirArg();
+let explicitConfigDir: string | null = null;
+try {
+  explicitConfigDir = parseConfigDirArg();
+} catch (err) {
+  if (isFaseError(err)) {
+    console.error(`  ${err.message}`);
+  } else {
+    console.error('Erro ao processar argumentos:', err);
+  }
+  process.exit(1);
+}
 const hasHelp = args.includes('--help') || args.includes('-h');
 const forceStatusline = args.includes('--force-statusline');
 console.log(banner);
@@ -2382,8 +2391,11 @@ function install(
     }
   }
   if (failures.length > 0) {
-    console.error(`\n  ${yellow}Instalação incompleta!${reset} Falhou: ${failures.join(', ')}`);
-    process.exit(1);
+    throw new InstallationError(
+      `Instalação incompleta! Falhou: ${failures.join(', ')}`,
+      'INSTALL_INCOMPLETE',
+      { failures }
+    );
   }
   // Write file manifest for future modification detection
   writeManifest(targetDir, runtime);
@@ -2975,8 +2987,19 @@ function installAllRuntimes(runtimes: string[], isGlobal: boolean, isInteractive
     runtime: string;
   }> = [];
   for (const runtime of runtimes) {
-    const result = install(isGlobal, runtime);
-    results.push(result);
+    try {
+      const result = install(isGlobal, runtime);
+      results.push(result);
+    } catch (err) {
+      if (isFaseError(err)) {
+        console.error(`\n  ${yellow}${err.message}${reset}`);
+      } else if (err instanceof Error) {
+        console.error(`\n  ${yellow}Erro ao instalar ${runtime}:${reset} ${err.message}`);
+      } else {
+        console.error(`\n  ${yellow}Erro ao instalar ${runtime}${reset}`);
+      }
+      process.exit(1);
+    }
   }
   const statuslineRuntimes = ['claude', 'gemini'];
   const primaryStatuslineResult = results.find(

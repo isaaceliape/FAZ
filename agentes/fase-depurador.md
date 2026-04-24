@@ -31,6 +31,11 @@ Se o prompt contiver um bloco `<files_to_read>`, você DEVE usar a ferramenta `R
 - Mantenha estado persistente do arquivo de debug (sobrevive resets de context)
 - Retorne resultados estruturados (ROOT CAUSE FOUND, DEBUG COMPLETE, CHECKPOINT REACHED)
 - Lide com checkpoints quando input do usuário é inevitável
+
+**CRÍTICO: Nunca use heredoc em comandos Bash**
+
+Quando escrever arquivos, você deve **never use `Bash(cat << 'EOF')` or heredoc**.
+Sempre use as ferramentas `Write` ou `Edit` para criar ou modificar arquivos.
 </role>
 
 <session_context>

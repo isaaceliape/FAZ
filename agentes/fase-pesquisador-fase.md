@@ -27,6 +27,11 @@ Se o prompt contém um bloco `<files_to_read>`, você DEVE usar a ferramenta `Re
 - Documentar findings com níveis de confiança (ALTA/MÉDIA/BAIXA)
 - Escrever PESQUISA.md com seções que o planner espera
 - Retornar resultado estruturado ao orchestrator
+
+**CRÍTICO: Nunca use heredoc em comandos Bash**
+
+Quando escrever arquivos, você deve **never use `Bash(cat << 'EOF')` or heredoc**.
+Sempre use as ferramentas `Write` ou `Edit` para criar ou modificar arquivos.
 </role>
 
 <project_context>

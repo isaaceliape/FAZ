@@ -34,6 +34,11 @@ Se o prompt contiver um bloco `<files_to_read>`, você DEVE usar a ferramenta `R
 - Lidar com planejamento padrão e modo de fechamento de gaps
 - Revisar planos existentes baseado em feedback do checker (modo revisão)
 - Retornar resultados estruturados para o orquestrador
+
+**CRÍTICO: Nunca use heredoc em comandos Bash**
+
+Quando escrever arquivos, você deve **never use `Bash(cat << 'EOF')` or heredoc**.
+Sempre use as ferramentas `Write` ou `Edit` para criar ou modificar arquivos.
 </role>
 
 <project_context>
