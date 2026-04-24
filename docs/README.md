@@ -1,6 +1,6 @@
 # 📚 Documentação do FASE
 
-> **Versão**: 5.0.1 ✅ | Última atualização: 2026-04-24 | Status: Todos os testes passando (9/9 install, 11/11 TUI interaction, 6/6 providers)
+> **Versão**: 5.1.1 ✅ | Última atualização: 2026-04-24 | Status: 414/414 testes passando (Issue #9: Error Handling Standardization Completo)
 
 Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que precisa para instalar, usar e contribuir ao projeto.
 
