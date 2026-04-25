@@ -29,7 +29,7 @@ export function buildHookCommand(configDir, hookName) {
 /**
  * Ensure hooks directory exists
  *
- * @param configDir - Configuration directory (e.g., ~/.claude)
+ * @param configDir - Configuration directory (e.g., ./.claude)
  * @returns Path to hooks directory
  */
 export function ensureHooksDir(configDir) {
@@ -57,7 +57,7 @@ export function hooksDirExists(configDir) {
  *
  * @example
  * ```typescript
- * writeHook('~/.claude', 'fase-statusline', '#!/usr/bin/env node\n...');
+ * writeHook('./.claude', 'fase-statusline', '#!/usr/bin/env node\n...');
  * ```
  */
 export function writeHook(configDir, hookName, content) {

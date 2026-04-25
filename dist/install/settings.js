@@ -16,7 +16,7 @@ import path from 'path';
  *
  * @example
  * ```typescript
- * const settings = readSettings('~/.claude/settings.json');
+ * const settings = readSettings('./.claude/settings.json');
  * if (settings.hooks) { ... }
  * ```
  */
@@ -39,7 +39,7 @@ export function readSettings(settingsPath) {
  *
  * @example
  * ```typescript
- * writeSettings('~/.claude/settings.json', { hooks: {...} });
+ * writeSettings('./.claude/settings.json', { hooks: {...} });
  * ```
  */
 export function writeSettings(settingsPath, settings) {
@@ -52,7 +52,7 @@ export function writeSettings(settingsPath, settings) {
  *
  * @example
  * ```typescript
- * ensureSettingsDir('~/.claude/settings.json');
+ * ensureSettingsDir('./.claude/settings.json');
  * ```
  */
 export function ensureSettingsDir(settingsPath) {
@@ -72,7 +72,7 @@ export function ensureSettingsDir(settingsPath) {
  *
  * @example
  * ```typescript
- * const merged = mergeSettings('~/.claude/settings.json', { hooks: {...} });
+ * const merged = mergeSettings('./.claude/settings.json', { hooks: {...} });
  * ```
  */
 export function mergeSettings(settingsPath, newSettings, options = {}) {
@@ -106,7 +106,7 @@ export function mergeSettings(settingsPath, newSettings, options = {}) {
  *
  * @example
  * ```typescript
- * const removed = removeHook('~/.claude/settings.json', 'fase-*');
+ * const removed = removeHook('./.claude/settings.json', 'fase-*');
  * ```
  */
 export function removeHook(settingsPath, hookPattern) {
@@ -142,7 +142,7 @@ export function removeHook(settingsPath, hookPattern) {
  *
  * @example
  * ```typescript
- * addHook('~/.claude/settings.json', 'fase-*', 'fase_commands');
+ * addHook('./.claude/settings.json', 'fase-*', 'fase_commands');
  * ```
  */
 export function addHook(settingsPath, hookPattern, hookName) {

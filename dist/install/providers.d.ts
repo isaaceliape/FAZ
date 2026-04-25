@@ -23,7 +23,7 @@ export type ProviderRuntime = 'claude' | 'opencode' | 'gemini' | 'codex' | 'copi
  *
  * @example
  * ```typescript
- * expandTilde('~/.claude') // => '/home/user/.claude'
+ * expandTilde('./.claude') // => '/current/dir/.claude'
  * ```
  */
 export declare function expandTilde(filePath: string): string;

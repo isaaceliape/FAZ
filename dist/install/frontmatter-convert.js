@@ -217,12 +217,12 @@ export function getCodexSkillAdapterHeader(skillName) {
 export function convertClaudeToQwenCommand(content) {
     // Replace tool name references in content
     let convertedContent = content;
-    // Replace ~/.claude and $HOME/.claude with Qwen's config location
-    convertedContent = convertedContent.replace(/~\/\.claude\b/g, '~/.qwen');
-    convertedContent = convertedContent.replace(/\$HOME\/\.claude\b/g, '$HOME/.qwen');
-    // Replace ~/.fase and $HOME/.fase with Qwen's config location
-    convertedContent = convertedContent.replace(/~\/\.fase\b/g, '~/.qwen');
-    convertedContent = convertedContent.replace(/\$HOME\/\.fase\b/g, '$HOME/.qwen');
+    // Replace .claude and .fase references with Qwen's project-local location
+    convertedContent = convertedContent.replace(/~\/\.claude\b/g, '.qwen');
+    convertedContent = convertedContent.replace(/\$HOME\/\.claude\b/g, '.qwen');
+    // Replace ~/.fase and $HOME/.fase with Qwen's project-local location
+    convertedContent = convertedContent.replace(/~\/\.fase\b/g, '.qwen');
+    convertedContent = convertedContent.replace(/\$HOME\/\.fase\b/g, '.qwen');
     // Check if content has frontmatter
     if (!convertedContent.startsWith('---')) {
         return convertedContent;
@@ -270,12 +270,12 @@ export function convertClaudeToCopilotCommand(content) {
     convertedContent = convertedContent.replace(/\bTodoWrite\b/g, 'write_todos');
     // Replace /fase:command with /fase-command for copilot (flat command structure)
     convertedContent = convertedContent.replace(/\/fase:/g, '/fase-');
-    // Replace ~/.claude and $HOME/.claude with Copilot's config location
-    convertedContent = convertedContent.replace(/~\/\.claude\b/g, '~/.github-copilot');
-    convertedContent = convertedContent.replace(/\$HOME\/\.claude\b/g, '$HOME/.github-copilot');
-    // Replace ~/.fase and $HOME/.fase with Copilot's config location
-    convertedContent = convertedContent.replace(/~\/\.fase\b/g, '~/.github-copilot');
-    convertedContent = convertedContent.replace(/\$HOME\/\.fase\b/g, '$HOME/.github-copilot');
+    // Replace .claude and .fase references with Copilot's project-local location
+    convertedContent = convertedContent.replace(/~\/\.claude\b/g, '.copilot');
+    convertedContent = convertedContent.replace(/\$HOME\/\.claude\b/g, '.copilot');
+    // Replace ~/.fase and $HOME/.fase with Copilot's project-local location
+    convertedContent = convertedContent.replace(/~\/\.fase\b/g, '.copilot');
+    convertedContent = convertedContent.replace(/\$HOME\/\.fase\b/g, '.copilot');
     // Replace general-purpose subagent type with Copilot's equivalent "general"
     convertedContent = convertedContent.replace(/subagent_type="general-purpose"/g, 'subagent_type="general"');
     // Check if content has frontmatter

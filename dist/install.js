@@ -771,7 +771,7 @@ function installCodexConfig(targetDir, agentsSrc) {
     const codexPathPrefix = `${targetDir.replace(/\\/g, '/')}/`;
     for (const file of agentEntries) {
         let content = fs.readFileSync(path.join(agentsSrc, file), 'utf8');
-        // Replace .claude paths before generating TOML (source files use ~/.claude and $HOME/.claude)
+        // Replace .claude paths (source files may reference .claude for project-local installs)
         content = content.replace(/~\/\.claude\//g, codexPathPrefix);
         content = content.replace(/\$HOME\/\.claude\//g, toHomePrefix(codexPathPrefix));
         const { frontmatter } = extractFrontmatterAndBody(content);
@@ -912,12 +912,12 @@ function convertClaudeToOpencodeFrontmatter(content) {
     convertedContent = convertedContent.replace(/\bTodoWrite\b/g, 'todowrite');
     // Replace /fase:command with /fase-command for opencode (flat command structure)
     convertedContent = convertedContent.replace(/\/fase:/g, '/fase-');
-    // Replace ~/.claude and $HOME/.claude with OpenCode's config location
-    convertedContent = convertedContent.replace(/~\/\.claude\b/g, '~/.config/opencode');
-    convertedContent = convertedContent.replace(/\$HOME\/\.claude\b/g, '$HOME/.config/opencode');
-    // Replace ~/.fase and $HOME/.fase with OpenCode's config location
-    convertedContent = convertedContent.replace(/~\/\.fase\b/g, '~/.config/opencode/fase');
-    convertedContent = convertedContent.replace(/\$HOME\/\.fase\b/g, '$HOME/.config/opencode/fase');
+    // Replace .claude and .fase references with OpenCode's project-local location
+    convertedContent = convertedContent.replace(/~\/\.claude\b/g, '.opencode');
+    convertedContent = convertedContent.replace(/\$HOME\/\.claude\b/g, '.opencode');
+    // Replace ~/.fase and $HOME/.fase with OpenCode's project-local location
+    convertedContent = convertedContent.replace(/~\/\.fase\b/g, '.opencode/fase');
+    convertedContent = convertedContent.replace(/\$HOME\/\.fase\b/g, '.opencode/fase');
     // Replace general-purpose subagent type with OpenCode's equivalent "general"
     convertedContent = convertedContent.replace(/subagent_type="general-purpose"/g, 'subagent_type="general"');
     // Check if content has frontmatter
@@ -1190,7 +1190,7 @@ function copyWithPathReplacement(srcDir, destDir, pathPrefix, runtime, isCommand
             copyWithPathReplacement(srcPath, destPath, pathPrefix, runtime, isCommand);
         }
         else if (entry.name.endsWith('.md')) {
-            // Replace ~/.claude/ and $HOME/.claude/ and ./.claude/ with runtime-appropriate paths
+            // Replace .claude/ references with runtime-appropriate paths
             let content = fs.readFileSync(srcPath, 'utf8');
             const globalClaudeRegex = /~\/\.claude\//g;
             const globalClaudeHomeRegex = /\$HOME\/\.claude\//g;
@@ -2141,7 +2141,7 @@ function install(runtime = 'claude') {
         for (const entry of agentEntries) {
             if (entry.isFile() && entry.name.endsWith('.md')) {
                 let content = fs.readFileSync(path.join(agentsSrc, entry.name), 'utf8');
-                // Replace ~/.claude/ and $HOME/.claude/ as they are the source of truth in the repo
+                // Replace .claude/ and .fase/ references with project-local paths
                 const dirRegex = /~\/\.claude\//g;
                 const homeDirRegex = /\$HOME\/\.claude\//g;
                 const globalFaseRegex = /~\/\.fase\//g;

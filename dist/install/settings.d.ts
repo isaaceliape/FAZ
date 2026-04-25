@@ -27,7 +27,7 @@ export interface ProviderSettings {
  *
  * @example
  * ```typescript
- * const settings = readSettings('~/.claude/settings.json');
+ * const settings = readSettings('./.claude/settings.json');
  * if (settings.hooks) { ... }
  * ```
  */
@@ -40,7 +40,7 @@ export declare function readSettings(settingsPath: string): ProviderSettings;
  *
  * @example
  * ```typescript
- * writeSettings('~/.claude/settings.json', { hooks: {...} });
+ * writeSettings('./.claude/settings.json', { hooks: {...} });
  * ```
  */
 export declare function writeSettings(settingsPath: string, settings: ProviderSettings): void;
@@ -51,7 +51,7 @@ export declare function writeSettings(settingsPath: string, settings: ProviderSe
  *
  * @example
  * ```typescript
- * ensureSettingsDir('~/.claude/settings.json');
+ * ensureSettingsDir('./.claude/settings.json');
  * ```
  */
 export declare function ensureSettingsDir(settingsPath: string): void;
@@ -66,7 +66,7 @@ export declare function ensureSettingsDir(settingsPath: string): void;
  *
  * @example
  * ```typescript
- * const merged = mergeSettings('~/.claude/settings.json', { hooks: {...} });
+ * const merged = mergeSettings('./.claude/settings.json', { hooks: {...} });
  * ```
  */
 export declare function mergeSettings(settingsPath: string, newSettings: ProviderSettings, options?: {
@@ -81,7 +81,7 @@ export declare function mergeSettings(settingsPath: string, newSettings: Provide
  *
  * @example
  * ```typescript
- * const removed = removeHook('~/.claude/settings.json', 'fase-*');
+ * const removed = removeHook('./.claude/settings.json', 'fase-*');
  * ```
  */
 export declare function removeHook(settingsPath: string, hookPattern: string): boolean;
@@ -94,7 +94,7 @@ export declare function removeHook(settingsPath: string, hookPattern: string): b
  *
  * @example
  * ```typescript
- * addHook('~/.claude/settings.json', 'fase-*', 'fase_commands');
+ * addHook('./.claude/settings.json', 'fase-*', 'fase_commands');
  * ```
  */
 export declare function addHook(settingsPath: string, hookPattern: string, hookName?: string): void;

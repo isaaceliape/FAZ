@@ -21,7 +21,7 @@ import os from 'os';
  *
  * @example
  * ```typescript
- * expandTilde('~/.claude') // => '/home/user/.claude'
+ * expandTilde('./.claude') // => '/current/dir/.claude'
  * ```
  */
 export function expandTilde(filePath) {

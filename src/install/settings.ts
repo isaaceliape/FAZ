@@ -34,7 +34,7 @@ export interface ProviderSettings {
  *
  * @example
  * ```typescript
- * const settings = readSettings('~/.claude/settings.json');
+ * const settings = readSettings('./.claude/settings.json');
  * if (settings.hooks) { ... }
  * ```
  */
@@ -57,7 +57,7 @@ export function readSettings(settingsPath: string): ProviderSettings {
  *
  * @example
  * ```typescript
- * writeSettings('~/.claude/settings.json', { hooks: {...} });
+ * writeSettings('./.claude/settings.json', { hooks: {...} });
  * ```
  */
 export function writeSettings(settingsPath: string, settings: ProviderSettings): void {
@@ -71,7 +71,7 @@ export function writeSettings(settingsPath: string, settings: ProviderSettings):
  *
  * @example
  * ```typescript
- * ensureSettingsDir('~/.claude/settings.json');
+ * ensureSettingsDir('./.claude/settings.json');
  * ```
  */
 export function ensureSettingsDir(settingsPath: string): void {
@@ -92,7 +92,7 @@ export function ensureSettingsDir(settingsPath: string): void {
  *
  * @example
  * ```typescript
- * const merged = mergeSettings('~/.claude/settings.json', { hooks: {...} });
+ * const merged = mergeSettings('./.claude/settings.json', { hooks: {...} });
  * ```
  */
 export function mergeSettings(
@@ -135,7 +135,7 @@ export function mergeSettings(
  *
  * @example
  * ```typescript
- * const removed = removeHook('~/.claude/settings.json', 'fase-*');
+ * const removed = removeHook('./.claude/settings.json', 'fase-*');
  * ```
  */
 export function removeHook(settingsPath: string, hookPattern: string): boolean {
@@ -176,7 +176,7 @@ export function removeHook(settingsPath: string, hookPattern: string): boolean {
  *
  * @example
  * ```typescript
- * addHook('~/.claude/settings.json', 'fase-*', 'fase_commands');
+ * addHook('./.claude/settings.json', 'fase-*', 'fase_commands');
  * ```
  */
 export function addHook(settingsPath: string, hookPattern: string, hookName?: string): void {
