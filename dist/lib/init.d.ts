@@ -1,5 +1,8 @@
 /**
  * Init — Compound init commands for workflow bootstrapping
+ *
+ * Each cmdInit* function composes InitContext (common config, milestone, paths)
+ * with specific fields for its use case. See init-context.ts for the seam.
  */
 export declare function cmdInitExecutePhase(cwd: string, phase: string, raw: boolean): void;
 export declare function cmdInitPlanPhase(cwd: string, phase: string, raw: boolean): void;

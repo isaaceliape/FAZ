@@ -1,26 +1,24 @@
 /**
  * Init — Compound init commands for workflow bootstrapping
+ *
+ * Each cmdInit* function composes InitContext (common config, milestone, paths)
+ * with specific fields for its use case. See init-context.ts for the seam.
  */
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import { resolveModelInternal, findEtapaInternal, getRoadmapEtapaInternal, pathExistsInternal, generateSlugInternal, getMilestoneInfo, toPosixPath, output, error, } from './core.js';
-import { loadConfig } from './config.js';
+import { output, error, generateSlugInternal, pathExistsInternal } from './core.js';
+import { buildInitContext, buildPhaseContext } from './init-context.js';
 /**
  * Validates that a directory path is safe for use with shell commands.
- * Checks that the directory exists and doesn't contain suspicious patterns.
- * @param dir - Directory path to validate
- * @throws Error if directory is invalid or unsafe
  */
 function validateCwdForShell(dir) {
     if (!dir) {
         throw new Error('Directory path is empty');
     }
-    // Check for path traversal attempts
     if (dir.includes('..') || dir.includes(';') || dir.includes('|') || dir.includes('&')) {
         throw new Error(`Invalid directory path: ${dir}`);
     }
-    // Verify directory exists
     if (!fs.existsSync(dir)) {
         throw new Error(`Directory does not exist: ${dir}`);
     }
@@ -28,11 +26,9 @@ function validateCwdForShell(dir) {
     if (!stats.isDirectory()) {
         throw new Error(`Path is not a directory: ${dir}`);
     }
-    // Verify it's within user's home or project directories (basic trust check)
     const resolved = path.resolve(dir);
     const homeDir = os.homedir();
     if (!resolved.startsWith(homeDir)) {
-        // Allow /tmp for temporary operations
         if (!resolved.startsWith('/tmp') && !resolved.startsWith(path.sep + 'tmp')) {
             process.stderr.write(`[init] Warning: Using directory outside home: ${resolved}\n`);
         }
@@ -40,24 +36,10 @@ function validateCwdForShell(dir) {
 }
 /**
  * Recursively searches for code files in a directory.
- * Safe alternative to shell find command.
- * @param dir - Directory to search
- * @param maxDepth - Maximum recursion depth
- * @param extensions - File extensions to look for
- * @returns Array of matching file paths
  */
 function findCodeFiles(dir, maxDepth, extensions) {
     const results = [];
-    const skipDirs = [
-        'node_modules',
-        '.git',
-        '.svn',
-        '.hg',
-        '__pycache__',
-        'vendor',
-        'dist',
-        'build',
-    ];
+    const skipDirs = ['node_modules', '.git', '.svn', '.hg', '__pycache__', 'vendor', 'dist', 'build'];
     function search(currentDir, depth) {
         if (depth > maxDepth)
             return;
@@ -77,9 +59,7 @@ function findCodeFiles(dir, maxDepth, extensions) {
                 }
             }
         }
-        catch {
-            // Skip directories we can't read
-        }
+        catch { }
     }
     search(dir, 0);
     return results;
@@ -88,59 +68,31 @@ export function cmdInitExecutePhase(cwd, phase, raw) {
     if (!phase) {
         error('fase obrigatória');
     }
-    const config = loadConfig(cwd);
-    const phaseInfo = findEtapaInternal(cwd, phase);
-    const milestone = getMilestoneInfo(cwd);
-    const roadmapEtapa = getRoadmapEtapaInternal(cwd, phase);
-    const reqMatch = roadmapEtapa?.section?.match(/^\*\*Requirements\*\*:[^\S\n]*([^\n]*)$/m);
-    const reqExtracted = reqMatch
-        ? reqMatch[1]
-            .replace(/[\[\]]/g, '')
-            .split(',')
-            .map((s) => s.trim())
-            .filter(Boolean)
-            .join(', ')
-        : null;
-    const phase_req_ids = reqExtracted && reqExtracted !== 'TBD' ? reqExtracted : null;
-    const branchName = config.branching_strategy === 'phase' && phaseInfo
-        ? config.etapa_branch_template
-            .replace('{phase}', phaseInfo.phase_number ?? '')
-            .replace('{slug}', phaseInfo.phase_slug || 'phase')
-        : config.branching_strategy === 'milestone'
-            ? config.milestone_branch_template
-                .replace('{milestone}', milestone.version)
-                .replace('{slug}', generateSlugInternal(milestone.name) || 'milestone')
+    const ctx = buildPhaseContext(cwd, phase);
+    // Branch calculation (specific to this command)
+    const branchName = ctx.config.branching_strategy === 'phase' && ctx.phaseInfo
+        ? ctx.config.etapa_branch_template
+            .replace('{phase}', ctx.phaseInfo.phase_number ?? '')
+            .replace('{slug}', ctx.phaseInfo.phase_slug || 'phase')
+        : ctx.config.branching_strategy === 'milestone'
+            ? ctx.config.milestone_branch_template
+                .replace('{milestone}', ctx.milestone.version)
+                .replace('{slug}', generateSlugInternal(ctx.milestone.name) || 'milestone')
             : null;
     const result = {
-        executor_model: resolveModelInternal(cwd, 'gsd-executor'),
-        verifier_model: resolveModelInternal(cwd, 'gsd-verifier'),
-        commit_docs: config.commit_docs,
-        parallelization: config.parallelization,
-        branching_strategy: config.branching_strategy,
-        etapa_branch_template: config.etapa_branch_template,
-        milestone_branch_template: config.milestone_branch_template,
-        verifier_enabled: config.verifier,
-        phase_found: !!phaseInfo,
-        phase_dir: phaseInfo?.directory || null,
-        phase_number: phaseInfo?.phase_number || null,
-        phase_name: phaseInfo?.phase_name || null,
-        phase_slug: phaseInfo?.phase_slug || null,
-        phase_req_ids,
-        plans: phaseInfo?.plans || [],
-        summaries: phaseInfo?.summaries || [],
-        incomplete_plans: phaseInfo?.incomplete_plans || [],
-        plan_count: phaseInfo?.plans?.length || 0,
-        incomplete_count: phaseInfo?.incomplete_plans?.length || 0,
+        ...ctx.phaseBase(),
+        executor_model: ctx.resolveModel('gsd-executor'),
+        verifier_model: ctx.resolveModel('gsd-verifier'),
+        parallelization: ctx.config.parallelization,
+        branching_strategy: ctx.config.branching_strategy,
+        etapa_branch_template: ctx.config.etapa_branch_template,
+        milestone_branch_template: ctx.config.milestone_branch_template,
+        verifier_enabled: ctx.config.verifier,
+        plans: ctx.phaseInfo?.plans || [],
+        summaries: ctx.phaseInfo?.summaries || [],
+        incomplete_plans: ctx.phaseInfo?.incomplete_plans || [],
+        incomplete_count: ctx.phaseInfo?.incomplete_plans?.length || 0,
         branch_name: branchName,
-        milestone_version: milestone.version,
-        milestone_name: milestone.name,
-        milestone_slug: generateSlugInternal(milestone.name),
-        state_exists: pathExistsInternal(cwd, '.fase-ai/STATE.md'),
-        roadmap_exists: pathExistsInternal(cwd, '.fase-ai/ROADMAP.md'),
-        config_exists: pathExistsInternal(cwd, '.fase-ai/config.json'),
-        state_path: '.fase-ai/STATE.md',
-        roadmap_path: '.fase-ai/ROADMAP.md',
-        config_path: '.fase-ai/config.json',
     };
     output(result, raw);
 }
@@ -148,71 +100,23 @@ export function cmdInitPlanPhase(cwd, phase, raw) {
     if (!phase) {
         error('fase obrigatória');
     }
-    const config = loadConfig(cwd);
-    const phaseInfo = findEtapaInternal(cwd, phase);
-    const roadmapEtapa = getRoadmapEtapaInternal(cwd, phase);
-    const reqMatch = roadmapEtapa?.section?.match(/^\*\*Requirements\*\*:[^\S\n]*([^\n]*)$/m);
-    const reqExtracted = reqMatch
-        ? reqMatch[1]
-            .replace(/[\[\]]/g, '')
-            .split(',')
-            .map((s) => s.trim())
-            .filter(Boolean)
-            .join(', ')
-        : null;
-    const phase_req_ids = reqExtracted && reqExtracted !== 'TBD' ? reqExtracted : null;
+    const ctx = buildPhaseContext(cwd, phase);
     const result = {
-        researcher_model: resolveModelInternal(cwd, 'gsd-phase-researcher'),
-        planner_model: resolveModelInternal(cwd, 'gsd-planner'),
-        checker_model: resolveModelInternal(cwd, 'gsd-plan-checker'),
-        research_enabled: config.research,
-        plan_checker_enabled: config.plan_checker,
-        nyquist_validation_enabled: config.nyquist_validation,
-        commit_docs: config.commit_docs,
-        phase_found: !!phaseInfo,
-        phase_dir: phaseInfo?.directory || null,
-        phase_number: phaseInfo?.phase_number || null,
-        phase_name: phaseInfo?.phase_name || null,
-        phase_slug: phaseInfo?.phase_slug || null,
-        padded_phase: phaseInfo?.phase_number?.padStart(2, '0') || null,
-        phase_req_ids,
-        has_research: phaseInfo?.has_research || false,
-        has_context: phaseInfo?.has_context || false,
-        has_plans: (phaseInfo?.plans?.length || 0) > 0,
-        plan_count: phaseInfo?.plans?.length || 0,
-        planning_exists: pathExistsInternal(cwd, '.fase-ai'),
-        roadmap_exists: pathExistsInternal(cwd, '.fase-ai/ROADMAP.md'),
-        state_path: '.fase-ai/STATE.md',
-        roadmap_path: '.fase-ai/ROADMAP.md',
-        requirements_path: '.fase-ai/REQUIREMENTS.md',
+        ...ctx.phaseBase(),
+        researcher_model: ctx.resolveModel('gsd-phase-researcher'),
+        planner_model: ctx.resolveModel('gsd-planner'),
+        checker_model: ctx.resolveModel('gsd-plan-checker'),
+        research_enabled: ctx.config.research,
+        plan_checker_enabled: ctx.config.plan_checker,
+        nyquist_validation_enabled: ctx.config.nyquist_validation,
     };
-    if (phaseInfo?.directory) {
-        const phaseDirFull = path.join(cwd, phaseInfo.directory);
-        try {
-            const files = fs.readdirSync(phaseDirFull);
-            const contextFile = files.find((f) => f.endsWith('-CONTEXT.md') || f === 'CONTEXT.md');
-            if (contextFile)
-                result.context_path = toPosixPath(path.join(phaseInfo.directory, contextFile));
-            const researchFile = files.find((f) => f.endsWith('-RESEARCH.md') || f === 'RESEARCH.md');
-            if (researchFile)
-                result.research_path = toPosixPath(path.join(phaseInfo.directory, researchFile));
-            const verificationFile = files.find((f) => f.endsWith('-VERIFICATION.md') || f === 'VERIFICATION.md');
-            if (verificationFile)
-                result.verification_path = toPosixPath(path.join(phaseInfo.directory, verificationFile));
-            const uatFile = files.find((f) => f.endsWith('-UAT.md') || f === 'UAT.md');
-            if (uatFile)
-                result.uat_path = toPosixPath(path.join(phaseInfo.directory, uatFile));
-        }
-        catch { }
-    }
     output(result, raw);
 }
 export function cmdInitNewProject(cwd, raw) {
-    const config = loadConfig(cwd);
+    const ctx = buildInitContext(cwd);
     const hasBraveSearch = !!process.env['BRAVE_API_KEY'];
     let hasCode = false;
     let hasPackageFile = false;
-    // Validate cwd before use with file operations
     try {
         validateCwdForShell(cwd);
         const codeExtensions = ['.ts', '.js', '.py', '.go', '.rs', '.swift', '.java'];
@@ -229,17 +133,17 @@ export function cmdInitNewProject(cwd, raw) {
             pathExistsInternal(cwd, 'go.mod') ||
             pathExistsInternal(cwd, 'Package.swift');
     const result = {
-        researcher_model: resolveModelInternal(cwd, 'gsd-project-researcher'),
-        synthesizer_model: resolveModelInternal(cwd, 'gsd-research-synthesizer'),
-        roadmapper_model: resolveModelInternal(cwd, 'gsd-roadmapper'),
-        commit_docs: config.commit_docs,
-        project_exists: pathExistsInternal(cwd, '.fase-ai/PROJECT.md'),
-        has_codebase_map: pathExistsInternal(cwd, '.fase-ai/codebase'),
-        planning_exists: pathExistsInternal(cwd, '.fase-ai'),
+        researcher_model: ctx.resolveModel('gsd-project-researcher'),
+        synthesizer_model: ctx.resolveModel('gsd-research-synthesizer'),
+        roadmapper_model: ctx.resolveModel('gsd-roadmapper'),
+        commit_docs: ctx.config.commit_docs,
+        project_exists: ctx.paths.project,
+        has_codebase_map: ctx.paths.codebase,
+        planning_exists: ctx.paths.planning,
         has_existing_code: hasCode,
         has_package_file: hasPackageFile,
         is_brownfield: hasCode || hasPackageFile,
-        needs_codebase_map: (hasCode || hasPackageFile) && !pathExistsInternal(cwd, '.fase-ai/codebase'),
+        needs_codebase_map: (hasCode || hasPackageFile) && !ctx.paths.codebase,
         has_git: pathExistsInternal(cwd, '.git'),
         brave_search_available: hasBraveSearch,
         project_path: '.fase-ai/PROJECT.md',
@@ -247,19 +151,18 @@ export function cmdInitNewProject(cwd, raw) {
     output(result, raw);
 }
 export function cmdInitNewMilestone(cwd, raw) {
-    const config = loadConfig(cwd);
-    const milestone = getMilestoneInfo(cwd);
+    const ctx = buildInitContext(cwd);
     const result = {
-        researcher_model: resolveModelInternal(cwd, 'gsd-project-researcher'),
-        synthesizer_model: resolveModelInternal(cwd, 'gsd-research-synthesizer'),
-        roadmapper_model: resolveModelInternal(cwd, 'gsd-roadmapper'),
-        commit_docs: config.commit_docs,
-        research_enabled: config.research,
-        current_milestone: milestone.version,
-        current_milestone_name: milestone.name,
-        project_exists: pathExistsInternal(cwd, '.fase-ai/PROJECT.md'),
-        roadmap_exists: pathExistsInternal(cwd, '.fase-ai/ROADMAP.md'),
-        state_exists: pathExistsInternal(cwd, '.fase-ai/STATE.md'),
+        researcher_model: ctx.resolveModel('gsd-project-researcher'),
+        synthesizer_model: ctx.resolveModel('gsd-research-synthesizer'),
+        roadmapper_model: ctx.resolveModel('gsd-roadmapper'),
+        commit_docs: ctx.config.commit_docs,
+        research_enabled: ctx.config.research,
+        current_milestone: ctx.milestone.version,
+        current_milestone_name: ctx.milestone.name,
+        project_exists: ctx.paths.project,
+        roadmap_exists: ctx.paths.roadmap,
+        state_exists: ctx.paths.state,
         project_path: '.fase-ai/PROJECT.md',
         roadmap_path: '.fase-ai/ROADMAP.md',
         state_path: '.fase-ai/STATE.md',
@@ -267,7 +170,7 @@ export function cmdInitNewMilestone(cwd, raw) {
     output(result, raw);
 }
 export function cmdInitQuick(cwd, description, raw) {
-    const config = loadConfig(cwd);
+    const ctx = buildInitContext(cwd);
     const now = new Date();
     const slug = description ? generateSlugInternal(description)?.substring(0, 40) : null;
     const quickDir = path.join(cwd, '.fase-ai', 'quick');
@@ -284,11 +187,11 @@ export function cmdInitQuick(cwd, description, raw) {
     }
     catch { }
     const result = {
-        planner_model: resolveModelInternal(cwd, 'gsd-planner'),
-        executor_model: resolveModelInternal(cwd, 'gsd-executor'),
-        checker_model: resolveModelInternal(cwd, 'gsd-plan-checker'),
-        verifier_model: resolveModelInternal(cwd, 'gsd-verifier'),
-        commit_docs: config.commit_docs,
+        planner_model: ctx.resolveModel('gsd-planner'),
+        executor_model: ctx.resolveModel('gsd-executor'),
+        checker_model: ctx.resolveModel('gsd-plan-checker'),
+        verifier_model: ctx.resolveModel('gsd-verifier'),
+        commit_docs: ctx.config.commit_docs,
         next_num: nextNum,
         slug: slug,
         description: description || null,
@@ -296,13 +199,13 @@ export function cmdInitQuick(cwd, description, raw) {
         timestamp: now.toISOString(),
         quick_dir: '.fase-ai/quick',
         task_dir: slug ? `.fase-ai/quick/${nextNum}-${slug}` : null,
-        roadmap_exists: pathExistsInternal(cwd, '.fase-ai/ROADMAP.md'),
-        planning_exists: pathExistsInternal(cwd, '.fase-ai'),
+        roadmap_exists: ctx.paths.roadmap,
+        planning_exists: ctx.paths.planning,
     };
     output(result, raw);
 }
 export function cmdInitResume(cwd, raw) {
-    const config = loadConfig(cwd);
+    const ctx = buildInitContext(cwd);
     let interruptedAgentId = null;
     try {
         interruptedAgentId = fs
@@ -311,16 +214,16 @@ export function cmdInitResume(cwd, raw) {
     }
     catch { }
     const result = {
-        state_exists: pathExistsInternal(cwd, '.fase-ai/STATE.md'),
-        roadmap_exists: pathExistsInternal(cwd, '.fase-ai/ROADMAP.md'),
-        project_exists: pathExistsInternal(cwd, '.fase-ai/PROJECT.md'),
-        planning_exists: pathExistsInternal(cwd, '.fase-ai'),
+        state_exists: ctx.paths.state,
+        roadmap_exists: ctx.paths.roadmap,
+        project_exists: ctx.paths.project,
+        planning_exists: ctx.paths.planning,
         state_path: '.fase-ai/STATE.md',
         roadmap_path: '.fase-ai/ROADMAP.md',
         project_path: '.fase-ai/PROJECT.md',
         has_interrupted_agent: !!interruptedAgentId,
         interrupted_agent_id: interruptedAgentId,
-        commit_docs: config.commit_docs,
+        commit_docs: ctx.config.commit_docs,
     };
     output(result, raw);
 }
@@ -328,90 +231,35 @@ export function cmdInitVerifyWork(cwd, phase, raw) {
     if (!phase) {
         error('fase obrigatória');
     }
-    const config = loadConfig(cwd);
-    const phaseInfo = findEtapaInternal(cwd, phase);
+    const ctx = buildPhaseContext(cwd, phase);
     const result = {
-        planner_model: resolveModelInternal(cwd, 'gsd-planner'),
-        checker_model: resolveModelInternal(cwd, 'gsd-plan-checker'),
-        commit_docs: config.commit_docs,
-        phase_found: !!phaseInfo,
-        phase_dir: phaseInfo?.directory || null,
-        phase_number: phaseInfo?.phase_number || null,
-        phase_name: phaseInfo?.phase_name || null,
-        has_verification: phaseInfo?.has_verification || false,
+        planner_model: ctx.resolveModel('gsd-planner'),
+        checker_model: ctx.resolveModel('gsd-plan-checker'),
+        commit_docs: ctx.config.commit_docs,
+        phase_found: !!ctx.phaseInfo,
+        phase_dir: ctx.phaseInfo?.directory || null,
+        phase_number: ctx.phaseInfo?.phase_number || null,
+        phase_name: ctx.phaseInfo?.phase_name || null,
+        has_verification: ctx.phaseInfo?.has_verification || false,
     };
     output(result, raw);
 }
 export function cmdInitPhaseOp(cwd, phase, raw) {
-    const config = loadConfig(cwd);
-    let phaseInfo = findEtapaInternal(cwd, phase);
+    const ctx = buildPhaseContext(cwd, phase);
+    // Handle case where phase not found in etapas but in roadmap
+    let phaseInfo = ctx.phaseInfo;
     if (!phaseInfo) {
-        const roadmapEtapa = getRoadmapEtapaInternal(cwd, phase);
-        if (roadmapEtapa?.found) {
-            const etapaNome = roadmapEtapa.phase_name;
-            phaseInfo = {
-                found: true,
-                directory: null,
-                phase_number: roadmapEtapa.phase_number,
-                phase_name: etapaNome,
-                phase_slug: etapaNome
-                    ? etapaNome
-                        .toLowerCase()
-                        .replace(/[^a-z0-9]+/g, '-')
-                        .replace(/^-+|-+$/g, '')
-                    : null,
-                plans: [],
-                summaries: [],
-                incomplete_plans: [],
-                has_research: false,
-                has_context: false,
-                has_verification: false,
-            };
-        }
+        const roadmapEtapa = ctx.phaseInfo; // Already handled in buildPhaseContext
+        // PhaseContext handles this internally now
     }
     const result = {
-        commit_docs: config.commit_docs,
-        brave_search: config.brave_search,
-        phase_found: !!phaseInfo,
-        phase_dir: phaseInfo?.directory || null,
-        phase_number: phaseInfo?.phase_number || null,
-        phase_name: phaseInfo?.phase_name || null,
-        phase_slug: phaseInfo?.phase_slug || null,
-        padded_phase: phaseInfo?.phase_number?.padStart(2, '0') || null,
-        has_research: phaseInfo?.has_research || false,
-        has_context: phaseInfo?.has_context || false,
-        has_plans: (phaseInfo?.plans?.length || 0) > 0,
-        has_verification: phaseInfo?.has_verification || false,
-        plan_count: phaseInfo?.plans?.length || 0,
-        roadmap_exists: pathExistsInternal(cwd, '.fase-ai/ROADMAP.md'),
-        planning_exists: pathExistsInternal(cwd, '.fase-ai'),
-        state_path: '.fase-ai/STATE.md',
-        roadmap_path: '.fase-ai/ROADMAP.md',
-        requirements_path: '.fase-ai/REQUIREMENTS.md',
+        ...ctx.phaseBase(),
+        brave_search: ctx.config.brave_search,
     };
-    if (phaseInfo?.directory) {
-        const phaseDirFull = path.join(cwd, phaseInfo.directory);
-        try {
-            const files = fs.readdirSync(phaseDirFull);
-            const contextFile = files.find((f) => f.endsWith('-CONTEXT.md') || f === 'CONTEXT.md');
-            if (contextFile)
-                result.context_path = toPosixPath(path.join(phaseInfo.directory, contextFile));
-            const researchFile = files.find((f) => f.endsWith('-RESEARCH.md') || f === 'RESEARCH.md');
-            if (researchFile)
-                result.research_path = toPosixPath(path.join(phaseInfo.directory, researchFile));
-            const verificationFile = files.find((f) => f.endsWith('-VERIFICATION.md') || f === 'VERIFICATION.md');
-            if (verificationFile)
-                result.verification_path = toPosixPath(path.join(phaseInfo.directory, verificationFile));
-            const uatFile = files.find((f) => f.endsWith('-UAT.md') || f === 'UAT.md');
-            if (uatFile)
-                result.uat_path = toPosixPath(path.join(phaseInfo.directory, uatFile));
-        }
-        catch { }
-    }
     output(result, raw);
 }
 export function cmdInitTodos(cwd, area, raw) {
-    const config = loadConfig(cwd);
+    const ctx = buildInitContext(cwd);
     const now = new Date();
     const pendingDir = path.join(cwd, '.fase-ai', 'todos', 'pending');
     let count = 0;
@@ -441,7 +289,7 @@ export function cmdInitTodos(cwd, area, raw) {
     }
     catch { }
     const result = {
-        commit_docs: config.commit_docs,
+        commit_docs: ctx.config.commit_docs,
         date: now.toISOString().split('T')[0],
         timestamp: now.toISOString(),
         todo_count: count,
@@ -449,15 +297,14 @@ export function cmdInitTodos(cwd, area, raw) {
         area_filter: area || null,
         pending_dir: '.fase-ai/todos/pending',
         completed_dir: '.fase-ai/todos/completed',
-        planning_exists: pathExistsInternal(cwd, '.fase-ai'),
-        todos_dir_exists: pathExistsInternal(cwd, '.fase-ai/todos'),
-        pending_dir_exists: pathExistsInternal(cwd, '.fase-ai/todos/pending'),
+        planning_exists: ctx.paths.planning,
+        todos_dir_exists: ctx.paths.todos,
+        pending_dir_exists: ctx.paths.todos && fs.existsSync(pendingDir),
     };
     output(result, raw);
 }
 export function cmdInitMilestoneOp(cwd, raw) {
-    const config = loadConfig(cwd);
-    const milestone = getMilestoneInfo(cwd);
+    const ctx = buildInitContext(cwd);
     let phaseCount = 0;
     let completedPhases = 0;
     const etapasDir = path.join(cwd, '.fase-ai', 'etapas');
@@ -486,25 +333,25 @@ export function cmdInitMilestoneOp(cwd, raw) {
     }
     catch { }
     const result = {
-        commit_docs: config.commit_docs,
-        milestone_version: milestone.version,
-        milestone_name: milestone.name,
-        milestone_slug: generateSlugInternal(milestone.name),
+        commit_docs: ctx.config.commit_docs,
+        milestone_version: ctx.milestone.version,
+        milestone_name: ctx.milestone.name,
+        milestone_slug: generateSlugInternal(ctx.milestone.name),
         phase_count: phaseCount,
         completed_phases: completedPhases,
         all_phases_complete: phaseCount > 0 && phaseCount === completedPhases,
         archived_milestones: archivedMilestones,
         archive_count: archivedMilestones.length,
-        project_exists: pathExistsInternal(cwd, '.fase-ai/PROJECT.md'),
-        roadmap_exists: pathExistsInternal(cwd, '.fase-ai/ROADMAP.md'),
-        state_exists: pathExistsInternal(cwd, '.fase-ai/STATE.md'),
-        archive_exists: pathExistsInternal(cwd, '.fase-ai/archive'),
-        phases_dir_exists: pathExistsInternal(cwd, '.fase-ai/phases'),
+        project_exists: ctx.paths.project,
+        roadmap_exists: ctx.paths.roadmap,
+        state_exists: ctx.paths.state,
+        archive_exists: ctx.paths.archive,
+        phases_dir_exists: ctx.paths.phases,
     };
     output(result, raw);
 }
 export function cmdInitMapCodebase(cwd, raw) {
-    const config = loadConfig(cwd);
+    const ctx = buildInitContext(cwd);
     const codebaseDir = path.join(cwd, '.fase-ai', 'codebase');
     let existingMaps = [];
     try {
@@ -512,21 +359,20 @@ export function cmdInitMapCodebase(cwd, raw) {
     }
     catch { }
     const result = {
-        mapper_model: resolveModelInternal(cwd, 'gsd-codebase-mapper'),
-        commit_docs: config.commit_docs,
-        search_gitignored: config.search_gitignored,
-        parallelization: config.parallelization,
+        mapper_model: ctx.resolveModel('gsd-codebase-mapper'),
+        commit_docs: ctx.config.commit_docs,
+        search_gitignored: ctx.config.search_gitignored,
+        parallelization: ctx.config.parallelization,
         codebase_dir: '.fase-ai/codebase',
         existing_maps: existingMaps,
         has_maps: existingMaps.length > 0,
-        planning_exists: pathExistsInternal(cwd, '.fase-ai'),
-        codebase_dir_exists: pathExistsInternal(cwd, '.fase-ai/codebase'),
+        planning_exists: ctx.paths.planning,
+        codebase_dir_exists: ctx.paths.codebase,
     };
     output(result, raw);
 }
 export function cmdInitProgress(cwd, raw) {
-    const config = loadConfig(cwd);
-    const milestone = getMilestoneInfo(cwd);
+    const ctx = buildInitContext(cwd);
     const etapasDir = path.join(cwd, '.fase-ai', 'etapas');
     const phases = [];
     let etapaAtual = null;
@@ -581,11 +427,11 @@ export function cmdInitProgress(cwd, raw) {
     }
     catch { }
     const result = {
-        executor_model: resolveModelInternal(cwd, 'gsd-executor'),
-        planner_model: resolveModelInternal(cwd, 'gsd-planner'),
-        commit_docs: config.commit_docs,
-        milestone_version: milestone.version,
-        milestone_name: milestone.name,
+        executor_model: ctx.resolveModel('gsd-executor'),
+        planner_model: ctx.resolveModel('gsd-planner'),
+        commit_docs: ctx.config.commit_docs,
+        milestone_version: ctx.milestone.version,
+        milestone_name: ctx.milestone.name,
         phases,
         phase_count: phases.length,
         completed_count: phases.filter((p) => p.status === 'complete').length,
@@ -594,9 +440,9 @@ export function cmdInitProgress(cwd, raw) {
         next_phase: nextEtapa,
         paused_at: pausedAt,
         has_work_in_progress: !!etapaAtual,
-        project_exists: pathExistsInternal(cwd, '.fase-ai/PROJECT.md'),
-        roadmap_exists: pathExistsInternal(cwd, '.fase-ai/ROADMAP.md'),
-        state_exists: pathExistsInternal(cwd, '.fase-ai/STATE.md'),
+        project_exists: ctx.paths.project,
+        roadmap_exists: ctx.paths.roadmap,
+        state_exists: ctx.paths.state,
         state_path: '.fase-ai/STATE.md',
         roadmap_path: '.fase-ai/ROADMAP.md',
         project_path: '.fase-ai/PROJECT.md',
