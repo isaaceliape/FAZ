@@ -7,369 +7,386 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>README - FASE Docs</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-dWl2hjFlPDATYNKGRekq9h+OhN6Z3BYV+VCugMzKa+2ZgIVsK0Y2SjC1+e6i7B9WDu9Zy4gxXVW5tADhJYXnzw==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <style>
-    :root {
-      --primary: #00ff88;
-      --secondary: #00bfff;
-      --warning: #ffaa00;
-      --danger: #ff3366;
-      --dark-bg: #0a0e27;
-      --grid-bg: #111827;
-      --text: #e5e7eb;
-      --dim: #9ca3af;
-    }
+/* FASE Documentation Styles */
+/* Extracted from build-docs.cjs for maintainability */
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+:root {
+  --primary: #00ff88;
+  --secondary: #00bfff;
+  --warning: #ffaa00;
+  --danger: #ff3366;
+  --dark-bg: #0a0e27;
+  --grid-bg: #111827;
+  --text: #e5e7eb;
+  --dim: #9ca3af;
+}
 
-    body {
-      background-color: var(--dark-bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    .header {
-      background-color: var(--grid-bg);
-      border-bottom: 1px solid rgba(0, 255, 136, 0.1);
-      padding: 20px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+body {
+  background-color: var(--dark-bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.5px;
-      text-decoration: none;
-      transition: color 0.2s ease;
-      border: none;
-      cursor: pointer;
-    }
+.header {
+  background-color: var(--grid-bg);
+  border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    .logo:hover {
-      color: var(--primary);
-    }
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
 
-    .logo span {
-      color: var(--primary);
-    }
+.logo:hover {
+  color: var(--primary);
+}
 
-    .logo:hover span {
-      color: var(--secondary);
-    }
+.logo span {
+  color: var(--primary);
+}
 
-    .nav-links {
-      display: flex;
-      gap: 20px;
-    }
+.logo:hover span {
+  color: var(--secondary);
+}
 
-    .nav-links a {
-      color: var(--text);
-      text-decoration: none;
-      transition: color 0.2s ease;
-      border: none;
-    }
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
 
-    .nav-links a:hover {
-      color: var(--primary);
-    }
+.nav-links a {
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  border: none;
+}
 
-    .content-wrapper {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-    }
+.nav-links a:hover {
+  color: var(--primary);
+}
 
-    .sidebar {
-      width: 250px;
-      background-color: var(--grid-bg);
-      border-right: 1px solid rgba(0, 255, 136, 0.1);
-      padding: 20px;
-      overflow-y: auto;
-      flex-shrink: 0;
-    }
+.content-wrapper {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
 
-    .sidebar h3 {
-      color: var(--primary);
-      font-size: 0.875rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 15px;
-      margin-top: 20px;
-    }
+.sidebar {
+  width: 250px;
+  background-color: var(--grid-bg);
+  border-right: 1px solid rgba(0, 255, 136, 0.1);
+  padding: 20px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
 
-    .sidebar h3:first-child {
-      margin-top: 0;
-    }
+.sidebar h3 {
+  color: var(--primary);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+  margin-top: 20px;
+}
 
-    .sidebar-link {
-      display: block;
-      color: var(--text);
-      text-decoration: none;
-      padding: 10px 12px;
-      margin-bottom: 8px;
-      border-radius: 4px;
-      transition: all 0.2s ease;
-      border-left: 3px solid transparent;
-    }
+.sidebar h3:first-child {
+  margin-top: 0;
+}
 
-    .sidebar-link:hover {
-      color: var(--primary);
-      background-color: rgba(0, 255, 136, 0.1);
-      border-left-color: var(--primary);
-    }
+.sidebar-link {
+  display: block;
+  color: var(--text);
+  text-decoration: none;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
 
-    .sidebar-link.active {
-      color: var(--primary);
-      background-color: rgba(0, 255, 136, 0.15);
-      border-left-color: var(--primary);
-      font-weight: 600;
-    }
+.sidebar-link:hover {
+  color: var(--primary);
+  background-color: rgba(0, 255, 136, 0.1);
+  border-left-color: var(--primary);
+}
 
-    .main {
-      flex: 1;
-      overflow-y: auto;
-      padding: 40px;
-    }
+.sidebar-link.active {
+  color: var(--primary);
+  background-color: rgba(0, 255, 136, 0.15);
+  border-left-color: var(--primary);
+  font-weight: 600;
+}
 
-    h1 {
-      color: var(--primary);
-      font-size: 2rem;
-      margin-bottom: 20px;
-      border-bottom: 2px solid var(--primary);
-      padding-bottom: 10px;
-    }
+.main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px;
+}
 
-    h2 {
-      color: var(--secondary);
-      font-size: 1.5rem;
-      margin-top: 30px;
-      margin-bottom: 15px;
-    }
+h1 {
+  color: var(--primary);
+  font-size: 2rem;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 10px;
+}
 
-    h3 {
-      color: var(--primary);
-      font-size: 1.2rem;
-      margin-top: 20px;
-      margin-bottom: 10px;
-    }
+h2 {
+  color: var(--secondary);
+  font-size: 1.5rem;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
 
-    p {
-      margin-bottom: 15px;
-      color: var(--text);
-    }
+h3 {
+  color: var(--primary);
+  font-size: 1.2rem;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
 
-    a {
-      color: var(--primary);
-      text-decoration: none;
-      border-bottom: 1px dotted var(--primary);
-      transition: all 0.2s ease;
-    }
+p {
+  margin-bottom: 15px;
+  color: var(--text);
+}
 
-    a:hover {
-      color: var(--secondary);
-      border-bottom-style: solid;
-    }
+a {
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--primary);
+  transition: all 0.2s ease;
+}
 
-    code {
-      background-color: var(--dark-bg);
-      color: var(--primary);
-      padding: 0.2rem 0.4rem;
-      border-radius: 2px;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9em;
-    }
+a:hover {
+  color: var(--secondary);
+  border-bottom-style: solid;
+}
 
-    pre {
-      background-color: var(--dark-bg);
-      border: 1px solid var(--dim);
-      border-radius: 4px;
-      padding: 15px;
-      overflow-x: auto;
-      margin: 15px 0;
-    }
+code {
+  background-color: var(--dark-bg);
+  color: var(--primary);
+  padding: 0.2rem 0.4rem;
+  border-radius: 2px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
 
-    pre code {
-      padding: 0;
-      background: none;
-      color: var(--primary);
-    }
+pre {
+  background-color: var(--dark-bg);
+  border: 1px solid var(--dim);
+  border-radius: 4px;
+  padding: 15px;
+  overflow-x: auto;
+  margin: 15px 0;
+}
 
-    ul, ol {
-      margin-left: 20px;
-      margin-bottom: 15px;
-    }
+pre code {
+  padding: 0;
+  background: none;
+  color: var(--primary);
+}
 
-    li {
-      margin-bottom: 8px;
-      color: var(--text);
-    }
+ul, ol {
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
 
-    blockquote {
-      border-left: 4px solid var(--primary);
-      background-color: var(--dark-bg);
-      padding: 15px;
-      margin: 15px 0;
-      color: var(--dim);
-    }
+li {
+  margin-bottom: 8px;
+  color: var(--text);
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 15px 0;
-      border: 1px solid var(--dim);
-    }
+blockquote {
+  border-left: 4px solid var(--primary);
+  background-color: var(--dark-bg);
+  padding: 15px;
+  margin: 15px 0;
+  color: var(--dim);
+}
 
-    th {
-      background-color: var(--dark-bg);
-      color: var(--primary);
-      padding: 12px;
-      text-align: left;
-      border-bottom: 2px solid var(--primary);
-      border-right: 1px solid var(--dim);
-      font-weight: 600;
-    }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+  border: 1px solid var(--dim);
+}
 
-    th:last-child {
-      border-right: none;
-    }
+th {
+  background-color: var(--dark-bg);
+  color: var(--primary);
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid var(--primary);
+  border-right: 1px solid var(--dim);
+  font-weight: 600;
+}
 
-    td {
-      padding: 12px;
-      border-bottom: 1px solid var(--dim);
-      border-right: 1px solid var(--dim);
-    }
+th:last-child {
+  border-right: none;
+}
 
-    td:last-child {
-      border-right: none;
-    }
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--dim);
+  border-right: 1px solid var(--dim);
+}
 
-    tr:hover {
-      background-color: rgba(0, 255, 136, 0.05);
-    }
+td:last-child {
+  border-right: none;
+}
 
-    strong {
-      color: var(--secondary);
-      font-weight: 600;
-    }
+tr:hover {
+  background-color: rgba(0, 255, 136, 0.05);
+}
 
-    em {
-      color: var(--dim);
-      font-style: italic;
-    }
+strong {
+  color: var(--secondary);
+  font-weight: 600;
+}
 
-    hr {
-      border: none;
-      border-top: 1px solid var(--dim);
-      margin: 30px 0;
-    }
+em {
+  color: var(--dim);
+  font-style: italic;
+}
 
-    .version-badge {
-      display: inline-block;
-      background-color: rgba(0, 255, 136, 0.15);
-      color: var(--primary);
-      padding: 6px 12px;
-      border-radius: 4px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      border: 1px solid var(--primary);
-      margin-bottom: 20px;
-    }
+hr {
+  border: none;
+  border-top: 1px solid var(--dim);
+  margin: 30px 0;
+}
 
-    /* Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
+.version-badge {
+  display: inline-block;
+  background-color: rgba(0, 255, 136, 0.15);
+  color: var(--primary);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid var(--primary);
+  margin-bottom: 20px;
+}
 
-    ::-webkit-scrollbar-track {
-      background: var(--dark-bg);
-    }
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
 
-    ::-webkit-scrollbar-thumb {
-      background: var(--primary);
-      border-radius: 4px;
-    }
+::-webkit-scrollbar-track {
+  background: var(--dark-bg);
+}
 
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--secondary);
-    }
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
 
-    /* Mobile */
-    @media (max-width: 768px) {
-      .content-wrapper {
-        flex-direction: column;
-      }
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
 
-      .sidebar {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid rgba(0, 255, 136, 0.1);
-        max-height: 150px;
-        overflow-x: auto;
-        display: flex;
-        gap: 10px;
-      }
+/* Font Awesome Icon Styling */
+i[class*="fa"] {
+  color: var(--primary);
+  margin-right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 
-      .sidebar h3 {
-        display: none;
-      }
+.sidebar-link i {
+  margin-right: 0.5rem;
+}
 
-      .sidebar-link {
-        white-space: nowrap;
-        margin-bottom: 0;
-      }
+/* Mobile */
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+  }
 
-      .main {
-        padding: 20px;
-      }
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+    max-height: 150px;
+    overflow-x: auto;
+    display: flex;
+    gap: 10px;
+  }
 
-      h1 {
-        font-size: 1.5rem;
-      }
+  .sidebar h3 {
+    display: none;
+  }
 
-      h2 {
-        font-size: 1.2rem;
-      }
-    }
+  .sidebar-link {
+    white-space: nowrap;
+    margin-bottom: 0;
+  }
+
+  .main {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+}
   </style>
 </head>
 <body>
   <div class="header">
     <a href="index.html" class="logo">fase<span>-</span>ai</a>
     <div class="nav-links">
-      <a href="index.html">Home</a>
+      <a href="{{HOME_LINK}}">Home</a>
       <a href="https://github.com/isaaceliape/FASE">GitHub</a>
     </div>
   </div>
 
   <div class="content-wrapper">
     <aside class="sidebar">
-      <h3>📚 Documentação</h3>
-      <a href="index.html" class="sidebar-link ">📖 README</a>
-<a href="COMANDOS.html" class="sidebar-link ">📋 Comandos</a>
-<a href="guia-do-usuario.html" class="sidebar-link ">📘 Guia do Usuário</a>
-<a href="CONTRIBUINDO.html" class="sidebar-link ">🤝 Guia de Contribuição</a>
-<a href="HOOKS.html" class="sidebar-link ">🔧 Git Hooks</a>
-<a href="NPM-REGISTRY.html" class="sidebar-link ">📦 NPM Registry</a>
-<a href="technical/padronizacao-caminhos.html" class="sidebar-link ">🛣️ Padronização de Caminhos</a>
-<a href="maintainers/MANTENEDORES.html" class="sidebar-link ">👨‍💼 Guia de Maintainers</a>
-<a href="monitor-contexto.html" class="sidebar-link ">📊 Monitor de Contexto</a>
+      <h3><i class="fa fa-book"></i> Documentação</h3>
+      <a href="index.html" class="sidebar-link "><i class="fa fa-book"></i> README</a>
+<a href="COMANDOS.html" class="sidebar-link "><i class="fa fa-list-check"></i> Comandos</a>
+<a href="GUIA-DO-USUARIO.html" class="sidebar-link "><i class="fa fa-book-open"></i> Guia do Usuário</a>
+<a href="CONTRIBUINDO.html" class="sidebar-link "><i class="fa fa-handshake"></i> Guia de Contribuição</a>
+<a href="HOOKS.html" class="sidebar-link "><i class="fa fa-wrench"></i> Git Hooks</a>
+<a href="NPM-REGISTRY.html" class="sidebar-link "><i class="fa fa-box"></i> NPM Registry</a>
+<a href="technical/padronizacao-caminhos.html" class="sidebar-link "><i class="fa fa-road"></i> Padronização de Caminhos</a>
+<a href="maintainers/MANTENEDORES.html" class="sidebar-link "><i class="fa fa-user-tie"></i> Guia de Maintainers</a>
+<a href="CONTEXT-MONITOR.html" class="sidebar-link "><i class="fa fa-chart-bar"></i> Monitor de Contexto</a>
     </aside>
 
     <main class="main">
-      <div class="version-badge">📦 Versão 3.2.0</div>
+      <div class="version-badge"><i class="fa fa-box"></i> Versão 5.1.0</div>
       <h1>📚 Documentação do FASE</h1>
 <blockquote>
-<p><strong>Versão</strong>: 3.2.0 | Última atualização: 2026-03-25</p>
+<p><strong>Versão</strong>: 5.1.0 ✅ | Última atualização: 2026-04-24 | Status: 414/414 testes passando (Issue #9: Error Handling Standardization Completo)</p>
 </blockquote>
 <p>Bem-vindo ao centro de documentação do FASE! Aqui você encontra tudo que precisa para instalar, usar e contribuir ao projeto.</p>
 <h2>📖 Documentos Principais</h2>
@@ -387,11 +404,15 @@
 </tr>
 <tr>
 <td><a href="COMANDOS.html"><strong>Comandos</strong></a></td>
-<td>Lista com todos os 32 comandos disponíveis</td>
+<td>Lista com todos os 34 comandos disponíveis</td>
 </tr>
 <tr>
 <td><a href="NPM-REGISTRY.html"><strong>NPM Registry</strong></a></td>
 <td>Configuração do npm registry e instalação</td>
+</tr>
+<tr>
+<td><a href="VERIFICAR-VERSAO.html"><strong>Verificação de Versão</strong></a></td>
+<td>Sistema automático de verificação de atualizações</td>
 </tr>
 </tbody></table>
 <h3>Para Desenvolvedores</h3>
@@ -407,6 +428,10 @@
 <td>Como contribuir para o FASE (bugs, features, traduções)</td>
 </tr>
 <tr>
+<td><a href="TESTING.html"><strong>Guia de Testes</strong></a></td>
+<td>Estrutura de testes, cobertura de providers, TUI interaction</td>
+</tr>
+<tr>
 <td><a href="HOOKS.html"><strong>Git Hooks</strong></a></td>
 <td>Git hooks e verificações de segurança</td>
 </tr>
@@ -415,7 +440,7 @@
 <td>Mecanismo de padronização de caminhos</td>
 </tr>
 </tbody></table>
-<h2>🎯 Começar Por Aqui</h2>
+<h2><i class="fa fa-bullseye"></i> Começar Por Aqui</h2>
 <h3>Sou um Usuário</h3>
 <ol>
 <li>Leia <a href="guia-do-usuario.html">Guia do Usuário</a> para instalação</li>
@@ -433,12 +458,13 @@
 <li>Procure em <a href="https://github.com/isaaceliape/FASE/issues">GitHub Issues</a> por issue similar</li>
 <li>Abra uma nova issue com os detalhes</li>
 </ol>
-<h2>📋 Estrutura de Arquivos</h2>
+<h2><i class="fa fa-list-check"></i> Estrutura de Arquivos</h2>
 <pre><code>docs/
 ├── README.md              # Este arquivo (índice)
 ├── guia-do-usuario.md     # Guia para usuários
 ├── COMANDOS.md            # Lista de comandos
 ├── CONTRIBUINDO.md        # Guia de contribuição
+├── TESTING.md             # Guia de testes (novo!)
 ├── HOOKS.md               # Git hooks documentation
 ├── NPM-REGISTRY.md        # Configuração npm
 ├── technical/
@@ -449,16 +475,16 @@
 <h2>🌐 Documentos em Português</h2>
 <p><strong>Toda documentação do FASE é em português brasileiro:</strong></p>
 <ul>
-<li>✅ Guias de usuário</li>
-<li>✅ Documentação de development</li>
-<li>✅ Comentários no código</li>
-<li>✅ Mensagens de erro e output</li>
+<li><i class="fa fa-check-circle"></i> Guias de usuário</li>
+<li><i class="fa fa-check-circle"></i> Documentação de development</li>
+<li><i class="fa fa-check-circle"></i> Comentários no código</li>
+<li><i class="fa fa-check-circle"></i> Mensagens de erro e output</li>
 </ul>
 <p><strong>Exceções (em inglês):</strong></p>
 <ul>
-<li>⚙️ Termos técnicos consagrados (framework, hook, commit)</li>
-<li>💻 Comandos e código</li>
-<li>📦 Nomes de pacotes npm</li>
+<li><i class="fa fa-cog"></i> Termos técnicos consagrados (framework, hook, commit)</li>
+<li><i class="fa fa-laptop"></i> Comandos e código</li>
+<li><i class="fa fa-box"></i> Nomes de pacotes npm</li>
 </ul>
 <h2>🆘 Precisa de Ajuda?</h2>
 <ul>
@@ -466,15 +492,52 @@
 <li><strong>Bug descoberto</strong>: Reporte com template <code>bug_report.md</code></li>
 <li><strong>Sugestão</strong>: Use template <code>feature_request.md</code></li>
 </ul>
-<h2>📈 Melhorias Documentadas</h2>
+<h2><i class="fa fa-chart-line"></i> Melhorias Documentadas</h2>
+<h3>v5.0.1 (Abril 2026)</h3>
+<p><strong>Testes de Interação com TUI para Todos os 6 Providers</strong></p>
+<ul>
+<li><i class="fa fa-check-circle"></i> Novo framework de testes <code>test/tmux/tui-interaction.test.cjs</code> para validar comandos em cada provider</li>
+<li><i class="fa fa-check-circle"></i> Testes automatizados usando tmux para simular interação do usuário</li>
+<li><i class="fa fa-check-circle"></i> Cobertura completa: Claude, OpenCode, Gemini, Codex, GitHub Copilot, Qwen</li>
+<li><i class="fa fa-check-circle"></i> 11 novos testes mocha validando: launch, command input, instalação local, padrões</li>
+<li><i class="fa fa-check-circle"></i> Qwen provider demonstra captura bem-sucedida de comandos FASE em TUI</li>
+<li><i class="fa fa-check-circle"></i> Suite instalação expandida: agora 9/9 testes de install/uninstall com todos os providers</li>
+<li><i class="fa fa-check-circle"></i> Documentação atualizada: <a href="TESTING.html">Guia de Testes</a></li>
+</ul>
+<p><strong>Correções:</strong></p>
+<ul>
+<li><i class="fa fa-check-circle"></i> Fixed: Qwen config path em tmux-test-helper (era <code>.claude</code>, agora <code>.qwen</code>)</li>
+<li><i class="fa fa-check-circle"></i> Fixed: Path resolution em <code>test/tmux/run-all-tests.sh</code></li>
+<li><i class="fa fa-check-circle"></i> Added: GitHub Copilot provider ao test matrix</li>
+</ul>
+<p><strong>Como executar:</strong></p>
+<pre><code class="language-bash">npm run test:tmux              # 9 testes de instalação (97s)
+npm run test:tmux:interaction  # 11 testes de TUI (60s)
+</code></pre>
+<h3>v5.0.0 (Abril 2026)</h3>
+<p><strong>Multi-Provider Architecture Completa</strong></p>
+<ul>
+<li><i class="fa fa-check-circle"></i> Suporte nativo para 6 code assistants: Claude, OpenCode, Gemini, Codex, GitHub Copilot, Qwen</li>
+<li><i class="fa fa-check-circle"></i> Cada provider com sua própria estrutura de diretórios padronizada</li>
+<li><i class="fa fa-check-circle"></i> 34 comandos FASE disponíveis em todos os providers</li>
+</ul>
+<h3>v3.3.0 (Abril 2026)</h3>
+<p><strong>Verificação Automática de Versão</strong></p>
+<ul>
+<li><i class="fa fa-check-circle"></i> Hook <code>SessionStart</code> verifica automaticamente por atualizações no npm</li>
+<li><i class="fa fa-check-circle"></i> Notificação estilizada mostra versão atual vs disponível</li>
+<li><i class="fa fa-check-circle"></i> Prompt interativo pergunta se deseja atualizar</li>
+<li><i class="fa fa-check-circle"></i> Statusline mostra indicador <code>⬆ /fase:atualizar</code> quando há atualização</li>
+<li><i class="fa fa-check-circle"></i> Cache local em <code>~/.claude/cache/fase-update-check.json</code></li>
+</ul>
 <h3>v3.2.0 (Março 2026)</h3>
 <p><strong>Path Standardization &amp; Multi-Runtime Architecture</strong></p>
 <ul>
-<li>✅ Todos os comandos e agentes agora usam padrão universal <code>@~/.fase/</code></li>
-<li>✅ Installer converte automaticamente para caminhos específicos de cada runtime</li>
-<li>✅ 129 testes unitários com cobertura completa</li>
-<li>✅ Documentação expandida sobre path standardization</li>
-<li>✅ Renomeação de arquivos: <code>.pt.md</code> → <code>.md</code> para consistência</li>
+<li><i class="fa fa-check-circle"></i> Todos os comandos e agentes agora usam padrão universal <code>@./.fase-ai/</code></li>
+<li><i class="fa fa-check-circle"></i> Installer converte automaticamente para caminhos específicos de cada runtime</li>
+<li><i class="fa fa-check-circle"></i> 129 testes unitários com cobertura completa</li>
+<li><i class="fa fa-check-circle"></i> Documentação expandida sobre path standardization</li>
+<li><i class="fa fa-check-circle"></i> Renomeação de arquivos: <code>.pt.md</code> → <code>.md</code> para consistência</li>
 </ul>
 <p><strong>Novos Documentos:</strong></p>
 <ul>
@@ -484,11 +547,11 @@
 <p><strong>Ver também:</strong> <a href="https://github.com/isaaceliape/FASE/blob/main/CHANGELOG.md">CHANGELOG.md</a> para histórico completo de versões</p>
 <h3>v2.4.0 (Março 2026)</h3>
 <ul>
-<li>✅ Adicionado pre-commit hooks para validação de pacote npm</li>
-<li>✅ Criado GitHub Actions para publicação automática</li>
-<li>✅ Templates de issues para bug reports e features</li>
-<li>✅ CONTRIBUTING.md com instruções detalhadas</li>
-<li>✅ Este índice de documentação</li>
+<li><i class="fa fa-check-circle"></i> Adicionado pre-commit hooks para validação de pacote npm</li>
+<li><i class="fa fa-check-circle"></i> Criado GitHub Actions para publicação automática</li>
+<li><i class="fa fa-check-circle"></i> Templates de issues para bug reports e features</li>
+<li><i class="fa fa-check-circle"></i> CONTRIBUTING.md com instruções detalhadas</li>
+<li><i class="fa fa-check-circle"></i> Este índice de documentação</li>
 </ul>
 <h2>📞 Contato</h2>
 <ul>
@@ -497,7 +560,7 @@
 <li><strong>Email</strong>: Via issue (por favor, não compartilhar emails publicamente)</li>
 </ul>
 <hr>
-<p><strong>Versão</strong>: 3.2.0
+<p><strong>Versão</strong>: 5.1.0
 <strong>Última atualização</strong>: 2026-03-13</p>
 
     </main>

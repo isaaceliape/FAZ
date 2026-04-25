@@ -3,340 +3,391 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>VERIFICAR-INSTALACAO - FASE Docs</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-dWl2hjFlPDATYNKGRekq9h+OhN6Z3BYV+VCugMzKa+2ZgIVsK0Y2SjC1+e6i7B9WDu9Zy4gxXVW5tADhJYXnzw==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <style>
-    :root {
-      --primary: #00ff88;
-      --secondary: #00bfff;
-      --warning: #ffaa00;
-      --danger: #ff3366;
-      --dark-bg: #0a0e27;
-      --grid-bg: #111827;
-      --text: #e5e7eb;
-      --dim: #9ca3af;
-    }
+/* FASE Documentation Styles */
+/* Extracted from build-docs.cjs for maintainability */
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+:root {
+  --primary: #00ff88;
+  --secondary: #00bfff;
+  --warning: #ffaa00;
+  --danger: #ff3366;
+  --dark-bg: #0a0e27;
+  --grid-bg: #111827;
+  --text: #e5e7eb;
+  --dim: #9ca3af;
+}
 
-    body {
-      background-color: var(--dark-bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    .header {
-      background-color: var(--grid-bg);
-      border-bottom: 1px solid rgba(0, 255, 136, 0.1);
-      padding: 20px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+body {
+  background-color: var(--dark-bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.5px;
-    }
+.header {
+  background-color: var(--grid-bg);
+  border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    .logo span {
-      color: var(--primary);
-    }
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
 
-    .nav-links {
-      display: flex;
-      gap: 20px;
-    }
+.logo:hover {
+  color: var(--primary);
+}
 
-    .nav-links a {
-      color: var(--text);
-      text-decoration: none;
-      transition: color 0.2s ease;
-      border: none;
-    }
+.logo span {
+  color: var(--primary);
+}
 
-    .nav-links a:hover {
-      color: var(--primary);
-    }
+.logo:hover span {
+  color: var(--secondary);
+}
 
-    .content-wrapper {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-    }
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
 
-    .sidebar {
-      width: 250px;
-      background-color: var(--grid-bg);
-      border-right: 1px solid rgba(0, 255, 136, 0.1);
-      padding: 20px;
-      overflow-y: auto;
-      flex-shrink: 0;
-    }
+.nav-links a {
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  border: none;
+}
 
-    .sidebar h3 {
-      color: var(--primary);
-      font-size: 0.875rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 15px;
-      margin-top: 20px;
-    }
+.nav-links a:hover {
+  color: var(--primary);
+}
 
-    .sidebar h3:first-child {
-      margin-top: 0;
-    }
+.content-wrapper {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
 
-    .sidebar-link {
-      display: block;
-      color: var(--text);
-      text-decoration: none;
-      padding: 10px 12px;
-      margin-bottom: 8px;
-      border-radius: 4px;
-      transition: all 0.2s ease;
-      border-left: 3px solid transparent;
-    }
+.sidebar {
+  width: 250px;
+  background-color: var(--grid-bg);
+  border-right: 1px solid rgba(0, 255, 136, 0.1);
+  padding: 20px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
 
-    .sidebar-link:hover {
-      color: var(--primary);
-      background-color: rgba(0, 255, 136, 0.1);
-      border-left-color: var(--primary);
-    }
+.sidebar h3 {
+  color: var(--primary);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+  margin-top: 20px;
+}
 
-    .sidebar-link.active {
-      color: var(--primary);
-      background-color: rgba(0, 255, 136, 0.15);
-      border-left-color: var(--primary);
-      font-weight: 600;
-    }
+.sidebar h3:first-child {
+  margin-top: 0;
+}
 
-    .main {
-      flex: 1;
-      overflow-y: auto;
-      padding: 40px;
-    }
+.sidebar-link {
+  display: block;
+  color: var(--text);
+  text-decoration: none;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
 
-    h1 {
-      color: var(--primary);
-      font-size: 2rem;
-      margin-bottom: 20px;
-      border-bottom: 2px solid var(--primary);
-      padding-bottom: 10px;
-    }
+.sidebar-link:hover {
+  color: var(--primary);
+  background-color: rgba(0, 255, 136, 0.1);
+  border-left-color: var(--primary);
+}
 
-    h2 {
-      color: var(--secondary);
-      font-size: 1.5rem;
-      margin-top: 30px;
-      margin-bottom: 15px;
-    }
+.sidebar-link.active {
+  color: var(--primary);
+  background-color: rgba(0, 255, 136, 0.15);
+  border-left-color: var(--primary);
+  font-weight: 600;
+}
 
-    h3 {
-      color: var(--primary);
-      font-size: 1.2rem;
-      margin-top: 20px;
-      margin-bottom: 10px;
-    }
+.main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px;
+}
 
-    p {
-      margin-bottom: 15px;
-      color: var(--text);
-    }
+h1 {
+  color: var(--primary);
+  font-size: 2rem;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 10px;
+}
 
-    a {
-      color: var(--primary);
-      text-decoration: none;
-      border-bottom: 1px dotted var(--primary);
-      transition: all 0.2s ease;
-    }
+h2 {
+  color: var(--secondary);
+  font-size: 1.5rem;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
 
-    a:hover {
-      color: var(--secondary);
-      border-bottom-style: solid;
-    }
+h3 {
+  color: var(--primary);
+  font-size: 1.2rem;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
 
-    code {
-      background-color: var(--dark-bg);
-      color: var(--primary);
-      padding: 0.2rem 0.4rem;
-      border-radius: 2px;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9em;
-    }
+p {
+  margin-bottom: 15px;
+  color: var(--text);
+}
 
-    pre {
-      background-color: var(--dark-bg);
-      border: 1px solid var(--dim);
-      border-radius: 4px;
-      padding: 15px;
-      overflow-x: auto;
-      margin: 15px 0;
-    }
+a {
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--primary);
+  transition: all 0.2s ease;
+}
 
-    pre code {
-      padding: 0;
-      background: none;
-      color: var(--primary);
-    }
+a:hover {
+  color: var(--secondary);
+  border-bottom-style: solid;
+}
 
-    ul, ol {
-      margin-left: 20px;
-      margin-bottom: 15px;
-    }
+code {
+  background-color: var(--dark-bg);
+  color: var(--primary);
+  padding: 0.2rem 0.4rem;
+  border-radius: 2px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
 
-    li {
-      margin-bottom: 8px;
-      color: var(--text);
-    }
+pre {
+  background-color: var(--dark-bg);
+  border: 1px solid var(--dim);
+  border-radius: 4px;
+  padding: 15px;
+  overflow-x: auto;
+  margin: 15px 0;
+}
 
-    blockquote {
-      border-left: 4px solid var(--primary);
-      background-color: var(--dark-bg);
-      padding: 15px;
-      margin: 15px 0;
-      color: var(--dim);
-    }
+pre code {
+  padding: 0;
+  background: none;
+  color: var(--primary);
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 15px 0;
-      border: 1px solid var(--dim);
-    }
+ul, ol {
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
 
-    th {
-      background-color: var(--dark-bg);
-      color: var(--primary);
-      padding: 12px;
-      text-align: left;
-      border-bottom: 2px solid var(--primary);
-      border-right: 1px solid var(--dim);
-      font-weight: 600;
-    }
+li {
+  margin-bottom: 8px;
+  color: var(--text);
+}
 
-    th:last-child {
-      border-right: none;
-    }
+blockquote {
+  border-left: 4px solid var(--primary);
+  background-color: var(--dark-bg);
+  padding: 15px;
+  margin: 15px 0;
+  color: var(--dim);
+}
 
-    td {
-      padding: 12px;
-      border-bottom: 1px solid var(--dim);
-      border-right: 1px solid var(--dim);
-    }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+  border: 1px solid var(--dim);
+}
 
-    td:last-child {
-      border-right: none;
-    }
+th {
+  background-color: var(--dark-bg);
+  color: var(--primary);
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid var(--primary);
+  border-right: 1px solid var(--dim);
+  font-weight: 600;
+}
 
-    tr:hover {
-      background-color: rgba(0, 255, 136, 0.05);
-    }
+th:last-child {
+  border-right: none;
+}
 
-    strong {
-      color: var(--secondary);
-      font-weight: 600;
-    }
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--dim);
+  border-right: 1px solid var(--dim);
+}
 
-    em {
-      color: var(--dim);
-      font-style: italic;
-    }
+td:last-child {
+  border-right: none;
+}
 
-    hr {
-      border: none;
-      border-top: 1px solid var(--dim);
-      margin: 30px 0;
-    }
+tr:hover {
+  background-color: rgba(0, 255, 136, 0.05);
+}
 
-    /* Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
+strong {
+  color: var(--secondary);
+  font-weight: 600;
+}
 
-    ::-webkit-scrollbar-track {
-      background: var(--dark-bg);
-    }
+em {
+  color: var(--dim);
+  font-style: italic;
+}
 
-    ::-webkit-scrollbar-thumb {
-      background: var(--primary);
-      border-radius: 4px;
-    }
+hr {
+  border: none;
+  border-top: 1px solid var(--dim);
+  margin: 30px 0;
+}
 
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--secondary);
-    }
+.version-badge {
+  display: inline-block;
+  background-color: rgba(0, 255, 136, 0.15);
+  color: var(--primary);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid var(--primary);
+  margin-bottom: 20px;
+}
 
-    /* Mobile */
-    @media (max-width: 768px) {
-      .content-wrapper {
-        flex-direction: column;
-      }
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
 
-      .sidebar {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid rgba(0, 255, 136, 0.1);
-        max-height: 150px;
-        overflow-x: auto;
-        display: flex;
-        gap: 10px;
-      }
+::-webkit-scrollbar-track {
+  background: var(--dark-bg);
+}
 
-      .sidebar h3 {
-        display: none;
-      }
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
 
-      .sidebar-link {
-        white-space: nowrap;
-        margin-bottom: 0;
-      }
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
 
-      .main {
-        padding: 20px;
-      }
+/* Font Awesome Icon Styling */
+i[class*="fa"] {
+  color: var(--primary);
+  margin-right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 
-      h1 {
-        font-size: 1.5rem;
-      }
+.sidebar-link i {
+  margin-right: 0.5rem;
+}
 
-      h2 {
-        font-size: 1.2rem;
-      }
-    }
+/* Mobile */
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+    max-height: 150px;
+    overflow-x: auto;
+    display: flex;
+    gap: 10px;
+  }
+
+  .sidebar h3 {
+    display: none;
+  }
+
+  .sidebar-link {
+    white-space: nowrap;
+    margin-bottom: 0;
+  }
+
+  .main {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+}
   </style>
 </head>
 <body>
   <div class="header">
-    <div class="logo">fase<span>-</span>ai</div>
+    <a href="index.html" class="logo">fase<span>-</span>ai</a>
     <div class="nav-links">
-      <a href="index.html">Home</a>
+      <a href="{{HOME_LINK}}">Home</a>
       <a href="https://github.com/isaaceliape/FASE">GitHub</a>
     </div>
   </div>
 
   <div class="content-wrapper">
     <aside class="sidebar">
-      <h3>📚 Documentação</h3>
-      <a href="readme.html" class="sidebar-link ">📖 README</a>
-<a href="COMANDOS.html" class="sidebar-link ">📋 Comandos</a>
-<a href="GUIA-DO-USUARIO.html" class="sidebar-link ">📘 Guia do Usuário</a>
-<a href="HOOKS.html" class="sidebar-link ">🔧 Git Hooks</a>
-<a href="NPM-REGISTRY.html" class="sidebar-link ">📦 NPM Registry</a>
-<a href="CONTEXT-MONITOR.html" class="sidebar-link ">📊 Context Monitor</a>
+      <h3><i class="fa fa-book"></i> Documentação</h3>
+      <a href="index.html" class="sidebar-link "><i class="fa fa-book"></i> README</a>
+<a href="COMANDOS.html" class="sidebar-link "><i class="fa fa-list-check"></i> Comandos</a>
+<a href="GUIA-DO-USUARIO.html" class="sidebar-link "><i class="fa fa-book-open"></i> Guia do Usuário</a>
+<a href="CONTRIBUINDO.html" class="sidebar-link "><i class="fa fa-handshake"></i> Guia de Contribuição</a>
+<a href="HOOKS.html" class="sidebar-link "><i class="fa fa-wrench"></i> Git Hooks</a>
+<a href="NPM-REGISTRY.html" class="sidebar-link "><i class="fa fa-box"></i> NPM Registry</a>
+<a href="technical/padronizacao-caminhos.html" class="sidebar-link "><i class="fa fa-road"></i> Padronização de Caminhos</a>
+<a href="maintainers/MANTENEDORES.html" class="sidebar-link "><i class="fa fa-user-tie"></i> Guia de Maintainers</a>
+<a href="CONTEXT-MONITOR.html" class="sidebar-link "><i class="fa fa-chart-bar"></i> Monitor de Contexto</a>
     </aside>
 
     <main class="main">
+      <div class="version-badge"><i class="fa fa-box"></i> Versão 5.1.0</div>
       <h1>Verificar Instalação - Documentação</h1>
+<blockquote>
+<p><strong>Versão</strong>: 5.1.0 ✅ | Última atualização: 2026-04-20</p>
+</blockquote>
 <h2>Visão Geral</h2>
 <p>O comando <code>verificar-instalacao</code> é uma ferramenta de diagnóstico que verifica o status da instalação do FASE no sistema e gera um relatório detalhado com problemas encontrados e ações corretivas sugeridas.</p>
 <h2>Uso</h2>
@@ -352,9 +403,9 @@
 <h2>O Que É Verificado</h2>
 <h3>1. Instalação do Pacote</h3>
 <ul>
-<li>✅ Verifica se <code>fase-ai</code> está disponível via npx</li>
-<li>✅ Mostra a versão mais recente no npm registry</li>
-<li>✅ Verifica acesso ao registry oficial</li>
+<li><i class="fa fa-check-circle"></i> Verifica se <code>fase-ai</code> está instalado globalmente via npm</li>
+<li><i class="fa fa-check-circle"></i> Mostra a versão instalada</li>
+<li><i class="fa fa-check-circle"></i> Mostra o local de instalação</li>
 </ul>
 <h3>2. Runtimes Configurados</h3>
 <p>Para cada runtime suportado:</p>
@@ -386,7 +437,7 @@
 <h3>3. Workflows FASE</h3>
 <ul>
 <li>Diretório <code>~/.fase</code></li>
-<li>Subdiretório <code>~/.fase/workflows</code></li>
+<li>Subdiretório <code>./.fase-ai/workflows</code></li>
 <li>Arquivos de workflow (<code>.md</code>)</li>
 </ul>
 <h2>Saída do Relatório</h2>
@@ -395,12 +446,12 @@
   RELATÓRIO DE VERIFICAÇÃO FASE v3.0.2
 ═══════════════════════════════════════════════════════════
 
-📦 INSTALAÇÃO DO PACOTE
+&lt;i class=&quot;fa fa-box&quot;&gt;&lt;/i&gt; INSTALAÇÃO DO PACOTE
   Status: INSTALADO/NÃO INSTALADO
   Versão: X.Y.Z
   Localização: /caminho/para/pacote
 
-🔧 RUNTIMES CONFIGURADOS
+&lt;i class=&quot;fa fa-wrench&quot;&gt;&lt;/i&gt; RUNTIMES CONFIGURADOS
   Claude Code: CONFIGURADO/NÃO_CONFIGURADO
     - Settings: OK/MISSING
     - Comandos FASE: N encontrados
@@ -422,7 +473,7 @@
   Diretório ~/.fase: EXISTS/MISSING
   Workflows disponíveis: N
 
-⚠️ PROBLEMAS ENCONTRADOS
+&lt;i class=&quot;fa fa-warning&quot;&gt;&lt;/i&gt; PROBLEMAS ENCONTRADOS
   1. Problema 1
   2. Problema 2
   ...
@@ -435,29 +486,28 @@
 ═══════════════════════════════════════════════════════════
 </code></pre>
 <h2>Critérios de Saúde</h2>
-<h3>✅ Instalação Saudável</h3>
+<h3><i class="fa fa-check-circle"></i> Instalação Saudável</h3>
 <ul>
-<li>Pacote disponível via npx</li>
+<li>Pacote instalado globalmente</li>
 <li>Pelo menos um runtime configurado</li>
 <li>Comandos FASE presentes no runtime configurado</li>
 <li>Workflows disponíveis</li>
 </ul>
-<h3>⚠️ Instalação Parcial</h3>
+<h3><i class="fa fa-warning"></i> Instalação Parcial</h3>
 <ul>
 <li>Pacote instalado mas nenhum runtime configurado</li>
 <li>Runtime configurado mas sem comandos FASE</li>
 <li>Workflows ausentes</li>
 </ul>
-<h3>❌ Instalação Problemática</h3>
+<h3><i class="fa fa-times-circle"></i> Instalação Problemática</h3>
 <ul>
 <li>Pacote não instalado</li>
 <li>Múltiplos problemas de configuração</li>
 <li>Conflitos de versão detectados</li>
 </ul>
 <h2>Ações Corretivas Comuns</h2>
-<h3>Pacote Não Disponível</h3>
-<pre><code class="language-bash"># FASE é usado via npx - sempre baixa a versão mais recente
-npx fase-ai
+<h3>Pacote Não Instalado</h3>
+<pre><code class="language-bash">npm install -g fase-ai@latest
 </code></pre>
 <h3>Claude Code Sem Comandos</h3>
 <pre><code class="language-bash">npx fase-ai --claude
@@ -472,22 +522,18 @@ npx fase-ai
 <pre><code class="language-bash">npx fase-ai --codex
 </code></pre>
 <h3>Workflows Ausentes</h3>
-<pre><code class="language-bash">mkdir -p ~/.fase/workflows
+<pre><code class="language-bash">mkdir -p ./.fase-ai/workflows
 # Copiar workflows do projeto ou reinstalar
 npx fase-ai
 </code></pre>
 <h3>Atualizar Versão</h3>
-<pre><code class="language-bash"># npx sempre usa a versão mais recente
-npx fase-ai@latest
-
+<pre><code class="language-bash">npm update -g fase-ai
 # Ou dentro do assistente:
 /fase-atualizar
 </code></pre>
 <h3>Reinstalação Completa</h3>
-<pre><code class="language-bash"># Limpar cache do npm
-npm cache clean --force
-
-# Reinstalar via npx
+<pre><code class="language-bash">npm uninstall -g fase-ai
+npm install -g fase-ai@latest
 npx fase-ai --all
 </code></pre>
 <h2>Código de Saída</h2>
@@ -501,37 +547,37 @@ npx fase-ai --all
   RELATÓRIO DE VERIFICAÇÃO FASE v3.0.2
 ═══════════════════════════════════════════════════════════
 
-📦 INSTALAÇÃO DO PACOTE
-  ✓ Status: INSTALADO
-  ✓ Versão: 3.0.2
-  ✓ Localização: /usr/local/lib/node_modules/fase-ai
+&lt;i class=&quot;fa fa-box&quot;&gt;&lt;/i&gt; INSTALAÇÃO DO PACOTE
+  &lt;i class=&quot;fa fa-check&quot;&gt;&lt;/i&gt; Status: INSTALADO
+  &lt;i class=&quot;fa fa-check&quot;&gt;&lt;/i&gt; Versão: 3.0.2
+  &lt;i class=&quot;fa fa-check&quot;&gt;&lt;/i&gt; Localização: /usr/local/lib/node_modules/fase-ai
 
-🔧 RUNTIMES CONFIGURADOS
+&lt;i class=&quot;fa fa-wrench&quot;&gt;&lt;/i&gt; RUNTIMES CONFIGURADOS
 
   Claude Code: CONFIGURADO
-    ✓ Settings: OK
-    ✓ Comandos FASE: 32 encontrados
-    ✓ Hooks: 6 encontrados
+    &lt;i class=&quot;fa fa-check&quot;&gt;&lt;/i&gt; Settings: OK
+    &lt;i class=&quot;fa fa-check&quot;&gt;&lt;/i&gt; Comandos FASE: 32 encontrados
+    &lt;i class=&quot;fa fa-check&quot;&gt;&lt;/i&gt; Hooks: 6 encontrados
 
   OpenCode: NÃO_CONFIGURADO
     - Settings: MISSING
     - Comandos FASE: 0 encontrados
 
   Gemini: CONFIGURADO
-    ✓ Settings: OK
-    ✓ Comandos FASE: 32 encontrados
+    &lt;i class=&quot;fa fa-check&quot;&gt;&lt;/i&gt; Settings: OK
+    &lt;i class=&quot;fa fa-check&quot;&gt;&lt;/i&gt; Comandos FASE: 32 encontrados
 
   Codex: NÃO_CONFIGURADO
     - Config: MISSING
     - Skills FASE: 0 encontradas
 
 📁 WORKFLOWS FASE
-  ✓ Diretório ~/.fase: EXISTS
-  ✓ Workflows disponíveis: 12
+  &lt;i class=&quot;fa fa-check&quot;&gt;&lt;/i&gt; Diretório ~/.fase: EXISTS
+  &lt;i class=&quot;fa fa-check&quot;&gt;&lt;/i&gt; Workflows disponíveis: 12
 
 ═══════════════════════════════════════════════════════════
 
-  ✅ FASE está instalado e configurado corretamente!
+  &lt;i class=&quot;fa fa-check-circle&quot;&gt;&lt;/i&gt; FASE está instalado e configurado corretamente!
 
 ═══════════════════════════════════════════════════════════
 </code></pre>
@@ -540,23 +586,23 @@ npx fase-ai --all
   RELATÓRIO DE VERIFICAÇÃO FASE v3.0.2
 ═══════════════════════════════════════════════════════════
 
-📦 INSTALAÇÃO DO PACOTE
-  ✗ Status: NÃO INSTALADO
+&lt;i class=&quot;fa fa-box&quot;&gt;&lt;/i&gt; INSTALAÇÃO DO PACOTE
+  &lt;i class=&quot;fa fa-xmark&quot;&gt;&lt;/i&gt; Status: NÃO INSTALADO
 
-🔧 RUNTIMES CONFIGURADOS
+&lt;i class=&quot;fa fa-wrench&quot;&gt;&lt;/i&gt; RUNTIMES CONFIGURADOS
 
   Claude Code: CONFIGURADO
-    ✓ Settings: OK
-    ✗ Comandos FASE: 0 encontrados
+    &lt;i class=&quot;fa fa-check&quot;&gt;&lt;/i&gt; Settings: OK
+    &lt;i class=&quot;fa fa-xmark&quot;&gt;&lt;/i&gt; Comandos FASE: 0 encontrados
     ⚠ Hooks: 0 encontrados
 
   [...]
 
 ═══════════════════════════════════════════════════════════
 
-  ⚠️  6 PROBLEMA(S) ENCONTRADO(S):
+  &lt;i class=&quot;fa fa-warning&quot;&gt;&lt;/i&gt;  6 PROBLEMA(S) ENCONTRADO(S):
 
-  1. Pacote fase-ai não disponível via npx
+  1. Pacote fase-ai não instalado globalmente
   2. Claude Code: Sem comandos FASE instalados
   3. OpenCode: Sem comandos FASE instalados
   4. Gemini: Sem comandos FASE instalados
@@ -565,9 +611,9 @@ npx fase-ai --all
 
   💡 AÇÕES SUGERIDAS:
 
-  1. Pacote não disponível
-     Comando: npx fase-ai
-     Instalar FASE via npx
+  1. Pacote não instalado
+     Comando: npm install -g fase-ai@latest
+     Instalar FASE globalmente
 
   2. Claude Code sem comandos
      Comando: npx fase-ai --claude
@@ -582,8 +628,7 @@ npx fase-ai --all
 <ul>
 <li><code>bin/verificar-instalacao.js</code> - Script principal</li>
 <li><code>bin/test/verificar-instalacao.test.js</code> - Testes</li>
-<li><code>comandos/verificar-instalacao.md</code> - Comando em português</li>
-<li><code>bin/comandos/check-installation.md</code> - Comando em inglês (deprecated)</li>
+<li><code>bin/comandos/verificar-instalacao.md</code> - Comando em português</li>
 </ul>
 <h3>Executar Testes</h3>
 <pre><code class="language-bash">cd bin

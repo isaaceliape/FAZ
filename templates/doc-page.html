@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>{{TITLE}} - FASE Docs</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-dWl2hjFlPDATYNKGRekq9h+OhN6Z3BYV+VCugMzKa+2ZgIVsK0Y2SjC1+e6i7B9WDu9Zy4gxXVW5tADhJYXnzw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <style>
+{{CSS}}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="{{HOME_LINK}}" class="logo">fase<span>-</span>ai</a>
+    <div class="nav-links">
+      <a href="{{HOME_LINK}}">Home</a>
+      <a href="https://github.com/isaaceliape/FASE">GitHub</a>
+    </div>
+  </div>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <h3><i class="fa fa-book"></i> Documentação</h3>
+      {{SIDEBAR_LINKS}}
+    </aside>
+
+    <main class="main">
+      <div class="version-badge"><i class="fa fa-box"></i> Versão {{VERSION}}</div>
+      {{CONTENT}}
+    </main>
+  </div>
+</body>
+</html>

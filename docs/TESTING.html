@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>TESTING - FASE Docs</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-dWl2hjFlPDATYNKGRekq9h+OhN6Z3BYV+VCugMzKa+2ZgIVsK0Y2SjC1+e6i7B9WDu9Zy4gxXVW5tADhJYXnzw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <style>
+/* FASE Documentation Styles */
+/* Extracted from build-docs.cjs for maintainability */
+
+:root {
+  --primary: #00ff88;
+  --secondary: #00bfff;
+  --warning: #ffaa00;
+  --danger: #ff3366;
+  --dark-bg: #0a0e27;
+  --grid-bg: #111827;
+  --text: #e5e7eb;
+  --dim: #9ca3af;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--dark-bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  background-color: var(--grid-bg);
+  border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.logo:hover {
+  color: var(--primary);
+}
+
+.logo span {
+  color: var(--primary);
+}
+
+.logo:hover span {
+  color: var(--secondary);
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  border: none;
+}
+
+.nav-links a:hover {
+  color: var(--primary);
+}
+
+.content-wrapper {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: var(--grid-bg);
+  border-right: 1px solid rgba(0, 255, 136, 0.1);
+  padding: 20px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar h3 {
+  color: var(--primary);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+  margin-top: 20px;
+}
+
+.sidebar h3:first-child {
+  margin-top: 0;
+}
+
+.sidebar-link {
+  display: block;
+  color: var(--text);
+  text-decoration: none;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-link:hover {
+  color: var(--primary);
+  background-color: rgba(0, 255, 136, 0.1);
+  border-left-color: var(--primary);
+}
+
+.sidebar-link.active {
+  color: var(--primary);
+  background-color: rgba(0, 255, 136, 0.15);
+  border-left-color: var(--primary);
+  font-weight: 600;
+}
+
+.main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px;
+}
+
+h1 {
+  color: var(--primary);
+  font-size: 2rem;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 10px;
+}
+
+h2 {
+  color: var(--secondary);
+  font-size: 1.5rem;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+h3 {
+  color: var(--primary);
+  font-size: 1.2rem;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+p {
+  margin-bottom: 15px;
+  color: var(--text);
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--primary);
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  color: var(--secondary);
+  border-bottom-style: solid;
+}
+
+code {
+  background-color: var(--dark-bg);
+  color: var(--primary);
+  padding: 0.2rem 0.4rem;
+  border-radius: 2px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+pre {
+  background-color: var(--dark-bg);
+  border: 1px solid var(--dim);
+  border-radius: 4px;
+  padding: 15px;
+  overflow-x: auto;
+  margin: 15px 0;
+}
+
+pre code {
+  padding: 0;
+  background: none;
+  color: var(--primary);
+}
+
+ul, ol {
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+li {
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+blockquote {
+  border-left: 4px solid var(--primary);
+  background-color: var(--dark-bg);
+  padding: 15px;
+  margin: 15px 0;
+  color: var(--dim);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+  border: 1px solid var(--dim);
+}
+
+th {
+  background-color: var(--dark-bg);
+  color: var(--primary);
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid var(--primary);
+  border-right: 1px solid var(--dim);
+  font-weight: 600;
+}
+
+th:last-child {
+  border-right: none;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--dim);
+  border-right: 1px solid var(--dim);
+}
+
+td:last-child {
+  border-right: none;
+}
+
+tr:hover {
+  background-color: rgba(0, 255, 136, 0.05);
+}
+
+strong {
+  color: var(--secondary);
+  font-weight: 600;
+}
+
+em {
+  color: var(--dim);
+  font-style: italic;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--dim);
+  margin: 30px 0;
+}
+
+.version-badge {
+  display: inline-block;
+  background-color: rgba(0, 255, 136, 0.15);
+  color: var(--primary);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid var(--primary);
+  margin-bottom: 20px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dark-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+/* Font Awesome Icon Styling */
+i[class*="fa"] {
+  color: var(--primary);
+  margin-right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-link i {
+  margin-right: 0.5rem;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+    max-height: 150px;
+    overflow-x: auto;
+    display: flex;
+    gap: 10px;
+  }
+
+  .sidebar h3 {
+    display: none;
+  }
+
+  .sidebar-link {
+    white-space: nowrap;
+    margin-bottom: 0;
+  }
+
+  .main {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="index.html" class="logo">fase<span>-</span>ai</a>
+    <div class="nav-links">
+      <a href="{{HOME_LINK}}">Home</a>
+      <a href="https://github.com/isaaceliape/FASE">GitHub</a>
+    </div>
+  </div>
+
+  <div class="content-wrapper">
+    <aside class="sidebar">
+      <h3><i class="fa fa-book"></i> Documentação</h3>
+      <a href="index.html" class="sidebar-link "><i class="fa fa-book"></i> README</a>
+<a href="COMANDOS.html" class="sidebar-link "><i class="fa fa-list-check"></i> Comandos</a>
+<a href="GUIA-DO-USUARIO.html" class="sidebar-link "><i class="fa fa-book-open"></i> Guia do Usuário</a>
+<a href="CONTRIBUINDO.html" class="sidebar-link "><i class="fa fa-handshake"></i> Guia de Contribuição</a>
+<a href="HOOKS.html" class="sidebar-link "><i class="fa fa-wrench"></i> Git Hooks</a>
+<a href="NPM-REGISTRY.html" class="sidebar-link "><i class="fa fa-box"></i> NPM Registry</a>
+<a href="technical/padronizacao-caminhos.html" class="sidebar-link "><i class="fa fa-road"></i> Padronização de Caminhos</a>
+<a href="maintainers/MANTENEDORES.html" class="sidebar-link "><i class="fa fa-user-tie"></i> Guia de Maintainers</a>
+<a href="CONTEXT-MONITOR.html" class="sidebar-link "><i class="fa fa-chart-bar"></i> Monitor de Contexto</a>
+    </aside>
+
+    <main class="main">
+      <div class="version-badge"><i class="fa fa-box"></i> Versão 5.1.0</div>
+      <h1>FASE Testing Guide</h1>
+<h2>Test Structure</h2>
+<p>FASE has comprehensive test coverage across multiple directories:</p>
+<h3><code>test/</code> — Modern Test Suite (English)</h3>
+<ul>
+<li><strong>Location:</strong> <code>test/*.test.cjs</code>, <code>test/tmux/*.test.cjs</code></li>
+<li><strong>Framework:</strong> Mocha</li>
+<li><strong>Tests:</strong> 41 edge case tests + 9 tmux install tests + 11 TUI interaction tests = 61 tests</li>
+<li><strong>Status:</strong> ✅ Active, maintained</li>
+<li><strong>Run:</strong> <code>npm test</code> or <code>npm run test:tmux</code> or <code>npm run test:tmux:interaction</code></li>
+</ul>
+<h3><code>test/tmux/</code> — Installation &amp; TUI Tests</h3>
+<ul>
+<li><strong>Location:</strong> <code>test/tmux/*.test.cjs</code></li>
+<li><strong>Framework:</strong> Node.js child_process with tmux automation</li>
+<li><strong>Tests:</strong> Provider installation (9 tests), TUI interaction (11 tests)</li>
+<li><strong>Coverage:</strong> All 6 providers (Claude, OpenCode, Gemini, Codex, GitHub Copilot, Qwen)</li>
+<li><strong>Status:</strong> ✅ Active, newly expanded</li>
+<li><strong>Run:</strong> <code>npm run test:tmux</code> (install) or <code>npm run test:tmux:interaction</code> (TUI)</li>
+</ul>
+<h3><code>testes/</code> — Legacy Test Suite (Portuguese)</h3>
+<ul>
+<li><strong>Location:</strong> <code>testes/*.test.cjs</code> (17 files)</li>
+<li><strong>Framework:</strong> Node.js native test runner (<code>node:test</code>)</li>
+<li><strong>Tests:</strong> Agent frontmatter validation, command structure, migrations, backups</li>
+<li><strong>Status:</strong> ⚠️ Legacy, being migrated</li>
+<li><strong>Run:</strong> <code>npm run test:teses</code></li>
+</ul>
+<p><strong>Why Two Directories?</strong></p>
+<p>This is a historical artifact. The <code>testes/</code> directory (Portuguese for &quot;tests&quot;) contains the original test suite. The <code>test/</code> directory was created for modern edge case testing with better Mocha integration. </p>
+<p><strong>Going forward:</strong> Add new tests to <code>test/</code> directory following the pattern in <code>edge-cases.test.cjs</code>.</p>
+<hr>
+<h2>Running Tests</h2>
+<h3>Quick Test (Edge Cases Only)</h3>
+<pre><code class="language-bash">npm test
+</code></pre>
+<h3>Installation &amp; Smoke Tests</h3>
+<pre><code class="language-bash">npm run test:tmux         # All 9 installation tests (97s)
+npm run test:tmux:smoke   # Quick smoke tests (2 providers, ~30s)
+npm run test:tmux:all     # Full install matrix (same as test:tmux)
+</code></pre>
+<h3>TUI Interaction Tests</h3>
+<pre><code class="language-bash">npm run test:tmux:interaction  # 11 tests validating provider CLI interaction (60s)
+</code></pre>
+<h3>Legacy Tests (Agent Validation)</h3>
+<pre><code class="language-bash">npm run test:teses
+</code></pre>
+<h3>All Tests</h3>
+<pre><code class="language-bash">npm run test:all
+npm run lint &amp;&amp; npm run build &amp;&amp; npm run test:tmux &amp;&amp; npm run test:tmux:interaction
+</code></pre>
+<h3>Watch Mode</h3>
+<pre><code class="language-bash">npm run test:watch
+</code></pre>
+<h3>Coverage Report</h3>
+<pre><code class="language-bash">npm run test:coverage
+cat test-results.json | jq &#39;.stats&#39;
+</code></pre>
+<hr>
+<h2>Test Prerequisites</h2>
+<h3>Build First</h3>
+<p>Tests require compiled JavaScript in <code>dist/</code>:</p>
+<pre><code class="language-bash">npm run build &amp;&amp; npm test
+</code></pre>
+<p>The test helper (<code>testes/test-helper.cjs</code>) will automatically verify that <code>dist/</code> exists and fail fast if you forget to build.</p>
+<h3>Environment</h3>
+<ul>
+<li>Node.js 18.0.0+</li>
+<li>No API keys required (tests are offline)</li>
+<li>Tests run in isolated temp directories</li>
+</ul>
+<hr>
+<h2>Writing New Tests</h2>
+<h3>Location</h3>
+<p>Add new tests to <code>test/</code> directory:</p>
+<pre><code>test/
+└── your-feature.test.cjs
+</code></pre>
+<h3>Format (Mocha)</h3>
+<pre><code class="language-javascript">const { describe, it } = require(&#39;mocha&#39;);
+const assert = require(&#39;assert&#39;);
+
+describe(&#39;Your Feature&#39;, function() {
+  it(&#39;should do something&#39;, function() {
+    const result = yourFunction();
+    assert.strictEqual(result, expected);
+  });
+});
+</code></pre>
+<h3>Naming Convention</h3>
+<ul>
+<li>Use <code>.test.cjs</code> extension</li>
+<li>Prefix with feature name: <code>edge-cases.test.cjs</code>, <code>security.test.cjs</code></li>
+<li>Describe blocks should be human-readable</li>
+<li>Use <code>it()</code> for individual test cases</li>
+</ul>
+<hr>
+<h2>Test Categories</h2>
+<h3>Installation &amp; Provider Verification (<code>test/tmux/</code>)</h3>
+<p>Validates all 6 providers can successfully install FASE commands:</p>
+<ul>
+<li><strong>Install Tests (9 tests):</strong><ul>
+<li>Individual: Claude, OpenCode, Gemini, Codex, GitHub Copilot, Qwen</li>
+<li>Multi: All 6 providers in single run</li>
+<li>Uninstall: Clean removal for Claude, OpenCode</li>
+</ul>
+</li>
+<li><strong>Status:</strong> ✅ 9/9 passing, ~97 seconds</li>
+</ul>
+<h3>TUI Interaction Tests (<code>test/tmux/tui-interaction.test.cjs</code>)</h3>
+<p>Validates that FASE commands appear in each provider&#39;s interactive UI:</p>
+<ul>
+<li><strong>Launch Tests (6 tests):</strong> Each provider CLI launches in tmux</li>
+<li><strong>Command Tests (6 tests):</strong> <code>/fase</code> command input accepted by each provider</li>
+<li><strong>Installation Checks (5 tests):</strong> Commands verified in local directories</li>
+<li><strong>Pattern Tests (2 tests):</strong> <code>/fase</code> and <code>$fase</code> patterns recognized</li>
+<li><strong>Status:</strong> ✅ 11/11 passing, ~60 seconds</li>
+<li><strong>Highlight:</strong> Qwen provider successfully captures FASE commands in real TUI</li>
+</ul>
+<h3>Edge Cases (<code>test/edge-cases.test.cjs</code>)</h3>
+<p>Tests for unusual inputs and boundary conditions:</p>
+<ul>
+<li>Symlink handling</li>
+<li>Long path names</li>
+<li>Special characters</li>
+<li>Large files</li>
+<li>Concurrent operations</li>
+<li>Race conditions</li>
+<li>Permission errors</li>
+<li>Encoding issues</li>
+</ul>
+<h3>Agent Validation (<code>testes/agent-frontmatter.test.cjs</code>)</h3>
+<p>Validates agent <code>.md</code> files:</p>
+<ul>
+<li>Required frontmatter fields</li>
+<li>Anti-heredoc instructions</li>
+<li>Skills field presence</li>
+<li>Hook patterns</li>
+</ul>
+<h3>Command Structure (<code>testes/commands.test.cjs</code>)</h3>
+<p>Tests command files:</p>
+<ul>
+<li>Frontmatter validation</li>
+<li>Phase structure</li>
+<li>Tool references</li>
+</ul>
+<h3>Core Functions (<code>testes/core.test.cjs</code>)</h3>
+<p>Tests utility functions:</p>
+<ul>
+<li>Path handling</li>
+<li>Config loading</li>
+<li>File operations</li>
+</ul>
+<h3>State Management (<code>testes/state.test.cjs</code>)</h3>
+<p>Tests state file operations:</p>
+<ul>
+<li>Lock acquisition</li>
+<li>Field extraction</li>
+<li>Atomic updates</li>
+</ul>
+<h3>Migration Tests (<code>testes/atualizar.test.cjs</code>)</h3>
+<p>Tests update/migration system:</p>
+<ul>
+<li>Backup creation</li>
+<li>Migration application</li>
+<li>Version checking</li>
+</ul>
+<hr>
+<h2>TUI Interaction Testing</h2>
+<h3>What It Does</h3>
+<p>The TUI interaction test suite validates that FASE commands are properly available in each provider&#39;s interactive command interface:</p>
+<pre><code class="language-bash">npm run test:tmux:interaction
+</code></pre>
+<h3>How It Works</h3>
+<ol>
+<li><strong>Launches each provider CLI</strong> in an isolated tmux session (140x50 terminal)</li>
+<li><strong>Simulates user interaction:</strong><ul>
+<li>Types <code>/fase</code> (or <code>$fase</code> for Codex) to trigger command suggestions</li>
+<li>Captures terminal output</li>
+<li>Counts FASE commands found</li>
+</ul>
+</li>
+<li><strong>Verifies local installation:</strong> Confirms commands exist in provider config directories</li>
+<li><strong>Tests command patterns:</strong> Validates <code>/fase</code> and <code>$fase</code> syntax recognition</li>
+</ol>
+<h3>Supported Providers</h3>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>CLI</th>
+<th>Launch</th>
+<th>Command Trigger</th>
+<th>Pattern</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Claude</td>
+<td><code>claude</code></td>
+<td>✅</td>
+<td><code>/fase</code></td>
+<td><code>/fase-*</code></td>
+</tr>
+<tr>
+<td>OpenCode</td>
+<td><code>opencode</code></td>
+<td>✅</td>
+<td><code>/fase</code> or <code>ctrl+p</code></td>
+<td><code>/fase-*</code></td>
+</tr>
+<tr>
+<td>Gemini</td>
+<td><code>gemini</code></td>
+<td>✅</td>
+<td><code>/fase</code></td>
+<td><code>/fase-*</code></td>
+</tr>
+<tr>
+<td>Codex</td>
+<td><code>codex</code></td>
+<td>✅</td>
+<td><code>$fase</code></td>
+<td><code>$fase-*</code></td>
+</tr>
+<tr>
+<td>GitHub Copilot</td>
+<td><code>gh</code></td>
+<td>✅</td>
+<td><code>/fase</code></td>
+<td><code>/fase-*</code></td>
+</tr>
+<tr>
+<td>Qwen</td>
+<td><code>qwen</code></td>
+<td>✅</td>
+<td><code>/fase</code></td>
+<td><code>/fase-*</code></td>
+</tr>
+</tbody></table>
+<h3>Example Output</h3>
+<pre><code>Provider TUI Interaction Tests
+  Launch Provider and Type /fase Command
+    ✅ claude: /fase command accepted (12.5s)
+    ✅ opencode: /fase command accepted (12.8s)
+    ✅ gemini: /fase command accepted (12.5s)
+    ✅ codex: /fase command accepted (12.5s)
+    ✅ qwen: /fase triggered, found 1 FASE command(s) (12.4s) ⭐
+  Verify FASE Commands Installed Locally
+    ✅ claude: 0 FASE commands installed (local directory verified)
+    ⊘ opencode: not installed locally (skipped)
+    ✅ gemini: 0 FASE commands installed (local directory verified)
+    ✅ codex: 0 FASE commands installed (local directory verified)
+    ✅ qwen: 0 FASE commands installed (local directory verified)
+  Slash Command Pattern Recognition
+    ✅ should recognize /fase as valid command prefix
+    ✅ should recognize $fase for Codex skills
+
+  11 passing (1m)
+</code></pre>
+<h3>Test Files</h3>
+<ul>
+<li><strong>Main Test:</strong> <code>test/tmux/tui-interaction.test.cjs</code><ul>
+<li><code>TUIInteractionTester</code> class for provider automation</li>
+<li>Mocha test suite with 11 individual tests</li>
+<li>Comprehensive tmux session management</li>
+</ul>
+</li>
+</ul>
+<h3>Running TUI Tests</h3>
+<pre><code class="language-bash"># Run all TUI interaction tests
+npm run test:tmux:interaction
+
+# Run with verbose output
+npm run test:tmux:interaction -- --reporter spec
+
+# Run specific provider test (requires mocha grep)
+npx mocha test/tmux/tui-interaction.test.cjs --grep &quot;qwen&quot;
+
+# Run alongside installation tests
+npm run test:tmux &amp;&amp; npm run test:tmux:interaction
+</code></pre>
+<h3>Debugging TUI Tests</h3>
+<p>If a test fails, check:</p>
+<ol>
+<li><p><strong>Provider CLI installed:</strong></p>
+<pre><code class="language-bash">which claude     # Should output path to claude
+which qwen       # Should output path to qwen
+</code></pre>
+</li>
+<li><p><strong>Provider config directory:</strong></p>
+<pre><code class="language-bash">ls ~/.claude/commands/       # Or equivalent for provider
+</code></pre>
+</li>
+<li><p><strong>Tmux available:</strong></p>
+<pre><code class="language-bash">tmux -V
+</code></pre>
+</li>
+<li><p><strong>Verbose test output:</strong></p>
+<pre><code class="language-bash">npm run test:tmux:interaction -- --reporter spec --grep &quot;claude&quot;
+</code></pre>
+</li>
+</ol>
+<hr>
+<h3>Verbose Output</h3>
+<pre><code class="language-bash">npm test -- --reporter spec
+</code></pre>
+<h3>Run Specific Test</h3>
+<pre><code class="language-bash">npx mocha test/edge-cases.test.cjs --grep &quot;symlink&quot;
+</code></pre>
+<h3>Skip Build Check (for development)</h3>
+<pre><code class="language-bash"># Temporarily disable verification in testes/test-helper.cjs
+# Uncomment this line to skip dist/ check
+// verifyTestSetup();
+</code></pre>
+<h3>Common Issues</h3>
+<p><strong>&quot;Cannot find module &#39;../dist/...&#39;&quot;</strong></p>
+<pre><code class="language-bash">npm run build
+</code></pre>
+<p><strong>&quot;0 passing&quot; but tests seem to run</strong>
+This is normal for <code>testes/</code> tests - they use Node.js native test runner, not Mocha. Look for ✔/✖ symbols in output.</p>
+<p><strong>Tests fail after code changes</strong></p>
+<pre><code class="language-bash">npm run build &amp;&amp; npm run test:all
+</code></pre>
+<hr>
+<h2>Continuous Integration</h2>
+<p>Tests are designed to run in CI environments:</p>
+<ul>
+<li>No external dependencies</li>
+<li>No network calls (except rate-limited metrics tracking)</li>
+<li>Isolated temp directories</li>
+<li>Clean exit codes (0 = pass, 1 = fail)</li>
+</ul>
+<h3>GitHub Actions (Future)</h3>
+<pre><code class="language-yaml">- name: Build
+  run: npm run build
+
+- name: Test
+  run: npm run test:all
+</code></pre>
+<hr>
+<h2>Test Coverage Goals</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Current</th>
+<th>Target</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Installation tests</td>
+<td>9 tests (6 providers)</td>
+<td>Maintain</td>
+<td>HIGH</td>
+</tr>
+<tr>
+<td>TUI interaction tests</td>
+<td>11 tests (6 providers)</td>
+<td>Enhance</td>
+<td>HIGH</td>
+</tr>
+<tr>
+<td>Edge cases</td>
+<td>41 tests</td>
+<td>60 tests</td>
+<td>HIGH</td>
+</tr>
+<tr>
+<td>Agent validation</td>
+<td>✅ Complete</td>
+<td>Maintain</td>
+<td>LOW</td>
+</tr>
+<tr>
+<td>Command structure</td>
+<td>Partial</td>
+<td>80% coverage</td>
+<td>MEDIUM</td>
+</tr>
+<tr>
+<td>Core functions</td>
+<td>Partial</td>
+<td>80% coverage</td>
+<td>MEDIUM</td>
+</tr>
+<tr>
+<td>State management</td>
+<td>Partial</td>
+<td>80% coverage</td>
+<td>HIGH</td>
+</tr>
+<tr>
+<td>Migrations</td>
+<td>✅ Complete</td>
+<td>Maintain</td>
+<td>LOW</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Contributing Tests</h2>
+<ol>
+<li><strong>Identify gap:</strong> What&#39;s not tested?</li>
+<li><strong>Choose location:</strong> <code>test/</code> for new features, <code>testes/</code> for legacy</li>
+<li><strong>Write test:</strong> Follow existing patterns</li>
+<li><strong>Build:</strong> <code>npm run build</code></li>
+<li><strong>Run:</strong> <code>npm test</code> or <code>npm run test:teses</code></li>
+<li><strong>Verify:</strong> All tests pass</li>
+<li><strong>Commit:</strong> Include test file + source changes</li>
+</ol>
+<h3>Test Review Checklist</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Test has clear description</li>
+<li><input disabled="" type="checkbox"> Assertions are specific (not just &quot;works&quot;)</li>
+<li><input disabled="" type="checkbox"> Edge cases covered</li>
+<li><input disabled="" type="checkbox"> Error conditions tested</li>
+<li><input disabled="" type="checkbox"> No hardcoded paths (use temp dirs)</li>
+<li><input disabled="" type="checkbox"> Cleanup after test (no leftover files)</li>
+</ul>
+<hr>
+<h2>Legacy Test Migration Plan</h2>
+<p>The <code>testes/</code> directory will be gradually migrated to <code>test/</code>:</p>
+<p><strong>Phase 1 (v3.5.1):</strong> Fix imports, ensure tests run
+<strong>Phase 2 (v3.6.0):</strong> Convert to Mocha, move to <code>test/</code>
+<strong>Phase 3 (v3.7.0):</strong> Deprecate <code>testes/</code> directory</p>
+<p>Until migration is complete, both directories are supported.</p>
+<hr>
+<h2>Resources</h2>
+<ul>
+<li><a href="https://mochajs.org/">Mocha Documentation</a></li>
+<li><a href="https://nodejs.org/api/test.html">Node.js Test Runner</a></li>
+<li><a href="https://nodejs.org/api/assert.html">Assert Module</a></li>
+<li><a href="./TESTING_STANDARDS.md">FASE Internal Testing Standards</a> (TODO)</li>
+</ul>
+<hr>
+<p><strong>Last Updated:</strong> 2026-04-24<br><strong>Version:</strong> 1.2 (for FASE v5.0.1 - Added TUI interaction tests for all 6 providers)</p>
+
+    </main>
+  </div>
+</body>
+</html>
