@@ -1,112 +1,85 @@
 # Padronização de Caminhos de Comandos
 
-> **Versão**: 4.0.0 ✅ | Última atualização: 2026-04-20
+> **Versão**: 5.1.1 ✅ | Última atualização: 2026-04-25
 
 ## Visão Geral
 
-Os comandos do FASE usam referências de caminho agnósticas ao ambiente que são convertidas para caminhos específicos do runtime durante a instalação. Isso permite que as mesmas definições de comando funcionem em múltiplos ambientes (Claude Code, OpenCode, Gemini, Codex).
+O FASE agora usa exclusivamente um modelo de instalação **local ao projeto**. Todos os arquivos de workflow, template, e configuração são armazenados no diretório `./.fase-ai/` na raiz do projeto, eliminando a necessidade de instalações globais na pasta home do usuário.
 
-## Convenção de Caminhos
+## Estrutura de Caminhos
 
-### Arquivos Fonte (`comandos/*.md`)
+### Diretório Raiz do Projeto
 
-Os arquivos de comando fonte usam referências de caminho universal:
-- **Workflows**: `@./.fase-ai/workflows/workflow-name.md`
-- **Templates**: `@./.fase-ai/templates/template-name.md`
-- **Referências**: `@./.fase-ai/references/reference-name.md`
+O FASE opera com a seguinte estrutura de diretórios no projeto:
+
+```
+.fase-ai/
+├── workflows/          # Arquivos de workflow do FASE
+├── templates/          # Templates de agente
+├── references/         # Arquivos de referência
+├── bin/
+│   └── fase-tools.cjs # Ferramentas CLI do FASE
+└── config/            # Arquivos de configuração
+```
+
+### Convenção de Caminhos nos Arquivos Fonte
+
+Os arquivos de comando fonte (`comandos/*.md`) usam caminhos relativos ao projeto:
+
+- **Workflows**: `./.fase-ai/workflows/workflow-name.md`
+- **Templates**: `./.fase-ai/templates/template-name.md`
+- **Referências**: `./.fase-ai/references/reference-name.md`
 - **Ferramentas do runtime**: `./.fase-ai/bin/fase-tools.cjs`
 
-Esses caminhos são **agnósticos ao ambiente** e usados em:
-1. Blocos `<execution_context>` (para carregamento de contexto do Claude Code)
+Esses caminhos são usados em:
+1. Blocos `<execution_context>` (para carregamento de contexto)
 2. Referências inline nas seções `<process>`
 3. Blocos de código bash para execução de scripts
 
-### Conversão de Caminhos Durante Instalação
-
-Quando FASE é instalado via `npx fase-ai [--runtime]`, o instalador (`bin/install.js`) converte esses caminhos universais para localizações específicas do runtime:
-
-| Runtime | Caminho Convertido |
-|---------|---|
-| **Claude Code** | `~/.claude/fase/` |
-| **Gemini** | `~/.gemini/fase/` |
-| **OpenCode** | `~/.config/opencode/fase/` |
-| **Codex** | `~/.codex/fase/` |
-
-#### Exemplos de Conversão
-
-**Para Instalação no Gemini:**
-```
-Fonte:       @./.fase-ai/workflows/plan-phase.md
-Instalado:   @~/.gemini/fase/workflows/plan-phase.md
-```
-
-**Para Instalação no OpenCode:**
-```
-Fonte:       ./.fase-ai/bin/fase-tools.cjs
-Instalado:   $HOME/.config/opencode/fase/bin/fase-tools.cjs
-```
-
-**Para Instalação no Claude Code:**
-```
-Fonte:       ./.fase-ai/workflows/add-phase.md
-Instalado:   ~/.claude/fase/workflows/add-phase.md
-```
-
 ## Detalhes de Implementação
 
-### Regras de Substituição de Caminhos do Instalador
+### Como os Caminhos Funcionam
 
-O instalador aplica substituições de caminho em três funções:
+O FASE resolve todos os caminhos relativos ao diretório da raiz do projeto onde `./.fase-ai/` está localizado:
 
-1. **`copyFlattenedCommands`** - para OpenCode (estrutura de comando simples)
-2. **`copyCommandsAsCodexSkills`** - para Codex (estrutura de skill)
-3. **`copyWithPathReplacement`** - para Claude Code e Gemini
+```bash
+# Exemplo: Carregando um workflow
+node ./.fase-ai/bin/fase-tools.cjs load-workflow workflows/planning
 
-Padrões de substituição:
-- `~/\.fase/` → `<pathPrefix>fase/` (por exemplo, `~/.claude/fase/`)
-- `./.fase-ai/` → `<homePrefix>fase/` (por exemplo, `$HOME/.claude/fase/`)
-
-Para OpenCode especificamente:
-- `~/.fase` → `~/.config/opencode/fase`
-- `$HOME/.fase` → `$HOME/.config/opencode/fase`
+# Exemplo: Lendo um arquivo de template
+cat ./.fase-ai/templates/agent-template.md
+```
 
 ### Arquivos Distribuídos (`bin/comandos/*.md`)
 
 O diretório `bin/` contém arquivos de comando pré-construídos distribuídos via NPM. Esses arquivos:
-- Têm blocos `<execution_context>` **removidos** (não necessários após instalação)
-- Têm referências inline `./.fase-ai/` **preservadas** para o instalador substituir
+- Têm referências `./.fase-ai/` que funcionam quando executados do diretório do projeto
 - Contêm texto completamente traduzido para português
-- São instalados em localizações específicas do runtime pelo instalador
+- São auto-contidos ou referenciam arquivos em `./.fase-ai/`
 
 ## Arquivos de Workflow/Template
 
-Os arquivos reais de workflow, template e referência são fornecidos por:
-1. **GSD (projeto upstream)** - fornece os arquivos de workflow principal
-2. **FASE** - fornece versões localizadas em português
+Os arquivos reais de workflow, template e referência residem em:
 
-Esses arquivos são instalados na localização de caminho convertido (por exemplo, `~/.claude/fase/workflows/`, `~/.gemini/fase/workflows/`).
+- **GSD (projeto upstream)** - fornece os arquivos de workflow principal
+- **FASE** - fornece versões localizadas em português
+
+Todos os arquivos são instalados no diretório `./.fase-ai/` da raiz do projeto.
 
 ## Uso em Desenvolvimento
 
-Ao desenvolver localmente com arquivos de comando fonte do FASE (`comandos/*.md`), você precisa ter arquivos de workflow disponíveis em `./.fase-ai/` para que o Claude Code carregue via blocos `<execution_context>`. Opções:
+Ao desenvolver localmente com arquivos de comando fonte do FASE (`comandos/*.md`), você precisa ter arquivos de workflow disponíveis em `./.fase-ai/`:
 
-1. **Symlink para instalação do GSD:**
-   ```bash
-   ln -s ~/.claude/fase ~/.fase
-   ```
-
-2. **Apontar para workflows de desenvolvimento:**
-   Se estiver trabalhando em workflows do GSD localmente, ajuste o symlink para apontar para seu diretório local `workflows/` do GSD
-
-3. **Instalar GSD primeiro:**
-   Certifique-se de que o GSD está instalado em seu ambiente de runtime antes de desenvolver comandos do FASE
+1. **Checkout do repositório inclui `.fase-ai/`** - A estrutura de diretório e arquivos são incluídos no repositório
+2. **Executar em contexto do projeto** - Todos os comandos devem ser executados da raiz do projeto
+3. **Referências relativas ao projeto** - Use caminhos `./.fase-ai/` relativos à raiz do projeto
 
 ## Consistência em Múltiplos Ambientes
 
-Todos os 32 comandos do FASE agora seguem a mesma convenção de caminho:
-- <i class="fa fa-check-circle"></i> 13 comandos com referências de workflow usam `@./.fase-ai/`
-- <i class="fa fa-check-circle"></i> 19 comandos sem referências externas (auto-contidos)
-- <i class="fa fa-check-circle"></i> Instalador converte corretamente caminhos para cada runtime
-- <i class="fa fa-check-circle"></i> OpenCode recebe caminhos corretamente formatados `~/.config/opencode/fase/`
+Todos os 34 comandos do FASE seguem a mesma convenção de caminho:
+- ✅ Todos os comandos usam caminhos `./.fase-ai/` relativos ao projeto
+- ✅ Sem dependências em variáveis de ambiente de caminho
+- ✅ Sem instalações globais na pasta home
+- ✅ Funcionam consistentemente em Claude Code, OpenCode, Gemini, Codex e Qwen
 
-Isso garante compatibilidade de comando em Claude Code, OpenCode, Gemini e Codex sem ramificação específica do ambiente na lógica do comando.
+Isso garante portabilidade de comando em todos os runtimes sem necessidade de ajustes específicos do ambiente.
