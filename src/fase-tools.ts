@@ -19,6 +19,7 @@ import * as milestone from './lib/milestone.js';
 import * as commands from './lib/commands.js';
 import * as init from './lib/init.js';
 import * as frontmatter from './lib/frontmatter.js';
+import { cmdWebsearch } from './lib/research.js';
 import {
   checkForUpdate,
   promptForUpdate,
@@ -537,7 +538,7 @@ async function main(): Promise<void> {
       const query = args[1];
       const limitIdx = args.indexOf('--limit');
       const freshnessIdx = args.indexOf('--freshness');
-      await commands.cmdWebsearch(
+      await cmdWebsearch(
         query,
         {
           limit: limitIdx !== -1 ? parseInt(args[limitIdx + 1], 10) : 10,

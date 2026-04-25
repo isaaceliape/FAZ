@@ -15,6 +15,16 @@ import {
 } from './core.js';
 import { extractFrontmatter, parseMustHavesBlock } from './frontmatter.js';
 import { writeStateMd } from './state.js';
+import {
+  requireParam,
+  resolveVerificationPath,
+  loadVerificationFile,
+  outputVerificationResult,
+  isValidCommitHash,
+  fileExists,
+  extractAtReferences,
+  extractBacktickReferences,
+} from './verification-utils.js';
 
 export function cmdVerifySummary(
   cwd: string,
@@ -121,11 +131,9 @@ export function cmdVerifySummary(
 }
 
 export function cmdVerifyPlanStructure(cwd: string, filePath: string, raw: boolean): void {
-  if (!filePath) {
-    error('caminho do arquivo obrigatório');
-  }
-  const fullPath = path.isAbsolute(filePath) ? filePath : path.join(cwd, filePath);
-  const content = safeReadFile(fullPath);
+  requireParam(filePath, 'caminho do arquivo');
+  const fullPath = resolveVerificationPath(cwd, filePath);
+  const content = loadVerificationFile(fullPath);
   if (!content) {
     output({ error: 'Arquivo não encontrado', path: filePath }, raw);
     return;
@@ -260,11 +268,9 @@ export function cmdVerifyPhaseCompleteness(cwd: string, phase: string, raw: bool
 }
 
 export function cmdVerifyReferences(cwd: string, filePath: string, raw: boolean): void {
-  if (!filePath) {
-    error('caminho do arquivo obrigatório');
-  }
-  const fullPath = path.isAbsolute(filePath) ? filePath : path.join(cwd, filePath);
-  const content = safeReadFile(fullPath);
+  requireParam(filePath, 'caminho do arquivo');
+  const fullPath = resolveVerificationPath(cwd, filePath);
+  const content = loadVerificationFile(fullPath);
   if (!content) {
     output({ error: 'Arquivo não encontrado', path: filePath }, raw);
     return;
@@ -273,41 +279,40 @@ export function cmdVerifyReferences(cwd: string, filePath: string, raw: boolean)
   const found: string[] = [];
   const missing: string[] = [];
 
-  const atRefs = content.match(/@([^\s\n,)]+\/[^\s\n,)]+)/g) || [];
+  // Check @ references
+  const atRefs = extractAtReferences(content);
   for (const ref of atRefs) {
-    const cleanRef = ref.slice(1);
-    const resolved = cleanRef.startsWith('~/')
-      ? path.join(process.env['HOME'] || '', cleanRef.slice(2))
-      : path.join(cwd, cleanRef);
-    if (fs.existsSync(resolved)) {
-      found.push(cleanRef);
+    const resolved = ref.startsWith('~/')
+      ? path.join(process.env['HOME'] || '', ref.slice(2))
+      : path.join(cwd, ref);
+    if (fileExists(resolved)) {
+      found.push(ref);
     } else {
-      missing.push(cleanRef);
+      missing.push(ref);
     }
   }
 
-  const backtickRefs = content.match(/`([^`]+\/[^`]+\.[a-zA-Z]{1,10})`/g) || [];
+  // Check backtick file references
+  const backtickRefs = extractBacktickReferences(content);
   for (const ref of backtickRefs) {
-    const cleanRef = ref.slice(1, -1);
-    if (cleanRef.startsWith('http') || cleanRef.includes('${') || cleanRef.includes('{{')) continue;
-    if (found.includes(cleanRef) || missing.includes(cleanRef)) continue;
-    const resolved = path.join(cwd, cleanRef);
-    if (fs.existsSync(resolved)) {
-      found.push(cleanRef);
+    if (found.includes(ref) || missing.includes(ref)) continue;
+    const resolved = path.join(cwd, ref);
+    if (fileExists(resolved)) {
+      found.push(ref);
     } else {
-      missing.push(cleanRef);
+      missing.push(ref);
     }
   }
 
-  output(
+  outputVerificationResult(
     {
       valid: missing.length === 0,
       found: found.length,
       missing,
       total: found.length + missing.length,
+      errors: [],
     },
-    raw,
-    missing.length === 0 ? 'valid' : 'invalid'
+    raw
   );
 }
 
@@ -319,23 +324,22 @@ export function cmdVerifyCommits(cwd: string, hashes: string[], raw: boolean): v
   const valid: string[] = [];
   const invalid: string[] = [];
   for (const hash of hashes) {
-    const result = execGit(cwd, ['cat-file', '-t', hash]);
-    if (result.exitCode === 0 && result.stdout.trim() === 'commit') {
+    if (isValidCommitHash(cwd, hash)) {
       valid.push(hash);
     } else {
       invalid.push(hash);
     }
   }
 
-  output(
+  outputVerificationResult(
     {
       all_valid: invalid.length === 0,
-      valid,
-      invalid,
+      valid_hashes: valid,
+      invalid_hashes: invalid,
       total: hashes.length,
+      errors: [],
     },
-    raw,
-    invalid.length === 0 ? 'valid' : 'invalid'
+    raw
   );
 }
 
@@ -347,11 +351,9 @@ interface ArtifactItem {
 }
 
 export function cmdVerifyArtifacts(cwd: string, planFilePath: string, raw: boolean): void {
-  if (!planFilePath) {
-    error('caminho do arquivo de plano obrigatório');
-  }
-  const fullPath = path.isAbsolute(planFilePath) ? planFilePath : path.join(cwd, planFilePath);
-  const content = safeReadFile(fullPath);
+  requireParam(planFilePath, 'caminho do arquivo de plano');
+  const fullPath = resolveVerificationPath(cwd, planFilePath);
+  const content = loadVerificationFile(fullPath);
   if (!content) {
     output({ error: 'Arquivo não encontrado', path: planFilePath }, raw);
     return;
@@ -422,11 +424,9 @@ interface KeyLinkItem {
 }
 
 export function cmdVerifyKeyLinks(cwd: string, planFilePath: string, raw: boolean): void {
-  if (!planFilePath) {
-    error('caminho do arquivo de plano obrigatório');
-  }
-  const fullPath = path.isAbsolute(planFilePath) ? planFilePath : path.join(cwd, planFilePath);
-  const content = safeReadFile(fullPath);
+  requireParam(planFilePath, 'caminho do arquivo de plano');
+  const fullPath = resolveVerificationPath(cwd, planFilePath);
+  const content = loadVerificationFile(fullPath);
   if (!content) {
     output({ error: 'Arquivo não encontrado', path: planFilePath }, raw);
     return;

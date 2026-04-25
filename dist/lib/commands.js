@@ -1,5 +1,12 @@
 /**
- * Commands — Standalone utility commands
+ * Commands — CLI command handlers for fase-tools dispatcher
+ *
+ * This module contains synchronous CLI command handlers that output JSON
+ * for AI agents. Each function corresponds to a command in fase-tools.ts.
+ *
+ * Async commands (websearch) are in research.ts.
+ *
+ * @module lib/commands
  */
 import fs from 'fs';
 import path from 'path';
@@ -338,56 +345,6 @@ export function cmdSummaryExtract(cwd, summaryPath, fields, raw) {
         return;
     }
     output(fullResult, raw);
-}
-export async function cmdWebsearch(query, options, raw) {
-    const apiKey = process.env['BRAVE_API_KEY'];
-    if (!apiKey) {
-        // No key = silent skip, agent falls back to built-in WebSearch
-        output({ available: false, reason: 'BRAVE_API_KEY not set' }, raw, '');
-        return;
-    }
-    if (!query) {
-        output({ available: false, error: 'Busca obrigatória' }, raw, '');
-        return;
-    }
-    const params = new URLSearchParams({
-        q: query,
-        count: String(options.limit || 10),
-        country: 'us',
-        search_lang: 'en',
-        text_decorations: 'false',
-    });
-    if (options.freshness) {
-        params.set('freshness', options.freshness);
-    }
-    try {
-        const response = await fetch(`https://api.search.brave.com/res/v1/web/search?${params}`, {
-            headers: {
-                Accept: 'application/json',
-                'X-Subscription-Token': apiKey,
-            },
-        });
-        if (!response.ok) {
-            output({ available: false, error: `Erro da API: ${response.status}` }, raw, '');
-            return;
-        }
-        const data = (await response.json());
-        const results = (data.web?.results || []).map((r) => ({
-            title: r.title,
-            url: r.url,
-            description: r.description,
-            age: r.age || null,
-        }));
-        output({
-            available: true,
-            query,
-            count: results.length,
-            results,
-        }, raw, results.map((r) => `${r.title}\n${r.url}\n${r.description}`).join('\n\n'));
-    }
-    catch (err) {
-        output({ available: false, error: err.message }, raw, '');
-    }
 }
 export function cmdProgressRender(cwd, format, raw) {
     const etapasDir = path.join(cwd, '.fase-ai', 'etapas');

@@ -21,11 +21,6 @@ export declare function cmdHistoryDigest(cwd: string, raw: boolean): void;
 export declare function cmdResolveModel(cwd: string, agentType: string, raw: boolean): void;
 export declare function cmdCommit(cwd: string, message: string, files: string[], raw: boolean, amend: boolean): void;
 export declare function cmdSummaryExtract(cwd: string, summaryPath: string, fields: string[], raw: boolean): void;
-interface WebsearchOptions {
-    limit?: number;
-    freshness?: string;
-}
-export declare function cmdWebsearch(query: string, options: WebsearchOptions, raw: boolean): Promise<void>;
 export declare function cmdProgressRender(cwd: string, format: string, raw: boolean): void;
 export declare function cmdTodoComplete(cwd: string, filename: string, raw: boolean): void;
 interface ScaffoldOptions {

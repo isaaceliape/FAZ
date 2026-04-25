@@ -36,20 +36,10 @@ const AGENT_SECTION = '[agents';
 // Enable test exports from install.js (skips main CLI logic)
 process.env.FASE_TEST_MODE = '1';
 
-// Import from ES module using dynamic import
-const installModule = require('../../dist/install.js');
-const faseExports = globalThis.FASE_TEST_EXPORTS || {
-  getCodexSkillAdapterHeader: () => {},
-  convertClaudeAgentToCodexAgent: () => {},
-  generateCodexAgentToml: () => {},
-  generateCodexConfigBlock: () => {},
-  stripGsdFromCodexConfig: () => {},
-  mergeCodexConfig: () => {},
-  fixTomlEscaping: () => {},
-  FASE_CODEX_MARKER: '',
-  CODEX_AGENT_SANDBOX: {},
-};
+// Import from ES module - exports are set on globalThis
+require('../../dist/install.js');
 
+// Get exports from globalThis (ES module fallback)
 const {
   getCodexSkillAdapterHeader,
   convertClaudeAgentToCodexAgent,
@@ -60,7 +50,7 @@ const {
   fixTomlEscaping,
   FASE_CODEX_MARKER,
   CODEX_AGENT_SANDBOX,
-} = faseExports;
+} = globalThis;
 
 // ─── getCodexSkillAdapterHeader ─────────────────────────────────────────────────
 

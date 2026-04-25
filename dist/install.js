@@ -8,7 +8,7 @@ import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { checkAndPromptForUpdate } from './lib/version-check.js';
 import { safeJsonParse as helperSafeJsonParse } from './install/helpers.js';
-import { convertClaudeToQwenCommand, convertClaudeToCopilotCommand, } from './install/frontmatter-convert.js';
+import { getConverter } from './lib/converters/index.js';
 import { ValidationError, InstallationError, isFaseError } from './lib/errors.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -195,38 +195,7 @@ catch (err) {
 }
 const hasHelp = args.includes('--help') || args.includes('-h');
 const forceStatusline = args.includes('--force-statusline');
-console.log(banner);
-// Run verification if --verificar-instalacao flag is provided
-if (hasVerificar) {
-    try {
-        const scriptPath = path.join(__dirname, 'verificar-instalacao.js');
-        execSync(`node "${scriptPath}"`, { stdio: 'inherit' });
-    }
-    catch (e) {
-        const err = e;
-        // Verification script already output errors, just exit with its code
-        process.exit(err.status || 1);
-    }
-}
-// Show help if requested
-if (hasHelp) {
-    console.log(`  ${yellow}Uso:${reset} npx fase-ai [opções]\n\n  ${yellow}Opções:${reset}\n    ${cyan}--claude${reset}                  Instalar apenas para Claude Code\n    ${cyan}--opencode${reset}                Instalar apenas para OpenCode\n    ${cyan}--gemini${reset}                  Instalar apenas para Gemini\n    ${cyan}--codex${reset}                   Instalar apenas para Codex\n    ${cyan}--copilot${reset}          Instalar apenas para GitHub Copilot\n    ${cyan}--qwen${reset}                    Instalar apenas para Qwen Code\n    ${cyan}--all${reset}                     Instalar para todos os runtimes\n    ${cyan}-u, --uninstall${reset}           Desinstalar o FASE (remover todos os arquivos)\n    ${cyan}--atualizar${reset}               Atualizar FASE: detecta runtimes instalados e reinstala\n    ${cyan}-v, --verificar${reset}           Verificar instalação e gerar relatório\n    ${cyan}-c, --config-dir <caminho>${reset} Especificar diretório de configuração customizado\n    ${cyan}-h, --help${reset}                Exibir esta mensagem de ajuda\n    ${cyan}--force-statusline${reset}        Substituir configuração de statusline existente
-    ${cyan}--auto-detect${reset}             Modo automático: detecta runtimes e usa configuração do projeto\n\n  ${yellow}Exemplos:${reset}\n    ${dim}# Instalação interativa (solicita runtime)${reset}\n    npx fase-ai\n\n    ${dim}# Instalar para Claude Code${reset}\n    npx fase-ai --claude\n\n    ${dim}# Instalar para OpenCode${reset}\n    npx fase-ai --opencode\n\n    ${dim}# Instalar para Gemini${reset}\n    npx fase-ai --gemini\n\n    ${dim}# Instalar para Codex${reset}\n    npx fase-ai --codex\n\n    ${dim}# Instalar para GitHub Copilot${reset}\n    npx fase-ai --copilot\n\n    ${dim}# Instalar para Qwen Code${reset}\n    npx fase-ai --qwen\n\n    ${dim}# Instalar para todos os runtimes${reset}
-    npx fase-ai --all
-
-    ${dim}# Instalação automática (para package.json postinstall)${reset}\n    npx fase-ai --auto-detect\n\n    ${dim}# Atualizar runtimes instalados${reset}\n    npx fase-ai --atualizar\n\n    ${dim}# Atualizar um runtime específico${reset}\n    npx fase-ai --claude --atualizar\n\n    ${dim}# Verificar instalação${reset}\n    npx fase-ai --verificar\n\n    ${dim}# Desinstalação interativa (solicita confirma)${reset}\n    npx fase-ai --uninstall\n\n    ${dim}# Desinstalar do GitHub Copilot${reset}\n    npx fase-ai --copilot --uninstall\n\n    ${dim}# Desinstalar do Codex${reset}\n    npx fase-ai --codex --uninstall\n\n    ${dim}# Desinstalar do OpenCode${reset}\n    npx fase-ai --opencode --uninstall\n\n    ${dim}# Desinstalar do Qwen Code${reset}\n    npx fase-ai --qwen --uninstall\n\n  ${yellow}Notas:${reset}\n    A opção --config-dir é útil quando você tem múltiplas configurações.\n    Tem prioridade sobre as variáveis de ambiente CLAUDE_CONFIG_DIR / GEMINI_CONFIG_DIR / CODEX_HOME / COPILOT_CONFIG_DIR / QWEN_CONFIG_DIR.\n    Use ${cyan}--uninstall${reset} sem localização para um processo interativo seguro.\n    Use ${cyan}--atualizar${reset} para re-instalar mantendo configurações existentes.
-    Use ${cyan}--auto-detect${reset} para instalação via npm postinstall (package.json).\n`);
-    process.exit(0);
-}
-/**
- * Expand ~ to home directory (shell doesn't expand in env vars passed to node)
- */
-function expandTilde(filePath) {
-    if (filePath && filePath.startsWith('~/')) {
-        return path.join(os.homedir(), filePath.slice(2));
-    }
-    return filePath;
-}
+// NOTE: Banner and CLI side effects moved to end of file (inside FASE_TEST_MODE else block)
 /**
  * Read and parse settings.json, returning empty object if it doesn't exist
  */
@@ -417,85 +386,7 @@ function processAttribution(content, attribution) {
  * @param {string} content - Markdown file content with YAML frontmatter
  * @returns {string} - Content with converted frontmatter
  */
-// Color name to hex mapping for opencode compatibility
-const colorNameToHex = {
-    cyan: '#00FFFF',
-    red: '#FF0000',
-    green: '#00FF00',
-    blue: '#0000FF',
-    yellow: '#FFFF00',
-    magenta: '#FF00FF',
-    orange: '#FFA500',
-    purple: '#800080',
-    pink: '#FFC0CB',
-    white: '#FFFFFF',
-    black: '#000000',
-    gray: '#808080',
-    grey: '#808080',
-};
-// Tool name mapping from Claude Code to OpenCode
-// OpenCode uses lowercase tool names; special mappings for renamed tools
-const claudeToOpencodeTools = {
-    AskUserQuestion: 'question',
-    SlashCommand: 'skill',
-    TodoWrite: 'todowrite',
-    WebFetch: 'webfetch',
-    WebSearch: 'websearch', // Plugin/MCP - keep for compatibility
-};
-// Tool name mapping from Claude Code to Gemini CLI
-// Gemini CLI uses snake_case built-in tool names
-const claudeToGeminiTools = {
-    Read: 'read_file',
-    Write: 'write_file',
-    Edit: 'replace',
-    Bash: 'run_shell_command',
-    Glob: 'glob',
-    Grep: 'search_file_content',
-    WebSearch: 'google_web_search',
-    WebFetch: 'web_fetch',
-    TodoWrite: 'write_todos',
-    AskUserQuestion: 'ask_user',
-};
-/**
- * Convert a Claude Code tool name to OpenCode format
- * - Applies special mappings (AskUserQuestion -> question, etc.)
- * - Converts to lowercase (except MCP tools which keep their format)
- */
-function convertToolName(claudeTool) {
-    // Check for special mapping first
-    if (claudeToOpencodeTools[claudeTool]) {
-        return claudeToOpencodeTools[claudeTool];
-    }
-    // MCP tools (mcp__*) keep their format
-    if (claudeTool.startsWith('mcp__')) {
-        return claudeTool;
-    }
-    // Default: convert to lowercase
-    return claudeTool.toLowerCase();
-}
-/**
- * Convert a Claude Code tool name to Gemini CLI format
- * - Applies Claude→Gemini mapping (Read→read_file, Bash→run_shell_command, etc.)
- * - Filters out MCP tools (mcp__*) — they are auto-discovered at runtime in Gemini
- * - Filters out Task — agents are auto-registered as tools in Gemini
- * @returns Gemini tool name, or null if tool should be excluded
- */
-function convertGeminiToolName(claudeTool) {
-    // MCP tools: exclude — auto-discovered from mcpServers config at runtime
-    if (claudeTool.startsWith('mcp__')) {
-        return null;
-    }
-    // Task: exclude — agents are auto-registered as callable tools
-    if (claudeTool === 'Task') {
-        return null;
-    }
-    // Check for explicit mapping
-    if (claudeToGeminiTools[claudeTool]) {
-        return claudeToGeminiTools[claudeTool];
-    }
-    // Default: lowercase
-    return claudeTool.toLowerCase();
-}
+// Utility functions for Codex special case (per-agent .toml generation)
 function toSingleLine(value) {
     return value.replace(/\s+/g, ' ').trim();
 }
@@ -615,7 +506,8 @@ function fixTomlEscaping(content) {
     fixed = fixed.replace(/\\`/g, '\\\\`');
     // Fix grep patterns: \| becomes | (pipes don't need escaping in grep -E)
     // This handles patterns like: grep -E "export\|interface" or grep -r "import.*stripe\|import.*supabase"
-    fixed = fixed.replace(/\\|/g, '|');
+    // Note: Must escape the pipe character in regex since | is alternation operator
+    fixed = fixed.replace(/\\\|/g, '|');
     return fixed;
 }
 /**
@@ -787,260 +679,7 @@ function installCodexConfig(targetDir, agentsSrc) {
     return agents.length;
 }
 /**
- * Strip HTML <sub> tags for Gemini CLI output
- * Terminals don't support subscript — Gemini renders these as raw HTML.
- * Converts <sub>text</sub> to italic *(text)* for readable terminal output.
- */
-function stripSubTags(content) {
-    return content.replace(/<sub>(.*?)<\/sub>/g, '*($1)*');
-}
-/**
- * Convert Claude Code agent frontmatter to Gemini CLI format
- * Gemini agents use .md files with YAML frontmatter, same as Claude,
- * but with different field names and formats:
- * - tools: must be a YAML array (not comma-separated string)
- * - tool names: must use Gemini built-in names (read_file, not Read)
- * - color: must be removed (causes validation error)
- * - mcp__* tools: must be excluded (auto-discovered at runtime)
- */
-function convertClaudeToGeminiAgent(content) {
-    if (!content.startsWith('---'))
-        return content;
-    const endIndex = content.indexOf('---', 3);
-    if (endIndex === -1)
-        return content;
-    const frontmatter = content.substring(3, endIndex).trim();
-    const body = content.substring(endIndex + 3);
-    const lines = frontmatter.split('\n');
-    const newLines = [];
-    let inAllowedTools = false;
-    let inSkills = false;
-    const tools = [];
-    for (const line of lines) {
-        const trimmed = line.trim();
-        // Skip skills section entirely (not supported by Gemini)
-        if (trimmed.startsWith('skills:')) {
-            inSkills = true;
-            continue;
-        }
-        // Handle indented lines under skills
-        if (inSkills) {
-            if (trimmed.startsWith('- ') || (trimmed && line.startsWith('  '))) {
-                continue;
-            }
-            else if (trimmed) {
-                inSkills = false;
-            }
-        }
-        // Normalize agent name to valid slug (lowercase, no accents)
-        if (trimmed.startsWith('name:')) {
-            const nameValue = trimmed.substring(5).trim();
-            // Convert to lowercase and remove accents
-            const normalized = nameValue
-                .toLowerCase()
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '');
-            newLines.push(`name: ${normalized}`);
-            continue;
-        }
-        // Convert allowed-tools YAML array to tools list
-        if (trimmed.startsWith('allowed-tools:')) {
-            inAllowedTools = true;
-            continue;
-        }
-        // Handle inline tools: field (comma-separated string)
-        if (trimmed.startsWith('tools:')) {
-            const toolsValue = trimmed.substring(6).trim();
-            if (toolsValue) {
-                const parsed = toolsValue
-                    .split(',')
-                    .map((t) => t.trim())
-                    .filter((t) => t);
-                for (const t of parsed) {
-                    const mapped = convertGeminiToolName(t);
-                    if (mapped)
-                        tools.push(mapped);
-                }
-            }
-            else {
-                // tools: with no value means YAML array follows
-                inAllowedTools = true;
-            }
-            continue;
-        }
-        // Strip color field (not supported by Gemini CLI, causes validation error)
-        if (trimmed.startsWith('color:'))
-            continue;
-        // Collect allowed-tools/tools array items
-        if (inAllowedTools) {
-            if (trimmed.startsWith('- ')) {
-                const mapped = convertGeminiToolName(trimmed.substring(2).trim());
-                if (mapped)
-                    tools.push(mapped);
-                continue;
-            }
-            else if (trimmed && !trimmed.startsWith('-')) {
-                inAllowedTools = false;
-            }
-        }
-        if (!inAllowedTools && !inSkills) {
-            newLines.push(line);
-        }
-    }
-    // Add tools as YAML array (Gemini requires array format)
-    if (tools.length > 0) {
-        newLines.push('tools:');
-        for (const tool of tools) {
-            newLines.push(`  - ${tool}`);
-        }
-    }
-    const newFrontmatter = newLines.join('\n').trim();
-    // Escape ${VAR} patterns in agent body for Gemini CLI compatibility.
-    // Gemini's templateString() treats all ${word} patterns as template variables
-    // and throws "Template validation failed: Missing required input parameters"
-    // when they can't be resolved. FASE agents use ${PHASE}, ${PLAN}, etc. as
-    // shell variables in bash code blocks — convert to $VAR (no braces) which
-    // is equivalent bash and invisible to Gemini's /\$\{(\w+)\}/g regex.
-    const escapedBody = body.replace(/\$\{(\w+)\}/g, '$$$1');
-    return `---\n${newFrontmatter}\n---${stripSubTags(escapedBody)}`;
-}
-function convertClaudeToOpencodeFrontmatter(content) {
-    // Replace tool name references in content (applies to all files)
-    let convertedContent = content;
-    convertedContent = convertedContent.replace(/\bAskUserQuestion\b/g, 'question');
-    convertedContent = convertedContent.replace(/\bSlashCommand\b/g, 'skill');
-    convertedContent = convertedContent.replace(/\bTodoWrite\b/g, 'todowrite');
-    // Replace /fase:command with /fase-command for opencode (flat command structure)
-    convertedContent = convertedContent.replace(/\/fase:/g, '/fase-');
-    // Replace .claude and .fase references with OpenCode's project-local location
-    convertedContent = convertedContent.replace(/~\/\.claude\b/g, '.opencode');
-    convertedContent = convertedContent.replace(/\$HOME\/\.claude\b/g, '.opencode');
-    // Replace ~/.fase and $HOME/.fase with OpenCode's project-local location
-    convertedContent = convertedContent.replace(/~\/\.fase\b/g, '.opencode/fase');
-    convertedContent = convertedContent.replace(/\$HOME\/\.fase\b/g, '.opencode/fase');
-    // Replace general-purpose subagent type with OpenCode's equivalent "general"
-    convertedContent = convertedContent.replace(/subagent_type="general-purpose"/g, 'subagent_type="general"');
-    // Check if content has frontmatter
-    if (!convertedContent.startsWith('---')) {
-        return convertedContent;
-    }
-    // Find the end of frontmatter
-    const endIndex = convertedContent.indexOf('---', 3);
-    if (endIndex === -1) {
-        return convertedContent;
-    }
-    const frontmatter = convertedContent.substring(3, endIndex).trim();
-    const body = convertedContent.substring(endIndex + 3);
-    // Parse frontmatter line by line (simple YAML parsing)
-    const lines = frontmatter.split('\n');
-    const newLines = [];
-    let inAllowedTools = false;
-    const allowedTools = [];
-    for (const line of lines) {
-        const trimmed = line.trim();
-        // Detect start of allowed-tools array
-        if (trimmed.startsWith('allowed-tools:')) {
-            inAllowedTools = true;
-            continue;
-        }
-        // Detect inline tools: field (comma-separated string)
-        if (trimmed.startsWith('tools:')) {
-            const toolsValue = trimmed.substring(6).trim();
-            if (toolsValue) {
-                // Parse comma-separated tools
-                const tools = toolsValue
-                    .split(',')
-                    .map((t) => t.trim())
-                    .filter((t) => t);
-                allowedTools.push(...tools);
-            }
-            continue;
-        }
-        // Remove name: field - opencode uses filename for command name
-        if (trimmed.startsWith('name:')) {
-            continue;
-        }
-        // Convert color names to hex for opencode
-        if (trimmed.startsWith('color:')) {
-            const colorValue = trimmed.substring(6).trim().toLowerCase();
-            const hexColor = colorNameToHex[colorValue];
-            if (hexColor) {
-                newLines.push(`color: "${hexColor}"`);
-            }
-            else if (colorValue.startsWith('#')) {
-                // Validate hex color format (#RGB or #RRGGBB)
-                if (/^#[0-9a-f]{3}$|^#[0-9a-f]{6}$/i.test(colorValue)) {
-                    // Already hex and valid, keep as is
-                    newLines.push(line);
-                }
-                // Skip invalid hex colors
-            }
-            // Skip unknown color names
-            continue;
-        }
-        // Collect allowed-tools items
-        if (inAllowedTools) {
-            if (trimmed.startsWith('- ')) {
-                allowedTools.push(trimmed.substring(2).trim());
-                continue;
-            }
-            else if (trimmed && !trimmed.startsWith('-')) {
-                // End of array, new field started
-                inAllowedTools = false;
-            }
-        }
-        // Keep other fields (including name: which opencode ignores)
-        if (!inAllowedTools) {
-            newLines.push(line);
-        }
-    }
-    // Add tools object if we had allowed-tools or tools
-    if (allowedTools.length > 0) {
-        newLines.push('tools:');
-        for (const tool of allowedTools) {
-            newLines.push(`  ${convertToolName(tool)}: true`);
-        }
-    }
-    // Rebuild frontmatter (body already has tool names converted)
-    const newFrontmatter = newLines.join('\n').trim();
-    return `---\n${newFrontmatter}\n---${body}`;
-}
-/**
- * Convert Claude Code markdown command to Gemini TOML format
- * @param {string} content - Markdown file content with YAML frontmatter
- * @returns {string} - TOML content
- */
-function convertClaudeToGeminiToml(content) {
-    // Check if content has frontmatter
-    if (!content.startsWith('---')) {
-        return `prompt = ${JSON.stringify(content)}\n`;
-    }
-    const endIndex = content.indexOf('---', 3);
-    if (endIndex === -1) {
-        return `prompt = ${JSON.stringify(content)}\n`;
-    }
-    const frontmatter = content.substring(3, endIndex).trim();
-    const body = content.substring(endIndex + 3).trim();
-    // Extract description from frontmatter
-    let description = '';
-    const lines = frontmatter.split('\n');
-    for (const line of lines) {
-        const trimmed = line.trim();
-        if (trimmed.startsWith('description:')) {
-            description = trimmed.substring(12).trim();
-            break;
-        }
-    }
-    // Construct TOML
-    let toml = '';
-    if (description) {
-        toml += `description = ${JSON.stringify(description)}\n`;
-    }
-    toml += `prompt = ${JSON.stringify(body)}\n`;
-    return toml;
-}
-/**
- * Copy commands to a flat structure for OpenCode
+ * Copy commands to a flat structure for OpenCode, Copilot, Qwen
  * OpenCode expects: command/fase-help.md (invoked as /fase-help)
  * Source structure: bin/comandos/help.md
  *
@@ -1048,7 +687,7 @@ function convertClaudeToGeminiToml(content) {
  * @param {string} destDir - Destination directory (e.g., command/)
  * @param {string} prefix - Prefix for filenames (e.g., 'fase')
  * @param {string} pathPrefix - Path prefix for file references
- * @param {string} runtime - Target runtime ('claude' or 'opencode')
+ * @param {string} runtime - Target runtime ('opencode', 'copilot', 'qwen')
  */
 function copyFlattenedCommands(srcDir, destDir, prefix, pathPrefix, runtime) {
     if (!fs.existsSync(srcDir)) {
@@ -1065,6 +704,9 @@ function copyFlattenedCommands(srcDir, destDir, prefix, pathPrefix, runtime) {
     else {
         fs.mkdirSync(destDir, { recursive: true });
     }
+    // Get converter for this runtime
+    const converter = getConverter(runtime);
+    const conversionContext = { cwd: process.cwd(), pathPrefix };
     const entries = fs.readdirSync(srcDir, { withFileTypes: true });
     for (const entry of entries) {
         const srcPath = path.join(srcDir, entry.name);
@@ -1074,36 +716,15 @@ function copyFlattenedCommands(srcDir, destDir, prefix, pathPrefix, runtime) {
             copyFlattenedCommands(srcPath, destDir, `${prefix}-${entry.name}`, pathPrefix, runtime);
         }
         else if (entry.name.endsWith('.md')) {
-            // Flatten: help.md -> fase-help.md
-            const baseName = entry.name.replace('.md', '');
-            const destName = `${prefix}-${baseName}.md`;
-            const destPath = path.join(destDir, destName);
+            // Read content
             let content = fs.readFileSync(srcPath, 'utf8');
-            const globalClaudeRegex = /~\/\.claude\//g;
-            const globalClaudeHomeRegex = /\$HOME\/\.claude\//g;
-            const localClaudeRegex = /\.\/\.claude\//g;
-            const opencodeDirRegex = /~\/\.opencode\//g;
-            const globalFaseRegex = /~\/\.fase\//g;
-            const globalFaseHomeRegex = /\$HOME\/\.fase\//g;
-            const sharedHomePath = '$HOME/.fase-ai/';
-            content = content.replace(globalClaudeRegex, pathPrefix);
-            content = content.replace(globalClaudeHomeRegex, toHomePrefix(pathPrefix));
-            content = content.replace(localClaudeRegex, `./${getDirName(runtime)}/`);
-            content = content.replace(opencodeDirRegex, pathPrefix);
-            content = content.replace(globalFaseRegex, pathPrefix);
-            content = content.replace(globalFaseHomeRegex, sharedHomePath);
+            // Apply attribution (optional utility)
             content = processAttribution(content, getCommitAttribution(runtime));
-            // Convert frontmatter based on runtime
-            if (runtime === 'qwen') {
-                content = convertClaudeToQwenCommand(content);
-            }
-            else if (runtime === 'copilot') {
-                content = convertClaudeToCopilotCommand(content);
-            }
-            else {
-                content = convertClaudeToOpencodeFrontmatter(content);
-            }
-            fs.writeFileSync(destPath, content);
+            // Convert using provider converter (handles flattening)
+            const converted = converter.convertCommand(content, entry.name, conversionContext);
+            // Use the flattened filename from the converter
+            const destPath = path.join(destDir, converted.filename);
+            fs.writeFileSync(destPath, converted.content);
         }
     }
 }
@@ -1129,6 +750,9 @@ function copyCommandsAsCodexSkills(srcDir, skillsDir, prefix, pathPrefix, runtim
             fs.rmSync(path.join(skillsDir, entry.name), { recursive: true });
         }
     }
+    // Get converter for this runtime (Codex)
+    const converter = getConverter(runtime);
+    const conversionContext = { cwd: process.cwd(), pathPrefix };
     function recurse(currentSrcDir, currentPrefix) {
         const entries = fs.readdirSync(currentSrcDir, { withFileTypes: true });
         for (const entry of entries) {
@@ -1140,27 +764,16 @@ function copyCommandsAsCodexSkills(srcDir, skillsDir, prefix, pathPrefix, runtim
             if (!entry.name.endsWith('.md')) {
                 continue;
             }
-            const baseName = entry.name.replace('.md', '');
-            const skillName = `${currentPrefix}-${baseName}`;
-            const skillDir = path.join(skillsDir, skillName);
-            fs.mkdirSync(skillDir, { recursive: true });
+            // Read content
             let content = fs.readFileSync(srcPath, 'utf8');
-            const globalClaudeRegex = /~\/\.claude\//g;
-            const globalClaudeHomeRegex = /\$HOME\/\.claude\//g;
-            const localClaudeRegex = /\.\/\.claude\//g;
-            const codexDirRegex = /~\/\.codex\//g;
-            const globalFaseRegex = /~\/\.fase\//g;
-            const globalFaseHomeRegex = /\$HOME\/\.fase\//g;
-            const sharedHomePath = '$HOME/.fase-ai/';
-            content = content.replace(globalClaudeRegex, pathPrefix);
-            content = content.replace(globalClaudeHomeRegex, toHomePrefix(pathPrefix));
-            content = content.replace(localClaudeRegex, `./${getDirName(runtime)}/`);
-            content = content.replace(codexDirRegex, pathPrefix);
-            content = content.replace(globalFaseRegex, pathPrefix);
-            content = content.replace(globalFaseHomeRegex, sharedHomePath);
+            // Apply attribution (optional utility)
             content = processAttribution(content, getCommitAttribution(runtime));
-            content = convertClaudeCommandToCodexSkill(content, skillName);
-            fs.writeFileSync(path.join(skillDir, 'SKILL.md'), content);
+            // Convert using Codex converter (returns skill directory name and SKILL.md content)
+            const converted = converter.convertCommand(content, entry.name, conversionContext);
+            // Create skill directory and write SKILL.md
+            const skillDir = path.join(skillsDir, converted.filename);
+            fs.mkdirSync(skillDir, { recursive: true });
+            fs.writeFileSync(path.join(skillDir, 'SKILL.md'), converted.content);
         }
     }
     recurse(srcDir, prefix);
@@ -1174,14 +787,14 @@ function copyCommandsAsCodexSkills(srcDir, skillsDir, prefix, pathPrefix, runtim
  * @param {string} runtime - Target runtime ('claude', 'opencode', 'gemini', 'codex')
  */
 function copyWithPathReplacement(srcDir, destDir, pathPrefix, runtime, isCommand = false) {
-    const isOpencode = runtime === 'opencode';
-    const isCodex = runtime === 'codex';
-    const dirName = getDirName(runtime);
     // Clean install: remove existing destination to prevent orphaned files
     if (fs.existsSync(destDir)) {
         fs.rmSync(destDir, { recursive: true });
     }
     fs.mkdirSync(destDir, { recursive: true });
+    // Get converter for this runtime
+    const converter = getConverter(runtime);
+    const conversionContext = { cwd: process.cwd(), pathPrefix };
     const entries = fs.readdirSync(srcDir, { withFileTypes: true });
     for (const entry of entries) {
         const srcPath = path.join(srcDir, entry.name);
@@ -1190,48 +803,18 @@ function copyWithPathReplacement(srcDir, destDir, pathPrefix, runtime, isCommand
             copyWithPathReplacement(srcPath, destPath, pathPrefix, runtime, isCommand);
         }
         else if (entry.name.endsWith('.md')) {
-            // Replace .claude/ references with runtime-appropriate paths
+            // Read content
             let content = fs.readFileSync(srcPath, 'utf8');
-            const globalClaudeRegex = /~\/\.claude\//g;
-            const globalClaudeHomeRegex = /\$HOME\/\.claude\//g;
-            const localClaudeRegex = /\.\/\.claude\//g;
-            const globalFaseRegex = /~\/\.fase\//g;
-            const globalFaseHomeRegex = /\$HOME\/\.fase\//g;
-            const sharedHomePath = '$HOME/.fase-ai/';
-            content = content.replace(globalClaudeRegex, pathPrefix);
-            content = content.replace(globalClaudeHomeRegex, toHomePrefix(pathPrefix));
-            content = content.replace(localClaudeRegex, `./${dirName}/`);
-            content = content.replace(globalFaseRegex, pathPrefix);
-            content = content.replace(globalFaseHomeRegex, sharedHomePath);
+            // Apply attribution (optional utility)
             content = processAttribution(content, getCommitAttribution(runtime));
-            // Convert frontmatter for runtime compatibility
-            if (isOpencode) {
-                content = convertClaudeToOpencodeFrontmatter(content);
-                fs.writeFileSync(destPath, content);
-            }
-            else if (runtime === 'copilot') {
-                content = convertClaudeToCopilotCommand(content);
-                fs.writeFileSync(destPath, content);
-            }
-            else if (runtime === 'gemini') {
-                if (isCommand) {
-                    // Convert to TOML for Gemini (strip <sub> tags — terminals can't render subscript)
-                    content = stripSubTags(content);
-                    const tomlContent = convertClaudeToGeminiToml(content);
-                    // Replace extension with .toml
-                    const tomlPath = destPath.replace(/\.md$/, '.toml');
-                    fs.writeFileSync(tomlPath, tomlContent);
-                }
-                else {
-                    fs.writeFileSync(destPath, content);
-                }
-            }
-            else if (isCodex) {
-                content = convertClaudeToCodexMarkdown(content);
-                fs.writeFileSync(destPath, content);
+            // Convert using provider converter
+            if (isCommand) {
+                const converted = converter.convertCommand(content, entry.name, conversionContext);
+                fs.writeFileSync(destPath, converted.content);
             }
             else {
-                fs.writeFileSync(destPath, content);
+                const converted = converter.convertAgent(content, conversionContext);
+                fs.writeFileSync(destPath, converted.content);
             }
         }
         else {
@@ -2136,39 +1719,19 @@ function install(runtime = 'claude') {
                 }
             }
         }
+        // Get converter for this runtime
+        const converter = getConverter(runtime);
+        const conversionContext = { cwd: process.cwd(), pathPrefix };
         // Copy new agents
         const agentEntries = fs.readdirSync(agentsSrc, { withFileTypes: true });
         for (const entry of agentEntries) {
             if (entry.isFile() && entry.name.endsWith('.md')) {
                 let content = fs.readFileSync(path.join(agentsSrc, entry.name), 'utf8');
-                // Replace .claude/ and .fase/ references with project-local paths
-                const dirRegex = /~\/\.claude\//g;
-                const homeDirRegex = /\$HOME\/\.claude\//g;
-                const globalFaseRegex = /~\/\.fase\//g;
-                const globalFaseHomeRegex = /\$HOME\/\.fase\//g;
-                const sharedHomePath = '$HOME/.fase-ai/';
-                content = content.replace(dirRegex, pathPrefix);
-                content = content.replace(homeDirRegex, toHomePrefix(pathPrefix));
-                content = content.replace(globalFaseRegex, pathPrefix);
-                content = content.replace(globalFaseHomeRegex, sharedHomePath);
+                // Apply attribution (optional utility)
                 content = processAttribution(content, getCommitAttribution(runtime));
-                // Convert frontmatter for runtime compatibility
-                if (isOpencode) {
-                    content = convertClaudeToOpencodeFrontmatter(content);
-                }
-                else if (isCopilot) {
-                    content = convertClaudeToCopilotCommand(content);
-                }
-                else if (isGemini) {
-                    content = convertClaudeToGeminiAgent(content);
-                }
-                else if (isCodex) {
-                    content = convertClaudeAgentToCodexAgent(content);
-                }
-                else if (isQwen) {
-                    content = convertClaudeToQwenCommand(content);
-                }
-                fs.writeFileSync(path.join(agentsDest, entry.name), content);
+                // Convert using provider converter
+                const converted = converter.convertAgent(content, conversionContext);
+                fs.writeFileSync(path.join(agentsDest, entry.name), converted.content);
             }
         }
         if (verifyInstalled(agentsDest, 'agents')) {
@@ -2831,6 +2394,7 @@ if (process.env.FASE_TEST_MODE) {
         mergeCodexConfig,
         installCodexConfig,
         convertClaudeCommandToCodexSkill,
+        fixTomlEscaping,
         FASE_CODEX_MARKER,
         CODEX_AGENT_SANDBOX,
         // Auto-detect mode exports
@@ -2841,18 +2405,36 @@ if (process.env.FASE_TEST_MODE) {
         getLocalDir,
         getCommitAttribution,
     };
-    // Try CommonJS first, fallback to ES module export
-    try {
-        // @ts-ignore
-        module.exports = testExports;
-    }
-    catch {
-        // ES module context - export individually
-        Object.assign(globalThis, testExports);
-    }
+    // ES module context - export on globalThis for test access
+    Object.assign(globalThis, testExports);
 }
 else {
-    // Main logic
+    // ─── CLI Side Effects (only run when NOT in test mode) ────────────────────────
+    // Print banner
+    console.log(banner);
+    // Run verification if --verificar-instalacao flag is provided
+    if (hasVerificar) {
+        try {
+            const scriptPath = path.join(__dirname, 'verificar-instalacao.js');
+            execSync(`node "${scriptPath}"`, { stdio: 'inherit' });
+        }
+        catch (e) {
+            const err = e;
+            // Verification script already output errors, just exit with its code
+            process.exit(err.status || 1);
+        }
+    }
+    // Show help if requested
+    if (hasHelp) {
+        console.log(`  ${yellow}Uso:${reset} npx fase-ai [opções]\n\n  ${yellow}Opções:${reset}\n    ${cyan}--claude${reset}                  Instalar apenas para Claude Code\n    ${cyan}--opencode${reset}                Instalar apenas para OpenCode\n    ${cyan}--gemini${reset}                  Instalar apenas para Gemini\n    ${cyan}--codex${reset}                   Instalar apenas para Codex\n    ${cyan}--copilot${reset}          Instalar apenas para GitHub Copilot\n    ${cyan}--qwen${reset}                    Instalar apenas para Qwen Code\n    ${cyan}--all${reset}                     Instalar para todos os runtimes\n    ${cyan}-u, --uninstall${reset}           Desinstalar o FASE (remover todos os arquivos)\n    ${cyan}--atualizar${reset}               Atualizar FASE: detecta runtimes instalados e reinstala\n    ${cyan}-v, --verificar${reset}           Verificar instalação e gerar relatório\n    ${cyan}-c, --config-dir <caminho>${reset} Especificar diretório de configuração customizado\n    ${cyan}-h, --help${reset}                Exibir esta mensagem de ajuda\n    ${cyan}--force-statusline${reset}        Substituir configuração de statusline existente
+    ${cyan}--auto-detect${reset}             Modo automático: detecta runtimes e usa configuração do projeto\n\n  ${yellow}Exemplos:${reset}\n    ${dim}# Instalação interativa (solicita runtime)${reset}\n    npx fase-ai\n\n    ${dim}# Instalar para Claude Code${reset}\n    npx fase-ai --claude\n\n    ${dim}# Instalar para OpenCode${reset}\n    npx fase-ai --opencode\n\n    ${dim}# Instalar para Gemini${reset}\n    npx fase-ai --gemini\n\n    ${dim}# Instalar para Codex${reset}\n    npx fase-ai --codex\n\n    ${dim}# Instalar para GitHub Copilot${reset}\n    npx fase-ai --copilot\n\n    ${dim}# Instalar para Qwen Code${reset}\n    npx fase-ai --qwen\n\n    ${dim}# Instalar para todos os runtimes${reset}
+    npx fase-ai --all
+
+    ${dim}# Instalação automática (para package.json postinstall)${reset}\n    npx fase-ai --auto-detect\n\n    ${dim}# Atualizar runtimes instalados${reset}\n    npx fase-ai --atualizar\n\n    ${dim}# Atualizar um runtime específico${reset}\n    npx fase-ai --claude --atualizar\n\n    ${dim}# Verificar instalação${reset}\n    npx fase-ai --verificar\n\n    ${dim}# Desinstalação interativa (solicita confirma)${reset}\n    npx fase-ai --uninstall\n\n    ${dim}# Desinstalar do GitHub Copilot${reset}\n    npx fase-ai --copilot --uninstall\n\n    ${dim}# Desinstalar do Codex${reset}\n    npx fase-ai --codex --uninstall\n\n    ${dim}# Desinstalar do OpenCode${reset}\n    npx fase-ai --opencode --uninstall\n\n    ${dim}# Desinstalar do Qwen Code${reset}\n    npx fase-ai --qwen --uninstall\n\n  ${yellow}Notas:${reset}\n    A opção --config-dir é útil quando você tem múltiplas configurações.\n    Tem prioridade sobre as variáveis de ambiente CLAUDE_CONFIG_DIR / GEMINI_CONFIG_DIR / CODEX_HOME / COPILOT_CONFIG_DIR / QWEN_CONFIG_DIR.\n    Use ${cyan}--uninstall${reset} sem localização para um processo interativo seguro.\n    Use ${cyan}--atualizar${reset} para re-instalar mantendo configurações existentes.
+    Use ${cyan}--auto-detect${reset} para instalação via npm postinstall (package.json).\n`);
+        process.exit(0);
+    }
+    // ─── Main logic ───────────────────────────────────────────────────────────────
     (async () => {
         // Handle auto-detect mode (postinstall or --auto-detect flag)
         if (hasAutoDetect || isRunningAsPostinstall()) {

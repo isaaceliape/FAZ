@@ -17,6 +17,7 @@ import * as milestone from './lib/milestone.js';
 import * as commands from './lib/commands.js';
 import * as init from './lib/init.js';
 import * as frontmatter from './lib/frontmatter.js';
+import { cmdWebsearch } from './lib/research.js';
 import { checkForUpdate, promptForUpdate, runUpdate, getCachedUpdateInfo, } from './lib/version-check.js';
 // Global handler for unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
@@ -484,7 +485,7 @@ async function main() {
             const query = args[1];
             const limitIdx = args.indexOf('--limit');
             const freshnessIdx = args.indexOf('--freshness');
-            await commands.cmdWebsearch(query, {
+            await cmdWebsearch(query, {
                 limit: limitIdx !== -1 ? parseInt(args[limitIdx + 1], 10) : 10,
                 freshness: freshnessIdx !== -1 ? args[freshnessIdx + 1] : undefined,
             }, raw);
