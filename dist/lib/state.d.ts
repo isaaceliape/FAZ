@@ -1,31 +1,17 @@
 /**
  * State — STATE.md operations and progression engine
+ *
+ * This module provides command functions for STATE.md manipulation.
+ * Core utilities are in submodules:
+ *   - state/types.ts: Options interfaces
+ *   - state/field-utils.ts: Field extraction/replacement
+ *   - state/frontmatter-sync.ts: Frontmatter synchronization
+ *   - state/lock.ts: PID-based file locking and writeStateMd
  */
-export interface StateMetricOptions {
-    phase?: string;
-    plan?: string;
-    duration?: string;
-    tasks?: string;
-    files?: string;
-}
-export interface StateDecisionOptions {
-    phase?: string;
-    summary?: string;
-    summary_file?: string;
-    rationale?: string;
-    rationale_file?: string;
-}
-export interface StateBlockerOptions {
-    text?: string;
-    text_file?: string;
-}
-export interface StateSessionOptions {
-    stopped_at?: string;
-    resume_file?: string;
-}
-export declare function stateExtractField(content: string, fieldName: string): string | null;
-export declare function stateReplaceField(content: string, fieldName: string, newValue: string): string | null;
-export declare function writeStateMd(statePath: string, content: string, cwd: string): void;
+import { StateMetricOptions, StateDecisionOptions, StateBlockerOptions, StateSessionOptions } from './state/types.js';
+export { StateMetricOptions, StateDecisionOptions, StateBlockerOptions, StateSessionOptions, } from './state/types.js';
+export { stateExtractField, stateReplaceField } from './state/field-utils.js';
+export { writeStateMd } from './state/lock.js';
 export declare function cmdStateLoad(cwd: string, raw: boolean): void;
 export declare function cmdStateGet(cwd: string, section: string | undefined, raw: boolean): void;
 export declare function cmdStatePatch(cwd: string, patches: Record<string, string>, raw: boolean): void;

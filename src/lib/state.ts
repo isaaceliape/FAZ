@@ -1,375 +1,48 @@
 /**
  * State — STATE.md operations and progression engine
+ *
+ * This module provides command functions for STATE.md manipulation.
+ * Core utilities are in submodules:
+ *   - state/types.ts: Options interfaces
+ *   - state/field-utils.ts: Field extraction/replacement
+ *   - state/frontmatter-sync.ts: Frontmatter synchronization
+ *   - state/lock.ts: PID-based file locking and writeStateMd
  */
 
 import fs from 'fs';
 import path from 'path';
-import {
-  escapeRegex,
-  getMilestoneInfo,
-  getMilestoneEtapaFilter,
-  output,
-  error,
-  checkDiskSpace,
-} from './core.js';
+import { output, error } from './core.js';
 import { loadConfig } from './config.js';
-import { ensureInsidePlanejamento } from './path.js';
+import { extractFrontmatter } from './frontmatter.js';
+
+// Import from state submodules
 import {
-  extractFrontmatter,
-  reconstructFrontmatter,
-  type ParsedFrontmatter,
-} from './frontmatter.js';
+  StateMetricOptions,
+  StateDecisionOptions,
+  StateBlockerOptions,
+  StateSessionOptions,
+} from './state/types.js';
+import { stateExtractField, stateReplaceField } from './state/field-utils.js';
+import {
+  readTextArgOrFile,
+  buildStateFrontmatter,
+  stripFrontmatter,
+} from './state/frontmatter-sync.js';
+import { writeStateMd } from './state/lock.js';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// ─── Re-export from submodules for backward compatibility ───────────────────
 
-export interface StateMetricOptions {
-  phase?: string;
-  plan?: string;
-  duration?: string;
-  tasks?: string;
-  files?: string;
-}
+export {
+  StateMetricOptions,
+  StateDecisionOptions,
+  StateBlockerOptions,
+  StateSessionOptions,
+} from './state/types.js';
 
-export interface StateDecisionOptions {
-  phase?: string;
-  summary?: string;
-  summary_file?: string;
-  rationale?: string;
-  rationale_file?: string;
-}
+export { stateExtractField, stateReplaceField } from './state/field-utils.js';
+export { writeStateMd } from './state/lock.js';
 
-export interface StateBlockerOptions {
-  text?: string;
-  text_file?: string;
-}
-
-export interface StateSessionOptions {
-  stopped_at?: string;
-  resume_file?: string;
-}
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-export function stateExtractField(content: string, fieldName: string): string | null {
-  const escaped = escapeRegex(fieldName);
-  const boldPattern = new RegExp(`\\*\\*${escaped}:\\*\\*\\s*(.+)`, 'i');
-  const boldMatch = content.match(boldPattern);
-  if (boldMatch) return boldMatch[1].trim();
-  const plainPattern = new RegExp(`^${escaped}:\\s*(.+)`, 'im');
-  const plainMatch = content.match(plainPattern);
-  return plainMatch ? plainMatch[1].trim() : null;
-}
-
-export function stateReplaceField(
-  content: string,
-  fieldName: string,
-  newValue: string
-): string | null {
-  const escaped = escapeRegex(fieldName);
-  const boldPattern = new RegExp(`(\\*\\*${escaped}:\\*\\*\\s*)(.*)`, 'i');
-  if (boldPattern.test(content)) {
-    return content.replace(boldPattern, (_match, prefix: string) => `${prefix}${newValue}`);
-  }
-  const plainPattern = new RegExp(`(^${escaped}:\\s*)(.*)`, 'im');
-  if (plainPattern.test(content)) {
-    return content.replace(plainPattern, (_match, prefix: string) => `${prefix}${newValue}`);
-  }
-  return null;
-}
-
-function readTextArgOrFile(
-  cwd: string,
-  value: string | undefined,
-  filePath: string | undefined,
-  label: string
-): string | null {
-  if (!filePath) return value ?? null;
-  const resolvedPath = path.isAbsolute(filePath) ? filePath : path.join(cwd, filePath);
-  try {
-    return fs.readFileSync(resolvedPath, 'utf-8').trimEnd();
-  } catch {
-    throw new Error(`${label} file not found: ${filePath}`);
-  }
-}
-
-// ─── State Frontmatter Sync ───────────────────────────────────────────────────
-
-function buildStateFrontmatter(bodyContent: string, cwd: string | null): ParsedFrontmatter {
-  const etapaAtual = stateExtractField(bodyContent, 'Fase Atual');
-  const etapaAtualName = stateExtractField(bodyContent, 'Nome da Fase Atual');
-  const currentPlan = stateExtractField(bodyContent, 'Plano Atual');
-  const totalEtapasRaw = stateExtractField(bodyContent, 'Total de Fases');
-  const totalPlansRaw = stateExtractField(bodyContent, 'Total de Planos na Fase');
-  const status = stateExtractField(bodyContent, 'Status');
-  const progressRaw = stateExtractField(bodyContent, 'Progresso');
-  const lastActivity = stateExtractField(bodyContent, 'Última Atividade');
-  const stoppedAt =
-    stateExtractField(bodyContent, 'Parado Em') || stateExtractField(bodyContent, 'Parado em');
-  const pausedAt = stateExtractField(bodyContent, 'Pausado Em');
-
-  let milestone: string | null = null;
-  let milestoneName: string | null = null;
-  if (cwd) {
-    try {
-      const info = getMilestoneInfo(cwd);
-      milestone = info.version;
-      milestoneName = info.name;
-    } catch {}
-  }
-
-  let totalEtapas: number | null = totalEtapasRaw ? parseInt(totalEtapasRaw, 10) : null;
-  let completedPhases: number | null = null;
-  let totalPlans: number | null = totalPlansRaw ? parseInt(totalPlansRaw, 10) : null;
-  let completedPlans: number | null = null;
-
-  if (cwd) {
-    try {
-      const etapasDir = path.join(cwd, '.fase-ai', 'etapas');
-      if (fs.existsSync(etapasDir)) {
-        const isDirInMilestone = getMilestoneEtapaFilter(cwd);
-        const etapasDirs = fs
-          .readdirSync(etapasDir, { withFileTypes: true })
-          .filter((e) => e.isDirectory())
-          .map((e) => e.name)
-          .filter(isDirInMilestone);
-        let diskTotalPlans = 0;
-        let diskTotalSummaries = 0;
-        let diskCompletedPhases = 0;
-
-        for (const dir of etapasDirs) {
-          const files = fs.readdirSync(path.join(etapasDir, dir));
-          const plans = files.filter((f: string) => f.match(/-PLAN\.md$/i)).length;
-          const summaries = files.filter((f: string) => f.match(/-SUMMARY\.md$/i)).length;
-          diskTotalPlans += plans;
-          diskTotalSummaries += summaries;
-          if (plans > 0 && summaries >= plans) diskCompletedPhases++;
-        }
-        totalEtapas =
-          isDirInMilestone.phaseCount > 0
-            ? Math.max(etapasDirs.length, isDirInMilestone.phaseCount)
-            : etapasDirs.length;
-        completedPhases = diskCompletedPhases;
-        totalPlans = diskTotalPlans;
-        completedPlans = diskTotalSummaries;
-      }
-    } catch {}
-  }
-
-  let progressPercent: number | null = null;
-  if (progressRaw) {
-    const pctMatch = progressRaw.match(/(\d+)%/);
-    if (pctMatch) progressPercent = parseInt(pctMatch[1], 10);
-  }
-
-  let normalizedStatus = status ?? 'unknown';
-  const statusLower = (status ?? '').toLowerCase();
-  if (statusLower.includes('paused') || statusLower.includes('stopped') || pausedAt) {
-    normalizedStatus = 'paused';
-  } else if (statusLower.includes('executing') || statusLower.includes('in progress')) {
-    normalizedStatus = 'executing';
-  } else if (statusLower.includes('planning') || statusLower.includes('ready to plan')) {
-    normalizedStatus = 'planning';
-  } else if (statusLower.includes('discussing')) {
-    normalizedStatus = 'discussing';
-  } else if (statusLower.includes('verif')) {
-    normalizedStatus = 'verifying';
-  } else if (statusLower.includes('complete') || statusLower.includes('done')) {
-    normalizedStatus = 'completed';
-  } else if (statusLower.includes('ready to execute')) {
-    normalizedStatus = 'executing';
-  }
-
-  const fm: ParsedFrontmatter = { gsd_state_version: '1.0' };
-
-  if (milestone) fm['milestone'] = milestone;
-  if (milestoneName) fm['milestone_name'] = milestoneName;
-  if (etapaAtual) fm['current_phase'] = etapaAtual;
-  if (etapaAtualName) fm['current_phase_name'] = etapaAtualName;
-  if (currentPlan) fm['current_plan'] = currentPlan;
-  fm['status'] = normalizedStatus;
-  if (stoppedAt) fm['stopped_at'] = stoppedAt;
-  if (pausedAt) fm['paused_at'] = pausedAt;
-  fm['last_updated'] = new Date().toISOString();
-  if (lastActivity) fm['last_activity'] = lastActivity;
-
-  const progress: Record<string, number> = {};
-  if (totalEtapas !== null) progress['total_phases'] = totalEtapas;
-  if (completedPhases !== null) progress['completed_phases'] = completedPhases;
-  if (totalPlans !== null) progress['total_plans'] = totalPlans;
-  if (completedPlans !== null) progress['completed_plans'] = completedPlans;
-  if (progressPercent !== null) progress['percent'] = progressPercent;
-  if (Object.keys(progress).length > 0)
-    fm['progress'] = progress as unknown as ParsedFrontmatter[string];
-
-  return fm;
-}
-
-function stripFrontmatter(content: string): string {
-  return content.replace(/^---\n[\s\S]*?\n---\n*/, '');
-}
-
-function syncStateFrontmatter(content: string, cwd: string): string {
-  const body = stripFrontmatter(content);
-  const fm = buildStateFrontmatter(body, cwd);
-  const yamlStr = reconstructFrontmatter(fm);
-  return `---\n${yamlStr}\n---\n\n${body}`;
-}
-
-/**
- * Acquires an exclusive state lock using atomic directory creation.
- * Uses PID-based stale lock detection to prevent deadlocks.
- * @param lockPath - Path to the lock file
- * @param maxAttempts - Maximum number of acquisition attempts
- * @param baseDelayMs - Base delay for exponential backoff
- * @returns true if lock acquired
- * @throws Error if lock cannot be acquired
- */
-function acquireStateLock(lockPath: string, maxAttempts = 10, baseDelayMs = 50): boolean {
-  const lockDir = lockPath + '.d';
-  const pidFile = path.join(lockDir, 'pid');
-
-  for (let i = 0; i < maxAttempts; i++) {
-    try {
-      // Atomic lock acquisition using mkdir (atomic on all platforms)
-      fs.mkdirSync(lockDir, { recursive: false });
-
-      // Write PID to verify ownership
-      fs.writeFileSync(pidFile, String(process.pid), 'utf-8');
-
-      // Register cleanup handler
-      process.on('exit', () => {
-        try {
-          fs.unlinkSync(pidFile);
-          fs.rmdirSync(lockDir);
-        } catch (err) {
-          process.stderr.write(`[state:acquireLock] Cleanup error: ${(err as Error).message}\n`);
-        }
-      });
-
-      return true;
-    } catch (e) {
-      const err = e as NodeJS.ErrnoException;
-      if (err.code !== 'EEXIST') {
-        throw new Error(`state.cjs: erro ao adquirir lock: ${err.message}`);
-      }
-
-      // Lock exists - check if stale (process no longer running)
-      try {
-        const existingPid = fs.readFileSync(pidFile, 'utf-8').trim();
-        const pidNum = parseInt(existingPid, 10);
-        if (!isNaN(pidNum)) {
-          try {
-            // Check if process is still running
-            process.kill(pidNum, 0);
-            // Process is running, wait and retry
-          } catch {
-            // Process is dead, remove stale lock
-            try {
-              fs.unlinkSync(pidFile);
-              fs.rmdirSync(lockDir);
-              continue; // Retry immediately
-            } catch (err) {
-              process.stderr.write(
-                `[state:acquireLock] Failed to remove stale lock: ${(err as Error).message}\n`
-              );
-            }
-          }
-        } else {
-          // Invalid PID file, treat as stale
-          try {
-            fs.unlinkSync(pidFile);
-            fs.rmdirSync(lockDir);
-            continue;
-          } catch (err) {
-            process.stderr.write(
-              `[state:acquireLock] Failed to remove invalid PID lock: ${(err as Error).message}\n`
-            );
-          }
-        }
-      } catch (readErr) {
-        // Can't read PID file, treat as stale
-        process.stderr.write(
-          `[state:acquireLock] Can't read PID file: ${(readErr as Error).message}\n`
-        );
-        try {
-          // Check if pidFile exists before unlinking (handles missing PID file case)
-          if (fs.existsSync(pidFile)) {
-            fs.unlinkSync(pidFile);
-          }
-          fs.rmdirSync(lockDir);
-          continue; // Retry immediately after cleanup
-        } catch (cleanupErr) {
-          const cleanupError = cleanupErr as NodeJS.ErrnoException;
-          // If rmdir fails because directory is not empty, force cleanup
-          if (cleanupError.code === 'ENOTEMPTY') {
-            try {
-              // Remove all files in lock directory and then remove directory
-              const files = fs.readdirSync(lockDir);
-              for (const file of files) {
-                fs.unlinkSync(path.join(lockDir, file));
-              }
-              fs.rmdirSync(lockDir);
-              continue;
-            } catch (forceCleanupErr) {
-              process.stderr.write(
-                `[state:acquireLock] Failed to force cleanup stale lock: ${(forceCleanupErr as Error).message}\n`
-              );
-            }
-          } else {
-            process.stderr.write(
-              `[state:acquireLock] Failed to cleanup stale lock: ${(cleanupErr as Error).message}\n`
-            );
-          }
-        }
-      }
-
-      // Exponential backoff
-      const delay = baseDelayMs * Math.pow(2, i);
-      const deadline = Date.now() + delay;
-      while (Date.now() < deadline) {
-        /* spin */
-      }
-    }
-  }
-
-  throw new Error(`state.cjs: não foi possível adquirir lock após ${maxAttempts} tentativas`);
-}
-
-function releaseStateLock(lockPath: string): void {
-  const lockDir = lockPath + '.d';
-  try {
-    const pidFile = path.join(lockDir, 'pid');
-    if (fs.existsSync(pidFile)) {
-      fs.unlinkSync(pidFile);
-    }
-    if (fs.existsSync(lockDir)) {
-      fs.rmdirSync(lockDir);
-    }
-  } catch (err) {
-    process.stderr.write(`[state:releaseLock] Failed to release lock: ${(err as Error).message}\n`);
-  }
-}
-
-export function writeStateMd(statePath: string, content: string, cwd: string): void {
-  ensureInsidePlanejamento(cwd, statePath, 'STATE.md write');
-
-  // Check disk space before acquiring lock
-  if (!checkDiskSpace(statePath, 1024 * 1024)) {
-    // 1MB minimum
-    error('Espaço em disco insuficiente para salvar STATE.md');
-  }
-
-  const lockPath = path.join(path.dirname(statePath), '.state-lock');
-  acquireStateLock(lockPath);
-  try {
-    const synced = syncStateFrontmatter(content, cwd);
-    fs.writeFileSync(statePath, synced, 'utf-8');
-  } finally {
-    releaseStateLock(lockPath);
-  }
-}
-
-// ─── Commands ─────────────────────────────────────────────────────────────────
+// ─── Commands ────────────────────────────────────────────────────────────────
 
 export function cmdStateLoad(cwd: string, raw: boolean): void {
   const config = loadConfig(cwd);
